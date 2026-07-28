@@ -32,6 +32,12 @@ const server = app.listen(process.env.PORT || 3000, () => {
   console.log("Server jalan di port", process.env.PORT || 3000);
 });
 
+// Cek server hidup -- tanpa API key, dipakai buat tes cepat lewat browser
+// atau uptime monitor setelah deploy.
+app.get("/health", (req, res) => {
+  res.json({ ok: true, time: new Date().toISOString() });
+});
+
 // --- WebSocket (dipakai dashboard Demo saja) ---
 const wss = new WebSocketServer({ server });
 const clients = new Set();
