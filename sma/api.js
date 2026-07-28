@@ -1,6 +1,6 @@
 // ============================================================
 // JANGAN UBAH FILE INI — sudah disiapkan pelatih, ini koneksi ke backend.
-// Kerjakan TANTANGAN kamu di SMA - Smart Room Monitor.html saja:
+// Kerjakan TANTANGAN kamu di index.html saja:
 // panggil kirimPerintahFan(...) dari tombol yang kamu buat.
 // ============================================================
 // URL backend -- diisi PELATIH. Backend di-deploy ke server online, jadi

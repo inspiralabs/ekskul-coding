@@ -1,11 +1,3 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/demo", "destination": "/Demo - Smart Room Monitor/Smart Room Monitor.html" },
-    { "source": "/demo/:path*", "destination": "/Demo - Smart Room Monitor/:path*" },
-    { "source": "/sma", "destination": "/SMA - Smart Room Monitor/SMA - Smart Room Monitor.html" },
-    { "source": "/sma/:path*", "destination": "/SMA - Smart Room Monitor/:path*" },
-    { "source": "/smp", "destination": "/SMP - Smart Room Monitor/SMP - Smart Room Monitor Junior.html" },
-    { "source": "/smp/:path*", "destination": "/SMP - Smart Room Monitor/:path*" }
-  ]
+  "cleanUrls": true
 }

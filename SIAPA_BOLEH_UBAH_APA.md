@@ -14,9 +14,10 @@ asy-syahid-ekskul/
 │   ├── smp_room_monitor/                 <- materi IoT SMP (Anda)
 │   ├── sma_room_monitor/                 <- materi IoT SMA (Anda) -- ada TANTANGAN
 │   └── sma_room_monitor_REFERENSI_PELATIH/  <- kunci jawaban, JANGAN dibagikan ke siswa
-├── Demo - Smart Room Monitor/            <- dashboard referensi Anda (pelatih)
-├── SMA - Smart Room Monitor/             <- materi web dev SMA (rekan Anda) -- ada TANTANGAN
-├── SMP - Smart Room Monitor/             <- materi web dev SMP (rekan Anda)
+├── demo/                                  <- dashboard referensi Anda (pelatih)
+├── sma/                                   <- materi web dev SMA (rekan Anda) -- ada TANTANGAN
+├── smp/                                   <- materi web dev SMP (rekan Anda)
+├── vercel.json                            <- routing /demo /sma /smp untuk deploy Vercel
 └── SIAPA_BOLEH_UBAH_APA.md               <- file ini
 ```
 
@@ -54,25 +55,27 @@ sensor, `fanServer.handleClient()`).
 **JANGAN dibagikan ke siswa.** Ini kunci jawaban lengkap TANTANGAN, untuk Anda verifikasi
 sebelum kelas dan sebagai panduan diskusi setelah siswa mengerjakan TANTANGAN mereka.
 
-## 3. Dashboard (`Demo/`, `SMA/`, `SMP - Smart Room Monitor/`)
+## 3. Dashboard (`demo/`, `sma/`, `smp/`)
 
 Tiap folder punya file `api.js` — **"kabel" ke backend, berlabel besar "JANGAN UBAH FILE
 INI"** di baris paling atas. Ini yang memisahkan tegas kode backend dari kode tampilan.
+HTML utama di tiap folder bernama `index.html` (bukan nama panjang berspasi lagi) supaya
+URL di Vercel bersih: `ekskulcoding.inspiralabs.id/demo`, `/sma`, `/smp`.
 
 | Folder | Materi | Siapa ajar | File tampilan (bebas diubah) | `api.js` (jangan ubah) |
 |---|---|---|---|---|
-| `Demo - Smart Room Monitor/` | Referensi lengkap | Anda (demo di kelas) | `Smart Room Monitor.html`, `app.js` | `api.js` |
-| `SMA - Smart Room Monitor/` | Web dev SMA | Rekan Anda | `SMA - Smart Room Monitor.html` | `api.js` |
-| `SMP - Smart Room Monitor/` | Web dev SMP | Rekan Anda | `SMP - Smart Room Monitor Junior.html` | `api.js` |
+| `demo/` | Referensi lengkap | Anda (demo di kelas) | `index.html`, `app.js` | `api.js` |
+| `sma/` | Web dev SMA | Rekan Anda | `index.html` | `api.js` |
+| `smp/` | Web dev SMP | Rekan Anda | `index.html` | `api.js` |
 
 **Satu baris yang PERLU diubah manual di tiap `api.js`:** `MY_DEVICE_ID` — sesuaikan dengan
 device/kelompok mana yang mau ditampilkan di dashboard itu. Ini satu-satunya pengecualian
 "jangan ubah" karena bukan logika koneksi, hanya nilai konfigurasi.
 
 ### Dashboard Demo
-File asli (`Smart Room Monitor.dc.html` dari tool desain) tersimpan sebagai
+File asli (`Smart Room Monitor.dc.html` dari tool desain) tersimpan di `demo/` sebagai
 `Smart Room Monitor.ORIGINAL_REFERENSI_DESAIN.html` — bukan file yang dipakai lagi, hanya
-referensi visual. File yang aktif dipakai (`Smart Room Monitor.html` + `app.js`) adalah
+referensi visual. File yang aktif dipakai (`demo/index.html` + `demo/app.js`) adalah
 tulisan ulang vanilla JS yang bisa langsung dibuka di browser mana pun.
 
 ### Dashboard SMA — bagian TANTANGAN (materi rekan Anda)
@@ -114,7 +117,7 @@ bisa membuat perangkat teman sekelompok lain ikut error atau data tertukar antar
    - `firmware/smp_room_monitor/smp_room_monitor.ino`
    - `firmware/sma_room_monitor/sma_room_monitor.ino`
    - `firmware/sma_room_monitor_REFERENSI_PELATIH/*.ino`
-   - `Demo - Smart Room Monitor/api.js`, `SMA - Smart Room Monitor/api.js`, `SMP - Smart Room Monitor/api.js`
+   - `demo/api.js`, `sma/api.js`, `smp/api.js`
 3. Tentukan daftar `DEVICE_ID` final per kelompok (lihat `backend/README.md` bagian 4),
    masukkan ke `HANDOUT_SISWA.md`.
 4. Compile & flash `sma_room_monitor_REFERENSI_PELATIH` ke satu ESP32 uji untuk verifikasi

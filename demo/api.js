@@ -1,6 +1,6 @@
 // ============================================================
 // JANGAN UBAH FILE INI — ini "kabel" penghubung ke backend.
-// Kalau mau mengubah TAMPILAN, edit Smart Room Monitor.html saja.
+// Kalau mau mengubah TAMPILAN, edit index.html saja.
 // ============================================================
 // URL backend -- diisi PELATIH. Backend di-deploy ke server online, jadi
 // isi dengan URL server itu (https://...)

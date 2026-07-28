@@ -1,6 +1,5 @@
 // ============================================================
-// JANGAN UBAH FILE INI. Tampilan boleh diedit di
-// SMP - Smart Room Monitor Junior.html.
+// JANGAN UBAH FILE INI. Tampilan boleh diedit di index.html.
 // ============================================================
 // URL backend -- diisi PELATIH. Backend di-deploy ke server online, jadi
 // isi dengan URL server itu (https://...)

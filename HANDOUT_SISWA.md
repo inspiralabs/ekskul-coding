@@ -52,7 +52,7 @@ File kamu: `firmware/sma_room_monitor/sma_room_monitor.ino`
 fungsi `handleFanCommand()` — ada 4 TODO dengan petunjuk di komentarnya. Ingat: modul relay
 biasanya **active-LOW** (`LOW` = nyala, `HIGH` = mati) — kebalikan dari LED biasa!
 
-Kalau kamu juga mengerjakan dashboard: file `SMA - Smart Room Monitor.html` punya bagian
+Kalau kamu juga mengerjakan dashboard: file `sma/index.html` punya bagian
 TANTANGAN kosong untuk mode Otomatis + slider threshold. Jangan buka/ubah `api.js` —
 tinggal panggil fungsi yang sudah ada di sana:
 ```js

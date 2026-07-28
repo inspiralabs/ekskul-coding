@@ -39,7 +39,7 @@ Backend di-deploy ke server online (bukan dijalankan di laptop saat kelas). Sete
 (mis. `https://api-ekskulcoding.inspiralabs.id`), catat URL itu — dipakai untuk mengganti
 `<url-backend-anda>` di:
 - `SERVER_URL` pada SEMUA firmware ESP32 (`firmware/*/*.ino`)
-- `API_BASE` pada SEMUA `api.js` dashboard (`Demo/SMA/SMP - Smart Room Monitor/api.js`)
+- `API_BASE` pada SEMUA `api.js` dashboard (`demo/api.js`, `sma/api.js`, `smp/api.js`)
 
 **Penting — ESP32 dan HTTPS:** karena backend HTTPS, firmware ESP32 sudah disiapkan pakai
 `WiFiClientSecure` dengan `client.setInsecure()` (lewati verifikasi sertifikat — cukup untuk
