@@ -1,0 +1,9 @@
+backend/.env
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Config/cache tool AI lokal -- bukan bagian proyek
+.claude/
+.impeccable/
+.rtk/

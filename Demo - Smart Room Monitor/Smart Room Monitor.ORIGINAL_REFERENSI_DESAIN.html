@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  body{margin:0;-webkit-font-smoothing:antialiased}
+  @keyframes fanspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes pulseDot{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+  a{color:#2FA9D6}
+  a:hover{color:#1F8CB8}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:{{ theme.bg }};color:{{ theme.text }};font-family:'Nunito',sans-serif;transition:background .35s,color .35s;padding:clamp(16px,3vw,36px);box-sizing:border-box;display:flex;flex-direction:column;gap:20px">
+
+  <header style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,{{ accent.primary }},{{ accent.secondary }});display:flex;align-items:center;justify-content:center;flex:none">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 2C10 6 6 9 6 13a6 6 0 0 0 12 0c0-4-4-7-6-11z" fill="#fff" opacity="0.95"></path></svg>
+      </div>
+      <div>
+        <h1 style="margin:0;font:800 clamp(22px,3vw,30px)/1.1 'Baloo 2',sans-serif;color:{{ theme.text }}">Smart Room Monitor</h1>
+        <p style="margin:2px 0 0;font:600 13px/1.3 'Nunito',sans-serif;color:{{ theme.muted }}">Monitoring Suhu &amp; Kelembapan — Sensor DHT22</p>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;background:{{ theme.card }};border:1px solid {{ theme.border }};padding:8px 14px;border-radius:999px;box-shadow:0 2px 10px {{ theme.shadow }}">
+        <span style="width:9px;height:9px;border-radius:50%;background:{{ connectionColor }};color:{{ connectionColor }};display:inline-block;animation:pulseDot 1.6s infinite"></span>
+        <span style="font:700 13px 'Nunito',sans-serif;color:{{ theme.text }}">{{ connectionLabel }}</span>
+      </div>
+      <div style="background:{{ theme.card }};border:1px solid {{ theme.border }};padding:8px 16px;border-radius:999px;box-shadow:0 2px 10px {{ theme.shadow }};font:800 14px/1 'Baloo 2',sans-serif;color:{{ theme.text }};letter-spacing:0.5px">{{ nowStr }}</div>
+      <button onClick="{{ toggleDarkMode }}" style="width:38px;height:38px;border-radius:50%;border:1px solid {{ theme.border }};background:{{ theme.card }};cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px {{ theme.shadow }}" style-hover="transform:scale(1.06)">
+        <sc-if value="{{ darkMode }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="#FFC94D"></path></svg>
+        </sc-if>
+        <sc-if value="{{ notDarkMode }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#FF9F43"></circle><g stroke="#FF9F43" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"></line><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"></line><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"></line><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"></line></g></svg>
+        </sc-if>
+      </button>
+    </div>
+  </header>
+
+  <sc-if value="{{ isAlert }}" hint-placeholder-val="{{ false }}">
+    <div style="background:{{ alertBg }};border-radius:18px;padding:14px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px {{ theme.shadow }}">
+      <span style="font-size:22px;flex:none">⚠️</span>
+      <div style="font:700 14px/1.4 'Nunito',sans-serif;color:#5A2A00">{{ alertMessage }}</div>
+    </div>
+  </sc-if>
+
+  <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+
+    <div style="background:{{ theme.card }};border:1px solid {{ theme.border }};border-radius:24px;padding:22px;box-shadow:0 4px 20px {{ theme.shadow }};display:flex;flex-direction:column;gap:14px;transition:transform .2s" style-hover="transform:translateY(-3px)">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z" stroke="{{ tempColor }}" stroke-width="1.8"></path><circle cx="12" cy="17" r="2.2" fill="{{ tempColor }}"></circle></svg>
+          <span style="font:800 17px 'Baloo 2',sans-serif;color:{{ theme.text }}">Suhu Ruangan</span>
+        </div>
+        <span style="font:800 13px 'Nunito',sans-serif;color:{{ tempTrendColor }}">{{ tempTrendIcon }} {{ tempTrendVal }}°</span>
+      </div>
+      <div style="position:relative;width:170px;height:170px;margin:0 auto">
+        <svg width="170" height="170" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+          <circle cx="80" cy="80" r="70" fill="none" stroke="{{ theme.border }}" stroke-width="14"></circle>
+          <circle cx="80" cy="80" r="70" fill="none" stroke="{{ tempColor }}" stroke-width="14" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="{{ tempDashoffset }}" style="transition:stroke-dashoffset .6s ease,stroke .4s"></circle>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span style="font:800 clamp(36px,6vw,44px)/1 'Baloo 2',sans-serif;color:{{ theme.text }}">{{ tempRounded }}°</span>
+          <span style="font:700 13px 'Nunito',sans-serif;color:{{ theme.muted }}">Celsius</span>
+        </div>
+      </div>
+      <p style="margin:0;text-align:center;font:700 13px/1.3 'Nunito',sans-serif;color:{{ tempColor }}">{{ tempStatusLabel }}</p>
+    </div>
+
+    <div style="background:{{ theme.card }};border:1px solid {{ theme.border }};border-radius:24px;padding:22px;box-shadow:0 4px 20px {{ theme.shadow }};display:flex;flex-direction:column;gap:14px;transition:transform .2s" style-hover="transform:translateY(-3px)">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2c4 5.5 7 9.4 7 13a7 7 0 1 1-14 0c0-3.6 3-7.5 7-13z" fill="{{ humidityColor }}"></path></svg>
+          <span style="font:800 17px 'Baloo 2',sans-serif;color:{{ theme.text }}">Kelembapan</span>
+        </div>
+        <span style="font:800 13px 'Nunito',sans-serif;color:{{ humidityTrendColor }}">{{ humidityTrendIcon }} {{ humidityTrendVal }}%</span>
+      </div>
+      <div style="position:relative;width:170px;height:170px;margin:0 auto">
+        <svg width="170" height="170" viewBox="0 0 160 160" style="transform:rotate(-90deg)">
+          <circle cx="80" cy="80" r="70" fill="none" stroke="{{ theme.border }}" stroke-width="14"></circle>
+          <circle cx="80" cy="80" r="70" fill="none" stroke="{{ humidityColor }}" stroke-width="14" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="{{ humidityDashoffset }}" style="transition:stroke-dashoffset .6s ease,stroke .4s"></circle>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <span style="font:800 clamp(36px,6vw,44px)/1 'Baloo 2',sans-serif;color:{{ theme.text }}">{{ humidityRounded }}%</span>
+          <span style="font:700 13px 'Nunito',sans-serif;color:{{ theme.muted }}">RH</span>
+        </div>
+      </div>
+      <p style="margin:0;text-align:center;font:700 13px/1.3 'Nunito',sans-serif;color:{{ humidityColor }}">{{ humidityStatusLabel }}</p>
+    </div>
+
+  </section>
+
+  <section style="background:{{ theme.card }};border:1px solid {{ theme.border }};border-radius:24px;padding:22px;box-shadow:0 4px 20px {{ theme.shadow }}">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+      <h2 style="margin:0;font:800 18px 'Baloo 2',sans-serif;color:{{ theme.text }}">Riwayat Sensor</h2>
+      <div style="display:flex;gap:6px;background:{{ theme.bg }};padding:4px;border-radius:999px">
+        <button onClick="{{ setChartViewBoth }}" style="border:none;padding:7px 14px;border-radius:999px;font:700 12px 'Nunito',sans-serif;cursor:pointer;background:{{ btnBothBg }};color:{{ btnBothColor }}">Keduanya</button>
+        <button onClick="{{ setChartViewTemp }}" style="border:none;padding:7px 14px;border-radius:999px;font:700 12px 'Nunito',sans-serif;cursor:pointer;background:{{ btnTempBg }};color:{{ btnTempColor }}">Suhu</button>
+        <button onClick="{{ setChartViewHumidity }}" style="border:none;padding:7px 14px;border-radius:999px;font:700 12px 'Nunito',sans-serif;cursor:pointer;background:{{ btnHumBg }};color:{{ btnHumColor }}">Kelembapan</button>
+      </div>
+    </div>
+    <svg viewBox="0 0 600 190" style="width:100%;height:200px;overflow:visible">
+      <line x1="0" y1="10" x2="600" y2="10" stroke="{{ theme.border }}" stroke-dasharray="4 4"></line>
+      <line x1="0" y1="95" x2="600" y2="95" stroke="{{ theme.border }}" stroke-dasharray="4 4"></line>
+      <line x1="0" y1="180" x2="600" y2="180" stroke="{{ theme.border }}"></line>
+      <polyline points="{{ tempPoints }}" fill="none" stroke="#FF7A45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:{{ tempLineOpacity }};transition:opacity .3s"></polyline>
+      <polyline points="{{ humidityPoints }}" fill="none" stroke="#4FB6E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity:{{ humidityLineOpacity }};transition:opacity .3s"></polyline>
+    </svg>
+    <div style="display:flex;gap:20px;margin-top:10px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:6px;font:700 12px 'Nunito',sans-serif;color:{{ theme.muted }}"><span style="width:12px;height:12px;border-radius:3px;background:#FF7A45;display:inline-block"></span>Suhu (°C)</div>
+      <div style="display:flex;align-items:center;gap:6px;font:700 12px 'Nunito',sans-serif;color:{{ theme.muted }}"><span style="width:12px;height:12px;border-radius:3px;background:#4FB6E8;display:inline-block"></span>Kelembapan (%)</div>
+      <div style="margin-left:auto;font:700 12px 'Nunito',sans-serif;color:{{ theme.muted }}">2 jam terakhir</div>
+    </div>
+  </section>
+
+  <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+    <div style="background:{{ theme.card }};border:1px solid {{ theme.border }};border-radius:24px;padding:22px;box-shadow:0 4px 20px {{ theme.shadow }};display:flex;flex-direction:column;gap:16px">
+      <h2 style="margin:0;font:800 18px 'Baloo 2',sans-serif;color:{{ theme.text }}">Kontrol Kipas</h2>
+
+      <button onClick="{{ toggleFanManual }}" style="border:none;cursor:pointer;border-radius:20px;padding:22px;display:flex;align-items:center;gap:18px;background:{{ fanCardBg }};transition:background .3s" style-active="transform:scale(0.98)">
+        <div style="width:64px;height:64px;flex:none;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" style="animation:{{ fanAnim }};transform-origin:center">
+            <g fill="#fff">
+              <ellipse cx="12" cy="7" rx="3.2" ry="5" opacity="0.95"></ellipse>
+              <ellipse cx="12" cy="7" rx="3.2" ry="5" opacity="0.95" transform="rotate(120 12 12)"></ellipse>
+              <ellipse cx="12" cy="7" rx="3.2" ry="5" opacity="0.95" transform="rotate(240 12 12)"></ellipse>
+            </g>
+            <circle cx="12" cy="12" r="2.3" fill="#fff"></circle>
+          </svg>
+        </div>
+        <div style="text-align:left">
+          <div style="font:800 20px 'Baloo 2',sans-serif;color:#fff">{{ fanStatusLabel }}</div>
+          <div style="font:700 13px 'Nunito',sans-serif;color:rgba(255,255,255,0.85)">{{ fanHintLabel }}</div>
+        </div>
+      </button>
+
+      <div style="display:flex;gap:8px">
+        <button onClick="{{ setModeManual }}" style="flex:1;border:none;padding:10px;border-radius:14px;font:700 13px 'Nunito',sans-serif;cursor:pointer;background:{{ modeManualBg }};color:{{ modeManualColor }}">Manual</button>
+        <button onClick="{{ setModeAuto }}" style="flex:1;border:none;padding:10px;border-radius:14px;font:700 13px 'Nunito',sans-serif;cursor:pointer;background:{{ modeAutoBg }};color:{{ modeAutoColor }}">Otomatis</button>
+      </div>
+
+      <sc-if value="{{ isModeAuto }}" hint-placeholder-val="{{ true }}">
+        <div style="background:{{ theme.bg }};border-radius:16px;padding:14px 16px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="font:700 13px 'Nunito',sans-serif;color:{{ theme.muted }}">Ambang batas suhu</span>
+            <span style="font:800 13px 'Nunito',sans-serif;color:{{ theme.text }}">{{ threshold }}°C</span>
+          </div>
+          <input type="range" min="20" max="40" step="1" value="{{ threshold }}" onChange="{{ setThreshold }}" style="width:100%;accent-color:{{ accent.primary }}">
+          <p style="margin:8px 0 0;font:600 12px/1.4 'Nunito',sans-serif;color:{{ theme.muted }}">Kipas menyala otomatis jika suhu &gt; {{ threshold }}°C</p>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="background:{{ theme.card }};border:1px solid {{ theme.border }};border-radius:24px;padding:22px;box-shadow:0 4px 20px {{ theme.shadow }}">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">📘</span>
+        <span style="font:800 17px 'Baloo 2',sans-serif;color:{{ theme.text }}">Kenapa ini penting?</span>
+      </div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+        <p style="margin:0;font:600 14px/1.6 'Nunito',sans-serif;color:{{ theme.muted }}">
+          <strong style="color:{{ theme.text }}">DHT22</strong> adalah sensor yang membaca suhu dan kelembapan udara sekaligus, lalu mengirim datanya ke mikrokontroler (mis. ESP32/Arduino) untuk diproses.
+        </p>
+        <p style="margin:0;font:600 14px/1.6 'Nunito',sans-serif;color:{{ theme.muted }}">
+          Memantau suhu &amp; kelembapan penting karena ruangan yang terlalu panas atau lembap bisa merusak alat elektronik, membuat tidak nyaman, dan memicu jamur/bakteri.
+        </p>
+        <p style="margin:0;font:600 14px/1.6 'Nunito',sans-serif;color:{{ theme.muted }}">
+          Di dashboard ini, saat suhu melewati ambang batas, sistem otomatis menyalakan kipas. Inilah contoh sederhana <strong style="color: rgb(31, 41, 55);">sistem kontrol otomatis (closed-loop)</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align:center;padding:8px 0;font:700 12px 'Nunito',sans-serif;color:{{ theme.muted }}">Sekolah Quran Asy Syahid • Ekskul Coding • InspiraLabs</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:900},&quot;defaultThreshold&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:30,&quot;min&quot;:20,&quot;max&quot;:40,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Kontrol&quot;},&quot;updateIntervalSec&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:3,&quot;min&quot;:2,&quot;max&quot;:10,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Simulasi&quot;},&quot;accentPalette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;playful&quot;,&quot;options&quot;:[&quot;playful&quot;,&quot;ocean&quot;,&quot;sunset&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tema&quot;}}">
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+
+class Component extends DCLogic {
+  state = (() => {
+    const temp = 26, humidity = 55;
+    return {
+      temp, humidity, prevTemp: temp, prevHumidity: humidity,
+      displayTemp: temp, displayHumidity: humidity,
+      history: [], fanMode: 'auto', manualFanOn: false, fanOn: false,
+      threshold: this.props && this.props.defaultThreshold != null ? this.props.defaultThreshold : 30,
+      chartView: 'both', darkMode: false, infoExpanded: false, online: true, now: new Date()
+    };
+  })();
+
+  componentDidMount() {
+    const seed = [];
+    let t = this.state.temp, h = this.state.humidity;
+    for (let i = 0; i < 12; i++) {
+      t = clamp(t + (Math.random()-0.5)*2.5, 15, 38);
+      h = clamp(h + (Math.random()-0.5)*5, 20, 90);
+      seed.push({ temp: t, humidity: h });
+    }
+    const fanOn = this.state.fanMode === 'auto' ? t > this.state.threshold : false;
+    this.setState({ history: seed, temp: t, humidity: h, displayTemp: t, displayHumidity: h, fanOn });
+
+    const speedMs = ((this.props && this.props.updateIntervalSec) || 4) * 1000;
+    this._sensorTimer = setInterval(() => this.sampleSensor(), speedMs);
+    this._animTimer = setInterval(() => this.animateStep(), 50);
+    this._clockTimer = setInterval(() => this.setState({ now: new Date() }), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._sensorTimer);
+    clearInterval(this._animTimer);
+    clearInterval(this._clockTimer);
+    clearTimeout(this._offlineTimer);
+  }
+
+  sampleSensor() {
+    const prevTemp = this.state.temp, prevHumidity = this.state.humidity;
+    const newTemp = clamp(prevTemp + (Math.random()-0.5)*3, 15, 38);
+    const newHumidity = clamp(prevHumidity + (Math.random()-0.5)*6, 20, 90);
+    const fanOn = this.state.fanMode === 'auto' ? newTemp > this.state.threshold : this.state.manualFanOn;
+    const history = [...this.state.history, { temp: newTemp, humidity: newHumidity }].slice(-20);
+    this.setState({ prevTemp, prevHumidity, temp: newTemp, humidity: newHumidity, fanOn, history });
+
+    if (Math.random() < 0.06 && this.state.online) {
+      this.setState({ online: false });
+      this._offlineTimer = setTimeout(() => this.setState({ online: true }), 2200);
+    }
+  }
+
+  animateStep() {
+    this.setState(s => ({
+      displayTemp: lerp(s.displayTemp, s.temp, 0.15),
+      displayHumidity: lerp(s.displayHumidity, s.humidity, 0.15)
+    }));
+  }
+
+  toggleFanManual = () => {
+    if (this.state.fanMode !== 'manual') return;
+    this.setState(s => ({ manualFanOn: !s.manualFanOn, fanOn: !s.manualFanOn }));
+  };
+  setModeManual = () => this.setState(s => ({ fanMode: 'manual', fanOn: s.manualFanOn }));
+  setModeAuto = () => this.setState(s => ({ fanMode: 'auto', fanOn: s.temp > s.threshold }));
+  setThreshold = (e) => {
+    const v = Number(e.target.value);
+    this.setState(s => ({ threshold: v, fanOn: s.fanMode === 'auto' ? s.temp > v : s.fanOn }));
+  };
+  setChartViewBoth = () => this.setState({ chartView: 'both' });
+  setChartViewTemp = () => this.setState({ chartView: 'temp' });
+  setChartViewHumidity = () => this.setState({ chartView: 'humidity' });
+  toggleInfo = () => this.setState(s => ({ infoExpanded: !s.infoExpanded }));
+  toggleDarkMode = () => this.setState(s => ({ darkMode: !s.darkMode }));
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.darkMode;
+    const theme = dark
+      ? { bg: '#121A1F', card: '#1C262C', text: '#EAF2F1', muted: '#93A6AF', border: 'rgba(255,255,255,0.08)', shadow: 'rgba(0,0,0,0.35)' }
+      : { bg: '#F2F8F7', card: '#FFFFFF', text: '#1F2937', muted: '#6B7785', border: 'rgba(15,30,30,0.07)', shadow: 'rgba(20,40,40,0.08)' };
+
+    const palette = (this.props && this.props.accentPalette) || 'playful';
+    const accentMap = {
+      playful: { primary: '#FF9F43', secondary: '#2ED9A6' },
+      ocean: { primary: '#2FA9D6', secondary: '#37D6C0' },
+      sunset: { primary: '#FF6B81', secondary: '#FFB86B' }
+    };
+    const accent = accentMap[palette] || accentMap.playful;
+
+    const tempColor = s.displayTemp < 20 ? '#4FB6E8' : s.displayTemp <= 30 ? '#2ED9A6' : '#FF6B6B';
+    const tempStatusLabel = s.displayTemp < 20 ? 'Dingin' : s.displayTemp <= 30 ? 'Normal' : 'Panas';
+    const humidityColor = s.displayHumidity < 35 ? '#FFC94D' : s.displayHumidity <= 70 ? '#4FB6E8' : '#B08CFF';
+    const humidityStatusLabel = s.displayHumidity < 35 ? 'Kering' : s.displayHumidity <= 70 ? 'Normal' : 'Lembap';
+
+    const tempPct = clamp((s.displayTemp - 10) / 30, 0, 1);
+    const humidityPct = clamp((s.displayHumidity - 20) / 70, 0, 1);
+    const circumference = 439.8;
+
+    const tDiff = s.temp - s.prevTemp;
+    const hDiff = s.humidity - s.prevHumidity;
+
+    const hist = s.history.length ? s.history : [{ temp: s.temp, humidity: s.humidity }];
+    const n = hist.length;
+    const xStep = n > 1 ? 600 / (n - 1) : 0;
+    const tempPoints = hist.map((p, i) => `${i*xStep},${180 - clamp((p.temp-10)/30,0,1)*160}`).join(' ');
+    const humidityPoints = hist.map((p, i) => `${i*xStep},${180 - clamp((p.humidity-20)/70,0,1)*160}`).join(' ');
+
+    const isTempAlert = s.displayTemp > 33 || s.displayTemp < 16;
+    const isHumidityAlert = s.displayHumidity > 85 || s.displayHumidity < 25;
+    const isAlert = isTempAlert || isHumidityAlert;
+    let alertMessage = '';
+    if (isTempAlert && isHumidityAlert) alertMessage = 'Suhu dan kelembapan di luar batas normal — periksa ruangan!';
+    else if (isTempAlert) alertMessage = s.displayTemp > 33 ? 'Suhu terlalu tinggi! Pertimbangkan menyalakan kipas.' : 'Suhu terlalu rendah untuk kenyamanan ruangan.';
+    else if (isHumidityAlert) alertMessage = s.displayHumidity > 85 ? 'Kelembapan sangat tinggi — risiko lembap/jamur.' : 'Udara terlalu kering.';
+
+    const btnActiveBg = accent.primary, btnActiveColor = '#fff';
+    const btnIdleBg = 'transparent', btnIdleColor = theme.muted;
+
+    return {
+      theme, accent,
+      darkMode: dark, notDarkMode: !dark, toggleDarkMode: this.toggleDarkMode,
+      nowStr: s.now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      online: s.online,
+      connectionColor: s.online ? '#2ED9A6' : '#FF6B6B',
+      connectionLabel: s.online ? 'Online' : 'Offline',
+
+      isAlert, alertMessage, alertBg: dark ? '#4A2E12' : '#FFE9CC',
+
+      tempColor, tempStatusLabel,
+      tempRounded: (Math.round(s.displayTemp * 10) / 10).toFixed(1),
+      tempDashoffset: circumference - tempPct * circumference,
+      tempTrendIcon: tDiff > 0.3 ? '▲' : tDiff < -0.3 ? '▼' : '—',
+      tempTrendColor: tDiff > 0.3 ? '#FF6B6B' : tDiff < -0.3 ? '#4FB6E8' : theme.muted,
+      tempTrendVal: Math.abs(tDiff).toFixed(1),
+
+      humidityColor, humidityStatusLabel,
+      humidityRounded: Math.round(s.displayHumidity),
+      humidityDashoffset: circumference - humidityPct * circumference,
+      humidityTrendIcon: hDiff > 0.5 ? '▲' : hDiff < -0.5 ? '▼' : '—',
+      humidityTrendColor: hDiff > 0.5 ? '#B08CFF' : hDiff < -0.5 ? '#FFC94D' : theme.muted,
+      humidityTrendVal: Math.round(Math.abs(hDiff)),
+
+      tempPoints, humidityPoints,
+      chartView: s.chartView,
+      tempLineOpacity: s.chartView === 'humidity' ? 0 : 1,
+      humidityLineOpacity: s.chartView === 'temp' ? 0 : 1,
+      setChartViewBoth: this.setChartViewBoth, setChartViewTemp: this.setChartViewTemp, setChartViewHumidity: this.setChartViewHumidity,
+      btnBothBg: s.chartView === 'both' ? btnActiveBg : btnIdleBg, btnBothColor: s.chartView === 'both' ? btnActiveColor : btnIdleColor,
+      btnTempBg: s.chartView === 'temp' ? btnActiveBg : btnIdleBg, btnTempColor: s.chartView === 'temp' ? btnActiveColor : btnIdleColor,
+      btnHumBg: s.chartView === 'humidity' ? btnActiveBg : btnIdleBg, btnHumColor: s.chartView === 'humidity' ? btnActiveColor : btnIdleColor,
+
+      fanOn: s.fanOn,
+      fanStatusLabel: s.fanOn ? 'Fan Menyala' : 'Fan Mati',
+      fanHintLabel: s.fanMode === 'auto' ? `Mode otomatis · ambang ${s.threshold}°C` : 'Mode manual · tekan untuk ubah',
+      fanCardBg: s.fanOn ? `linear-gradient(135deg, ${accent.primary}, ${accent.secondary})` : (dark ? '#2A343A' : '#B9C4C8'),
+      fanAnim: s.fanOn ? 'fanspin 1.1s linear infinite' : 'none',
+      toggleFanManual: this.toggleFanManual,
+
+      fanMode: s.fanMode, isModeAuto: s.fanMode === 'auto',
+      setModeManual: this.setModeManual, setModeAuto: this.setModeAuto,
+      modeManualBg: s.fanMode === 'manual' ? theme.text : theme.bg, modeManualColor: s.fanMode === 'manual' ? theme.card : theme.muted,
+      modeAutoBg: s.fanMode === 'auto' ? theme.text : theme.bg, modeAutoColor: s.fanMode === 'auto' ? theme.card : theme.muted,
+
+      threshold: s.threshold, setThreshold: this.setThreshold,
+
+      infoExpanded: s.infoExpanded, notInfoExpanded: !s.infoExpanded, toggleInfo: this.toggleInfo,
+      infoChevronDeg: s.infoExpanded ? 180 : 0
+    };
+  }
+}
+</script>
+</body>
+</html>

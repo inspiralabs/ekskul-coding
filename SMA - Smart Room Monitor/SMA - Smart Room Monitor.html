@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Room Monitor - Starter Template</title>
+<script src="api.js"></script>
+
+<!--
+  SMART ROOM MONITOR - STARTER TEMPLATE (DHT22)
+  Template belajar HTML, CSS, JavaScript untuk siswa SMA/SMK.
+
+  File ini SENGAJA belum lengkap. Hanya fitur dasar yang sudah dibuat:
+  header, status koneksi, jam, dua kartu sensor (suhu & kelembapan),
+  alert sederhana, dan kontrol fan manual. Sisanya jadi latihanmu!
+
+  PETUNJUK DAN TANTANGAN UNTUK SISWA:
+  1. Ganti warna tema di bagian ":root" (baris CSS paling atas), misalnya
+     variabel warna-primer, jadi warna favoritmu!
+  2. Ganti nilai ambang batas suhu di JS (cari "AMBANG_BATAS_SUHU_TINGGI")
+     lalu lihat efeknya pada alert.
+  3. Tambahkan MODE OTOMATIS untuk fan: buat tombol "Otomatis" di samping
+     tombol fan, lalu buat fan menyala sendiri kalau suhu > ambang batas.
+  4. Tambahkan GRAFIK RIWAYAT suhu & kelembapan pakai elemen <canvas>.
+  5. Tambahkan MODE GELAP (dark mode) dengan tombol di header - contek
+     variabel warna yang sudah disiapkan di ":root" untuk memudahkan.
+  6. Tambahkan panel edukasi collapsible berisi penjelasan singkat
+     tentang sensor DHT22.
+
+  Struktur file ini:
+  - Bagian style berisi semua CSS, dikelompokkan per komponen
+  - Bagian body berisi HTML, ditandai komentar BAGIAN: ...
+  - Bagian script di akhir file, dipisah per fungsi dengan komentar
+-->
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="kontainer">
+
+  <!-- ================================================================
+       BAGIAN: HEADER
+       ================================================================ -->
+  <header class="header">
+    <div class="header-judul">
+      <span class="logo-emoji">🌡️</span>
+      <div>
+        <h1>Smart Room Monitor</h1>
+        <p>Dashboard IoT sensor DHT22 - <span id="deviceIdLabel"></span></p>
+      </div>
+    </div>
+    <div class="header-kanan">
+      <div class="status-koneksi">
+        <span class="dot-status" id="dotStatus"></span>
+        <span id="teksStatus">Online</span>
+      </div>
+      <div class="jam-realtime" id="jamRealtime">00:00:00</div>
+      <!-- BAGIAN: MODE GELAP (kosong - TANTANGAN 5)
+           Tambahkan tombol di sini untuk toggle dark mode. -->
+      <span id="bagianModeGelap"></span>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       BAGIAN: NOTIFIKASI / ALERT
+       ================================================================ -->
+  <div class="alert-banner" id="alertBanner">
+    <span class="alert-emoji">⚠️</span>
+    <span id="alertTeks">Peringatan: kondisi ruangan tidak normal!</span>
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: KARTU DATA UTAMA (Suhu & Kelembapan)
+       Kartu di bawah SENGAJA dibuat minim - hanya angka & status yang
+       jalan (dipakai oleh JS). TANTANGAN 1: percantik sendiri, misalnya:
+       - tambahkan ikon/emoji besar
+       - tambahkan gauge/progress ring melingkar
+       - tambahkan trend indicator (panah naik/turun dari nilai sebelumnya)
+       ================================================================ -->
+  <div class="grid-kartu-utama">
+
+    <!-- Kartu Suhu -->
+    <div class="kartu-sensor">
+      <div class="kartu-info-sensor">
+        <div class="label-sensor">Suhu Ruangan</div>
+        <div class="angka-besar"><span id="angkaSuhu">--</span><span class="satuan">°C</span></div>
+        <span class="status-label" id="statusSuhu">Normal</span>
+        <!-- TULIS KODEMU DI SINI (ikon, gauge, trend, dst) -->
+      </div>
+    </div>
+
+    <!-- Kartu Kelembapan -->
+    <div class="kartu-sensor">
+      <div class="kartu-info-sensor">
+        <div class="label-sensor">Kelembapan Udara</div>
+        <div class="angka-besar"><span id="angkaLembap">--</span><span class="satuan">%</span></div>
+        <span class="status-label" id="statusLembap">Normal</span>
+        <!-- TULIS KODEMU DI SINI (ikon, gauge, trend, dst) -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: GRAFIK RIWAYAT (kosong - TANTANGAN 4)
+       Tambahkan elemen <canvas> atau library grafik di sini, lalu
+       gambar riwayat suhu & kelembapan dari beberapa jam terakhir.
+       ================================================================ -->
+  <div class="kartu-kosong" id="bagianGrafik">
+    <!-- TULIS KODEMU DI SINI -->
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: KONTROL FAN (baru mode manual)
+       ================================================================ -->
+  <div class="kartu-fan">
+    <h2>🌀 Kontrol Fan</h2>
+    <!-- ================================================================
+         BAGIAN: MODE FAN (kosong - TANTANGAN 3)
+         Tambahkan tombol mode Manual/Otomatis dan slider ambang batas
+         suhu di sini. Lihat fungsi jalankanLogikaOtomatis() di JS.
+         ================================================================ -->
+    <div class="kartu-kosong" id="bagianModeFan">
+      <!-- TULIS KODEMU DI SINI -->
+    </div>
+    <div class="tombol-fan-besar" id="tombolFan">
+      <span class="ikon-fan" id="ikonFan">🌀</span>
+      <div class="fan-teks">
+        <strong id="labelFan">Fan Mati</strong>
+        <span id="subLabelFan">Tekan untuk menyalakan</span>
+      </div>
+      <div class="switch-fan" id="switchFan"><div class="knop"></div></div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: PANEL EDUKASI (kosong - TANTANGAN 6)
+       Tambahkan card collapsible berisi penjelasan singkat tentang
+       sensor DHT22 dan kenapa suhu/kelembapan penting dipantau.
+       ================================================================ -->
+  <div class="kartu-kosong" id="bagianEdukasi">
+    <!-- TULIS KODEMU DI SINI -->
+  </div>
+
+  <p class="footer-catatan">Dibuat sebagai proyek belajar IoT - data pada dashboard ini adalah simulasi dummy.</p>
+
+</div>
+
+<script>
+/* =====================================================================
+   BAGIAN: STATE / VARIABEL GLOBAL
+   Nilai-nilai ini menyimpan kondisi dashboard saat ini
+   ===================================================================== */
+var suhuSaatIni = 26;      // nilai suhu awal (°C)
+var lembapSaatIni = 55;    // nilai kelembapan awal (%)
+var fanMenyala = false;     // status fan: true = ON, false = OFF
+
+document.getElementById("deviceIdLabel").textContent = MY_DEVICE_ID;
+
+// Ambang batas suhu untuk memicu alert. TANTANGAN 2: coba ubah nilai ini.
+var AMBANG_BATAS_SUHU_TINGGI = 32;
+
+/* =====================================================================
+   FUNGSI: ambilDataSensorDariBackend()
+   Mengambil data sensor ASLI dari backend (via api.js), menggantikan
+   simulasi acak yang lama. Kalau device belum pernah kirim data,
+   angka lama dipertahankan (tidak error).
+   ===================================================================== */
+async function ambilDataSensorDariBackend() {
+  var data = await ambilDataSensorTerbaru();
+  if (!data) return; // ESP32 belum pernah kirim data
+  suhuSaatIni = data.temp;
+  lembapSaatIni = data.humidity;
+}
+
+function clamp(nilai, min, max) {
+  return Math.max(min, Math.min(max, nilai));
+}
+
+/* =====================================================================
+   FUNGSI: perbaruiTampilanSensor()
+   Menampilkan angka suhu & kelembapan terbaru ke layar, dan mewarnai
+   label status sesuai kondisi.
+   ===================================================================== */
+function perbaruiTampilanSensor() {
+  document.getElementById("angkaSuhu").textContent = suhuSaatIni.toFixed(1);
+  document.getElementById("angkaLembap").textContent = lembapSaatIni.toFixed(0);
+
+  // --- status suhu ---
+  var warnaSuhu, statusSuhuTeks;
+  if (suhuSaatIni < 22) { warnaSuhu = "var(--warna-dingin)"; statusSuhuTeks = "Dingin"; }
+  else if (suhuSaatIni <= 29) { warnaSuhu = "var(--warna-normal)"; statusSuhuTeks = "Normal"; }
+  else { warnaSuhu = "var(--warna-panas)"; statusSuhuTeks = "Panas"; }
+  var elStatusSuhu = document.getElementById("statusSuhu");
+  elStatusSuhu.textContent = statusSuhuTeks;
+  elStatusSuhu.style.background = warnaSuhu;
+
+  // --- status kelembapan ---
+  var warnaLembap, statusLembapTeks;
+  if (lembapSaatIni < 40) { warnaLembap = "var(--warna-kering)"; statusLembapTeks = "Kering"; }
+  else if (lembapSaatIni <= 70) { warnaLembap = "var(--warna-lembap-normal)"; statusLembapTeks = "Normal"; }
+  else { warnaLembap = "var(--warna-lembap-tinggi)"; statusLembapTeks = "Lembap"; }
+  var elStatusLembap = document.getElementById("statusLembap");
+  elStatusLembap.textContent = statusLembapTeks;
+  elStatusLembap.style.background = warnaLembap;
+
+  perbaruiAlert();
+}
+
+/* =====================================================================
+   FUNGSI: perbaruiAlert()
+   Menampilkan banner peringatan jika suhu melebihi ambang batas.
+   TANTANGAN: tambahkan juga kondisi untuk kelembapan terlalu kering/lembap.
+   ===================================================================== */
+function perbaruiAlert() {
+  var banner = document.getElementById("alertBanner");
+  var teks = document.getElementById("alertTeks");
+
+  if (suhuSaatIni > AMBANG_BATAS_SUHU_TINGGI) {
+    teks.textContent = "⚠️ Suhu terlalu tinggi (" + suhuSaatIni.toFixed(1) + "°C)! Pastikan ventilasi ruangan baik.";
+    banner.classList.add("tampil");
+  } else {
+    banner.classList.remove("tampil");
+  }
+}
+
+/* =====================================================================
+   BAGIAN: JAM REAL-TIME & STATUS KONEKSI
+   ===================================================================== */
+function perbaruiJam() {
+  var sekarang = new Date();
+  var jam = String(sekarang.getHours()).padStart(2, "0");
+  var menit = String(sekarang.getMinutes()).padStart(2, "0");
+  var detik = String(sekarang.getSeconds()).padStart(2, "0");
+  document.getElementById("jamRealtime").textContent = jam + ":" + menit + ":" + detik;
+}
+
+/* Simulasi status koneksi: sesekali "offline" secara acak agar terlihat nyata.
+   TANTANGAN: ganti dengan status koneksi asli dari perangkat ESP32/NodeMCU-mu. */
+function perbaruiStatusKoneksi() {
+  var online = Math.random() > 0.05; // 95% kemungkinan online
+  var dot = document.getElementById("dotStatus");
+  var teks = document.getElementById("teksStatus");
+  if (online) {
+    dot.classList.remove("offline");
+    teks.textContent = "Online";
+  } else {
+    dot.classList.add("offline");
+    teks.textContent = "Offline";
+  }
+}
+
+/* =====================================================================
+   BAGIAN: KONTROL FAN (manual saja - lihat TANTANGAN 3 untuk mode otomatis)
+   ===================================================================== */
+function perbaruiTampilanFan() {
+  var tombolFan = document.getElementById("tombolFan");
+  var ikonFan = document.getElementById("ikonFan");
+  var labelFan = document.getElementById("labelFan");
+  var subLabelFan = document.getElementById("subLabelFan");
+  var switchFan = document.getElementById("switchFan");
+
+  if (fanMenyala) {
+    tombolFan.classList.add("nyala");
+    ikonFan.classList.add("berputar");
+    labelFan.textContent = "Fan Menyala";
+    subLabelFan.textContent = "Tekan untuk mematikan";
+    switchFan.classList.add("nyala");
+  } else {
+    tombolFan.classList.remove("nyala");
+    ikonFan.classList.remove("berputar");
+    labelFan.textContent = "Fan Mati";
+    subLabelFan.textContent = "Tekan untuk menyalakan";
+    switchFan.classList.remove("nyala");
+  }
+}
+
+/* Menyalakan/mematikan fan saat kartu diklik.
+   CONTOH JADI: dulu ini cuma ubah variabel lokal (fanMenyala = !fanMenyala).
+   Sekarang kita kirim perintah ke backend lewat kirimPerintahFan() dari
+   api.js, backend yang jadi sumber kebenaran & yang benar-benar menyalakan
+   relay di ESP32. Pakai pola YANG SAMA ini untuk TANTANGAN 3 (mode
+   Otomatis + slider threshold) di bagian HTML "bagianModeFan" di atas:
+   panggil kirimPerintahFan({ fanMode: "auto" }) atau
+   kirimPerintahFan({ threshold: nilaiSlider }). */
+async function toggleFanManual() {
+  var hasil = await kirimPerintahFan({ manualFanOn: !fanMenyala });
+  fanMenyala = hasil.fanOn;
+  perbaruiTampilanFan();
+}
+
+/* =====================================================================
+   BAGIAN: SIKLUS UTAMA (dipanggil berkala oleh setInterval)
+   ===================================================================== */
+async function siklusPembaruanData() {
+  await ambilDataSensorDariBackend();
+  perbaruiTampilanSensor();
+
+  // status fan juga ikut disegarkan (kalau ada perintah dari dashboard lain)
+  var fan = await ambilStatusFan();
+  fanMenyala = fan.fanOn;
+  perbaruiTampilanFan();
+}
+
+/* =====================================================================
+   BAGIAN: STATUS KONEKSI
+   Online kalau backend berhasil dihubungi saat siklus terakhir.
+   ===================================================================== */
+var statusOnlineTerkini = false;
+function perbaruiStatusKoneksi() {
+  var dot = document.getElementById("dotStatus");
+  var teks = document.getElementById("teksStatus");
+  if (statusOnlineTerkini) {
+    dot.classList.remove("offline");
+    teks.textContent = "Online";
+  } else {
+    dot.classList.add("offline");
+    teks.textContent = "Offline";
+  }
+}
+
+/* =====================================================================
+   INISIALISASI: dijalankan sekali saat halaman dimuat
+   ===================================================================== */
+async function inisialisasiDashboard() {
+  try {
+    await siklusPembaruanData();
+    statusOnlineTerkini = true;
+  } catch (err) {
+    console.error("Gagal ambil data dari backend:", err);
+    statusOnlineTerkini = false;
+  }
+  perbaruiTampilanFan();
+  perbaruiJam();
+  perbaruiStatusKoneksi();
+
+  document.getElementById("tombolFan").addEventListener("click", toggleFanManual);
+
+  setInterval(perbaruiJam, 1000);
+  // data sensor "baru" diambil dari backend tiap 4-5 detik
+  setInterval(function () {
+    siklusPembaruanData()
+      .then(function () { statusOnlineTerkini = true; perbaruiStatusKoneksi(); })
+      .catch(function (err) { console.error("Gagal ambil data:", err); statusOnlineTerkini = false; perbaruiStatusKoneksi(); });
+  }, 4500);
+}
+
+document.addEventListener("DOMContentLoaded", inisialisasiDashboard);
+</script>
+
+</body>
+</html>

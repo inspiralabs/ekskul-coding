@@ -1,0 +1,318 @@
+/* ===================================================================
+   VARIABEL WARNA & UKURAN (CSS Variables)
+   Ubah nilai di sini untuk re-theming seluruh dashboard
+   =================================================================== */
+:root {
+  --warna-primer: #ff8a3d;        /* oranye ceria - aksen utama */
+  --warna-sekunder: #3ddc97;      /* hijau mint */
+  --warna-biru: #4d9de0;          /* biru muda */
+
+  --warna-bg: #f4f7fb;
+  --warna-bg-gradasi: linear-gradient(135deg, #eef5ff 0%, #f4fff9 100%);
+  --warna-card: #ffffff;
+  --warna-teks: #24313f;
+  --warna-teks-lemah: #7b8a99;
+  --warna-border: #e5ecf3;
+
+  /* Warna status suhu */
+  --warna-dingin: #4d9de0;
+  --warna-normal: #3ddc97;
+  --warna-panas: #ff5c5c;
+
+  /* Warna status kelembapan */
+  --warna-kering: #f4c542;
+  --warna-lembap-normal: #4d9de0;
+  --warna-lembap-tinggi: #a367e0;
+
+  /* Warna status koneksi & fan */
+  --warna-online: #3ddc97;
+  --warna-offline: #ff5c5c;
+  --warna-fan-aktif: #ff8a3d;
+  --warna-fan-mati: #b7c3cf;
+
+  --radius-besar: 24px;
+  --radius-sedang: 16px;
+  --shadow-card: 0 8px 24px rgba(36, 49, 63, 0.08);
+  --font-utama: 'Baloo 2', 'Quicksand', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-utama);
+  background: var(--warna-bg-gradasi);
+  color: var(--warna-teks);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+a { color: var(--warna-biru); }
+a:hover { color: var(--warna-primer); }
+
+.kontainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ===================================================================
+   BAGIAN: HEADER
+   =================================================================== */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--warna-card);
+  border-radius: var(--radius-besar);
+  padding: 18px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 24px;
+}
+
+.header-judul {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-judul .logo-emoji { font-size: 36px; line-height: 1; }
+.header-judul h1 { margin: 0; font-size: 22px; font-weight: 800; }
+.header-judul p { margin: 2px 0 0; font-size: 13px; color: var(--warna-teks-lemah); }
+
+.header-kanan {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.status-koneksi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.dot-status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--warna-online);
+  position: relative;
+}
+
+.dot-status.offline { background: var(--warna-offline); }
+
+.dot-status::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: denyut 1.6s ease-out infinite;
+}
+
+@keyframes denyut {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.jam-realtime {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: var(--warna-bg);
+  border: 1px solid var(--warna-border);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ===================================================================
+   BAGIAN: ALERT / NOTIFIKASI
+   =================================================================== */
+.alert-banner {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  background: #fff1e6;
+  border: 1px solid #ffd0a8;
+  color: #a3450a;
+  padding: 14px 20px;
+  border-radius: var(--radius-sedang);
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.alert-banner.tampil { display: flex; }
+.alert-banner .alert-emoji { font-size: 22px; }
+
+/* ===================================================================
+   BAGIAN: KARTU DATA UTAMA (Suhu & Kelembapan)
+   =================================================================== */
+.grid-kartu-utama {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 760px) {
+  .grid-kartu-utama { grid-template-columns: 1fr; }
+}
+
+.kartu-sensor {
+  background: var(--warna-card);
+  border-radius: var(--radius-besar);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-wrap: wrap;
+}
+
+.kartu-sensor:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(36, 49, 63, 0.14);
+}
+
+.ikon-sensor {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--warna-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.kartu-info-sensor { flex: 1; min-width: 140px; }
+
+.kartu-info-sensor .label-sensor {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--warna-teks-lemah);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.angka-besar {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 4px 0 6px;
+}
+
+.angka-besar .satuan { font-size: 22px; font-weight: 700; color: var(--warna-teks-lemah); }
+
+.status-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: #fff;
+}
+
+/* ===================================================================
+   BAGIAN: KONTROL FAN
+   =================================================================== */
+.kartu-fan {
+  background: var(--warna-card);
+  border-radius: var(--radius-besar);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.kartu-fan h2 { margin: 0 0 16px; font-size: 18px; font-weight: 800; }
+
+.tombol-fan-besar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: var(--warna-bg);
+  border: 2px solid var(--warna-border);
+  border-radius: var(--radius-sedang);
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.tombol-fan-besar.nyala {
+  background: linear-gradient(135deg, #fff1e6, #ffe4cf);
+  border-color: var(--warna-fan-aktif);
+}
+
+.ikon-fan {
+  font-size: 46px;
+  display: inline-block;
+}
+
+.ikon-fan.berputar {
+  animation: putarFan 0.9s linear infinite;
+}
+
+@keyframes putarFan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.fan-teks strong { display: block; font-size: 17px; font-weight: 800; }
+.fan-teks span { font-size: 13px; color: var(--warna-teks-lemah); }
+
+.switch-fan {
+  width: 58px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--warna-fan-mati);
+  position: relative;
+  margin-left: auto;
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+
+.switch-fan.nyala { background: var(--warna-fan-aktif); }
+
+.switch-fan .knop {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: left 0.25s ease;
+}
+
+.switch-fan.nyala .knop { left: 29px; }
+
+/* Kotak kosong untuk section yang belum kamu isi - hapus style ini
+   kalau sudah tidak dibutuhkan */
+.kartu-kosong {
+  background: var(--warna-card);
+  border: 2px dashed var(--warna-border);
+  border-radius: var(--radius-besar);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  color: var(--warna-teks-lemah);
+  font-size: 13px;
+  min-height: 40px;
+}
+
+.footer-catatan {
+  text-align: center;
+  font-size: 12px;
+  color: var(--warna-teks-lemah);
+  margin-top: 10px;
+}

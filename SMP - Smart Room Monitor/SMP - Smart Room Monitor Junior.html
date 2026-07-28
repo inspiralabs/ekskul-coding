@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Room Monitor Junior</title>
+<script src="api.js"></script>
+
+<!--
+  SMART ROOM MONITOR JUNIOR - TEMPLATE UNTUK SISWA SMP
+  Versi sederhana: hanya HTML + CSS, JavaScript minim (jam & animasi angka saja).
+
+  PETUNJUK UNTUK SISWA - coba ubah ini duluan:
+  1. Ganti warna di bagian ":root" paling atas CSS - lihat nama komentarnya.
+  2. Ganti tulisan judul "Smart Room Monitor Junior" jadi nama proyekmu sendiri.
+  3. Ganti angka suhu & kelembapan (cari class .angka-besar di HTML).
+  4. Ganti emoji ikon (🌡️, 💧, 😊) dengan emoji favoritmu.
+  5. Cari komentar "TAMBAHKAN ELEMEN KAMU DI SINI" dan isi dengan idemu sendiri!
+
+  Struktur file:
+  - <style> berisi semua CSS
+  - <body> berisi HTML, ditandai komentar BAGIAN: ...
+  - <script> di akhir file, hanya untuk jam & animasi sederhana
+-->
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="kontainer">
+
+  <!-- ================================================================
+       BAGIAN: HEADER - ganti judul di sini
+       ================================================================ -->
+  <header class="header">
+    <div class="judul-dashboard">
+      <span class="logo-emoji">🌡️</span>
+      <div>
+        <h1>Smart Room Monitor Junior</h1>
+        <p>Dashboard pemantau suhu & kelembapan ruangan</p>
+      </div>
+    </div>
+    <div class="header-kanan">
+      <div class="status-koneksi">
+        <span class="dot-status"></span>
+        <span>Online</span>
+      </div>
+      <div class="jam-realtime" id="jamRealtime">00:00:00</div>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       BAGIAN: ALERT - ganti pesan atau warnanya di CSS (.alert-banner)
+       ================================================================ -->
+  <div class="alert-banner">
+    <span class="alert-emoji">⚠️</span>
+    <span>Suhu ruangan cukup tinggi hari ini, pastikan ventilasi terbuka!</span>
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: KARTU SUHU - ganti angka dan warna di sini
+       ================================================================ -->
+  <div class="grid-kartu-utama">
+
+    <div class="kartu-suhu">
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="gauge-track" cx="70" cy="70" r="58"></circle>
+          <!-- ganti stroke-dashoffset untuk mengubah seberapa penuh gauge (keliling ~ 364) -->
+          <circle class="gauge-nilai" id="gaugeSuhu" cx="70" cy="70" r="58"
+                  stroke="var(--warna-normal)" stroke-dasharray="364" stroke-dashoffset="120"></circle>
+        </svg>
+        <div class="gauge-tengah">🌡️</div>
+      </div>
+      <div class="info-sensor">
+        <div class="label-sensor">Suhu Ruangan</div>
+        <div class="angka-besar"><span id="angkaSuhu">26</span><span class="satuan">°C</span></div>
+        <span class="status-label" id="statusSuhu" style="background: var(--warna-normal)">Normal</span>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         BAGIAN: KARTU KELEMBAPAN - ganti angka dan warna di sini
+         ================================================================ -->
+    <div class="kartu-lembap">
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="gauge-track" cx="70" cy="70" r="58"></circle>
+          <circle class="gauge-nilai" id="gaugeLembap" cx="70" cy="70" r="58"
+                  stroke="var(--warna-lembap-normal)" stroke-dasharray="364" stroke-dashoffset="145"></circle>
+        </svg>
+        <div class="gauge-tengah">💧</div>
+      </div>
+      <div class="info-sensor">
+        <div class="label-sensor">Kelembapan Udara</div>
+        <div class="angka-besar"><span id="angkaLembap">60</span><span class="satuan">%</span></div>
+        <span class="status-label" id="statusLembap" style="background: var(--warna-lembap-normal)">Normal</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: KOTAK STATUS RUANGAN - ganti emoji dan teks sesuai kondisi
+       ================================================================ -->
+  <div class="kartu-status-ruangan">
+    <span class="emoji-status-ruangan">😊</span>
+    <div class="teks-status-ruangan">
+      <strong>Ruangan Nyaman</strong>
+      <span>Suhu dan kelembapan dalam kondisi baik untuk belajar.</span>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: PANEL EDUKASI - pakai <details> bawaan HTML, tanpa JS
+       ================================================================ -->
+  <details class="kartu-edukasi">
+    <summary>📚 Kenapa Ini Penting? (klik untuk buka)</summary>
+    <div class="edukasi-isi">
+      <div class="edukasi-poin">
+        <strong>Apa itu DHT22?</strong>
+        Sensor kecil yang bisa membaca suhu dan kelembapan udara sekaligus,
+        sering dipakai untuk belajar membuat alat elektronik sederhana.
+      </div>
+      <div class="edukasi-poin">
+        <strong>Kenapa suhu penting?</strong>
+        Ruangan yang terlalu panas membuat kita tidak nyaman dan sulit
+        berkonsentrasi saat belajar.
+      </div>
+      <div class="edukasi-poin">
+        <strong>Kenapa kelembapan penting?</strong>
+        Udara yang terlalu lembap bisa memicu bau apek dan jamur, sedangkan
+        udara terlalu kering membuat tenggorokan kering.
+      </div>
+    </div>
+  </details>
+
+  <!-- ================================================================
+       TAMBAHKAN ELEMEN KAMU DI SINI
+       Contoh ide: kartu cuaca hari ini, foto ruangan kelas, tombol like,
+       atau apapun yang menurutmu seru untuk ditambahkan!
+       ================================================================ -->
+  <div class="kotak-kosong">
+    ✏️ Ini area kosong untuk kamu isi sendiri - contoh ide: kartu cuaca hari ini,
+    foto ruangan kelas, atau tombol like. Hapus kotak ini kalau tidak dipakai.
+  </div>
+
+  <p class="footer-catatan"><span>SMP Asy Syahid</span><span class="titik-pemisah"></span><span>Ekskul Coding</span><span class="titik-pemisah"></span><span>InspiraLabs</span></p>
+
+</div>
+
+<script>
+  // BAGIAN: JAM REAL-TIME (JavaScript paling sederhana - hanya update jam)
+  function perbaruiJam() {
+    var sekarang = new Date();                                  // ambil waktu saat ini
+    var jam = String(sekarang.getHours()).padStart(2, "0");      // ambil jam, tambah 0 di depan jika perlu
+    var menit = String(sekarang.getMinutes()).padStart(2, "0");  // ambil menit
+    var detik = String(sekarang.getSeconds()).padStart(2, "0");  // ambil detik
+    document.getElementById("jamRealtime").textContent = jam + ":" + menit + ":" + detik; // tampilkan ke layar
+  }
+
+  perbaruiJam();                       // jalankan sekali saat halaman dibuka
+  setInterval(perbaruiJam, 1000);       // ulangi setiap 1 detik supaya jam terus berjalan
+
+  // BAGIAN: AMBIL DATA SENSOR ASLI dari backend (lewat api.js) tiap 4-5 detik.
+  // Rumus gauge: stroke-dashoffset = 364 * (1 - persen), 364 = keliling lingkaran.
+  function clamp(nilai, min, max) { return Math.max(min, Math.min(max, nilai)); }
+
+  async function perbaruiDataSensor() {
+    var data = await ambilDataSensorTerbaru();
+    if (!data) return; // ESP32 belum pernah kirim data, biarkan angka contoh tetap tampil
+
+    document.getElementById("angkaSuhu").textContent = data.temp.toFixed(1);
+    document.getElementById("angkaLembap").textContent = Math.round(data.humidity);
+
+    var persenSuhu = clamp((data.temp - 10) / 30, 0, 1);
+    var persenLembap = clamp((data.humidity - 20) / 70, 0, 1);
+    document.getElementById("gaugeSuhu").setAttribute("stroke-dashoffset", 364 * (1 - persenSuhu));
+    document.getElementById("gaugeLembap").setAttribute("stroke-dashoffset", 364 * (1 - persenLembap));
+
+    var statusSuhu = document.getElementById("statusSuhu");
+    if (data.temp < 22) { statusSuhu.textContent = "Dingin"; statusSuhu.style.background = "var(--warna-dingin)"; }
+    else if (data.temp <= 29) { statusSuhu.textContent = "Normal"; statusSuhu.style.background = "var(--warna-normal)"; }
+    else { statusSuhu.textContent = "Panas"; statusSuhu.style.background = "var(--warna-panas)"; }
+
+    var statusLembap = document.getElementById("statusLembap");
+    if (data.humidity < 40) { statusLembap.textContent = "Kering"; statusLembap.style.background = "var(--warna-kering)"; }
+    else if (data.humidity <= 70) { statusLembap.textContent = "Normal"; statusLembap.style.background = "var(--warna-lembap-normal)"; }
+    else { statusLembap.textContent = "Lembap"; statusLembap.style.background = "var(--warna-lembap-tinggi)"; }
+  }
+
+  perbaruiDataSensor();
+  setInterval(perbaruiDataSensor, 4500);
+</script>
+
+</body>
+</html>
