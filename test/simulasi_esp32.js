@@ -13,7 +13,7 @@
 //   node simulasi_esp32.js sma-1 25          (device + interval 25 = 2.5 detik)
 // ============================================================
 
-const SERVER_URL = "http://localhost:3000/api/readings";
+const SERVER_URL = "https://api-ekskulcoding.inspiralabs.id/api/readings";
 const API_KEY = "ekskul-coding-seru"; // samakan dengan backend/.env
 
 const DEVICE_ID = process.argv[2] || "sma-1";

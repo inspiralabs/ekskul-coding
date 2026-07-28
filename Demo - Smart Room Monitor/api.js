@@ -5,7 +5,8 @@
 // URL backend -- diisi PELATIH. Backend di-deploy ke server online, jadi
 // isi dengan URL server itu (https://...)
 // Untuk uji coba di laptop sebelum deploy, boleh sementara "http://localhost:3000".
-const API_BASE = "https://<url-backend-anda>";
+const API_BASE = "https://api-ekskulcoding.inspiralabs.id";
+// const API_BASE = "https://<url-backend-anda>";
 const MY_DEVICE_ID = "demo-1"; // ganti sesuai device yang mau ditampilkan di dashboard ini
 
 async function ambilRiwayat(limit = 20) {
