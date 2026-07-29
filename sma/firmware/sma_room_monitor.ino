@@ -5,7 +5,7 @@
 //
 // Cari kata "TANTANGAN" di file ini untuk tahu bagian yang
 // perlu kamu lengkapi. Bagian berlabel "JANGAN UBAH" adalah
-// koneksi ke backend yang sudah disiapkan pelatih.
+// koneksi ke backend yang sudah disiapkan tutor.
 // ============================================================
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -13,16 +13,17 @@
 #include <DHT.h>
 #include <WebServer.h>
 
-// ============ JANGAN UBAH: koneksi ke backend, sudah disiapkan pelatih ============
-// Backend di-deploy ke server online (HTTPS) -- SERVER_URL diisi PELATIH
-// dengan URL server itu, contoh: "https://api-ekskulcoding.inspiralabs.id/api/readings"
-const char* SERVER_URL = "https://<url-backend-anda>/api/readings";
-const char* API_KEY    = "<shared-secret>";
+// ============ JANGAN UBAH: koneksi ke backend, sudah disiapkan tutor ============
+// Ini sudah disiapkan tutor -- jangan diganti, kecuali diminta tutor.
+// SERVER_URL dan API_KEY jangan diubah
+const char* SERVER_URL = "https://api-ekskulcoding.inspiralabs.id/api/readings";
+const char* API_KEY    = "ekskul-coding-seru";
 
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
-const char* DEVICE_ID     = "sma-1";        // GANTI sesuai ID kelompokmu dari daftar pelatih!
-const char* WIFI_SSID     = "ISI_DI_SINI";
-const char* WIFI_PASSWORD = "ISI_DI_SINI";
+const char* DEVICE_ID     = "sma-1";        // GANTI sesuai ID kelompokmu dari daftar tutor!
+const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
+const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
+
 #define DHT_PIN 4                            // ganti sesuai pemasangan kabel DHT22
 #define RELAY_PIN 5                          // ganti sesuai pemasangan modul relay
 

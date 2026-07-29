@@ -1,12 +1,11 @@
 // ============================================================
-// JANGAN UBAH FILE INI — sudah disiapkan pelatih, ini koneksi ke backend.
+// JANGAN UBAH FILE INI — sudah disiapkan tutor, ini koneksi ke backend.
 // Kerjakan TANTANGAN kamu di index.html saja:
 // panggil kirimPerintahFan(...) dari tombol yang kamu buat.
 // ============================================================
-// URL backend -- diisi PELATIH. Backend di-deploy ke server online, jadi
+// URL backend -- diisi TUTOR. Backend di-deploy ke server online, jadi
 // isi dengan URL server itu (https://...)
 const API_BASE = "https://api-ekskulcoding.inspiralabs.id";
-// const API_BASE = "https://<url-backend-anda>";
 const MY_DEVICE_ID = "sma-1"; // ganti sesuai ID kelompokmu (SAMA dengan DEVICE_ID di firmware!)
 
 async function ambilDataSensorTerbaru() {

@@ -1,7 +1,7 @@
 # Siapa Boleh Ubah Apa — Panduan Proyek Smart Room Monitor
 
 Dokumen ini merangkum pembagian tanggung jawab di seluruh proyek: apa yang jadi urusan
-**pelatih/panitia**, apa yang jadi **materi IoT** (Anda ajarkan), dan apa yang jadi
+**tutor/panitia**, apa yang jadi **materi IoT** (Anda ajarkan), dan apa yang jadi
 **materi web dev/UI** (rekan Anda ajarkan) — plus bagian mana yang boleh diubah siswa dan
 mana yang tidak.
 
@@ -9,14 +9,14 @@ mana yang tidak.
 
 ```
 asy-syahid-ekskul/
-├── backend/                              <- PELATIH SAJA, tidak diajarkan
+├── backend/                              <- TUTOR SAJA, tidak diajarkan
 ├── firmware/
-│   ├── smp_room_monitor/                 <- materi IoT SMP (Anda)
-│   ├── sma_room_monitor/                 <- materi IoT SMA (Anda) -- ada TANTANGAN
-│   └── sma_room_monitor_REFERENSI_PELATIH/  <- kunci jawaban, JANGAN dibagikan ke siswa
-├── demo/                                  <- dashboard referensi Anda (pelatih)
+│   └── sma_room_monitor_REFERENSI_TUTOR/ <- kunci jawaban, JANGAN dibagikan ke siswa
+├── demo/                                  <- dashboard referensi Anda (tutor)
 ├── sma/                                   <- materi web dev SMA (rekan Anda) -- ada TANTANGAN
+│   └── firmware/sma_room_monitor.ino     <- materi IoT SMA (Anda) -- ada TANTANGAN
 ├── smp/                                   <- materi web dev SMP (rekan Anda)
+│   └── firmware/smp_room_monitor.ino     <- materi IoT SMP (Anda)
 ├── vercel.json                            <- routing /demo /sma /smp untuk deploy Vercel
 └── SIAPA_BOLEH_UBAH_APA.md               <- file ini
 ```
@@ -32,15 +32,15 @@ isinya sama sekali, cukup diberi:
 
 Lihat `backend/README.md` untuk cara setup & menjalankan.
 
-## 2. Firmware ESP32 (`firmware/`)
+## 2. Firmware ESP32 (`sma/firmware/`, `smp/firmware/`)
 
-### `smp_room_monitor/smp_room_monitor.ino`
+### `smp/firmware/smp_room_monitor.ino`
 **Materi:** IoT SMP (Anda ajarkan).
 **Siswa boleh ubah:** 4 baris saja — `DEVICE_ID`, `WIFI_SSID`, `WIFI_PASSWORD`, `DHT_PIN`.
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (URL server, API key, logika kirim
 data). Tidak ada kontrol relay di file ini sama sekali.
 
-### `sma_room_monitor/sma_room_monitor.ino`
+### `sma/firmware/sma_room_monitor.ino`
 **Materi:** IoT SMA (Anda ajarkan).
 **Siswa boleh/harus ubah:**
 - 5 baris identitas (`DEVICE_ID`, WiFi, `DHT_PIN`, `RELAY_PIN`)
@@ -51,7 +51,7 @@ data). Tidak ada kontrol relay di file ini sama sekali.
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (koneksi ke backend, loop kirim
 sensor, `fanServer.handleClient()`).
 
-### `sma_room_monitor_REFERENSI_PELATIH/`
+### `firmware/sma_room_monitor_REFERENSI_TUTOR/`
 **JANGAN dibagikan ke siswa.** Ini kunci jawaban lengkap TANTANGAN, untuk Anda verifikasi
 sebelum kelas dan sebagai panduan diskusi setelah siswa mengerjakan TANTANGAN mereka.
 
@@ -114,13 +114,13 @@ bisa membuat perangkat teman sekelompok lain ikut error atau data tertukar antar
 
 1. Deploy backend ke server (`backend/README.md`) dan catat URL server-nya.
 2. Ganti semua `<url-backend-anda>` dan `<shared-secret>` di:
-   - `firmware/smp_room_monitor/smp_room_monitor.ino`
-   - `firmware/sma_room_monitor/sma_room_monitor.ino`
-   - `firmware/sma_room_monitor_REFERENSI_PELATIH/*.ino`
+   - `smp/firmware/smp_room_monitor.ino`
+   - `sma/firmware/sma_room_monitor.ino`
+   - `firmware/sma_room_monitor_REFERENSI_TUTOR/*.ino`
    - `demo/api.js`, `sma/api.js`, `smp/api.js`
 3. Tentukan daftar `DEVICE_ID` final per kelompok (lihat `backend/README.md` bagian 4),
    masukkan ke `HANDOUT_SISWA.md`.
-4. Compile & flash `sma_room_monitor_REFERENSI_PELATIH` ke satu ESP32 uji untuk verifikasi
+4. Compile & flash `sma_room_monitor_REFERENSI_TUTOR` ke satu ESP32 uji untuk verifikasi
    relay & alur kontrol bekerja sebelum kelas.
-5. Baru bagikan `firmware/smp_room_monitor/` dan `firmware/sma_room_monitor/` (versi
-   TANTANGAN, BUKAN referensi) ke siswa sesuai `HANDOUT_SISWA.md`.
+5. Baru bagikan `smp/firmware/smp_room_monitor.ino` dan `sma/firmware/sma_room_monitor.ino`
+   (versi TANTANGAN, BUKAN referensi) ke siswa sesuai `HANDOUT_SISWA.md`.

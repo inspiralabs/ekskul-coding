@@ -1,5 +1,5 @@
 // ============================================================
-// Smart Room Monitor -- Versi REFERENSI PELATIH (JAWABAN LENGKAP)
+// Smart Room Monitor -- Versi REFERENSI TUTOR (JAWABAN LENGKAP)
 // JANGAN dibagikan ke siswa -- ini untuk verifikasi Anda sendiri
 // sebelum kelas, dan sebagai kunci jawaban TANTANGAN di
 // sma_room_monitor.ino.
@@ -10,8 +10,8 @@
 #include <DHT.h>
 #include <WebServer.h>
 
-const char* SERVER_URL = "https://<url-backend-anda>/api/readings";
-const char* API_KEY    = "<shared-secret>";
+const char* SERVER_URL = "https://api-ekskulcoding.inspiralabs.id/api/readings";
+const char* API_KEY    = "ekskul-coding-seru";
 
 const char* DEVICE_ID     = "sma-1";
 const char* WIFI_SSID     = "ISI_DI_SINI";

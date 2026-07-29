@@ -1,6 +1,6 @@
 # Handout Siswa — Smart Room Monitor
 
-## Info koneksi (isi oleh pelatih sebelum kelas)
+## Info koneksi (isi oleh tutor sebelum kelas)
 
 | Info | Nilai |
 |---|---|
@@ -9,7 +9,7 @@
 | Nama WiFi kelas | `___________________` |
 | Password WiFi kelas | `___________________` |
 
-## Daftar Device ID kelompok (isi oleh pelatih)
+## Daftar Device ID kelompok (isi oleh tutor)
 
 Cari nama kelompokmu di tabel ini, lalu pakai ID itu di firmware DAN di `api.js` (kalau
 kamu juga mengerjakan bagian dashboard).
@@ -28,7 +28,7 @@ data kalian akan saling menimpa di dashboard.
 
 ## Untuk siswa SMP
 
-File kamu: `firmware/smp_room_monitor/smp_room_monitor.ino`
+File kamu: `smp/firmware/smp_room_monitor.ino`
 
 Buka file itu di Arduino IDE, cari 4 baris ini dan isi sesuai tabel di atas:
 ```cpp
@@ -39,11 +39,11 @@ const char* WIFI_PASSWORD = "ISI_DI_SINI";
 ```
 Jangan ubah bagian lain yang bertanda `JANGAN UBAH DI BAWAH INI`. Upload ke ESP32, buka
 Serial Monitor, dan kamu akan lihat suhu/kelembapan terkirim ke dashboard yang sudah
-disiapkan pelatih.
+disiapkan tutor.
 
 ## Untuk siswa SMA
 
-File kamu: `firmware/sma_room_monitor/sma_room_monitor.ino`
+File kamu: `sma/firmware/sma_room_monitor.ino`
 
 **Tahap 1-3 (rangkaian, sensor, kirim data):** sama seperti SMP — isi `DEVICE_ID`, WiFi,
 `DHT_PIN`, ditambah `RELAY_PIN` sesuai pemasangan modul relaymu.

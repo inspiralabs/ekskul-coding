@@ -1,6 +1,6 @@
-# Backend Smart Room Monitor — Panduan Panitia/Pelatih
+# Backend Smart Room Monitor — Panduan Panitia/Tutor
 
-> Dokumen ini untuk PANITIA/PELATIH. Siswa dan pengajar web dev tidak perlu membaca atau
+> Dokumen ini untuk PANITIA/TUTOR. Siswa dan pengajar web dev tidak perlu membaca atau
 > menjalankan apa pun di folder ini — mereka hanya menerima URL server + API key.
 
 ## 1. Setup Supabase (sekali saja)

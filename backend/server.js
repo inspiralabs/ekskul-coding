@@ -1,6 +1,6 @@
 // ============================================================
 // Backend Smart Room Monitor -- INFRASTRUKTUR, BUKAN MATERI AJAR.
-// File ini dijalankan oleh PELATIH/PANITIA sebelum sesi kelas.
+// File ini dijalankan oleh TUTOR/PANITIA sebelum sesi kelas.
 // Siswa maupun pengajar web dev TIDAK perlu membuka/mengedit file ini.
 // ============================================================
 
