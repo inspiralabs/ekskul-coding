@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard - Ekskul Coding Asy Syahid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;font-family:'Nunito',sans-serif;
+    background:radial-gradient(circle at 15% 15%,#fff1de 0%,transparent 45%),
+               radial-gradient(circle at 85% 85%,#e4fbf3 0%,transparent 45%),
+               linear-gradient(135deg,#eef5ff 0%,#f4fff9 100%);
+    padding:32px 20px;
+  }
+  .kontainer{max-width:640px;margin:0 auto}
+  h1{font:800 clamp(26px,5vw,34px)/1.15 'Baloo 2',sans-serif;margin:0 0 6px;color:#FF9F43}
+  .subjudul{color:#6b7785;font:600 14px/1.5 'Nunito',sans-serif;margin:0 0 20px}
+  a.kembali{display:inline-block;margin-bottom:16px;color:#2ED9A6;font:700 13px 'Nunito',sans-serif;text-decoration:none}
+
+  .kelas-toggle{display:flex;gap:8px;margin-bottom:20px}
+  .kelas-toggle button{
+    flex:1;padding:10px 16px;border-radius:999px;border:1px solid rgba(15,30,30,.08);
+    background:#fff;font:700 14px 'Nunito',sans-serif;color:#1f2937;cursor:pointer;transition:.2s ease;
+  }
+  .kelas-toggle button.active{background:linear-gradient(135deg,#FF9F43,#2ED9A6);color:#fff;border-color:transparent}
+
+  .card{background:#fff;border-radius:24px;padding:20px;box-shadow:0 4px 20px rgba(15,30,30,.07);border:1px solid rgba(15,30,30,.04)}
+
+  .leaderboard-table{width:100%;border-collapse:collapse;font:600 14px 'Nunito',sans-serif}
+  .leaderboard-table th{text-align:left;padding:10px 8px;color:#6b7785;font:700 12px 'Nunito',sans-serif;border-bottom:2px solid rgba(15,30,30,.06)}
+  .leaderboard-table td{padding:10px 8px;border-bottom:1px solid rgba(15,30,30,.05)}
+  .leaderboard-table tr:last-child td{border-bottom:none}
+
+  .status-msg{text-align:center;color:#6b7785;font:600 14px 'Nunito',sans-serif;padding:20px 0}
+  .status-error{color:#FF6B6B}
+  .retry-btn{
+    display:block;margin:0 auto;padding:8px 20px;border-radius:999px;border:none;
+    background:linear-gradient(135deg,#FF9F43,#2ED9A6);color:#fff;font:700 13px 'Nunito',sans-serif;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<div class="kontainer">
+  <a class="kembali" href="/">&larr; Kembali</a>
+  <h1>Leaderboard &#127942;</h1>
+  <p class="subjudul">Ranking siswa berdasarkan nilai akhir gradebook.</p>
+
+  <div class="kelas-toggle">
+    <button data-kelas="sma">SMA</button>
+    <button data-kelas="smp">SMP</button>
+  </div>
+
+  <div class="card">
+    <div id="leaderboard-container"></div>
+  </div>
+</div>
+
+<script src="/shared/csv.js"></script>
+<script src="leaderboard.js"></script>
+</body>
+</html>
