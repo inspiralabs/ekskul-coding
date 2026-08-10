@@ -24,7 +24,8 @@
   @keyframes mengambang{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(12deg)}}
 
   .kontainer{max-width:520px;width:100%;position:relative;z-index:1}
-  .lencana{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 14px;font:700 12px 'Nunito',sans-serif;color:#2ED9A6;box-shadow:0 2px 10px rgba(15,30,30,.08);margin-bottom:16px}
+  .lencana{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 14px;font:700 12px 'Nunito',sans-serif;color:#2ED9A6;box-shadow:0 2px 10px rgba(15,30,30,.08);margin-bottom:16px;border:none;cursor:pointer;font-family:inherit}
+  .lencana:hover{background:#f2f8f7}
   .titik{width:8px;height:8px;border-radius:50%;background:#2ED9A6;animation:denyut 1.6s ease-out infinite}
   @keyframes denyut{0%{box-shadow:0 0 0 0 rgba(46,217,166,.5)}70%{box-shadow:0 0 0 8px rgba(46,217,166,0)}100%{box-shadow:0 0 0 0 rgba(46,217,166,0)}}
 
@@ -68,7 +69,7 @@
 <div class="blob"></div><div class="blob"></div><div class="blob"></div><div class="blob"></div>
 
 <div class="kontainer">
-  <span class="lencana"><span class="titik"></span>Hai, [Nama Siswa]</span>
+  <button class="lencana" id="salam-siswa" type="button"><span class="titik"></span><span id="salam-teks">Hai, Siswa</span></button>
   <h1>Ektrakurikuler Coding</h1>
   <p class="subjudul">Dashboard ini menampilkan leaderboard, materi, dan template starter untuk siswa SMA &amp; SMP Sekolah Quran Asy Syahid.</p>
 
@@ -86,6 +87,7 @@
       <div class="akordeon-isi"><div>
         <div class="pilihan">
           <a href="/sma/"><span class="emoji">🖥️</span> Lihat website</a>
+          <a href="/materi/?kelas=sma"><span class="emoji">📚</span> Materi &amp; Post-Test</a>
           <a href="https://drive.google.com/file/d/14tHnrs4urDLxjvf9sHT63yIkOpbmEuG4/view?usp=drive_link" target="_blank"><span class="emoji">⬇️</span> Unduh template &amp; firmware</a>
         </div>
       </div></div>
@@ -104,17 +106,10 @@
       <div class="akordeon-isi"><div>
         <div class="pilihan">
           <a href="/smp/"><span class="emoji">🖥️</span> Lihat website</a>
+          <a href="/materi/?kelas=smp"><span class="emoji">📚</span> Materi &amp; Post-Test</a>
           <a href="https://drive.google.com/file/d/12j2b3eK8423zYa8F-1uTewoOYeNC0yrh/view?usp=drive_link" target="_blank"><span class="emoji">⬇️</span> Unduh template &amp; firmware</a>
         </div>
       </div></div>
-    </div>
-
-    <div class="akordeon akordeon-demo">
-      <a class="kartu" href="/materi/">
-        <div class="ikon ikon-demo">📚</div>
-        <div class="teks"><strong>Materi &amp; Post-Test</strong><span>Materi &amp; post-test tiap pertemuan</span></div>
-        <span class="panah">→</span>
-      </a>
     </div>
 
     <div class="akordeon">
@@ -154,5 +149,30 @@
 
   <footer>InspiraLabs x Sekolah Quran Asy Syahid</footer>
 </div>
+
+<script>
+  var NAMA_KEY = 'ekskul-nama-siswa';
+
+  function tampilkanNama(nama) {
+    document.getElementById('salam-teks').textContent = nama ? 'Hai, ' + nama : 'Hai, Siswa';
+  }
+
+  function mintaNama() {
+    var nama = prompt('Siapa namamu?', localStorage.getItem(NAMA_KEY) || '');
+    if (nama === null) return;
+    nama = nama.trim();
+    if (nama) {
+      localStorage.setItem(NAMA_KEY, nama);
+    } else {
+      localStorage.removeItem(NAMA_KEY);
+    }
+    tampilkanNama(nama);
+  }
+
+  var namaTersimpan = localStorage.getItem(NAMA_KEY);
+  tampilkanNama(namaTersimpan);
+  document.getElementById('salam-siswa').addEventListener('click', mintaNama);
+  if (!namaTersimpan) mintaNama();
+</script>
 </body>
 </html>
