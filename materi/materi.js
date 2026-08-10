@@ -38,11 +38,14 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     window.history.replaceState({}, '', url);
   }
 
-  function toEmbedUrl(formUrl) {
-    if (!formUrl) return '';
-    if (formUrl.includes('embedded=true')) return formUrl;
-    const sep = formUrl.includes('?') ? '&' : '?';
-    return formUrl + sep + 'embedded=true';
+  function buildLinkButton(href, label, className) {
+    const link = document.createElement('a');
+    link.href = href;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = className;
+    link.textContent = label;
+    return link;
   }
 
   function buildCard(row) {
@@ -72,35 +75,13 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       if (!expanded && !injected) {
         injected = true;
         if (row['Link Drive']) {
-          const driveLink = document.createElement('a');
-          driveLink.href = row['Link Drive'];
-          driveLink.target = '_blank';
-          driveLink.rel = 'noopener';
-          driveLink.className = 'drive-btn';
-          driveLink.textContent = '📂 Buka Materi (Drive)';
-          body.appendChild(driveLink);
+          body.appendChild(buildLinkButton(row['Link Drive'], '📂 Buka Materi (Drive)', 'drive-btn'));
         }
         if (row['Link Post-Test']) {
-          const label1 = document.createElement('p');
-          label1.className = 'form-label';
-          label1.textContent = 'Post-Test';
-          const iframe1 = document.createElement('iframe');
-          iframe1.src = toEmbedUrl(row['Link Post-Test']);
-          iframe1.loading = 'lazy';
-          iframe1.className = 'form-embed';
-          body.appendChild(label1);
-          body.appendChild(iframe1);
+          body.appendChild(buildLinkButton(row['Link Post-Test'], '📝 Isi Post-Test', 'form-btn'));
         }
         if (row['Link Kritik & Saran']) {
-          const label2 = document.createElement('p');
-          label2.className = 'form-label';
-          label2.textContent = 'Kritik & Saran';
-          const iframe2 = document.createElement('iframe');
-          iframe2.src = toEmbedUrl(row['Link Kritik & Saran']);
-          iframe2.loading = 'lazy';
-          iframe2.className = 'form-embed';
-          body.appendChild(label2);
-          body.appendChild(iframe2);
+          body.appendChild(buildLinkButton(row['Link Kritik & Saran'], '💬 Kritik & Saran', 'form-btn'));
         }
       }
     });
