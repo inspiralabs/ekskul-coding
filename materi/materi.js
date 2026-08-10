@@ -59,25 +59,20 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 
     const body = document.createElement('div');
     body.className = 'materi-body';
-    let injected = false;
+    if (row['Link Drive']) {
+      body.appendChild(buildLinkButton(row['Link Drive'], '📂 Buka Materi (Drive)', 'drive-btn'));
+    }
+    if (row['Link Post-Test']) {
+      body.appendChild(buildLinkButton(row['Link Post-Test'], '📝 Isi Post-Test', 'form-btn'));
+    }
+    if (row['Link Kritik & Saran']) {
+      body.appendChild(buildLinkButton(row['Link Kritik & Saran'], '💬 Kritik & Saran', 'form-btn'));
+    }
 
     header.addEventListener('click', () => {
       const expanded = header.getAttribute('aria-expanded') === 'true';
       header.setAttribute('aria-expanded', String(!expanded));
       body.classList.toggle('open', !expanded);
-
-      if (!expanded && !injected) {
-        injected = true;
-        if (row['Link Drive']) {
-          body.appendChild(buildLinkButton(row['Link Drive'], '📂 Buka Materi (Drive)', 'drive-btn'));
-        }
-        if (row['Link Post-Test']) {
-          body.appendChild(buildLinkButton(row['Link Post-Test'], '📝 Isi Post-Test', 'form-btn'));
-        }
-        if (row['Link Kritik & Saran']) {
-          body.appendChild(buildLinkButton(row['Link Kritik & Saran'], '💬 Kritik & Saran', 'form-btn'));
-        }
-      }
     });
 
     card.appendChild(header);
