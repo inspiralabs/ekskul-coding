@@ -32,12 +32,6 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     return kelas === 'smp' ? 'smp' : 'sma';
   }
 
-  function setKelasInUrl(kelas) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('kelas', kelas);
-    window.history.replaceState({}, '', url);
-  }
-
   function buildLinkButton(href, label, className) {
     const link = document.createElement('a');
     link.href = href;
@@ -129,18 +123,11 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     }
   }
 
-  function initToggle() {
+  function init() {
     const kelas = currentKelas();
-    document.querySelectorAll('.kelas-toggle button').forEach((btn) => {
-      btn.classList.toggle('active', btn.dataset.kelas === kelas);
-      btn.addEventListener('click', () => {
-        setKelasInUrl(btn.dataset.kelas);
-        document.querySelectorAll('.kelas-toggle button').forEach((b) => b.classList.toggle('active', b === btn));
-        loadMateri(btn.dataset.kelas);
-      });
-    });
+    document.getElementById('kelas-label').textContent = kelas === 'smp' ? 'SMP' : 'SMA';
     loadMateri(kelas);
   }
 
-  document.addEventListener('DOMContentLoaded', initToggle);
+  document.addEventListener('DOMContentLoaded', init);
 }
