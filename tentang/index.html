@@ -20,7 +20,8 @@
   a.kembali{display:inline-block;margin-bottom:16px;color:#2ED9A6;font:700 13px 'Nunito',sans-serif;text-decoration:none}
 
   .card{background:#fff;border-radius:24px;padding:28px 24px;box-shadow:0 4px 20px rgba(15,30,30,.07);border:1px solid rgba(15,30,30,.04)}
-  .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#FF9F43,#2ED9A6);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+  .logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#FF9F43,#2ED9A6);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;overflow:hidden}
+  .logo img{width:100%;height:100%;object-fit:cover}
   h1{font:800 clamp(24px,5vw,30px)/1.2 'Baloo 2',sans-serif;margin:0 0 4px;color:#1f2937}
   .tagline{font:700 14px 'Nunito',sans-serif;color:#2ED9A6;margin:0 0 18px}
   p.deskripsi{font:600 15px/1.7 'Nunito',sans-serif;color:#4b5563;margin:0 0 22px}
@@ -36,8 +37,8 @@
 <div class="kontainer">
   <a class="kembali" href="/">&larr; Kembali</a>
 
-  < class="card">
-    <img src="/logo.webp" alt="Logo InspiraLabs">
+  <div class="card">
+    <div class="logo"><img src="/logo.webp" alt="Logo InspiraLabs"></div>
     <h1>InspiraLabs</h1>
     <p class="tagline">Mitra Solusi Digital Anda</p>
     <p class="deskripsi">
