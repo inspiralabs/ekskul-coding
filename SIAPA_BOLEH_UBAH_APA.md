@@ -67,10 +67,21 @@ URL di Vercel bersih: `ekskulcoding.inspiralabs.id/demo`, `/sma`, `/smp`.
 | `demo/` | Referensi lengkap | Anda (demo di kelas) | `index.html`, `app.js` | `api.js` |
 | `sma/` | Web dev SMA | Rekan Anda | `index.html` | `api.js` |
 | `smp/` | Web dev SMP | Rekan Anda | `index.html` | `api.js` |
+| `leaderboard/` | Ranking siswa (baca dari gradebook) | Rekan Anda | `index.html` | `leaderboard.js` |
+| `materi/` | Materi & form per pertemuan | Rekan Anda | `index.html` | `materi.js` |
 
 **Satu baris yang PERLU diubah manual di tiap `api.js`:** `MY_DEVICE_ID` — sesuaikan dengan
 device/kelompok mana yang mau ditampilkan di dashboard itu. Ini satu-satunya pengecualian
 "jangan ubah" karena bukan logika koneksi, hanya nilai konfigurasi.
+
+**Sama halnya untuk `leaderboard.js` dan `materi.js`:** satu baris yang PERLU
+diubah manual adalah konstanta URL sumber data di puncak file
+(`GRADEBOOK_URL` di `leaderboard.js`, `MATERI_URL` di `materi.js`). Kalau
+tutor membuat spreadsheet gradebook atau Materi yang baru, cukup ganti URL
+ini — tidak perlu mengubah logika kode. Cara mendapatkan URL: Google Sheets
+-> File -> Share -> Publish to web -> pilih tab -> format CSV -> salin link.
+`shared/csv.js` juga berlabel "JANGAN UBAH FILE INI" — util bersama yang
+dipakai kedua file di atas untuk membaca CSV.
 
 ### Dashboard Demo
 File asli (`Smart Room Monitor.dc.html` dari tool desain) tersimpan di `demo/` sebagai
