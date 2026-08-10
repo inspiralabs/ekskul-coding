@@ -5,7 +5,7 @@
 // tutor membuat spreadsheet Materi baru. Cara dapatkan URL: Google
 // Sheets -> File -> Share -> Publish to web -> format CSV -> salin link.
 
-const MATERI_URL = 'https://docs.google.com/spreadsheets/d/e/REPLACE_ME_MATERI/pub?output=csv';
+const MATERI_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyYQU4xkx4Hz8dz_QCvoDO_uqUevWqCP6Yu8IozDo6_imtUT1FjPgDyASufZaxPm9Y3cREdBVokwEE/pub?gid=0&single=true&output=csv';
 
 function filterMateri(rows, kelas) {
   return rows
@@ -80,23 +80,23 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
           driveLink.textContent = '📂 Buka Materi (Drive)';
           body.appendChild(driveLink);
         }
-        if (row['Link Form Post-Test']) {
+        if (row['Link Post-Test']) {
           const label1 = document.createElement('p');
           label1.className = 'form-label';
           label1.textContent = 'Post-Test';
           const iframe1 = document.createElement('iframe');
-          iframe1.src = toEmbedUrl(row['Link Form Post-Test']);
+          iframe1.src = toEmbedUrl(row['Link Post-Test']);
           iframe1.loading = 'lazy';
           iframe1.className = 'form-embed';
           body.appendChild(label1);
           body.appendChild(iframe1);
         }
-        if (row['Link Form Kritik & Saran']) {
+        if (row['Link Kritik & Saran']) {
           const label2 = document.createElement('p');
           label2.className = 'form-label';
           label2.textContent = 'Kritik & Saran';
           const iframe2 = document.createElement('iframe');
-          iframe2.src = toEmbedUrl(row['Link Form Kritik & Saran']);
+          iframe2.src = toEmbedUrl(row['Link Kritik & Saran']);
           iframe2.loading = 'lazy';
           iframe2.className = 'form-embed';
           body.appendChild(label2);

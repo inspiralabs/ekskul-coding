@@ -5,10 +5,19 @@
 // tutor membuat spreadsheet gradebook baru. Cara dapatkan URL:
 // Google Sheets -> File -> Share -> Publish to web -> pilih tab
 // gradebook -> format CSV -> salin link.
+//
+// GRADEBOOK_HEADER_ROW = 3 karena sheet gradebook tutor punya baris
+// judul + baris catatan rumus + satu baris kosong (yang di CSV tetap
+// berupa deretan koma, jadi TIDAK dibuang oleh parser) sebelum baris
+// header asli (ID Siswa, Nama Lengkap, dst). Kalau tutor mengubah
+// struktur sheet (tambah/kurang baris di atas header), angka ini yang
+// perlu disesuaikan.
+
+const GRADEBOOK_HEADER_ROW = 3;
 
 const GRADEBOOK_URL = {
-  sma: 'https://docs.google.com/spreadsheets/d/e/REPLACE_ME_SMA/pub?output=csv',
-  smp: 'https://docs.google.com/spreadsheets/d/e/REPLACE_ME_SMP/pub?output=csv',
+  sma: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-iiOjf3kuAFVaaCg1rOENELJVBjrjTNO2uuiqC1q1mWPNRsSIMEMG04fY6Vi9ZQ/pub?gid=412408676&single=true&output=csv',
+  smp: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkLb2YTqOH1gwn0sYziedXfCNbWD1TdHceKGTWgzEfTYTl9g-En_X8LdLOLAP1Rw/pub?gid=563350833&single=true&output=csv',
 };
 
 function rankRows(rows) {
@@ -90,7 +99,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
     const container = document.getElementById('leaderboard-container');
     renderLoading(container);
     try {
-      const rows = await fetchCsv(GRADEBOOK_URL[kelas]);
+      const rows = await fetchCsv(GRADEBOOK_URL[kelas], GRADEBOOK_HEADER_ROW);
       const ranked = rankRows(rows);
       if (ranked.length === 0) {
         renderEmpty(container);

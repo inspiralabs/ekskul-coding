@@ -43,4 +43,13 @@ const { parseCsv } = require('./csv.js');
   assert.deepStrictEqual(rows, []);
 }
 
+// headerRow skips leading title/note rows. Google Sheets CSV export often
+// pads an empty row with commas (",,,") rather than leaving it truly
+// blank, so it survives the blank-line filter and counts as a real row.
+{
+  const csv = 'JUDUL SHEET,,\nCatatan rumus di sini,,\n,,\nNama,Nilai,\nBudi,90,';
+  const rows = parseCsv(csv, 3);
+  assert.deepStrictEqual(rows, [{ Nama: 'Budi', Nilai: '90', '': '' }]);
+}
+
 console.log('All csv.js tests passed.');

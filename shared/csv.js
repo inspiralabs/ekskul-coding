@@ -35,12 +35,17 @@ function parseCsvLine(line) {
   return cells;
 }
 
-function parseCsv(text) {
+// headerRow: index (setelah baris kosong dibuang) dari baris yang berisi
+// nama kolom. Default 0 (baris pertama). Beberapa sheet tutor punya baris
+// judul/catatan di atas header asli (mis. gradebook: judul + rumus di
+// baris 1-2) — pemanggil kirim headerRow sesuai posisi header sebenarnya.
+function parseCsv(text, headerRow) {
+  const skip = headerRow || 0;
   const lines = text.split(/\r\n|\n/).filter((line) => line.trim() !== '');
-  if (lines.length === 0) return [];
-  const header = parseCsvLine(lines[0]).map((h) => h.trim());
+  if (lines.length <= skip) return [];
+  const header = parseCsvLine(lines[skip]).map((h) => h.trim());
   const rows = [];
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = skip + 1; i < lines.length; i++) {
     const cells = parseCsvLine(lines[i]);
     const row = {};
     header.forEach((key, idx) => {
@@ -51,7 +56,7 @@ function parseCsv(text) {
   return rows;
 }
 
-async function fetchCsv(url) {
+async function fetchCsv(url, headerRow) {
   let response;
   try {
     response = await fetch(url);
@@ -62,7 +67,7 @@ async function fetchCsv(url) {
     throw new Error('Gagal mengambil data (server merespons error).');
   }
   const text = await response.text();
-  return parseCsv(text);
+  return parseCsv(text, headerRow);
 }
 
 if (typeof window !== 'undefined') {
