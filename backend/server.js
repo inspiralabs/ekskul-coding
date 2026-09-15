@@ -28,8 +28,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const server = app.listen(process.env.PORT || 3000, () => {
-  console.log("Server jalan di port", process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3334, () => {
+  console.log("Server jalan di port", process.env.PORT || 3334);
 });
 
 // Cek server hidup -- tanpa API key, dipakai buat tes cepat lewat browser
@@ -117,6 +117,7 @@ app.post("/api/readings", checkApiKey, async (req, res) => {
     timestamp: new Date().toISOString(),
   });
 
+  console.log(`[readings] ${deviceId} <- suhu=${temp}C lembap=${humidity}% ip=${ip || "?"} -> fanOn=${fanOn}`);
   res.json({ ok: true, fanOn });
 });
 

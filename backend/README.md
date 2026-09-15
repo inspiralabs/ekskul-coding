@@ -31,7 +31,7 @@ Edit `.env`, isi `SUPABASE_URL` dan `SUPABASE_KEY` dari langkah 1, dan tentukan 
 npm start
 ```
 
-Harus muncul log: `Server jalan di port 3000`.
+Harus muncul log: `Server jalan di port 3334`.
 
 ## 3. Deploy backend & catat URL server
 
@@ -72,7 +72,7 @@ WAJIB memakai ID dari daftar ini — dua kelompok dengan ID sama akan saling men
 
 Uji lokal dulu sebelum deploy (`npm start` di laptop, target `localhost`):
 ```bash
-curl -X POST http://localhost:3000/api/readings ^
+curl -X POST http://localhost:3334/api/readings ^
   -H "Content-Type: application/json" -H "X-API-Key: ISI_API_KEY_ANDA" ^
   -d "{\"deviceId\":\"sma-1\",\"temp\":28,\"humidity\":60,\"ip\":\"192.168.1.99\"}"
 ```
