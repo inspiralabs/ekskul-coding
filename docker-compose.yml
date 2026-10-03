@@ -1,0 +1,25 @@
+# Deploy backend ke VPS Inspiralabs (app: api-ekskulcoding → https://api-ekskulcoding.inspiralabs.id).
+# Situs statis di root tetap di Vercel; file ini diabaikan Vercel (.vercelignore).
+services:
+  api:
+    build: ./backend
+    env_file:
+      - path: .env                 # di server: sudo -u deploy nano /srv/apps/api-ekskulcoding/.env
+        required: false
+    environment:
+      PORT: "3000"
+    expose: ["3000"]
+    restart: unless-stopped
+    networks: [edge]
+    labels:
+      - traefik.enable=true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+networks:
+  edge:
+    external: true
