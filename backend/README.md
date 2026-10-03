@@ -35,6 +35,10 @@ Harus muncul log: `Server jalan di port 3334`.
 
 ## 3. Deploy backend & catat URL server
 
+Backend jalan di **VPS Inspiralabs** sebagai app `api-ekskulcoding` (Docker, lewat `docker-compose.yml` +
+`backend/Dockerfile` di repo ini). Push ke `master` otomatis men-deploy ulang (±1 menit). `.env` server:
+`sudo -u deploy nano /srv/apps/api-ekskulcoding/.env` (kunci: lihat `.env.example` di root). `PORT` diatur compose (3000).
+
 Backend di-deploy ke server online (bukan dijalankan di laptop saat kelas). Setelah deploy
 (mis. `https://api-ekskulcoding.inspiralabs.id`), catat URL itu — dipakai untuk mengganti
 `<url-backend-anda>` di:
