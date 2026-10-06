@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Dashboard Suhu</title>
+    <style>
+        .kartu {
+            margin: 16px;
+            border: 2px solid #C9A24B;
+            padding: 20px;
+            background-color: #FAF8F5;
+        }
+        
+        .container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="kartu">
+        <h1>Mini Dashboard Suhu</h1>
+        <p>Selamat Datang Di Project Saya : (nama kamu)</p>
+    </div>
+    
+    <div class="container">
+        <div class="kartu">Suhu: 28°C</div>
+        <div class="kartu">Kelembapan: 60%</div>
+        <div class="kartu">Status: Normal</div>
+    </div>  
+
+    
+    <form>
+        <div class="kartu">
+            <label for="ambangBatas">Set Ambang Batas Suhu (°C):</label>
+            <input type="number" id="ambangBatas" placeholder="Contoh: 30">
+            <button type="button">Simpan</button>
+        </div>
+        
+        <div class="kartu">
+            <label for="modeFan">Mode Fan:</label>
+            <select id="modeFan">
+                <option value="manual">Manual</option>
+                <option value="otomatis">Otomatis</option>
+            </select>
+        </div>
+    </form>
+    
+    
+    <table>
+        <tr>
+            <th>Waktu</th>
+            <th>Suhu</th>
+            <th>Kelembapan</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>08:00</td>
+            <td>26°C</td>
+            <td>60%</td>
+            <td>Normal</td>
+        </tr>
+        <tr>
+            <td>09:00</td>
+            <td>31°C</td>
+            <td>55%</td>
+            <td>Panas</td>
+        </tr>
+        <tr>
+            <td>10:00</td>
+            <td>29°C</td>
+            <td>50%</td>
+            <td>Normal</td>
+        </tr>
+        <tr>
+            <td>11:00</td>
+            <td>24°C</td>
+            <td>70%</td>
+            <td>Sejuk</td>
+        </tr>
+        <tr>
+            <td>12:00</td>
+            <td>100°C</td>
+            <td>5%</td>
+            <td>Terbakar</td>
+        </tr>
+    </table>
+</body>
+</html>

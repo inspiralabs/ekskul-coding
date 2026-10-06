@@ -30,15 +30,15 @@ data kalian akan saling menimpa di dashboard.
 
 File kamu: `smp/firmware/smp_room_monitor.ino`
 
-Buka file itu di Arduino IDE, cari 4 baris ini dan isi sesuai tabel di atas:
+Buka folder `smp/firmware` lewat PlatformIO (PIO Home → Open Project), lalu buka file itu. Cari 4 baris ini dan isi sesuai tabel di atas:
 ```cpp
 const char* DEVICE_ID     = "smp-3";        // GANTI sesuai ID kelompokmu
 const char* WIFI_SSID     = "ISI_DI_SINI";
 const char* WIFI_PASSWORD = "ISI_DI_SINI";
 #define DHT_PIN 4                            // ganti kalau kabel DHT22 di pin lain
 ```
-Jangan ubah bagian lain yang bertanda `JANGAN UBAH DI BAWAH INI`. Upload ke ESP32, buka
-Serial Monitor, dan kamu akan lihat suhu/kelembapan terkirim ke dashboard yang sudah
+Jangan ubah bagian lain yang bertanda `JANGAN UBAH DI BAWAH INI`. Klik Upload (→), lalu buka
+Serial Monitor (🔌), dan kamu akan lihat suhu/kelembapan terkirim ke dashboard yang sudah
 disiapkan tutor.
 
 ## Untuk siswa SMA

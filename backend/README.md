@@ -65,7 +65,7 @@ Sebelum kelas, tentukan daftar ID tetap per kelompok, contoh:
 | SMP 2 | `smp-2` |
 | ... | ... |
 
-Bagikan daftar ini di handout siswa (lihat `HANDOUT_SISWA.md` di root proyek). Setiap kelompok
+Bagikan daftar ini di handout siswa (lihat `docs/HANDOUT_SISWA.md`). Setiap kelompok
 WAJIB memakai ID dari daftar ini — dua kelompok dengan ID sama akan saling menimpa data.
 
 ## 5. Cek server jalan dengan benar (`curl`)

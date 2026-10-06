@@ -11,15 +11,16 @@ sudah jalan, sisanya jadi tantanganmu.
 | `index.html` | ✅ Ya, ini tugasmu | Tampilan dashboard — HTML, CSS, dan JS ada di sini |
 | `api.js` | ❌ Jangan diubah | "Kabel" penghubung ke backend, sudah disiapkan tutor |
 | `firmware/sma_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 |
+| `firmware/platformio.ini` | ❌ Jangan diubah (kecuali `board`) | Pengaturan PlatformIO |
 
 ## Cara mulai
 
 1. Buka `index.html` langsung di browser untuk lihat tampilan dashboard saat ini.
-2. Buka `firmware/sma_room_monitor.ino` di Arduino IDE. Isi 5 baris identitas
+2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder `sma/firmware`.
+   Buka `sma_room_monitor.ino`, isi 5 baris identitas
    di bagian atas (`DEVICE_ID`, `WIFI_SSID`, `WIFI_PASSWORD`, `DHT_PIN`,
-   `RELAY_PIN`) sesuai data kelompokmu di `HANDOUT_SISWA.md` (di folder utama
-   repo). Bagian berlabel `JANGAN UBAH` jangan disentuh — itu koneksi ke server.
-3. Upload firmware ke ESP32, buka Serial Monitor, pastikan berhasil connect
+   `RELAY_PIN`) sesuai data kelompokmu di `docs/HANDOUT_SISWA.md`. Bagian berlabel `JANGAN UBAH` jangan disentuh — itu koneksi ke server.
+3. Klik Upload (→) lalu Serial Monitor (🔌) di status bar PlatformIO, pastikan berhasil connect
    WiFi dan mengirim data.
 4. Kerjakan TANTANGAN di `index.html` dan firmware (lihat daftar di bawah).
 
@@ -45,4 +46,4 @@ dashboard. Petunjuk ada di komentar TODO di dalam file itu.
 - ESP32 tidak connect WiFi? Cek Serial Monitor, pastikan `WIFI_SSID`/
   `WIFI_PASSWORD` benar.
 - Info lengkap koneksi (URL server, API key, Device ID kelompok) ada di
-  `HANDOUT_SISWA.md`.
+  `docs/HANDOUT_SISWA.md`.

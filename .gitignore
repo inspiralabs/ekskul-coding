@@ -9,3 +9,5 @@ Thumbs.db
 .rtk/
 
 *.zip
+.pio/
+*.ino.cpp

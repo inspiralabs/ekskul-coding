@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Tag penting agar responsif berjalan di perangkat mobile/HP -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Dashboard Suhu</title>
+    <style>
+        .kartu {
+            margin: 8px;
+            border: 2px solid #C9A24B;
+            border-radius: 12px;
+            padding: 20px;
+            background-color: #FAF8F5;
+        }
+        
+        .container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .riwayat {
+            margin: 8px; 
+            border: 2px solid #C9A24B;
+            border-radius: 12px;
+            border-collapse: collapse; 
+            width: calc(100% - 16px); 
+            text-align: left;
+        }
+
+        /* Memberi lebar sejajar di tampilan desktop */
+        .container .kartu {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        /* Media Query untuk Layar Mobile/HP (760px ke bawah) */
+        @media (max-width: 760px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="kartu">
+        <h1 id="title">Mini Dashboard Suhu</h1>
+        <p id="greeting">Selamat Datang Di Project Saya : (nama kamu)</p>
+    </div>
+    
+    <div class="container">
+        <div class="kartu">
+            <p id="suhuText">Suhu: 28°C</p>
+            <button id="tombolTambah">+1°C</button>
+            <button id="tombolKurang">-1°C</button>
+        </div>
+        
+        <div class="kartu">Kelembapan: 60%</div>
+        <div class="kartu">Status: Normal</div>
+    </div>  
+
+    <form>
+        <div class="kartu">
+            <label for="ambangBatas">Set Ambang Batas Suhu (°C):</label>
+            <input type="number" id="ambangBatas" placeholder="Contoh: 30">
+            <button type="button">Simpan</button>
+        </div>
+        
+        <div class="kartu">
+            <label for="modeFan">Mode Fan:</label>
+            <select id="modeFan">
+                <option value="manual">Manual</option>
+                <option value="otomatis">Otomatis</option>
+            </select>
+        </div>
+    </form>
+    
+    <table class="riwayat">
+        <tr>
+            <th>Waktu</th>
+            <th>Suhu</th>
+            <th>Kelembapan</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>08:00</td>
+            <td>26°C</td>
+            <td>60%</td>
+            <td>Normal</td>
+        </tr>
+        <tr>
+            <td>09:00</td>
+            <td>31°C</td>
+            <td>55%</td>
+            <td>Panas</td>
+        </tr>
+        <tr>
+            <td>10:00</td>
+            <td>29°C</td>
+            <td>50%</td>
+            <td>Normal</td>
+        </tr>
+        <tr>
+            <td>11:00</td>
+            <td>24°C</td>
+            <td>70%</td>
+            <td>Sejuk</td>
+        </tr>
+        <tr>
+            <td>12:00</td>
+            <td>100°C</td>
+            <td>5%</td>
+            <td>Terbakar</td>
+        </tr>
+    </table>
+    
+    <script>
+        let elemenGreeting = document.getElementById("greeting");
+        console.log(elemenGreeting); // menampilkan elemen HTML tersebut
+
+        elemenGreeting.textContent = "Welcome.. dari DOM";
+
+        let elemenTitle = document.getElementById("title");
+        elemenTitle.textContent = "DASHBOARD SUHU DARI DOM";
+
+
+        let suhu = 30; // Nilai awal suhu
+
+        document.getElementById("tombolTambah").addEventListener("click", function() {
+            suhu = suhu + 1;
+            document.getElementById("suhuText").textContent = `Suhu: ${suhu}°C`;
+        });
+
+        document.getElementById("tombolKurang").addEventListener("click", function() {
+            suhu = suhu - 1;
+            document.getElementById("suhuText").textContent = `Suhu: ${suhu}°C`;
+        });
+
+    </script>
+    
+</body>
+</html>

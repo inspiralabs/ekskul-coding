@@ -6,7 +6,7 @@
 // isi dengan URL server itu (https://...)
 // Untuk uji coba di laptop sebelum deploy, boleh sementara "http://localhost:3000".
 const API_BASE = "https://api-ekskulcoding.inspiralabs.id";
-const MY_DEVICE_ID = "demo-1"; // ganti sesuai device yang mau ditampilkan di dashboard ini
+const MY_DEVICE_ID = "sma-1"; // harus sama persis dengan DEVICE_ID di firmware ESP32
 
 async function ambilRiwayat(limit = 20) {
   const res = await fetch(`${API_BASE}/api/readings/${MY_DEVICE_ID}?limit=${limit}`);

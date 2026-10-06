@@ -1,0 +1,45 @@
+<!--
+  P6_LiveCoding_Topik2_TabelRiwayat.html
+  LIVE CODING BERSAMA - Topik 2: Select & Tabel
+  Melanjutkan dari Topik 1, menambahkan tabel riwayat sensor.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Dashboard Suhu</title>
+</head>
+<body>
+    <h1>Mini Dashboard Suhu</h1>
+    <p>Selamat Datang Di Project Saya : (nama kamu)</p>
+
+    <form>
+        <label for="ambangBatas">Set Ambang Batas Suhu (°C):</label>
+        <input type="number" id="ambangBatas" placeholder="Contoh: 30">
+        <button type="button">Simpan</button>
+        
+        <label for="modeFan">Mode Fan:</label>
+        <select id="modeFan">
+            <option value="manual">Manual</option>
+            <option value="otomatis">Otomatis</option>
+        </select>
+    </form>
+    
+    <table>
+        <tr>
+            <th>Waktu</th>
+            <th>Suhu</th>
+            <th>Kelembapan</th>
+        </tr>
+        <tr>
+            <td>08:00</td>
+            <td>26°C</td>
+            <td>60%</td>
+        </tr>
+        <tr>
+            <td>09:00</td>
+            <td>31°C</td>
+            <td>55%</td>
+        </tr>
+    </table>
+</body>
+</html>

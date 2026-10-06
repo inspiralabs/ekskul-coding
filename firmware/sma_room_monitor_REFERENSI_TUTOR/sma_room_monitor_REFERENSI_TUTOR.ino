@@ -16,8 +16,8 @@ const char* API_KEY    = "ekskul-coding-seru";
 const char* DEVICE_ID     = "sma-1";
 const char* WIFI_SSID     = "ISI_DI_SINI";
 const char* WIFI_PASSWORD = "ISI_DI_SINI";
-#define DHT_PIN 4
-#define RELAY_PIN 5
+#define DHT_PIN 23
+#define RELAY_PIN 18
 
 DHT dht(DHT_PIN, DHT22);
 WebServer fanServer(80);
@@ -59,6 +59,12 @@ void loop() {
   if (millis() - lastSendTime < SEND_INTERVAL_MS) return;
   lastSendTime = millis();
 
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi putus, coba reconnect...");
+    WiFi.reconnect();
+    return;
+  }
+
   float temp = dht.readTemperature();
   float humidity = dht.readHumidity();
 
@@ -77,11 +83,18 @@ void loop() {
   json += "\"ip\":\"" + WiFi.localIP().toString() + "\"";
   json += "}";
 
-  WiFiClientSecure client;
-  client.setInsecure();
-
   HTTPClient http;
-  http.begin(client, SERVER_URL);
+  WiFiClient plainClient;
+  WiFiClientSecure secureClient;
+  secureClient.setInsecure();
+
+  // SERVER_URL bisa http (tes lokal) atau https (production) -- pilih
+  // transport yang cocok, jangan paksa TLS ke server HTTP biasa.
+  if (String(SERVER_URL).startsWith("https")) {
+    http.begin(secureClient, SERVER_URL);
+  } else {
+    http.begin(plainClient, SERVER_URL);
+  }
   http.addHeader("Content-Type", "application/json");
   http.addHeader("X-API-Key", API_KEY);
 

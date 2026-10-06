@@ -8,17 +8,23 @@ mana yang tidak.
 ## Peta folder
 
 ```
-asy-syahid-ekskul/
+ekskul-coding/
 ├── backend/                              <- TUTOR SAJA, tidak diajarkan
 ├── firmware/
 │   └── sma_room_monitor_REFERENSI_TUTOR/ <- kunci jawaban, JANGAN dibagikan ke siswa
 ├── demo/                                  <- dashboard referensi Anda (tutor)
 ├── sma/                                   <- materi web dev SMA (rekan Anda) -- ada TANTANGAN
-│   └── firmware/sma_room_monitor.ino     <- materi IoT SMA (Anda) -- ada TANTANGAN
+│   └── firmware/                         <- materi IoT SMA (Anda), proyek PlatformIO -- ada TANTANGAN
 ├── smp/                                   <- materi web dev SMP (rekan Anda)
-│   └── firmware/smp_room_monitor.ino     <- materi IoT SMP (Anda)
-├── vercel.json                            <- routing /demo /sma /smp untuk deploy Vercel
-└── SIAPA_BOLEH_UBAH_APA.md               <- file ini
+│   └── firmware/                         <- materi IoT SMP (Anda), proyek PlatformIO
+├── index.html, leaderboard/, materi/,
+│   tentang/, shared/                      <- website ekskul (deploy Vercel, tetap di root)
+├── kurikulum/                             <- bahan ajar per jenjang & pertemuan (tidak di-deploy)
+│   ├── smp/p09..p13/                     <- materi.md + script-reels.md (IoT)
+│   └── sma/p06..p13/                     <- p06-p08 web (HTML), p09-p13 IoT (materi.md + script-reels.md)
+├── docs/                                  <- silabus, HANDOUT_SISWA.md, file ini
+├── prompt/                                <- prompt AI penyusun kurikulum
+└── vercel.json                            <- routing /demo /sma /smp untuk deploy Vercel
 ```
 
 ## 1. Backend (`backend/`)
@@ -43,10 +49,10 @@ data). Tidak ada kontrol relay di file ini sama sekali.
 ### `sma/firmware/sma_room_monitor.ino`
 **Materi:** IoT SMA (Anda ajarkan).
 **Siswa boleh/harus ubah:**
-- 5 baris identitas (`DEVICE_ID`, WiFi, `DHT_PIN`, `RELAY_PIN`)
+- 5 baris identitas (`DEVICE_ID`, WiFi, `DHT_PIN`, `RELAY_PIN` — default 18, hindari strapping pin 0/2/5/12/15)
 - Bagian **TANTANGAN** (ditandai `// ============ TANTANGAN`): isi fungsi
-  `handleFanCommand()` (4 TODO) dan daftarkan route `/fan` di `setup()`. Ini dikerjakan di
-  Pertemuan 4 sesuai silabus.
+  `handleFanCommand()` (4 TODO) dan daftarkan route `/fan` di `setup()`. Pola WebServer
+  dilatih di Pertemuan 12, TODO asli dikerjakan di Pertemuan 13 (lihat `kurikulum/sma/`).
 
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (koneksi ke backend, loop kirim
 sensor, `fanServer.handleClient()`).

@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "running led",
+			"path": "C:/Users/alif-dalfin/Documents/PlatformIO/Projects/running led"
+		},
+		{
+			"name": "Smart Room Monitor - SMA",
+			"path": "C:/Users/alif-dalfin/Documents/PlatformIO/Projects/Smart Room Monitor - SMA"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "ekskul-coding"
+	}
+}
