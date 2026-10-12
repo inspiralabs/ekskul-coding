@@ -63,6 +63,7 @@
              text-decoration:none;color:#1f2937;font:700 13px 'Nunito',sans-serif;transition:background .2s ease}
   .pilihan a:hover{background:#f2f8f7}
   .pilihan a span.emoji{font-size:15px}
+  .label-jenjang{margin:10px 12px 2px;font:800 11px 'Nunito',sans-serif;letter-spacing:.08em;color:#93A6AF}
 
   footer{text-align:center;margin-top:28px;font:700 12px 'Nunito',sans-serif;color:#93A6AF}
   footer a{color:#93A6AF;text-decoration:underline}
@@ -75,7 +76,7 @@
 <div class="kontainer">
   <button class="lencana" id="salam-siswa" type="button"><span class="titik"></span><span id="salam-teks">Hai, Siswa</span></button>
   <h1>Ekstrakurikuler Coding</h1>
-  <p class="subjudul">Dashboard ini menampilkan leaderboard, materi, dan template starter untuk siswa SMA &amp; SMP Sekolah Quran Asy Syahid.</p>
+  <p class="subjudul">Dashboard ini menampilkan leaderboard, materi, template starter, dan website kelompok untuk siswa SMA &amp; SMP Sekolah Quran Asy Syahid.</p>
 
   <div class="grid">
     <div class="akordeon">
@@ -130,6 +131,43 @@
         <div class="pilihan">
           <a href="/leaderboard/?kelas=sma"><span class="emoji">🎓</span> Leaderboard SMA</a>
           <a href="/leaderboard/?kelas=smp"><span class="emoji">📘</span> Leaderboard SMP</a>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="akordeon">
+      <button class="akordeon-toggle" aria-expanded="false" onclick="
+        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')!=='true');
+      ">
+        <div class="kartu">
+          <div class="ikon ikon-demo">🌐</div>
+          <div class="teks"><strong>Website Kelompok IoT</strong><span>Dashboard Smart Room Monitor buatan siswa</span></div>
+          <span class="panah">→</span>
+        </div>
+      </button>
+      <div class="akordeon-isi"><div>
+        <div class="pilihan">
+          <p class="label-jenjang">SMP</p>
+          <a href="https://smp-01.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-01 · Athalla Daffa Habibullah</a>
+          <a href="https://smp-02.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-02 · Sultan Raziq Salasa</a>
+          <a href="https://smp-03.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-03 · M. Abizan Syahdan</a>
+          <a href="https://smp-04.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-04 · M. Ghaizan Amsar S</a>
+          <a href="https://smp-05.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-05 · Bima Saguna Shiddiq</a>
+          <a href="https://smp-06.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-06 · Akmal Nafis &amp; M. Adlan Al Fadyl</a>
+          <a href="https://smp-07.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-07 · Rafif Ahnaf Rabbani &amp; M. Qassim</a>
+          <a href="https://smp-08.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-08 · Abdul Hasiib &amp; Zhaffir Arkana Kurniaputra</a>
+          <a href="https://smp-09.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-09 · Zahidan Akmal Wafa &amp; M. Alfatih</a>
+          <a href="https://smp-10.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-10 · Bintang Habibi Satriawan, Muzaffar Rakhsan Abqary, Yahya Zakiy Elmoursy, Mozhaffar Adam Kanz</a>
+          <a href="https://smp-11.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-11 · Tubagus Razan, Dzahwan Raditya Arraka, Essa Rizqi Wijaya, M. Fathir Abqary Arief</a>
+          <a href="https://smp-12.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-12 · M. Faiq Ghaisan Sutisna, M. Tsabbit Al Hanif, Zaidan Riqki Alfarizi, M. Zaidan Altamis</a>
+          <a href="https://smp-13.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-13 · Muzhaffar Pratama Nur Ikhwan, Bariq Taufiqurrahman, M. Naufal Khairy</a>
+          <p class="label-jenjang">SMA</p>
+          <a href="https://sma-01.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-01 · Nabil Abdillah</a>
+          <a href="https://sma-02.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-02 · M Lyu Marioka</a>
+          <a href="https://sma-03.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-03 · M Syafiy</a>
+          <a href="https://sma-04.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-04 · Qowiyyyl Luthfi Pradana &amp; M Kenzo Bagas</a>
+          <a href="https://sma-05.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-05 · Husna Mahira Taqiyya &amp; Aliya Nasifa Putri Kencoro</a>
+          <a href="https://sma-06.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-06 · M Dzaki &amp; M Fakhri</a>
         </div>
       </div></div>
     </div>
