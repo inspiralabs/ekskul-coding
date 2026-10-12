@@ -1,43 +1,32 @@
 # Smart Room Monitor — SMA
 
 Dashboard IoT untuk memantau suhu & kelembapan ruangan pakai sensor DHT22,
-plus kontrol kipas. Template ini **sengaja belum lengkap** — bagian dasar
-sudah jalan, sisanya jadi tantanganmu.
+plus kontrol kipas (manual, otomatis, ambang batas). Program ESP32 dan
+dashboard **sudah jadi** — fokusmu merakit rangkaian dengan benar, lalu
+mengkustom tampilan dashboard.
 
 ## Isi folder ini
 
 | File | Boleh diubah? | Fungsi |
 |---|---|---|
-| `index.html` | ✅ Ya, ini tugasmu | Tampilan dashboard — HTML, CSS, dan JS ada di sini |
+| `index.html` | ✅ Ya (profil, teks, bonus) | Tampilan dashboard — HTML, CSS, dan JS ada di sini |
 | `api.js` | ❌ Jangan diubah | "Kabel" penghubung ke backend, sudah disiapkan tutor |
 | `firmware/sma_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 |
 | `firmware/platformio.ini` | ❌ Jangan diubah (kecuali `board`) | Pengaturan PlatformIO |
 
 ## Cara mulai
 
-1. Buka `index.html` langsung di browser untuk lihat tampilan dashboard saat ini.
-2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder `sma/firmware`.
-   Buka `sma_room_monitor.ino`, isi 5 baris identitas
-   di bagian atas (`DEVICE_ID`, `WIFI_SSID`, `WIFI_PASSWORD`, `DHT_PIN`,
-   `RELAY_PIN`) sesuai data kelompokmu di `docs/HANDOUT_SISWA.md`. Bagian berlabel `JANGAN UBAH` jangan disentuh — itu koneksi ke server.
-3. Klik Upload (→) lalu Serial Monitor (🔌) di status bar PlatformIO, pastikan berhasil connect
-   WiFi dan mengirim data.
-4. Kerjakan TANTANGAN di `index.html` dan firmware (lihat daftar di bawah).
-
-## Daftar TANTANGAN
-
-Cari komentar `TANTANGAN` di `index.html` untuk detail dan hint tiap poin:
-
-1. **Ganti warna tema** — variabel warna di bagian `:root` (CSS paling atas).
-2. **Ganti ambang batas suhu** — cari `AMBANG_BATAS_SUHU_TINGGI` di JS, lihat efeknya ke alert.
-3. **Mode Otomatis fan** — tambah tombol "Otomatis" + fan menyala sendiri kalau suhu lewat ambang batas. Panggil `kirimPerintahFan({ fanMode: "auto" })` dan `kirimPerintahFan({ threshold: nilai })` dari `api.js` (fungsi ini sudah ada, tinggal dipakai). Contoh polanya sudah jadi di fungsi `toggleFanManual()`.
-4. **Grafik riwayat** — tambah `<canvas>` untuk grafik suhu & kelembapan.
-5. **Mode Gelap** — tombol dark mode di header, pakai variabel warna yang sudah disiapkan di `:root`.
-6. **Panel edukasi** — kotak collapsible berisi penjelasan singkat tentang sensor DHT22.
-
-Firmware (`firmware/sma_room_monitor.ino`) juga punya satu TANTANGAN:
-lengkapi fungsi `handleFanCommand()` supaya relay bisa dikontrol dari
-dashboard. Petunjuk ada di komentar TODO di dalam file itu.
+1. Rakit rangkaian: DHT22 data → GPIO 4, relay IN → GPIO 18 (lihat materi pertemuan).
+2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder `firmware`.
+   Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (Device ID sudah
+   diisi tutor). Ubah `DHT_PIN`/`RELAY_PIN` hanya kalau kabelmu di pin lain.
+3. Klik Upload (→) lalu Serial Monitor (🔌), pastikan berhasil connect WiFi dan
+   mengirim data (kode respons 200).
+4. Buka `index.html` di browser: angka sensor muncul, tombol fan bisa dipakai
+   (minta PIN kelompok ke tutor).
+5. Kustom dashboard: isi **Profil Kelompok** (nama, anggota, `foto-kelompok.jpg`),
+   ganti warna di `:root` (`style.css`). Bonus: grafik, mode gelap, panel edukasi
+   di kotak kosong.
 
 ## Kalau ada error
 
@@ -47,3 +36,17 @@ dashboard. Petunjuk ada di komentar TODO di dalam file itu.
   `WIFI_PASSWORD` benar.
 - Info lengkap koneksi (URL server, API key, Device ID kelompok) ada di
   `docs/HANDOUT_SISWA.md`.
+- Relay kebalikan (kipas nyala saat dashboard bilang mati)? Ganti
+  `RELAY_ACTIVE_LOW` jadi `false` di firmware.
+
+## Menyerahkan website ke tutor
+
+Website-mu akan online di `https://<device-id>.inspiralabs.id` (mis. `sma-04.inspiralabs.id`).
+Sebelum dikirim, pastikan:
+
+1. Halaman utama tetap bernama **`index.html`**.
+2. Semua file (gambar, CSS) ada **di dalam folder ini**. Foto kelompok diberi nama **`foto-kelompok.jpg`**.
+3. Tidak pakai `npm`/instalasi. Butuh library (mis. Chart.js)? Pakai link CDN.
+4. `api.js` tidak diubah (saat deploy selalu diganti versi asli tutor).
+5. Ukuran folder maksimal **5 MB** — kecilkan foto dari HP dulu.
+6. Zip seluruh folder, beri nama sesuai Device ID (mis. `sma-04.zip`), kirim ke tutor.

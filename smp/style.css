@@ -339,3 +339,17 @@ a:hover { color: var(--warna-primer); }
   background: var(--warna-teks-lemah);
   flex-shrink: 0;
 }
+
+/* Profil kelompok */
+.kartu-profil {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--warna-card);
+  border-radius: var(--radius-besar);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.kartu-profil img { width: 96px; height: 96px; object-fit: cover; border-radius: 16px; }
+.kartu-profil h2 { margin: 0; font-size: 20px; font-weight: 800; }
+.kartu-profil p { margin: 4px 0 0; color: var(--warna-teks-lemah); }

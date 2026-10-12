@@ -4,34 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Room Monitor - Starter Template</title>
-<link rel="icon" href="/icon.webp" type="image/webp">
+<link rel="icon" href="icon.webp" type="image/webp">
 <script src="api.js"></script>
 
 <!--
-  SMART ROOM MONITOR - STARTER TEMPLATE (DHT22)
-  Template belajar HTML, CSS, JavaScript untuk siswa SMA/SMK.
+  SMART ROOM MONITOR - DASHBOARD KELOMPOK (DHT22 + FAN)
+  Semua fitur utama SUDAH JADI: data sensor asli, alert, kontrol fan
+  manual, mode Otomatis, dan slider ambang batas. Website ini nanti
+  online di https://<device-id>.inspiralabs.id
 
-  File ini SENGAJA belum lengkap. Hanya fitur dasar yang sudah dibuat:
-  header, status koneksi, jam, dua kartu sensor (suhu & kelembapan),
-  alert sederhana, dan kontrol fan manual. Sisanya jadi latihanmu!
+  YANG PERLU KAMU UBAH (cukup ini saja):
+  1. BAGIAN: PROFIL KELOMPOK - nama kelompok, nama anggota, dan foto
+     (simpan foto dengan nama foto-kelompok.jpg di folder yang sama).
+  2. Warna tema di bagian ":root" paling atas style.css.
+  3. (Bonus) Kotak kosong: grafik riwayat, mode gelap, panel edukasi.
 
-  PETUNJUK DAN TANTANGAN UNTUK SISWA:
-  1. Ganti warna tema di bagian ":root" (baris CSS paling atas), misalnya
-     variabel warna-primer, jadi warna favoritmu!
-  2. Ganti nilai ambang batas suhu di JS (cari "AMBANG_BATAS_SUHU_TINGGI")
-     lalu lihat efeknya pada alert.
-  3. Tambahkan MODE OTOMATIS untuk fan: buat tombol "Otomatis" di samping
-     tombol fan, lalu buat fan menyala sendiri kalau suhu > ambang batas.
-  4. Tambahkan GRAFIK RIWAYAT suhu & kelembapan pakai elemen <canvas>.
-  5. Tambahkan MODE GELAP (dark mode) dengan tombol di header - contek
-     variabel warna yang sudah disiapkan di ":root" untuk memudahkan.
-  6. Tambahkan panel edukasi collapsible berisi penjelasan singkat
-     tentang sensor DHT22.
-
-  Struktur file ini:
-  - Bagian style berisi semua CSS, dikelompokkan per komponen
-  - Bagian body berisi HTML, ditandai komentar BAGIAN: ...
-  - Bagian script di akhir file, dipisah per fungsi dengan komentar
+  ATURAN SEBELUM DISERAHKAN KE TUTOR: lihat README.md.
 -->
 
 <link rel="stylesheet" href="style.css">
@@ -57,7 +45,7 @@
         <span id="teksStatus">Online</span>
       </div>
       <div class="jam-realtime" id="jamRealtime">00:00:00</div>
-      <!-- BAGIAN: MODE GELAP (kosong - TANTANGAN 5)
+      <!-- BAGIAN: MODE GELAP (kosong - BONUS, boleh dihapus)
            Tambahkan tombol di sini untuk toggle dark mode. -->
       <span id="bagianModeGelap"></span>
     </div>
@@ -72,9 +60,20 @@
   </div>
 
   <!-- ================================================================
+       BAGIAN: PROFIL KELOMPOK - ganti nama, anggota, dan foto kalian
+       ================================================================ -->
+  <div class="kartu-profil">
+    <img src="foto-kelompok.jpg" alt="Foto kelompok" onerror="this.remove()">
+    <div>
+      <h2>Nama Kelompok Kami</h2>
+      <p>Anggota: Nama 1, Nama 2</p>
+    </div>
+  </div>
+
+  <!-- ================================================================
        BAGIAN: KARTU DATA UTAMA (Suhu & Kelembapan)
        Kartu di bawah SENGAJA dibuat minim - hanya angka & status yang
-       jalan (dipakai oleh JS). TANTANGAN 1: percantik sendiri, misalnya:
+       jalan (dipakai oleh JS). BONUS: percantik sendiri, misalnya:
        - tambahkan ikon/emoji besar
        - tambahkan gauge/progress ring melingkar
        - tambahkan trend indicator (panah naik/turun dari nilai sebelumnya)
@@ -104,7 +103,7 @@
   </div>
 
   <!-- ================================================================
-       BAGIAN: GRAFIK RIWAYAT (kosong - TANTANGAN 4)
+       BAGIAN: GRAFIK RIWAYAT (kosong - BONUS, boleh dihapus)
        Tambahkan elemen <canvas> atau library grafik di sini, lalu
        gambar riwayat suhu & kelembapan dari beberapa jam terakhir.
        ================================================================ -->
@@ -113,17 +112,19 @@
   </div>
 
   <!-- ================================================================
-       BAGIAN: KONTROL FAN (baru mode manual)
+       BAGIAN: KONTROL FAN
        ================================================================ -->
   <div class="kartu-fan">
     <h2>🌀 Kontrol Fan</h2>
-    <!-- ================================================================
-         BAGIAN: MODE FAN (kosong - TANTANGAN 3)
-         Tambahkan tombol mode Manual/Otomatis dan slider ambang batas
-         suhu di sini. Lihat fungsi jalankanLogikaOtomatis() di JS.
-         ================================================================ -->
-    <div class="kartu-kosong" id="bagianModeFan">
-      <!-- TULIS KODEMU DI SINI -->
+    <p class="catatan-fan">Mengubah fan butuh PIN kelompok. Perubahan sampai ke kipas dalam ~4 detik.</p>
+    <!-- BAGIAN: MODE FAN - Manual (pakai tombol besar) atau Otomatis (ikut suhu) -->
+    <div class="mode-fan">
+      <button type="button" class="tombol-mode" id="tombolManual">Manual</button>
+      <button type="button" class="tombol-mode" id="tombolOtomatis">Otomatis</button>
+      <label class="slider-ambang">
+        Nyala otomatis di atas <strong id="labelAmbang">30</strong>°C
+        <input type="range" id="sliderAmbang" min="20" max="40" step="1" value="30">
+      </label>
     </div>
     <div class="tombol-fan-besar" id="tombolFan">
       <span class="ikon-fan" id="ikonFan">🌀</span>
@@ -136,7 +137,7 @@
   </div>
 
   <!-- ================================================================
-       BAGIAN: PANEL EDUKASI (kosong - TANTANGAN 6)
+       BAGIAN: PANEL EDUKASI (kosong - BONUS, boleh dihapus)
        Tambahkan card collapsible berisi penjelasan singkat tentang
        sensor DHT22 dan kenapa suhu/kelembapan penting dipantau.
        ================================================================ -->
@@ -159,7 +160,7 @@ var fanMenyala = false;     // status fan: true = ON, false = OFF
 
 document.getElementById("deviceIdLabel").textContent = MY_DEVICE_ID;
 
-// Ambang batas suhu untuk memicu alert. TANTANGAN 2: coba ubah nilai ini.
+// Ambang batas suhu untuk memicu alert (boleh diubah).
 var AMBANG_BATAS_SUHU_TINGGI = 32;
 
 /* =====================================================================
@@ -212,7 +213,6 @@ function perbaruiTampilanSensor() {
 /* =====================================================================
    FUNGSI: perbaruiAlert()
    Menampilkan banner peringatan jika suhu melebihi ambang batas.
-   TANTANGAN: tambahkan juga kondisi untuk kelembapan terlalu kering/lembap.
    ===================================================================== */
 function perbaruiAlert() {
   var banner = document.getElementById("alertBanner");
@@ -237,24 +237,12 @@ function perbaruiJam() {
   document.getElementById("jamRealtime").textContent = jam + ":" + menit + ":" + detik;
 }
 
-/* Simulasi status koneksi: sesekali "offline" secara acak agar terlihat nyata.
-   TANTANGAN: ganti dengan status koneksi asli dari perangkat ESP32/NodeMCU-mu. */
-function perbaruiStatusKoneksi() {
-  var online = Math.random() > 0.05; // 95% kemungkinan online
-  var dot = document.getElementById("dotStatus");
-  var teks = document.getElementById("teksStatus");
-  if (online) {
-    dot.classList.remove("offline");
-    teks.textContent = "Online";
-  } else {
-    dot.classList.add("offline");
-    teks.textContent = "Offline";
-  }
-}
-
 /* =====================================================================
-   BAGIAN: KONTROL FAN (manual saja - lihat TANTANGAN 3 untuk mode otomatis)
+   BAGIAN: KONTROL FAN (manual, otomatis, ambang batas)
+   Backend yang menyimpan status fan; ESP32 mengikutinya tiap ~4 detik.
    ===================================================================== */
+var modeFan = "auto";      // "manual" atau "auto"
+
 function perbaruiTampilanFan() {
   var tombolFan = document.getElementById("tombolFan");
   var ikonFan = document.getElementById("ikonFan");
@@ -266,29 +254,38 @@ function perbaruiTampilanFan() {
     tombolFan.classList.add("nyala");
     ikonFan.classList.add("berputar");
     labelFan.textContent = "Fan Menyala";
-    subLabelFan.textContent = "Tekan untuk mematikan";
     switchFan.classList.add("nyala");
   } else {
     tombolFan.classList.remove("nyala");
     ikonFan.classList.remove("berputar");
     labelFan.textContent = "Fan Mati";
-    subLabelFan.textContent = "Tekan untuk menyalakan";
     switchFan.classList.remove("nyala");
   }
+  subLabelFan.textContent = modeFan === "auto"
+    ? "Mode Otomatis - tekan untuk ambil alih manual"
+    : (fanMenyala ? "Tekan untuk mematikan" : "Tekan untuk menyalakan");
+
+  document.getElementById("tombolManual").classList.toggle("aktif", modeFan === "manual");
+  document.getElementById("tombolOtomatis").classList.toggle("aktif", modeFan === "auto");
 }
 
-/* Menyalakan/mematikan fan saat kartu diklik.
-   CONTOH JADI: dulu ini cuma ubah variabel lokal (fanMenyala = !fanMenyala).
-   Sekarang kita kirim perintah ke backend lewat kirimPerintahFan() dari
-   api.js, backend yang jadi sumber kebenaran & yang benar-benar menyalakan
-   relay di ESP32. Pakai pola YANG SAMA ini untuk TANTANGAN 3 (mode
-   Otomatis + slider threshold) di bagian HTML "bagianModeFan" di atas:
-   panggil kirimPerintahFan({ fanMode: "auto" }) atau
-   kirimPerintahFan({ threshold: nilaiSlider }). */
-async function toggleFanManual() {
-  var hasil = await kirimPerintahFan({ manualFanOn: !fanMenyala });
-  fanMenyala = hasil.fanOn;
+function terapkanStatusFan(status) {
+  fanMenyala = status.fanOn;
+  modeFan = status.fanMode;
+  var slider = document.getElementById("sliderAmbang");
+  if (document.activeElement !== slider) {
+    slider.value = status.threshold;
+    document.getElementById("labelAmbang").textContent = status.threshold;
+  }
   perbaruiTampilanFan();
+}
+
+async function ubahFan(perubahan) {
+  try {
+    terapkanStatusFan(await kirimPerintahFan(perubahan));
+  } catch (err) {
+    console.error("Gagal mengubah fan:", err);
+  }
 }
 
 /* =====================================================================
@@ -299,9 +296,7 @@ async function siklusPembaruanData() {
   perbaruiTampilanSensor();
 
   // status fan juga ikut disegarkan (kalau ada perintah dari dashboard lain)
-  var fan = await ambilStatusFan();
-  fanMenyala = fan.fanOn;
-  perbaruiTampilanFan();
+  terapkanStatusFan(await ambilStatusFan());
 }
 
 /* =====================================================================
@@ -336,7 +331,21 @@ async function inisialisasiDashboard() {
   perbaruiJam();
   perbaruiStatusKoneksi();
 
-  document.getElementById("tombolFan").addEventListener("click", toggleFanManual);
+  document.getElementById("tombolFan").addEventListener("click", function () {
+    ubahFan({ fanMode: "manual", manualFanOn: !fanMenyala });
+  });
+  document.getElementById("tombolManual").addEventListener("click", function () {
+    ubahFan({ fanMode: "manual", manualFanOn: fanMenyala });
+  });
+  document.getElementById("tombolOtomatis").addEventListener("click", function () {
+    ubahFan({ fanMode: "auto" });
+  });
+  document.getElementById("sliderAmbang").addEventListener("input", function (e) {
+    document.getElementById("labelAmbang").textContent = e.target.value;
+  });
+  document.getElementById("sliderAmbang").addEventListener("change", function (e) {
+    ubahFan({ threshold: Number(e.target.value) });
+  });
 
   setInterval(perbaruiJam, 1000);
   // data sensor "baru" diambil dari backend tiap 4-5 detik

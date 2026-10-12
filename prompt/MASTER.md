@@ -18,7 +18,7 @@ yang harus kamu hasilkan adalah
 10. untuk SMA. materinya tingkatannya adalah mereka punya pemahaman lebih untuk coding. jadi materinya dibuat dengan cukup lebih dalam dibanding smp tidak apa. mereka punya kesiapan lebih untuk coding. pastikan materinya mencakup keaktifan murid selama 70menitan. materi harus efektif untuk murid usia 15-18 tahun.
 11. isi challange bisa berupa melengkapi coding atau memperbaiki coding atau apapun tolong sarankan (bagi kedalam 3 tingkatan easy, medium dan hard)
 12. pastikan isi post-test adalah hal hal yang sudah dibahas (ada di ppt)
-13. sebenarnya uuntuk materi coding dan hardware iini sudah saya buatkan file atau bahan ajarnya, kamu pelajari dulu aja di folder smp dan sma
+13. sebenarnya uuntuk materi coding dan hardware iini sudah saya buatkan file atau bahan ajarnya, kamu pelajari dulu aja di folder smp dan sma.
 
 perbaiki kualitas prompt saya. tanyakan dan konfirmasi dulu apapun untuk menyempurnakan diskusi kita. jadi urutan kita adalah diskusi materi+challange+post test P9-P19 SMP dan SMA. jika sudah oke maka ekskusi kedalam file MD dahulu.
 

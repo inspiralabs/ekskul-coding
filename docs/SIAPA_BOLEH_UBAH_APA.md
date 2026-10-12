@@ -13,8 +13,8 @@ ekskul-coding/
 ├── firmware/
 │   └── sma_room_monitor_REFERENSI_TUTOR/ <- kunci jawaban, JANGAN dibagikan ke siswa
 ├── demo/                                  <- dashboard referensi Anda (tutor)
-├── sma/                                   <- materi web dev SMA (rekan Anda) -- ada TANTANGAN
-│   └── firmware/                         <- materi IoT SMA (Anda), proyek PlatformIO -- ada TANTANGAN
+├── sma/                                   <- dashboard SMA (fitur jadi, siswa kustom tampilan)
+│   └── firmware/                         <- firmware SMA (program jadi)
 ├── smp/                                   <- materi web dev SMP (rekan Anda)
 │   └── firmware/                         <- materi IoT SMP (Anda), proyek PlatformIO
 ├── index.html, leaderboard/, materi/,
@@ -42,17 +42,16 @@ Lihat `backend/README.md` untuk cara setup & menjalankan.
 
 ### `smp/firmware/smp_room_monitor.ino`
 **Materi:** IoT SMP (Anda ajarkan).
-**Siswa boleh ubah:** 4 baris saja — `DEVICE_ID`, `WIFI_SSID`, `WIFI_PASSWORD`, `DHT_PIN`.
+**Siswa boleh ubah:** `WIFI_SSID`, `WIFI_PASSWORD`, dan `DHT_PIN` kalau kabel di pin lain.
+`DEVICE_ID` sudah diisi tutor lewat `py tools/kelompok.py paket`.
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (URL server, API key, logika kirim
 data). Tidak ada kontrol relay di file ini sama sekali.
 
 ### `sma/firmware/sma_room_monitor.ino`
 **Materi:** IoT SMA (Anda ajarkan).
-**Siswa boleh/harus ubah:**
-- 5 baris identitas (`DEVICE_ID`, WiFi, `DHT_PIN`, `RELAY_PIN` — default 18, hindari strapping pin 0/2/5/12/15)
-- Bagian **TANTANGAN** (ditandai `// ============ TANTANGAN`): isi fungsi
-  `handleFanCommand()` (4 TODO) dan daftarkan route `/fan` di `setup()`. Pola WebServer
-  dilatih di Pertemuan 12, TODO asli dikerjakan di Pertemuan 13 (lihat `kurikulum/sma/`).
+**Program sudah jadi** (P9–P13 fokus perakitan). Siswa hanya mengisi WiFi, `DHT_PIN`/`RELAY_PIN`
+kalau kabel di pin lain (hindari strapping pin 0/2/5/12/15), dan `RELAY_ACTIVE_LOW` = `false` kalau
+modul relaynya active-HIGH. `DEVICE_ID` sudah diisi tutor.
 
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (koneksi ke backend, loop kirim
 sensor, `fanServer.handleClient()`).
@@ -76,9 +75,9 @@ URL di Vercel bersih: `ekskulcoding.inspiralabs.id/demo`, `/sma`, `/smp`.
 | `leaderboard/` | Ranking siswa (baca dari gradebook) | Rekan Anda | `index.html` | `leaderboard.js` |
 | `materi/` | Materi & form per pertemuan | Rekan Anda | `index.html` | `materi.js` |
 
-**Satu baris yang PERLU diubah manual di tiap `api.js`:** `MY_DEVICE_ID` — sesuaikan dengan
-device/kelompok mana yang mau ditampilkan di dashboard itu. Ini satu-satunya pengecualian
-"jangan ubah" karena bukan logika koneksi, hanya nilai konfigurasi.
+**`MY_DEVICE_ID` di `api.js`** diisi otomatis per kelompok oleh `py tools/kelompok.py paket`,
+dan saat deploy `api.js` selalu diganti versi tutor. Kontrol fan SMA dilindungi PIN per
+kelompok (`FAN_PINS` di `backend/.env`).
 
 **Sama halnya untuk `leaderboard.js` dan `materi.js`:** satu baris yang PERLU
 diubah manual adalah konstanta URL sumber data di puncak file
@@ -95,16 +94,9 @@ File asli (`Smart Room Monitor.dc.html` dari tool desain) tersimpan di `demo/` s
 referensi visual. File yang aktif dipakai (`demo/index.html` + `demo/app.js`) adalah
 tulisan ulang vanilla JS yang bisa langsung dibuka di browser mana pun.
 
-### Dashboard SMA — bagian TANTANGAN (materi rekan Anda)
-Ditandai komentar `TANTANGAN` di HTML: mode Otomatis + slider threshold, grafik riwayat,
-dark mode, panel edukasi. Untuk TANTANGAN 3 (mode Otomatis), siswa memanggil fungsi yang
-SUDAH ADA dari `api.js`:
-```js
-kirimPerintahFan({ fanMode: "auto" });
-kirimPerintahFan({ threshold: nilaiSlider });
-```
-Contoh polanya sudah ada di `toggleFanManual()` (baris ~605) yang sudah bekerja — siswa
-tinggal meniru pola yang sama untuk TANTANGAN lain.
+### Dashboard SMA
+Kontrol fan manual, mode Manual/Otomatis, dan slider ambang batas sudah jadi. Siswa mengkustom
+kartu Profil Kelompok, warna `:root`, foto; grafik/dark mode/panel edukasi jadi bonus opsional.
 
 ### Dashboard SMP
 Tidak ada bagian kontrol/TANTANGAN terkait backend — hanya satu kotak kosong untuk
@@ -129,15 +121,7 @@ bisa membuat perangkat teman sekelompok lain ikut error atau data tertukar antar
 
 ## 5. Checklist sebelum kelas (untuk Anda/panitia)
 
-1. Deploy backend ke server (`backend/README.md`) dan catat URL server-nya.
-2. Ganti semua `<url-backend-anda>` dan `<shared-secret>` di:
-   - `smp/firmware/smp_room_monitor.ino`
-   - `sma/firmware/sma_room_monitor.ino`
-   - `firmware/sma_room_monitor_REFERENSI_TUTOR/*.ino`
-   - `demo/api.js`, `sma/api.js`, `smp/api.js`
-3. Tentukan daftar `DEVICE_ID` final per kelompok (lihat `backend/README.md` bagian 4),
-   masukkan ke `HANDOUT_SISWA.md`.
-4. Compile & flash `sma_room_monitor_REFERENSI_TUTOR` ke satu ESP32 uji untuk verifikasi
-   relay & alur kontrol bekerja sebelum kelas.
-5. Baru bagikan `smp/firmware/smp_room_monitor.ino` dan `sma/firmware/sma_room_monitor.ino`
-   (versi TANTANGAN, BUKAN referensi) ke siswa sesuai `HANDOUT_SISWA.md`.
+1. Backend online + `FAN_PINS` sudah di `.env` server (`backend/README.md`).
+2. `py tools/kelompok.py paket` → bagikan `dist/paket/<id>.zip` ke tiap kelompok, PIN SMA secara pribadi.
+3. Flash satu ESP32 uji dengan firmware SMA untuk cek relay & alur kontrol.
+4. Akhir semester: deploy tiap kiriman siswa (`deploy/README.md`).

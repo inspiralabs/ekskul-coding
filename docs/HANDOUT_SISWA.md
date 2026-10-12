@@ -9,30 +9,43 @@
 | Nama WiFi kelas | `___________________` |
 | Password WiFi kelas | `___________________` |
 
-## Daftar Device ID kelompok (isi oleh tutor)
+## Daftar Device ID & alamat website
 
-Cari nama kelompokmu di tabel ini, lalu pakai ID itu di firmware DAN di `api.js` (kalau
-kamu juga mengerjakan bagian dashboard).
+Folder yang dibagikan tutor sudah berisi Device ID kelompokmu (di firmware dan `api.js`).
+Cukup pastikan cocok dengan tabel ini.
 
-| Kelompok | Device ID |
-|---|---|
-| SMA 1 | `sma-1` |
-| SMA 2 | `sma-2` |
-| SMA 3 | `sma-3` |
-| SMP 1 | `smp-1` |
-| SMP 2 | `smp-2` |
-| SMP 3 | `smp-3` |
+| Jenjang | Kelompok / Individu | Device ID | Website (setelah di-deploy tutor) |
+|---|---|---|---|
+| SMP | Athalla Daffa Habibullah | `smp-01` | `smp-01.inspiralabs.id` |
+| SMP | Sultan Raziq Salasa | `smp-02` | `smp-02.inspiralabs.id` |
+| SMP | M. Abizan Syahdan | `smp-03` | `smp-03.inspiralabs.id` |
+| SMP | M. Ghaizan Amsar S | `smp-04` | `smp-04.inspiralabs.id` |
+| SMP | Bima Saguna Shiddiq | `smp-05` | `smp-05.inspiralabs.id` |
+| SMP | Akmal Nafis & M. Adlan Al Fadyl | `smp-06` | `smp-06.inspiralabs.id` |
+| SMP | Rafif Ahnaf Rabbani & M. Qassim | `smp-07` | `smp-07.inspiralabs.id` |
+| SMP | Abdul Hasiib & Zhaffir Arkana Kurniaputra | `smp-08` | `smp-08.inspiralabs.id` |
+| SMP | Zahidan Akmal Wafa & M. Alfatih | `smp-09` | `smp-09.inspiralabs.id` |
+| SMP | Bintang Habibi Satriawan, Muzaffar Rakhsan Abqary, Yahya Zakiy Elmoursy, Mozhaffar Adam Kanz | `smp-10` | `smp-10.inspiralabs.id` |
+| SMP | Tubagus Razan, Dzahwan Raditya Arraka, Essa Rizqi Wijaya, M. Fathir Abqary Arief | `smp-11` | `smp-11.inspiralabs.id` |
+| SMP | M. Faiq Ghaisan Sutisna, M. Tsabbit Al Hanif, Zaidan Riqki Alfarizi, M. Zaidan Altamis | `smp-12` | `smp-12.inspiralabs.id` |
+| SMP | Muzhaffar Pratama Nur Ikhwan, Bariq Taufiqurrahman, M. Naufal Khairy | `smp-13` | `smp-13.inspiralabs.id` |
+| SMA | Nabil Abdillah | `sma-01` | `sma-01.inspiralabs.id` |
+| SMA | M Lyu Marioka | `sma-02` | `sma-02.inspiralabs.id` |
+| SMA | M Syafiy | `sma-03` | `sma-03.inspiralabs.id` |
+| SMA | Qowiyyyl Luthfi Pradana & M Kenzo Bagas | `sma-04` | `sma-04.inspiralabs.id` |
+| SMA | Husna Mahira Taqiyya & Aliya Nasifa Putri Kencoro | `sma-05` | `sma-05.inspiralabs.id` |
+| SMA | M Dzaki & M Fakhri | `sma-06` | `sma-06.inspiralabs.id` |
 
-**PENTING:** Jangan mengarang Device ID sendiri! Kalau dua kelompok pakai ID yang sama,
+**PENTING:** Jangan mengganti Device ID! Kalau dua kelompok pakai ID yang sama,
 data kalian akan saling menimpa di dashboard.
 
 ## Untuk siswa SMP
 
 File kamu: `smp/firmware/smp_room_monitor.ino`
 
-Buka folder `smp/firmware` lewat PlatformIO (PIO Home → Open Project), lalu buka file itu. Cari 4 baris ini dan isi sesuai tabel di atas:
+Buka folder `smp/firmware` lewat PlatformIO (PIO Home → Open Project), lalu buka file itu. Cari baris ini, isi WiFi saja (Device ID sudah diisi tutor):
 ```cpp
-const char* DEVICE_ID     = "smp-3";        // GANTI sesuai ID kelompokmu
+const char* DEVICE_ID     = "smp-01";        // sudah diisi tutor
 const char* WIFI_SSID     = "ISI_DI_SINI";
 const char* WIFI_PASSWORD = "ISI_DI_SINI";
 #define DHT_PIN 4                            // ganti kalau kabel DHT22 di pin lain
@@ -43,28 +56,28 @@ disiapkan tutor.
 
 ## Untuk siswa SMA
 
-File kamu: `sma/firmware/sma_room_monitor.ino`
+File kamu: `sma/firmware/sma_room_monitor.ino` — program sudah **jadi**, tidak ada yang perlu
+dilengkapi. Sama seperti SMP: isi WiFi, cek `DHT_PIN` dan `RELAY_PIN` sesuai pemasangan
+kabelmu, lalu Upload. Modul relay biasanya **active-LOW** (`LOW` = nyala) — sudah diatur
+di program; kalau relaymu kebalikannya, ganti `RELAY_ACTIVE_LOW` jadi `false`.
 
-**Tahap 1-3 (rangkaian, sensor, kirim data):** sama seperti SMP — isi `DEVICE_ID`, WiFi,
-`DHT_PIN`, ditambah `RELAY_PIN` sesuai pemasangan modul relaymu.
-
-**Tahap 4 (TANTANGAN kontrol relay):** cari komentar `TANTANGAN` di file, lalu lengkapi
-fungsi `handleFanCommand()` — ada 4 TODO dengan petunjuk di komentarnya. Ingat: modul relay
-biasanya **active-LOW** (`LOW` = nyala, `HIGH` = mati) — kebalikan dari LED biasa!
-
-Kalau kamu juga mengerjakan dashboard: file `sma/index.html` punya bagian
-TANTANGAN kosong untuk mode Otomatis + slider threshold. Jangan buka/ubah `api.js` —
-tinggal panggil fungsi yang sudah ada di sana:
-```js
-kirimPerintahFan({ fanMode: "auto" });
-kirimPerintahFan({ threshold: nilaiSlider });
-```
-Contoh yang sudah jadi ada di fungsi `toggleFanManual()` — tiru polanya.
+Dashboard (`index.html`) sudah punya tombol fan, mode Manual/Otomatis, dan slider ambang
+batas. Mengubah fan dari website meminta **PIN kelompok** sekali — PIN diberikan tutor
+langsung ke kelompokmu, jangan disebar. Perubahan sampai ke kipas paling lama ~4 detik.
 
 ## Aturan umum
 
 - File/baris berlabel **"JANGAN UBAH"** adalah "kabel" ke server — mengubahnya bisa
   membuat data kelompok lain ikut error.
-- File **`api.js`** di folder dashboard tidak pernah diubah — itu bukan bagian tugasmu.
-- Kalau ada error, cek dulu: sudah isi Device ID/WiFi dengan benar? ESP32 sudah berhasil
-  connect ke WiFi (cek Serial Monitor)? Alamat server sudah diawali `https://` (bukan `http://`)?
+- File **`api.js`** tidak pernah diubah (saat deploy, tutor selalu memakai versi aslinya).
+- Kalau ada error, cek dulu: sudah isi WiFi dengan benar? ESP32 sudah berhasil connect ke
+  WiFi (cek Serial Monitor)? Kabel sensor di pin yang sama dengan `DHT_PIN`?
+
+## Aturan menyerahkan website ke tutor
+
+1. Halaman utama tetap bernama **`index.html`**.
+2. Semua file (gambar, CSS) ada **di dalam folder** kelompokmu. Foto kelompok diberi nama
+   **`foto-kelompok.jpg`**.
+3. Tidak pakai `npm`/instalasi. Kalau butuh library (mis. Chart.js), pakai link CDN.
+4. Ukuran folder maksimal **5 MB** — kecilkan foto dari HP sebelum dimasukkan.
+5. Zip seluruh folder, beri nama sesuai Device ID (mis. `smp-07.zip`), kirim ke tutor.

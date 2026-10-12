@@ -5,3 +5,6 @@ CLAUDE.md
 docs/
 kurikulum/
 prompt/
+tools/
+dist/
+deploy/

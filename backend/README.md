@@ -52,21 +52,11 @@ diakses dari internet (mis. lewat port forwarding router atau IP publik). Pastik
 dikonfirmasi berfungsi sebelum kelas — kalau tidak, kontrol fan tetap "jalan" lewat fallback
 di respons `POST /api/readings` (jeda hingga ~4 detik), tapi tidak akan terasa instan.
 
-## 4. Tentukan daftar Device ID
+## 4. Daftar Device ID
 
-Sebelum kelas, tentukan daftar ID tetap per kelompok, contoh:
-
-| Kelompok | Device ID |
-|---|---|
-| SMA 1 | `sma-1` |
-| SMA 2 | `sma-2` |
-| ... | ... |
-| SMP 1 | `smp-1` |
-| SMP 2 | `smp-2` |
-| ... | ... |
-
-Bagikan daftar ini di handout siswa (lihat `docs/HANDOUT_SISWA.md`). Setiap kelompok
-WAJIB memakai ID dari daftar ini — dua kelompok dengan ID sama akan saling menimpa data.
+Daftar tetap ada di `tools/kelompok.json` (smp-01..smp-13, sma-01..sma-06) dan
+`docs/HANDOUT_SISWA.md`. PIN kontrol fan SMA ada di env `FAN_PINS` (lihat `.env.example`);
+device yang tidak terdaftar di `FAN_PINS` (mis. Demo) tidak dicek PIN-nya.
 
 ## 5. Cek server jalan dengan benar (`curl`)
 

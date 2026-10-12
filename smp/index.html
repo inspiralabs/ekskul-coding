@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Room Monitor Junior</title>
-<link rel="icon" href="/icon.webp" type="image/webp">
+<link rel="icon" href="icon.webp" type="image/webp">
 <script src="api.js"></script>
 
 <!--
@@ -14,9 +14,13 @@
   PETUNJUK UNTUK SISWA - coba ubah ini duluan:
   1. Ganti warna di bagian ":root" paling atas CSS - lihat nama komentarnya.
   2. Ganti tulisan judul "Smart Room Monitor Junior" jadi nama proyekmu sendiri.
-  3. Ganti angka suhu & kelembapan (cari class .angka-besar di HTML).
+  3. Angka suhu & kelembapan terisi otomatis dari sensor - tidak perlu diubah.
   4. Ganti emoji ikon (🌡️, 💧, 😊) dengan emoji favoritmu.
-  5. Cari komentar "TAMBAHKAN ELEMEN KAMU DI SINI" dan isi dengan idemu sendiri!
+  5. Isi BAGIAN: PROFIL KELOMPOK (nama kelompok, anggota, foto-kelompok.jpg).
+  6. Cari komentar "TAMBAHKAN ELEMEN KAMU DI SINI" dan isi dengan idemu sendiri!
+
+  Website ini nanti online di https://<device-id>.inspiralabs.id
+  Aturan sebelum diserahkan ke tutor: lihat README.md.
 
   Struktur file:
   - <style> berisi semua CSS
@@ -56,6 +60,17 @@
   <div class="alert-banner">
     <span class="alert-emoji">⚠️</span>
     <span>Suhu ruangan cukup tinggi hari ini, pastikan ventilasi terbuka!</span>
+  </div>
+
+  <!-- ================================================================
+       BAGIAN: PROFIL KELOMPOK - ganti nama, anggota, dan foto kalian
+       ================================================================ -->
+  <div class="kartu-profil">
+    <img src="foto-kelompok.jpg" alt="Foto kelompok" onerror="this.remove()">
+    <div>
+      <h2>Nama Kelompok Kami</h2>
+      <p>Anggota: Nama 1, Nama 2</p>
+    </div>
   </div>
 
   <!-- ================================================================

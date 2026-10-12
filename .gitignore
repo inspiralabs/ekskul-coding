@@ -11,3 +11,4 @@ Thumbs.db
 *.zip
 .pio/
 *.ino.cpp
+dist/

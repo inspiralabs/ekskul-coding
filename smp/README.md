@@ -17,15 +17,15 @@ belajar HTML & CSS dulu.
 
 1. Buka `index.html` langsung di browser untuk lihat tampilan dashboard.
 2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder
-   `smp/firmware`. Buka `smp_room_monitor.ino`, isi 4 baris
-   identitas di bagian atas (`DEVICE_ID`, `WIFI_SSID`, `WIFI_PASSWORD`,
-   `DHT_PIN`) sesuai data kelompokmu di `docs/HANDOUT_SISWA.md`. Bagian berlabel `JANGAN UBAH` jangan disentuh — itu
+   `firmware`. Buka `smp_room_monitor.ino`, isi `WIFI_SSID` dan
+   `WIFI_PASSWORD` (Device ID sudah diisi tutor). Ubah `DHT_PIN` hanya kalau
+   kabel DHT22 di pin lain. Bagian berlabel `JANGAN UBAH` jangan disentuh — itu
    koneksi ke server.
 3. Klik Upload (→) lalu Serial Monitor (🔌) di status bar PlatformIO, pastikan berhasil
    connect WiFi dan mengirim data.
-4. Eksplor bebas: cari kotak kosong bertanda `.kotak-kosong` di
-   `index.html` — isi dengan idemu sendiri (contoh: kartu cuaca, foto
-   ruangan kelas, tombol like), atau hapus kalau tidak dipakai.
+4. Kustom dashboard: isi **Profil Kelompok** (nama, anggota, `foto-kelompok.jpg`),
+   ganti warna di `:root` (`style.css`). Bonus: isi kotak kosong `.kotak-kosong`
+   dengan idemu sendiri, atau hapus kalau tidak dipakai.
 
 ## Kalau ada error
 
@@ -35,3 +35,15 @@ belajar HTML & CSS dulu.
   `WIFI_PASSWORD` benar.
 - Info lengkap koneksi (URL server, API key, Device ID kelompok) ada di
   `docs/HANDOUT_SISWA.md`.
+
+## Menyerahkan website ke tutor
+
+Website-mu akan online di `https://<device-id>.inspiralabs.id` (mis. `smp-07.inspiralabs.id`).
+Sebelum dikirim, pastikan:
+
+1. Halaman utama tetap bernama **`index.html`**.
+2. Semua file (gambar, CSS) ada **di dalam folder ini**. Foto kelompok diberi nama **`foto-kelompok.jpg`**.
+3. Tidak pakai `npm`/instalasi. Butuh library (mis. Chart.js)? Pakai link CDN.
+4. `api.js` tidak diubah (saat deploy selalu diganti versi asli tutor).
+5. Ukuran folder maksimal **5 MB** — kecilkan foto dari HP dulu.
+6. Zip seluruh folder, beri nama sesuai Device ID (mis. `smp-07.zip`), kirim ke tutor.

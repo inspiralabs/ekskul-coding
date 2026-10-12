@@ -297,6 +297,37 @@ a:hover { color: var(--warna-primer); }
 
 .switch-fan.nyala .knop { left: 29px; }
 
+/* Profil kelompok */
+.kartu-profil {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--warna-card);
+  border-radius: var(--radius-besar);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.kartu-profil img { width: 96px; height: 96px; object-fit: cover; border-radius: var(--radius-sedang); }
+.kartu-profil h2 { margin: 0; font-size: 20px; font-weight: 800; }
+.kartu-profil p { margin: 4px 0 0; color: var(--warna-teks-lemah); }
+
+/* Mode fan: tombol Manual/Otomatis + slider ambang batas */
+.catatan-fan { margin: -8px 0 16px; font-size: 12px; color: var(--warna-teks-lemah); }
+.mode-fan { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
+.tombol-mode {
+  font: inherit;
+  font-weight: 700;
+  padding: 8px 18px;
+  border: 2px solid var(--warna-border);
+  border-radius: 999px;
+  background: var(--warna-card);
+  color: var(--warna-teks);
+  cursor: pointer;
+}
+.tombol-mode.aktif { background: var(--warna-primer); border-color: var(--warna-primer); color: #fff; }
+.slider-ambang { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--warna-teks-lemah); }
+
 /* Kotak kosong untuk section yang belum kamu isi - hapus style ini
    kalau sudah tidak dibutuhkan */
 .kartu-kosong {

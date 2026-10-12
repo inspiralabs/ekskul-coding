@@ -22,7 +22,7 @@ app.use(express.json());
 // memanggil backend ini -- demo kelas LAN, bukan API publik production.
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-Key");
+  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, X-PIN");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
@@ -54,6 +54,18 @@ function broadcast(msg) {
 function checkApiKey(req, res, next) {
   if (req.header("X-API-Key") !== process.env.API_KEY) {
     return res.status(401).json({ ok: false, error: "invalid api key" });
+  }
+  next();
+}
+
+// --- Cek PIN kelompok (endpoint kontrol fan dari dashboard publik) ---
+// FAN_PINS di .env berisi JSON {"sma-01":"1234",...}. Device yang tidak terdaftar
+// (mis. dashboard Demo) tidak dicek PIN-nya.
+const FAN_PINS = JSON.parse(process.env.FAN_PINS || "{}");
+function checkPin(req, res, next) {
+  const pin = FAN_PINS[req.params.deviceId];
+  if (pin && req.header("X-PIN") !== pin) {
+    return res.status(403).json({ ok: false, error: "pin salah" });
   }
   next();
 }
@@ -163,7 +175,7 @@ app.get("/api/fan-control/:deviceId", async (req, res) => {
 // ============================================================
 // Dashboard -> backend: ubah kontrol fan (mode/manual/threshold)
 // ============================================================
-app.post("/api/fan-control/:deviceId", async (req, res) => {
+app.post("/api/fan-control/:deviceId", checkPin, async (req, res) => {
   const deviceId = req.params.deviceId;
   const current = await getFanControl(deviceId);
 

@@ -1,11 +1,10 @@
 // ============================================================
-// Smart Room Monitor -- Template SMA (versi TANTANGAN)
-// Baca sensor DHT22 + kirim data (sudah jadi), kontrol relay
-// lewat mini web server ESP32 (TANTANGAN, kamu isi sendiri).
+// Smart Room Monitor -- Template SMA (program JADI)
+// Baca sensor DHT22, kirim data ke dashboard tiap 4 detik, dan
+// nyalakan/matikan kipas lewat relay sesuai perintah dashboard.
 //
-// Cari kata "TANTANGAN" di file ini untuk tahu bagian yang
-// perlu kamu lengkapi. Bagian berlabel "JANGAN UBAH" adalah
-// koneksi ke backend yang sudah disiapkan tutor.
+// Yang perlu kamu isi HANYA bagian "BOLEH DIUBAH" (Device ID, WiFi,
+// pin). Bagian "JANGAN UBAH" adalah koneksi ke backend.
 // ============================================================
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -20,7 +19,7 @@ const char* SERVER_URL = "https://api-ekskulcoding.inspiralabs.id/api/readings";
 const char* API_KEY    = "ekskul-coding-seru";
 
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
-const char* DEVICE_ID     = "sma-1";        // GANTI sesuai ID kelompokmu dari daftar tutor!
+const char* DEVICE_ID     = "sma-01";        // sudah diisi tutor, JANGAN diganti
 const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
 const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
 
@@ -32,32 +31,28 @@ WebServer fanServer(80);
 
 bool fanOn = false;  // status relay/fan terkini
 
-// ============ TANTANGAN: lengkapi fungsi ini (Pertemuan 4) ============
-// Fungsi ini dipanggil otomatis saat backend mengirim POST ke http://<ip-esp32-ini>/fan
-// dengan body JSON: {"fanOn": true}  atau  {"fanOn": false}
+// Nyalakan/matikan relay. Modul relay umumnya ACTIVE-LOW:
+//   LOW  => relay ON (kipas menyala),  HIGH => relay OFF.
+// Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
+#define RELAY_ACTIVE_LOW true
+void setRelay(bool on) {
+  fanOn = on;
+  digitalWrite(RELAY_PIN, (on == RELAY_ACTIVE_LOW) ? LOW : HIGH);
+}
+
+// Dipanggil saat ada POST ke http://<ip-esp32-ini>/fan dengan body
+// {"fanOn": true} / {"fanOn": false} (perintah langsung dari jaringan lokal).
 void handleFanCommand() {
-  // TODO 1: baca body request.
-  //         hint: fanServer.arg("plain") berisi teks body-nya, contoh: {"fanOn":true}
-
-  // TODO 2: cari tahu apakah body itu mengandung "true" atau "false",
-  //         simpan hasilnya (true/false) ke variabel fanOn di atas.
-  //         hint paling sederhana: body.indexOf("true") >= 0
-
-  // TODO 3: nyalakan/matikan relay sesuai fanOn.
-  //         PENTING: modul relay umumnya ACTIVE-LOW, artinya:
-  //           digitalWrite(RELAY_PIN, LOW)  => relay ON  (menyala)
-  //           digitalWrite(RELAY_PIN, HIGH) => relay OFF (mati)
-  //         ini KEBALIKAN dari LED biasa -- cek datasheet modul relaymu
-  //         kalau ternyata active-HIGH, balik logikanya.
-
-  // TODO 4: balas ke backend supaya tahu perintah diterima:
-  //         fanServer.send(200, "application/json", "{\"ok\":true}");
+  String body = fanServer.arg("plain");
+  setRelay(body.indexOf("true") >= 0);
+  fanServer.send(200, "application/json", "{\"ok\":true}");
 }
 
 void setup() {
   // ==== JANGAN UBAH ====
   Serial.begin(115200);
   dht.begin();
+  setRelay(false);  // kipas mati saat baru menyala (ditulis sebelum pinMode)
   pinMode(RELAY_PIN, OUTPUT);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -71,9 +66,8 @@ void setup() {
   Serial.println(WiFi.localIP());
   // ==== akhir bagian JANGAN UBAH ====
 
-  // ============ TANTANGAN: daftarkan route /fan ke handleFanCommand ============
-  // hint: fanServer.on("/fan", HTTP_POST, handleFanCommand);
-  //       fanServer.begin();
+  fanServer.on("/fan", HTTP_POST, handleFanCommand);
+  fanServer.begin();
 }
 
 unsigned long lastSendTime = 0;
@@ -125,11 +119,10 @@ void loop() {
   if (responseCode > 0) {
     String body = http.getString();
     Serial.println(body);
-    // fallback: kalau perintah langsung dari backend sempat gagal,
-    // status fanOn dari response POST ini dipakai sebagai cadangan.
-    bool fallbackFanOn = body.indexOf("\"fanOn\":true") >= 0;
-    fanOn = fallbackFanOn;
-    digitalWrite(RELAY_PIN, fanOn ? LOW : HIGH);  // active-LOW
+    // Backend membalas dengan status fan terbaru ({"ok":true,"fanOn":...}),
+    // relay mengikuti balasan ini -- jadi perubahan dari dashboard sampai
+    // ke kipas paling lama ~4 detik.
+    setRelay(body.indexOf("\"fanOn\":true") >= 0);
   }
   http.end();
   // ==== akhir bagian JANGAN UBAH ====

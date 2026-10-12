@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "author": "InspiraLabs",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay1", "top": 20, "left": 200, "attrs": {} },
+    { "type": "wokwi-resistor", "id": "r1", "top": 160, "left": 330, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "beban", "top": 120, "left": 440, "attrs": { "color": "blue", "label": "Beban (kipas)" } }
+  ],
+  "connections": [
+    [ "relay1:VCC", "esp:VIN", "red", [] ],
+    [ "relay1:GND", "esp:GND.2", "black", [] ],
+    [ "relay1:COM", "esp:VIN", "red", [] ],
+    [ "relay1:NO", "r1:1", "blue", [] ],
+    [ "r1:2", "beban:A", "blue", [] ],
+    [ "beban:C", "esp:GND.1", "black", [] ]
+  ],
+  "dependencies": {}
+}

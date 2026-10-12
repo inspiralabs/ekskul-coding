@@ -4,7 +4,7 @@
 // URL backend -- diisi TUTOR. Backend di-deploy ke server online, jadi
 // isi dengan URL server itu (https://...)
 const API_BASE = "https://api-ekskulcoding.inspiralabs.id";
-const MY_DEVICE_ID = "smp-3"; // ganti sesuai ID kelompokmu (SAMA dengan DEVICE_ID di firmware!)
+const MY_DEVICE_ID = "smp-01"; // sudah diisi tutor (SAMA dengan DEVICE_ID di firmware)
 
 async function ambilDataSensorTerbaru() {
   const res = await fetch(`${API_BASE}/api/readings/${MY_DEVICE_ID}?limit=1`);
