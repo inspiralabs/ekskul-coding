@@ -7,4 +7,9 @@ kurikulum/
 prompt/
 tools/
 dist/
+kelompok/
+HANDOUT_SISWA.md
+SIAPA_BOLEH_UBAH_APA.md
+docker-compose.yml
+.env.example
 deploy/

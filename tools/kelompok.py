@@ -1,13 +1,13 @@
 """Paket & deploy website kelompok IoT (<id>.inspiralabs.id).
 
   py tools/kelompok.py paket                     -> dist/paket/<id>.zip untuk dibagikan (ID sudah terisi)
-  py tools/kelompok.py deploy <id> <zip|folder>  -> cek hasil kerja siswa lalu upload ke server
-  py tools/kelompok.py deploy <id> <zip|folder> --dry-run   -> cek saja, tidak upload
+  py tools/kelompok.py deploy <id> <zip|folder>  -> cek hasil kerja siswa lalu salin ke kelompok/<id>/
+  py tools/kelompok.py deploy <id> <zip|folder> --dry-run   -> cek saja, tidak menyalin
 
-Deploy butuh env DEPLOY_HOST (mis. root@1.2.3.4) dan opsional DEPLOY_DIR (default /var/www/ekskul).
+Setelah deploy: commit & push kelompok/<id> ke master -> server auto-deploy (docker-compose.yml, service kelompok).
 Daftar kelompok: tools/kelompok.json. Setup server: deploy/README.md.
 """
-import io, json, os, re, shutil, subprocess, sys, tempfile, zipfile
+import json, re, shutil, sys, tempfile, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -82,18 +82,11 @@ def deploy(device_id, sumber, dry_run):
     if dry_run:
         print("dry-run: folder siap di", staging)
         return
-    host = os.environ.get("DEPLOY_HOST") or sys.exit("Set env DEPLOY_HOST dulu, mis. root@1.2.3.4")
-    base = os.environ.get("DEPLOY_DIR", "/var/www/ekskul")
-    arsip = shutil.make_archive(str(staging), "gztar", staging)
-    remote_tar = f"/tmp/{device_id}.tar.gz"
-    subprocess.run(["scp", arsip, f"{host}:{remote_tar}"], check=True)
-    subprocess.run(["ssh", host,
-        f"set -e; mkdir -p {base}; rm -rf {base}/{device_id}.new; mkdir {base}/{device_id}.new; "
-        f"tar -xzf {remote_tar} -C {base}/{device_id}.new; rm -rf {base}/{device_id}.old; "
-        f"[ -d {base}/{device_id} ] && mv {base}/{device_id} {base}/{device_id}.old; "
-        f"mv {base}/{device_id}.new {base}/{device_id}; rm -rf {base}/{device_id}.old {remote_tar}"], check=True)
-    print(f"Online: https://{device_id}.inspiralabs.id")
-
+    tujuan = ROOT / "kelompok" / device_id
+    shutil.rmtree(tujuan, ignore_errors=True)
+    shutil.copytree(staging, tujuan)
+    print(f"Tersalin ke kelompok/{device_id}/. Online setelah di-push ke master (webhook server auto-deploy):")
+    print(f'  git add kelompok/{device_id} && git commit -m "deploy: website {device_id}" && git push')
 
 def cek():
     """Self-check: paket berisi ID benar, deploy menolak/menerima dengan benar."""
