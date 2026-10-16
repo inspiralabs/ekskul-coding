@@ -19,7 +19,7 @@ Di akhir kelas, setiap kelompok/individu:
 - [ ] Di **setiap laptop**: buat proyek PlatformIO (ESP32 Dev Module, Arduino), tempel `platformio.ini` dari folder Kode, salin Blink ke `src/main.cpp`, lalu **Build sekali**. Build pertama bisa 5–15 menit (download), jangan sampai terjadi di kelas.
 - [ ] **Upload tes** Blink ke satu board cadangan → pastikan driver CP210x/CH340 terpasang di tiap laptop (port muncul).
 - [ ] Siapkan 2–3 **kabel USB data cadangan**. Tandai kabel data dengan selotip warna supaya tidak tertukar dengan kabel charger.
-- [ ] Siapkan rakitan "rusak" untuk Challenge Hard (3 kesalahan **aman**: out di D5, out di baris breadboard yang beda, kabel − setengah masuk/jumper putus). **Jangan** menukar + dan −.
+- [ ] Siapkan rakitan "rusak" untuk Challenge Hard (3 kesalahan **aman**: out di D5, out di baris breadboard yang beda, kabel − setengah masuk/jumper putus). **Jangan** menukar + dan −. Bisa juga ambil acak dari `ekskulcoding.inspiralabs.id/sabotase/` (lihat *Cara main Kartu Sabotase*).
 - [ ] Charge power bank (dipakai mulai P12, tapi bagus untuk demo "program tetap tersimpan").
 
 ### 15 menit sebelum kelas
@@ -102,6 +102,17 @@ Bantu dengan **pertanyaan**, bukan langsung memperbaiki. Biarkan Perakit yang me
 | `Gagal baca sensor! Cek kabel.` | Kabel out / longgar / + − tertukar | Cabut USB, cek dengan checklist slide 16 |
 | Sensor terasa hangat/panas | + dan − tertukar | **Cabut USB segera**, tukar kabelnya, tunggu dingin |
 | Angka tidak berubah saat ditiup | Normal, sensor lambat | Tiup lebih lama (5 detik), tunggu 2–4 detik |
+
+## Cara main Kartu Sabotase (Challenge Hard "Detektif Sensor")
+Halaman: `ekskulcoding.inspiralabs.id/sabotase/` (juga ada di halaman utama ekskul, kartu "🎴 Kartu Sabotase"). Di SMP **tutor** yang menyabotase, bukan siswa.
+
+1. **Sebelum kelas atau saat siswa mengerjakan Medium:** buka halaman di HP → pilih **SMP** → **🎴 Ambil Kartu**. Keluar 3 kartu aman (1 untuk kabel out, 1 untuk kabel −, 1 untuk kabel +).
+2. **Pasang ketiganya** pada satu rakitan DHT22 dengan **USB dicabut**, lalu tekan **🙈 Tutup kartu**. Rakitan ini diberikan ke kelompok yang sudah menyelesaikan Easy/Medium.
+3. **Siswa jadi detektif:** colok USB, lihat Serial Monitor menulis `Gagal baca sensor!`, cari 3 kabel yang salah, tulis *kabel mana → seharusnya ke mana*, perbaiki sampai angka suhu muncul. **Program tidak boleh diubah.**
+4. **Cocokkan:** **catat 3 kartu tadi** (foto layar/kertas) sebelum menutupnya, karena Ambil Kartu berikutnya memberi kartu lain. Gejala tiap kartu ada di bagian "Untuk tutor: semua kartu & gejalanya" di halaman.
+5. **Nilai:** +10 kalau 3 kesalahan ditulis benar dan angka suhu muncul.
+
+**Jangan pernah menukar kabel + dan −** DHT22 (sensor bisa panas). Kartu di halaman sudah dipilih yang aman.
 
 ## 9. Keselamatan
 

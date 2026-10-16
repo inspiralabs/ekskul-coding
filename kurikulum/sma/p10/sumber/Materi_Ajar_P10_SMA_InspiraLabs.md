@@ -26,7 +26,7 @@ Detail lengkap (H-1, 15 menit sebelum, timeline, troubleshooting): `kurikulum/sm
 2. **Build sekali** di tiap laptop sebelum kelas (PlatformIO mengunduh platform ESP32 & library DHT, bisa 5–10 menit).
 3. Uji **setiap** modul relay dengan Tes 1. Pastikan relay **benar-benar mati** saat IN = HIGH (lihat "relay 5V + logika 3,3V" di Khusus Tutor P9).
 4. Siapkan simulasi Wokwi `kurikulum/sma/p10/wokwi/P10_PetaRakitan/` (simpan di akun Wokwi, salin link-nya): untuk screenshot slide Peta Rakitan dan cadangan kalau ada kit rusak.
-5. Cetak/tulis **Kartu Sabotase** untuk Challenge Hard (lihat Khusus Tutor).
+5. Buka halaman **Kartu Sabotase** `ekskulcoding.inspiralabs.id/sabotase/` untuk Challenge Hard (tidak perlu menulis kartu, lihat Khusus Tutor).
 
 ## Alur 70 menit
 
@@ -350,7 +350,7 @@ A. 0 V B. 3,3 V C. 5 V D. 12 V
 
 **Medium:** kipas menyala ±5–20 detik setelah digenggam (suhu naik pelan; DHT22 dibaca tiap 2 detik). Mati lagi setelah suhu turun **0,5°C di bawah AMBANG**, biasanya lebih lama (30–90 detik). Jawaban no. 5: tanpa jeda, suhu yang naik-turun 29,9 ↔ 30,1 membuat relay "cetak-cetek" ON-OFF tiap 2 detik (relay cepat aus, kipas tersendat). Jeda 0,5°C ini disebut **histeresis**; AC dan kulkas sungguhan juga memakainya. Mode Otomatis di dashboard P12 memakai ide ambang yang sama.
 
-**Hard — Kartu Sabotase (tulis 1 sabotase per kartu, tiap kelompok mendapat 2 kartu berbeda):**
+**Hard — Kartu Sabotase.** Kartu diambil acak dari `ekskulcoding.inspiralabs.id/sabotase/` (pilih **SMA**, tiap ambilan memberi 2 kartu yang mengubah kabel berbeda). Daftar lengkap kartu:
 
 | Sabotase | Gejala | Cara menemukan |
 |---|---|---|
@@ -358,6 +358,10 @@ A. 0 V B. 3,3 V C. 5 V D. 12 V
 | Kipas pindah dari NO ke NC | Kipas berputar saat Serial "MATI" | Continuity COM–NC bunyi saat USB dicabut, kabel kipas ada di NC |
 | Relay IN pindah ke D34 | Relay diam, Serial tetap AKTIF/MATI | Tegangan IN tidak berubah; D34 input-only |
 | Kipas − dilepas dari GND | Relay klik, kipas diam | Tegangan kipas + ke GND ±5 V saat aktif, tapi kipas − tidak tersambung |
+| DHT22 out digeser 1 baris breadboard | `Gagal baca DHT22`, kabel terlihat di D4 | Continuity kaki out ↔ D4 tidak bunyi |
+| Relay IN dilepas (menggantung) | Relay tidak pernah klik | Kabel biru tidak tersambung ke D18 |
+| DHT22 − dilepas dari GND | `Gagal baca DHT22` | Continuity kaki − ↔ GND tidak bunyi |
+| Kipas + pindah dari NO ke COM | Kipas menyala terus, tidak ikut relay | Kabel kipas + ada di COM, bukan NO |
 
 Aturan: sabotase dilakukan dengan **USB dicabut**, hanya dari kartu. **Jangan pernah** menyilangkan 3V3/VIN/GND (bisa korsleting). Pemilik rakitan menghadap belakang selama sabotase. Kelompok yang selesai cepat boleh menyabotase kelompok lain; kalau waktu mepet, tutor yang menyabotase saat Challenge Medium.
 

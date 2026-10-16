@@ -17,7 +17,7 @@ Bahan: slide P10, `sumber/Materi_Ajar_P10_SMA_InspiraLabs.md` (kunci di bagian K
 - [ ] Cadangan: 1 ESP32 yang sudah berisi Tes 1 (board penguji), 1 relay, 1 DHT22, 2 kabel USB data, 1 power bank.
 - [ ] Multimeter minimal 1 (ideal 2–3), baterai dicek, mode DC V & continuity (bunyi) berfungsi.
 - [ ] **Wokwi**: buka wokwi.com → New Project → ESP32, tempel `sketch.ino`, `diagram.json`, `libraries.txt` dari `wokwi/P10_PetaRakitan/`, Save, salin link. Ambil screenshot untuk slide Peta Rakitan kalau diagram Gemini tidak akurat. Link dipakai juga sebagai cadangan kit rusak.
-- [ ] Tulis **Kartu Sabotase** (1 sabotase per kartu, minimal 8 kartu) dari tabel Hard di Khusus Tutor: DHT out D4→D5 · kipas NO→NC · relay IN D18→D34 · kipas − dilepas dari GND.
+- [ ] Cek halaman **Kartu Sabotase** `ekskulcoding.inspiralabs.id/sabotase/` bisa dibuka di HP (cara main: lihat bagian *Cara main Kartu Sabotase* di bawah).
 
 ## 15 menit sebelum kelas
 - Kit dibagi per meja. Duduk berdekatan: **sma-01 ↔ sma-02**, **sma-03 ↔ sma-04**, **sma-05 ↔ sma-06** (jadi "tetangga" untuk cek silang & pasangan sabotase).
@@ -35,7 +35,7 @@ Bahan: slide P10, `sumber/Materi_Ajar_P10_SMA_InspiraLabs.md` (kunci di bagian K
 | 27–31 | 10–11 | Active-LOW + multimeter (demo), forum Topik 1 | Demo di kamera: probe hitam GND, merah IN |
 | 31–35 | 12 | Easy: Pindah Pin Relay | Pastikan semua **kembali ke D18** |
 | 35–44 | 13–15 | Rakit DHT22, Tes 2, Membaca Serial, forum Topik 2 | Tukar peran Perakit ↔ Penguji |
-| 44–50 | 16 | Medium: Termostat Tangan | Sambil siswa mengerjakan, siapkan Kartu Sabotase |
+| 44–50 | 16 | Medium: Termostat Tangan | Sambil siswa mengerjakan, buka halaman Kartu Sabotase |
 | 50–53 | 17–19 | Troubleshooting, 3 pengukuran, forum Topik 3 | Hubungkan ke pertanyaan pemantik |
 | 53–61 | 20 | Hard: Detektif Kabel | Pasangan sabotase = tetangga |
 | 61–63 | 21 | Peta proyek + foto rakitan | Foto dipakai lagi di P13 |
@@ -91,6 +91,20 @@ Kalau setelah **2 pertanyaan** kelompok masih buntu, tunjukkan **lokasi**-nya ("
 | Rakitan tetap gagal > 5 menit | Komponen rusak | Uji dengan **board penguji** cadangan; masih gagal → kelompok pakai **Wokwi** (lihat di bawah) |
 
 **Cadangan kit rusak:** kelompok membuka link Wokwi, mencocokkan kabel di layar dengan tabel Peta Rakitan, lalu mengerjakan Medium dengan klik DHT22 → geser suhu di atas 30°C → relay klik, LED biru (= kipas) menyala. Catat kit yang rusak, ganti sebelum P11.
+
+## Cara main Kartu Sabotase (Challenge Hard "Detektif Kabel")
+Halaman: `ekskulcoding.inspiralabs.id/sabotase/` (juga ada di halaman utama ekskul, kartu "🎴 Kartu Sabotase"). Tidak perlu menulis kartu.
+
+1. **Pasangan:** sma-01 ↔ sma-02, sma-03 ↔ sma-04, sma-05 ↔ sma-06. Tiap kelompok menyabotase rakitan tetangganya.
+2. **Ambil kartu:** penyabot membuka halaman di HP sendiri → pilih **SMA** → **🎴 Ambil Kartu**. Keluar 2 kartu yang mengubah 2 kabel berbeda.
+3. **Pasang sabotase:** pemilik rakitan menghadap belakang. Penyabot **mencabut USB**, melakukan persis isi kedua kartu, lalu menekan **🙈 Tutup kartu**.
+4. **Jadi detektif:** pemilik menyalakan alat, upload Tes 1 & Tes 2, mencatat gejala, mengukur dengan multimeter, lalu memperbaiki **tanpa membongkar semua kabel**.
+5. **Laporan:** 3 baris per kabel: *gejala → pengukuran → perbaikan* (foto). Penyabot membuka kartunya lagi (atau tutor membuka bagian "Untuk tutor" di halaman) untuk mencocokkan.
+6. **Nilai:** +10 kalau kedua kabel ditemukan dan laporannya benar. Yang dinilai cara berpikirnya, bukan kecepatan.
+
+Kartu itu **rahasia hanya bagi pemilik rakitan**. Penyabot boleh tahu karena merekalah yang memasang.
+Waktu mepet? Cukup 1 kartu, atau tutor yang menyabot saat Challenge Medium.
+Aturan selalu tampil di halaman: cabut USB, jangan pindahkan kabel 3V3/VIN/GND, hanya lakukan isi kartu.
 
 ## Keselamatan (tidak bisa ditawar)
 - **Hanya kipas DC 5V.** Tidak ada perangkat 220V/PLN, walaupun relay tertulis 250VAC.

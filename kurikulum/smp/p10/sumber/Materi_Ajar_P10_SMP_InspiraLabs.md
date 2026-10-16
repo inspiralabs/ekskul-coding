@@ -298,7 +298,7 @@ Gambar **rakitanmu** di kertas: ESP32, LED di **D2**, dan DHT22 (+ ke 3V3, out k
 
 **Medium:** LED breadboard berkedip lagi di D18. Lampu biru board **diam** karena lampu biru itu tersambung tetap ke pin 2, bukan ke pin 18. Pelajaran: angka di `#define` harus **sama** dengan pin tempat kabel dicolok. Hal yang sama berlaku untuk `DHT_PIN 4` di proyek akhir.
 
-**Hard — siapkan 3 kesalahan aman ini:**
+**Hard — siapkan 3 kesalahan aman.** Bisa memakai daftar tetap di bawah, atau ambil acak di `ekskulcoding.inspiralabs.id/sabotase/` (pilih **SMP**, keluar 3 kartu yang aman):
 1. Kabel **out** dicolok ke **D5**, bukan D4.
 2. Kabel out ditancapkan di breadboard pada **nomor baris yang berbeda** dengan kaki out sensor (tidak tersambung).
 3. Kabel **−** sensor ditancapkan **setengah** (tidak masuk penuh), atau pakai kabel jumper yang putus di dalam (bisa dicek dengan multimeter mode bunyi).
