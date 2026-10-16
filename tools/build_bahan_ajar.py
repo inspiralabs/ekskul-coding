@@ -68,17 +68,61 @@ def post_test(path):
     return soal
 
 
+def md_blok(md):
+    """Markdown panduan -> daftar blok [jenis, teks] untuk dirender DocumentApp (GS)."""
+    blok, tabel, kode = [], None, None
+    for baris in md.splitlines():
+        if kode is not None:
+            if baris.startswith('```'):
+                blok.append(['kode', '\n'.join(kode)]); kode = None
+            else:
+                kode.append(baris)
+            continue
+        if baris.startswith('```'):
+            kode = []; continue
+        if baris.lstrip().startswith('|'):
+            sel = [c.strip() for c in baris.strip().strip('|').split('|')]
+            if not all(re.fullmatch(r':?-+:?', c) for c in sel):
+                tabel = tabel if tabel is not None else []
+                tabel.append([re.sub(r'\*\*|`', '', c) for c in sel])
+            continue
+        if tabel is not None:
+            blok.append(['tabel', rata(tabel)]); tabel = None
+        t = baris.strip()
+        if not t or t == '---':
+            continue
+        t = t.replace('`', '')
+        m = re.match(r'(#{1,3}) (.*)', t)
+        if m:
+            blok.append(['h%d' % len(m.group(1)), m.group(2).replace('**', '')])
+        elif re.match(r'[-*] ', t):
+            blok.append(['li', re.sub(r'^[-*] (\[ \] )?', lambda x: '☐ ' if x.group(1) else '', t)])
+        elif t.startswith('> '):
+            blok.append(['kutip', t[2:]])
+        else:
+            blok.append(['p', t])
+    if tabel is not None:
+        blok.append(['tabel', rata(tabel)])
+    return blok
+
+
+def rata(tabel):  # DocumentApp butuh jumlah sel sama per baris
+    n = max(len(r) for r in tabel)
+    return [r + [''] * (n - len(r)) for r in tabel]
+
+
 GS = '''// ============================================================
 // SCRIPT {P} {J} — bahan ajar ke Google Drive (sekali Run)
 // Membuat di folder Drive pertemuan:
 //   {J}/Kode/...                        file kode materi & challenge (+ proyek akhir)
 //   {J}/POST TEST - Pertemuan {N} - {J}  Google Form mode Quiz (+ spreadsheet Responses)
+//   {J}/Panduan Pengajar {P} {J}         Google Docs (kalau ada Panduan_Pengajar_{P}_{J}.md)
 // Cara pakai:
 //   1. https://script.google.com -> New project -> hapus isi Code.gs -> tempel file ini -> Save.
 //   2. Isi FOLDER_PERTEMUAN di bawah (link folder Drive {P}) kalau masih kosong.
 //   3. Pilih fungsi "jalankan" -> Run -> izinkan akses.
 //   4. Execution log menampilkan link folder & link form (pasang link form di Linktree).
-// Aman dijalankan ulang: file kode diperbarui, folder/form tidak dobel.
+// Aman dijalankan ulang: file kode & Panduan Pengajar diperbarui, folder/form tidak dobel.
 // File ini DIBUAT OTOMATIS oleh tools/build_bahan_ajar.py -- jangan edit isinya di sini.
 // ============================================================
 
@@ -88,6 +132,8 @@ const JENJANG = '{J}';
 const KODE = {KODE};
 
 const POST_TEST = {POST};
+
+const PANDUAN = {PANDUAN};
 
 function jalankan() {{
   const id = (FOLDER_PERTEMUAN.match(/folders\\/([\\w-]+)/) || [null, FOLDER_PERTEMUAN])[1];
@@ -102,6 +148,7 @@ function jalankan() {{
   }}
 
   buatPostTest(folderJenjang);
+  if (PANDUAN.blok.length) tulisPanduan(folderJenjang);
   Logger.log('FOLDER     %s', folderJenjang.getUrl());
 }}
 
@@ -138,6 +185,45 @@ function buatPostTest(folder) {{
   Logger.log('POST TEST  dibuat -> %s', form.getPublishedUrl());
 }}
 
+function tulisPanduan(folder) {{
+  const ada = folder.getFilesByName(PANDUAN.judul);
+  let doc;
+  if (ada.hasNext()) {{
+    doc = DocumentApp.openById(ada.next().getId());
+    doc.getBody().clear();
+  }} else {{
+    doc = DocumentApp.create(PANDUAN.judul);
+    DriveApp.getFileById(doc.getId()).moveTo(folder);
+  }}
+  const body = doc.getBody();
+  const H = {{h1: DocumentApp.ParagraphHeading.HEADING1, h2: DocumentApp.ParagraphHeading.HEADING2,
+             h3: DocumentApp.ParagraphHeading.HEADING3}};
+  PANDUAN.blok.forEach(function (b) {{
+    const jenis = b[0], isi = b[1];
+    if (jenis === 'tabel') {{
+      const t = body.appendTable(isi);
+      t.getRow(0).editAsText().setBold(true);
+      return;
+    }}
+    const polos = jenis === 'kode' ? isi : isi.split('**').join('');
+    const el = jenis === 'li' ? body.appendListItem(polos).setGlyphType(DocumentApp.GlyphType.BULLET)
+                              : body.appendParagraph(polos);
+    if (H[jenis]) el.setHeading(H[jenis]);
+    if (jenis === 'kode') el.editAsText().setFontFamily('Courier New');
+    if (jenis === 'kutip') el.editAsText().setItalic(true);
+    if (jenis !== 'kode') {{  // **tebal** -> bold
+      const teks = el.editAsText();
+      let pos = 0;
+      isi.split('**').forEach(function (bagian, i) {{
+        if (i % 2 === 1 && bagian) teks.setBold(pos, pos + bagian.length - 1, true);
+        pos += bagian.length;
+      }});
+    }}
+  }});
+  doc.saveAndClose();
+  Logger.log('PANDUAN    %s', doc.getUrl());
+}}
+
 function ambilAtauBuatFolder(induk, nama) {{
   const it = induk.getFoldersByName(nama);
   return it.hasNext() ? it.next() : induk.createFolder(nama);
@@ -172,14 +258,20 @@ def build(jenjang, n, folders):
     if kode:
         kode['BACA_DULU.txt'] = BACA_DULU
 
+    pp = os.path.join(d, f'Panduan_Pengajar_P{n}_{J}.md')
+    panduan = {'judul': f'Panduan Pengajar P{n} {J} — {judul}',
+               'blok': md_blok(read(pp)) if os.path.exists(pp) else []}
+
     post = {'judul': f'POST TEST - Pertemuan {n} - {J}',
             'soal': post_test(os.path.join(sumber, f'POST_TEST_P{n}_{J}_InspiraLabs.md'))}
     gs = GS.format(P=f'P{n}', J=J, N=n,
                    FOLDER=json.dumps(folder or f'TEMPEL_LINK_FOLDER_P{n}_DI_SINI'),
                    KODE=json.dumps(kode, indent=2, ensure_ascii=False),
-                   POST=json.dumps(post, indent=2, ensure_ascii=False))
+                   POST=json.dumps(post, indent=2, ensure_ascii=False),
+                   PANDUAN=json.dumps(panduan, ensure_ascii=False))
     open(os.path.join(d, f'SCRIPT_P{n}_{J}.gs'), 'w', encoding='utf-8').write(gs)
-    print(f'P{n} {J}: PROMPT ({len(prompt) // 1000} KB), SCRIPT ({len(kode)} file kode, 5 soal)'
+    print(f'P{n} {J}: PROMPT ({len(prompt) // 1000} KB), SCRIPT ({len(kode)} file kode, 5 soal'
+          + (', panduan pengajar' if panduan['blok'] else '') + ')'
           + ('' if folder else '  [link folder Drive belum diisi]'))
 
 

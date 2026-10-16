@@ -3,12 +3,13 @@
 // Membuat di folder Drive pertemuan:
 //   SMP/Kode/...                        file kode materi & challenge (+ proyek akhir)
 //   SMP/POST TEST - Pertemuan 9 - SMP  Google Form mode Quiz (+ spreadsheet Responses)
+//   SMP/Panduan Pengajar P9 SMP         Google Docs (kalau ada Panduan_Pengajar_P9_SMP.md)
 // Cara pakai:
 //   1. https://script.google.com -> New project -> hapus isi Code.gs -> tempel file ini -> Save.
 //   2. Isi FOLDER_PERTEMUAN di bawah (link folder Drive P9) kalau masih kosong.
 //   3. Pilih fungsi "jalankan" -> Run -> izinkan akses.
 //   4. Execution log menampilkan link folder & link form (pasang link form di Linktree).
-// Aman dijalankan ulang: file kode diperbarui, folder/form tidak dobel.
+// Aman dijalankan ulang: file kode & Panduan Pengajar diperbarui, folder/form tidak dobel.
 // File ini DIBUAT OTOMATIS oleh tools/build_bahan_ajar.py -- jangan edit isinya di sini.
 // ============================================================
 
@@ -78,6 +79,8 @@ const POST_TEST = {
   ]
 };
 
+const PANDUAN = {"judul": "Panduan Pengajar P9 SMP — Kenalan dengan ESP32 & Rangkaian LED Pertama", "blok": []};
+
 function jalankan() {
   const id = (FOLDER_PERTEMUAN.match(/folders\/([\w-]+)/) || [null, FOLDER_PERTEMUAN])[1];
   if (!id || id.indexOf('TEMPEL') === 0) throw new Error('Isi FOLDER_PERTEMUAN dengan link folder Drive P9 dulu.');
@@ -91,6 +94,7 @@ function jalankan() {
   }
 
   buatPostTest(folderJenjang);
+  if (PANDUAN.blok.length) tulisPanduan(folderJenjang);
   Logger.log('FOLDER     %s', folderJenjang.getUrl());
 }
 
@@ -125,6 +129,45 @@ function buatPostTest(folder) {
   DriveApp.getFileById(form.getId()).moveTo(folder);
   DriveApp.getFileById(sheet.getId()).moveTo(folder);
   Logger.log('POST TEST  dibuat -> %s', form.getPublishedUrl());
+}
+
+function tulisPanduan(folder) {
+  const ada = folder.getFilesByName(PANDUAN.judul);
+  let doc;
+  if (ada.hasNext()) {
+    doc = DocumentApp.openById(ada.next().getId());
+    doc.getBody().clear();
+  } else {
+    doc = DocumentApp.create(PANDUAN.judul);
+    DriveApp.getFileById(doc.getId()).moveTo(folder);
+  }
+  const body = doc.getBody();
+  const H = {h1: DocumentApp.ParagraphHeading.HEADING1, h2: DocumentApp.ParagraphHeading.HEADING2,
+             h3: DocumentApp.ParagraphHeading.HEADING3};
+  PANDUAN.blok.forEach(function (b) {
+    const jenis = b[0], isi = b[1];
+    if (jenis === 'tabel') {
+      const t = body.appendTable(isi);
+      t.getRow(0).editAsText().setBold(true);
+      return;
+    }
+    const polos = jenis === 'kode' ? isi : isi.split('**').join('');
+    const el = jenis === 'li' ? body.appendListItem(polos).setGlyphType(DocumentApp.GlyphType.BULLET)
+                              : body.appendParagraph(polos);
+    if (H[jenis]) el.setHeading(H[jenis]);
+    if (jenis === 'kode') el.editAsText().setFontFamily('Courier New');
+    if (jenis === 'kutip') el.editAsText().setItalic(true);
+    if (jenis !== 'kode') {  // **tebal** -> bold
+      const teks = el.editAsText();
+      let pos = 0;
+      isi.split('**').forEach(function (bagian, i) {
+        if (i % 2 === 1 && bagian) teks.setBold(pos, pos + bagian.length - 1, true);
+        pos += bagian.length;
+      });
+    }
+  });
+  doc.saveAndClose();
+  Logger.log('PANDUAN    %s', doc.getUrl());
 }
 
 function ambilAtauBuatFolder(induk, nama) {

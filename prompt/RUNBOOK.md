@@ -5,7 +5,7 @@ Per pertemuan per jenjang (SMP & SMA) cukup **2 file** di `kurikulum/<jenjang>/p
 | File | Dijalankan di | Menghasilkan |
 |---|---|---|
 | `PROMPT_Pn_<JENJANG>.md` | **Gemini** (chat baru, Canvas aktif) | **A.** Google Slides · **B.** Google Docs Materi Ajar (berisi script Reels, post-test, kunci) |
-| `SCRIPT_Pn_<JENJANG>.gs` | **Apps Script** (1× Run) | Folder Drive `Pn/<JENJANG>` + subfolder **Kode** (file .cpp PlatformIO, .html, platformio.ini) + **Google Form** post-test |
+| `SCRIPT_Pn_<JENJANG>.gs` | **Apps Script** (1× Run) | Folder Drive `Pn/<JENJANG>` + subfolder **Kode** (file .cpp PlatformIO, .html, platformio.ini) + **Google Form** post-test + **Google Docs Panduan Pengajar** |
 
 ```
 Drive: Pn/
@@ -14,6 +14,7 @@ Drive: Pn/
     ├── Materi Ajar Pn <JENJANG> — <judul>         ← Google Docs   (dari PROMPT, bagian B)
     ├── POST TEST - Pertemuan n - <JENJANG>        ← Google Form   (dari SCRIPT)
     ├── POST TEST - Pertemuan n - <JENJANG> (Responses)
+    ├── Panduan Pengajar Pn <JENJANG> — <judul>   ← Google Docs (dari SCRIPT, sumber: pNN/Panduan_Pengajar_Pn_<JENJANG>.md)
     └── Kode/                                ← dari SCRIPT
         ├── BACA_DULU.txt, platformio.ini
         ├── Pn_1_....cpp / .html             ← live coding
@@ -30,7 +31,8 @@ Drive: Pn/
 5. Execution log menampilkan link folder & link form. **Pasang link form di Linktree** sebagai tombol "Post Test Pertemuan n".
 6. Pasang juga link folder **Kode** di Linktree (slide challenge menyuruh siswa mengunduh dari sana).
 
-Aman dijalankan ulang: file kode diperbarui, folder & form tidak dobel.
+Aman dijalankan ulang: file kode & Panduan Pengajar diperbarui, folder & form tidak dobel.
+**Post-test yang soalnya berubah:** form lama tidak ikut diperbarui. Hapus form + spreadsheet Responses lama di Drive, lalu Run lagi (link form berubah, perbarui Linktree).
 
 ## Langkah 2 — Gemini (Slides + Docs)
 
