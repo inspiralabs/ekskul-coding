@@ -77,7 +77,8 @@ GAMBAR RANGKAIAN (bagian berlabel "wiring" di isi slide):
      Footer tiap slide: "InspiraLabs • Ekskul Coding • Sekolah Qur'an Asy Syahid P12 SMP | nomor slide".
      Baris "> 🗣️ SPEAKER NOTES" masuk ke speaker notes, JANGAN tampil di slide.
      Blok wiring = perintah gambar diagram rangkaian (aturan di prompt/GENERATE-PPT.md).
-     Jawaban challenge & post-test hanya ada di Materi Ajar. -->
+     Jawaban challenge & post-test hanya ada di Materi Ajar.
+     Siswa SMP (12–15 tahun): teks slide singkat, satu ide per slide. -->
 
 ---
 
@@ -112,31 +113,47 @@ Website tidak mengukur apa-apa. Ada alat lain yang bekerja diam-diam di belakang
 
 Penasaran jawabannya? Yuk kita bongkar.
 
-> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 1.
+> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 1 (slide Tips Engineer).
 
 ---
 
 ### Apa yang kita capai hari ini?
 
-- **01 Data ke Dashboard**: Alat jalan pakai power bank, data kelompok tampil di website.
-- **02 Kustom Dashboard**: Nama kelompok, anggota, warna, foto, dan aturan serah folder.
+- **01 Data ke Dashboard**: Alat jalan pakai power bank, angkanya tampil di website.
+- **02 Kustom Dashboard**: Nama, warna, dan foto kelompok kalian.
+
+---
+
+### Peran di Kelompok
+
+| Peran | Tugas |
+|---|---|
+| **Operator** | Mengetik di VS Code |
+| **Desainer** | Memilih 3 warna |
+| **Fotografer** | Foto kelompok + kecilkan ukurannya |
+| **Pengecek** | Cek ejaan nama & aturan folder |
+
+Ganti peran di Topik 2. Kerja sendiri? Pegang semua peran, minta teman sebelah jadi Pengecek.
+
+> 🗣️ SPEAKER NOTES: Kelompok 2 orang: tiap orang pegang 2 peran. Semua keputusan desain (nama alat, warna) diputuskan bersama, Operator hanya mengetik.
 
 ---
 
 ### Alat Kita Masih "Kesepian"
-- P11: data suhu muncul di **Serial Monitor**, cuma di laptop yang tercolok kabel.
-- Firmware sebenarnya **sudah mengirim** data ke internet (`kode respons: 200`).
-- Hari ini: kita **melihat** data itu di **website kalian sendiri**, lalu membuatnya jadi milik kelompok.
+- P11: angka suhu cuma terlihat di **Serial Monitor** laptop.
+- Padahal firmware **sudah mengirim** angkanya ke internet (`200`).
+- Hari ini: angka itu tampil di **website kalian sendiri**.
 
 ---
 
 ### Perjalanan Data
 ```
-DHT22 → ESP32 → WiFi → Internet → Server InspiraLabs → Dashboard (website kalian)
+DHT22 → ESP32 → WiFi → Internet → Server → Dashboard
 ```
-- **Server** = komputer yang selalu menyala di internet, **menyimpan** data semua alat.
-- **Dashboard** = halaman web yang **menampilkan** data Device ID kalian (tiap ±4 detik).
-- Firmware **tersimpan** di ESP32. Colok ke **power bank** → alat jalan sendiri, **tanpa laptop**.
+- Seperti kirim surat: ESP32 = pengirim, **server** = kantor pos yang menyimpan surat.
+- **Dashboard** = website yang membaca surat terbaru untuk Device ID kalian.
+
+> 🗣️ SPEAKER NOTES: Server = komputer yang selalu menyala di internet, menyimpan data semua alat. Dashboard mengambil data terbaru kira-kira tiap 4 detik.
 
 ---
 
@@ -144,7 +161,7 @@ DHT22 → ESP32 → WiFi → Internet → Server InspiraLabs → Dashboard (webs
 1. Colok ESP32 ke **power bank**. Tunggu ±10 detik.
 2. Buka folder `smp-XX` → **double-click** `index.html`.
 3. Tunggu ±5 detik: angka berganti jadi data alat kalian.
-4. **Tiup** sensor → angka di dashboard ikut berubah.
+4. **Tiup** sensor → angka di dashboard ikut berubah!
 
 ```wiring
 Judul: Alat jalan sendiri dengan power bank
@@ -157,29 +174,27 @@ Koneksi:
 Sorot: tidak ada laptop ; ikon WiFi kecil menuju awan "Server" lalu ke layar dashboard
 ```
 
-> 🗣️ SPEAKER NOTES: Sebelum ada data, dashboard menampilkan angka contoh (26°C, 60%). Angka itu baru berubah kalau server sudah menerima data dari Device ID kelompok itu.
+> 🗣️ SPEAKER NOTES: "Tanpa laptop" bukan berarti tanpa listrik: power bank yang memberi listrik. Sebelum ada data, dashboard menampilkan angka contoh (26°C, 60%). Angka itu berubah kalau server sudah menerima data dari Device ID kelompok itu. Rayakan angka pertama di layar (quick win).
 
 ---
 
 ### Tips Engineer: Kalau Dashboard Diam
 
-| Gejala | Penyebab | Solusi |
-|---|---|---|
-| Angka tetap 26°C / 60% | ESP32 belum mengirim | Colok laptop, Serial Monitor harus `kode respons: 200` |
-| Serial macet di titik-titik | WiFi salah / 5 GHz / sinyal lemah | Cek zona hijau, dekatkan ke router |
-| Tidak berubah saat ditiup | Sensor dibaca tiap 4 detik | Tiup lebih lama, tunggu 5–10 detik |
-| ESP32 di power bank mati sendiri | Power bank mode hemat | Ganti power bank / colok laptop |
-| Data bukan milik alat kita | Folder tertukar | Cek nama folder & Device ID |
+| Gejala | Coba ini |
+|---|---|
+| Angka tetap 26°C / 60% | Colok ke laptop, cek Serial Monitor: harus `200` |
+| Tidak berubah saat ditiup | Tiup lebih lama, tunggu 10 detik |
+| ESP32 di power bank mati sendiri | Ganti power bank / colok laptop |
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik di awal sesi: dashboard hanya menampilkan apa yang sudah sampai di server. Ingatkan kembali tebakan siswa tadi.
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik: website hanya menampilkan apa yang sudah sampai di server, seperti website cuaca yang mengambil data dari stasiun cuaca. Ingatkan kembali tebakan siswa tadi. Lainnya: Serial Monitor macet di titik-titik → WiFi salah / 5 GHz / sinyal lemah (tabel P11); data bukan milik alat kita → folder tertukar, cek nama folder & Device ID; power bank mati sendiri karena mode hemat (arus kecil dianggap sudah penuh).
 
 ---
 
 ### Forum Diskusi Live Coding
 
-**Kalau laptop dimatikan, apakah data suhu tetap muncul di dashboard? Kenapa?**
+**Kalau laptop dimatikan, apakah suhu tetap muncul di dashboard? Kenapa?**
 
-> 🗣️ SPEAKER NOTES: Topik 1 — Data ke Dashboard. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+> 🗣️ SPEAKER NOTES: Topik 1 — Data ke Dashboard. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Jawaban: ya, selama ESP32 dapat listrik (power bank) dan WiFi. Program tersimpan di ESP32. Website bisa dibuka dari perangkat lain.
 
 ---
 
@@ -187,67 +202,67 @@ Sorot: tidak ada laptop ; ikon WiFi kecil menuju awan "Server" lalu ke layar das
 
 **TOPIK 1 DARI 2 — CHALLENGE 🟢**
 
-Nyalakan alat pakai **power bank** (tanpa laptop). Buka dashboard dan buktikan angka suhu kelompokmu **muncul**. Tiup sensor → angka di dashboard ikut berubah. Tunjukkan ke tutor.
+1. Nyalakan alat pakai **power bank** (tanpa laptop).
+2. Buka dashboard: angka suhu kalian **muncul**.
+3. Tiup sensor → angka ikut berubah. Tunjukkan ke tutor!
 
 ---
 
 ### Peta Dashboard: Boleh & Jangan
 
-| File | Boleh diubah? | Yang diubah |
-|---|---|---|
-| `index.html` | ✅ Boleh (teks) | Nama kelompok, anggota, judul |
-| `style.css` | ✅ Boleh (warna) | Warna di `:root` paling atas |
-| `foto-kelompok.jpg` | ✅ Ditambahkan | Foto kelompok |
-| `icon.webp` | Biarkan | Ikon tab browser |
-| `api.js` | ❌ **Jangan** | "Kabel" ke server |
-| `<script>` di bawah `index.html` | ❌ **Jangan** | Pengambil data sensor |
+| File | Boleh? |
+|---|---|
+| `index.html` | ✅ Ganti **teks** |
+| `style.css` | ✅ Ganti **warna** |
+| `foto-kelompok.jpg` | ✅ Tambahkan |
+| `api.js` | ❌ **Jangan** |
 
-Edit pakai **VS Code** → **Save** (Ctrl+S) → **refresh** browser (F5).
+Edit di **VS Code** → **Save** (Ctrl+S) → **refresh** browser (F5).
+
+> 🗣️ SPEAKER NOTES: api.js = "kabel" dashboard ke server; saat website online selalu diganti versi asli tutor. Bagian <script> di bawah index.html juga jangan diubah (pengambil data sensor). icon.webp biarkan. Cara membuka di VS Code: klik kanan file → Open With Code, atau File → Open Folder → smp-XX.
 
 ---
 
 ### Kustom 1: Profil & Judul
-Cari komentar **BAGIAN: PROFIL KELOMPOK** di `index.html`:
+Cari **BAGIAN: PROFIL KELOMPOK** di `index.html`:
 ```html
-<div class="kartu-profil">
-  <img src="foto-kelompok.jpg" alt="Foto kelompok" onerror="this.remove()">
-  <div>
-    <h2>Nama Kelompok Kami</h2>
-    <p>Anggota: Nama 1, Nama 2</p>
-  </div>
-</div>
+<h2>Nama Kelompok Kami</h2>
+<p>Anggota: Nama 1, Nama 2</p>
 ```
-- Ganti **teks** di antara `<h2>…</h2>` dan `<p>…</p>`. **Jangan** hapus tanda `< >`.
-- Nama anggota sudah diisi tutor, cek ejaannya.
+- Ganti **teks** di antara tanda `< >`. Tandanya jangan dihapus.
 - Ganti juga judul `Smart Room Monitor Junior` di **BAGIAN: HEADER**.
+
+> 🗣️ SPEAKER NOTES: Nama anggota sudah diisi tutor, minta Pengecek mengecek ejaannya. Peserta individu: tulis nama sendiri dan nama alat. Tips cari: Ctrl+F lalu ketik "PROFIL". Contoh tag lengkap ada di file (div class="kartu-profil" berisi img, h2, p).
 
 ---
 
 ### Kustom 2: Warna di :root
-Buka `style.css`, bagian `:root` paling atas:
+Buka `style.css`, paling atas:
 ```css
 --warna-primer: #ff8a3d;        /* oranye ceria untuk aksen utama */
 --warna-sekunder: #3ddc97;      /* hijau mint */
 --warna-biru: #4d9de0;          /* biru muda */
 ```
-- Ganti 6 huruf/angka setelah `#`. Cari kode warna di Google: "color picker".
-- Titik koma `;` di akhir baris jangan terhapus.
+- Klik **kotak warna kecil** di depan kode → pilih warna.
+- Titik koma `;` jangan terhapus.
+
+> 🗣️ SPEAKER NOTES: VS Code menampilkan kotak warna kecil di depan tiap kode warna di file CSS. Klik kotaknya → muncul pemilih warna. Cara lain: Google "color picker", salin 6 huruf/angka setelah #. Ajak Desainer memilih 3 warna yang cocok dan tetap mudah dibaca.
 
 ---
 
 ### Kustom 3: Foto Kelompok
-1. Kecilkan dulu: **Paint** → **Resize** → lebar **800 piksel** → Save as **JPEG**.
-2. Nama file **persis**: `foto-kelompok.jpg` (huruf kecil, tanda minus, akhiran `.jpg`).
-3. Simpan **di dalam folder** `smp-XX`, sejajar dengan `index.html`.
-4. Refresh browser → foto muncul di kartu profil.
+1. Kecilkan: **Paint** → **Resize** → lebar **800 piksel** → Save as **JPEG**.
+2. Beri nama **persis**: `foto-kelompok.jpg`.
+3. Simpan di folder `smp-XX`, sebelah `index.html`.
+4. Refresh browser → foto muncul!
 
-> 🗣️ SPEAKER NOTES: Kesalahan paling sering: Foto-Kelompok.JPG, "foto kelompok.jpg" (spasi), foto-kelompok.jpeg, foto-kelompok.jpg.jpg (ekstensi tersembunyi di Windows), atau foto masih di Downloads. Kalau nama salah, kotak foto hilang.
+> 🗣️ SPEAKER NOTES: Kesalahan paling sering: Foto-Kelompok.JPG (huruf besar), "foto kelompok.jpg" (spasi), foto-kelompok.jpeg, foto-kelompok.jpg.jpg (akhiran tersembunyi di Windows: nyalakan View → File name extensions), atau foto masih di Downloads. Kalau nama salah, kotak foto hilang. Foto belum ada? Boleh menyusul di P13.
 
 ---
 
 ### Forum Diskusi Live Coding
 
-**Foto sudah dimasukkan, tapi tidak muncul di dashboard. Apa saja kemungkinan penyebabnya?**
+**Foto sudah dimasukkan, tapi tidak muncul. Apa saja kemungkinan penyebabnya?**
 
 > 🗣️ SPEAKER NOTES: Topik 2 — Kustom Dashboard. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
 
@@ -257,27 +272,25 @@ Buka `style.css`, bagian `:root` paling atas:
 
 **TOPIK 2 DARI 2 — CHALLENGE 🟡**
 
-1. Nama kelompok & anggota di **Profil Kelompok** (cek ejaan).
-2. Judul di **header** jadi nama alat kalian.
-3. **3 warna** di `:root` (`--warna-primer`, `--warna-sekunder`, `--warna-biru`).
-4. `foto-kelompok.jpg` tampil di kartu profil.
+1. Nama kelompok & anggota di **Profil Kelompok**.
+2. Judul **header** = nama alat kalian.
+3. Ganti **3 warna** di `:root`.
+4. `foto-kelompok.jpg` tampil.
 
-Data sensor harus **tetap muncul** setelah diubah.
+Angka sensor harus **tetap muncul** setelah diubah!
 
 ---
 
 ### Aturan Serah Folder
-Website kalian akan **online** di **`https://<device-id>.inspiralabs.id`** (contoh: `smp-07.inspiralabs.id`)
+Website kalian akan **online** di **`smp-XX.inspiralabs.id`**!
 
 1. Halaman utama tetap **`index.html`**.
-2. **Semua** file ada **di dalam folder** `smp-XX`.
-3. Foto bernama **`foto-kelompok.jpg`**.
-4. **Tidak** pakai `npm`. Butuh library? Pakai **link CDN**.
-5. **Jangan** ubah `api.js`.
-6. Maksimal **5 MB**. Hapus folder **`firmware/.pio`** sebelum di-zip.
-7. Zip, beri nama Device ID (mis. `smp-07.zip`), serahkan ke tutor di **P13**.
+2. **Semua** file ada di dalam folder `smp-XX`.
+3. Foto bernama **`foto-kelompok.jpg`**, sudah dikecilkan.
+4. `api.js` **tidak** diubah.
+5. Hapus folder **`firmware/.pio`**. Total maksimal **5 MB**.
 
-> 🗣️ SPEAKER NOTES: Cek ukuran: klik kanan folder → Properties → Size. Folder firmware/.pio dibuat otomatis oleh PlatformIO, bisa ratusan MB, aman dihapus. api.js selalu diganti versi asli tutor saat deploy.
+> 🗣️ SPEAKER NOTES: Contoh alamat: https://smp-07.inspiralabs.id. Cek ukuran: klik kanan folder → Properties → Size. Folder firmware/.pio dibuat otomatis oleh PlatformIO saat Build, bisa ratusan MB, aman dihapus (dibuat ulang saat Build berikutnya). Zip diserahkan di P13. Untuk siswa yang sudah mahir: tidak boleh pakai npm/instalasi; kalau butuh library, pakai link CDN.
 
 ---
 
@@ -285,10 +298,10 @@ Website kalian akan **online** di **`https://<device-id>.inspiralabs.id`** (cont
 
 **TOPIK 2 DARI 2 — CHALLENGE 🔴**
 
-1. Tutor menampilkan isi folder kelompok khayalan `smp-99`.
-2. Temukan **semua pelanggaran** aturan serah folder (minimal 4).
-3. Tulis di kertas beserta cara memperbaikinya.
-4. Cek folder kalian sendiri: ukurannya berapa MB?
+1. Tutor menampilkan isi folder khayalan `smp-99`.
+2. Temukan **minimal 4** pelanggaran aturan.
+3. Tulis cara memperbaikinya.
+4. Cek folder kalian sendiri: berapa MB?
 
 ---
 
@@ -301,7 +314,7 @@ Website kalian akan **online** di **`https://<device-id>.inspiralabs.id`** (cont
 [P13] Rapikan alat (casing) + showcase
 ```
 
-> 🗣️ SPEAKER NOTES: Minggu depan siswa membawa kotak bekas (kardus kecil, kotak plastik, kotak pensil bekas) untuk casing alat, plus selotip/double tape.
+> 🗣️ SPEAKER NOTES: Minggu depan siswa membawa kotak bekas (kardus kecil, kotak plastik, kotak pensil bekas) untuk casing alat, plus selotip/double tape. Kotak logam atau kaleng tidak boleh.
 
 ---
 
@@ -314,7 +327,7 @@ Website kalian akan **online** di **`https://<device-id>.inspiralabs.id`** (cont
 - **02** Temukan dan klik tombol bertuliskan **"Post Test"**.
 - **03** Kerjakan 5 soal pilihan ganda tersebut dengan teliti dan jujur!
 
-> 🗣️ SPEAKER NOTES: Pastikan tombol "Post Test Pertemuan 12" di Linktree sudah mengarah ke Google Form P12 SMP.
+> 🗣️ SPEAKER NOTES: Pastikan tombol "Post Test Pertemuan 12" di Linktree sudah mengarah ke Google Form P12 SMP. Post-test dikerjakan sendiri-sendiri.
 
 ---
 
@@ -366,42 +379,45 @@ STRUKTUR DOKUMEN:
 | Tanggal | Jum'at, 6 November 2026 |
 | Durasi | 70 menit |
 | Target silabus | Siswa mampu menampilkan data sensor DHT22 di dashboard yang telah disediakan (proyek akhir) dan mengkustom tampilannya |
-| Penilaian | Progres proyek akhir: data kelompok tampil di dashboard + profil kelompok terisi |
-| Potongan proyek akhir yang dibedah | Dashboard `index.html` + `style.css` dari zip proyek (`smp-XX.zip`). Bagian yang dikustom: **BAGIAN: PROFIL KELOMPOK** di `index.html` (nama kelompok, anggota, `foto-kelompok.jpg`), judul di **BAGIAN: HEADER**, dan warna di `:root` paling atas `style.css`. `api.js` **tidak disentuh**. Firmware sudah terpasang sejak P11. |
+| Penilaian | Progres proyek akhir: data kelompok tampil di dashboard + profil kelompok terisi + 3 warna diganti |
+| Potongan proyek akhir yang dibedah | Dashboard `index.html` + `style.css` dari folder `smp-XX`. Bagian yang dikustom: **BAGIAN: PROFIL KELOMPOK** di `index.html` (nama kelompok, anggota, `foto-kelompok.jpg`), judul di **BAGIAN: HEADER**, dan warna di `:root` paling atas `style.css`. `api.js` **tidak disentuh**. Firmware sudah terpasang sejak P11. |
 
 ## Alat & bahan (per kelompok/individu)
 
 - Alat dari P11 (ESP32 + DHT22, firmware proyek sudah ter-upload)
-- **Power bank** + kabel USB (supaya alat jalan tanpa laptop)
-- Laptop + folder proyek hasil extract `smp-XX.zip` (dari P11)
+- **Power bank** (terisi penuh) + kabel USB: ESP32 tetap butuh listrik walau tanpa laptop
+- Laptop + folder proyek `smp-XX` (dari P11)
 - **Foto kelompok** (atau foto diri untuk peserta individu) di HP/laptop
 - WiFi kelas **2.4 GHz** (sama seperti P11)
 
 ## Persiapan tutor sebelum kelas
 
-1. Cek backend online: `https://api-ekskulcoding.inspiralabs.id/health`.
+1. Cek backend online: `https://api-ekskulcoding.inspiralabs.id/health`. Coba buka satu `index.html` dari laptop kelas: angka contoh harus berganti jadi data sungguhan.
 2. Siapkan zip cadangan (`py tools/kelompok.py paket`) untuk siswa yang foldernya hilang/rusak. Kalau zip diganti, siswa harus mengisi WiFi & upload firmware lagi.
-3. Siapkan cara memindahkan foto dari HP ke laptop (kabel/Drive/WA Web). Tunjukkan cara mengecilkan foto: buka di **Paint** → **Resize** → lebar **800 piksel** → Save as **JPEG**.
-4. Siapkan contoh "folder bermasalah" untuk Challenge Hard (lihat Kunci), cukup ditulis di papan/slide.
+3. Siapkan cara memindahkan foto dari HP ke laptop (kabel/Drive/WA Web). Kalau siswa tidak membawa foto: foto bersama di kelas pakai HP tutor.
+4. Tulis contoh folder `smp-99` untuk Challenge Hard (lihat Kunci) di papan/slide.
 5. Hotspot cadangan 2.4 GHz.
+6. Panduan lengkap: `kurikulum/smp/p12/Panduan_Pengajar_P12_SMP.md`.
 
 ## Alur 70 menit
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–5 | Pembuka | Nyalakan semua alat pakai power bank, cek Serial Monitor satu laptop: `kode respons: 200` |
-| 5–10 | Pembuka materi | Cover + pertanyaan pemantik |
-| 10–17 | Materi | Slide 1–2: perjalanan data, alat tanpa laptop |
-| 17–25 | Praktek bersama | Slide 3: buka dashboard, data kelompok muncul |
-| 25–30 | 🟢 Challenge Easy | Data Pertamaku Muncul |
-| 30–38 | Materi | Slide 5–7: peta dashboard, profil, warna, foto |
-| 38–50 | 🟡 Challenge Medium | Dashboard Punya Kami |
-| 50–55 | Materi | Slide 8: aturan serah folder & alamat website |
-| 55–58 | 🔴 Challenge Hard | Inspektur Folder |
-| 58–60 | Peta proyek | Slide 9 |
-| 60–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+| 0–5 | Pembuka | Nyalakan semua alat pakai power bank, tentukan peran (Slide 1) |
+| 5–8 | Pembuka materi | Cover + pertanyaan pemantik + agenda |
+| 8–12 | Materi | Slide 2–3: alat "kesepian", perjalanan data |
+| 12–20 | Praktek bersama | Slide 4: buka dashboard, data kelompok muncul |
+| 20–23 | Tips + forum | Slide 5 + Forum Diskusi Topik 1 |
+| 23–27 | 🟢 Challenge Easy | Data Pertamaku Muncul (wajib) |
+| 27–35 | Materi + demo | Slide 6–9: boleh & jangan, profil, warna, foto (tutor demo langsung di layar). Ganti peran. |
+| 35–37 | Forum | Forum Diskusi Topik 2 |
+| 37–52 | 🟡 Challenge Medium | Dashboard Punya Kami |
+| 52–55 | Materi | Slide 10: aturan serah folder & alamat website |
+| 55–60 | 🔴 Challenge Hard | Inspektur Folder |
+| 60–62 | Peta proyek | Slide 11 + ingatkan bawa kotak bekas |
+| 62–70 | Post-test | 5 soal pilihan ganda (Google Form), dikerjakan sendiri-sendiri |
 
-Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Alat Kita Masih "Kesepian" → Perjalanan Data → Praktek Bareng: Buka Dashboard-mu → Tips Engineer: Kalau Dashboard Diam → 💬 Forum Diskusi → 🟢 Easy → Peta Dashboard: Boleh & Jangan → Kustom 1: Profil & Judul → Kustom 2: Warna di :root → Kustom 3: Foto Kelompok → 💬 Forum Diskusi → 🟡 Medium → Aturan Serah Folder → 🔴 Hard → Peta Proyek Akhir → Post-test (Linktree) → Penutup.
+Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Peran di Kelompok → Alat Kita Masih "Kesepian" → Perjalanan Data → Praktek Bareng: Buka Dashboard-mu → Tips Engineer: Kalau Dashboard Diam → 💬 Forum Diskusi → 🟢 Easy → Peta Dashboard: Boleh & Jangan → Kustom 1: Profil & Judul → Kustom 2: Warna di :root → Kustom 3: Foto Kelompok → 💬 Forum Diskusi → 🟡 Medium → Aturan Serah Folder → 🔴 Hard → Peta Proyek Akhir → Post-test (Linktree) → Penutup.
 
 > Buffer: kalau pemindahan foto lama, foto boleh menyusul di P13. Yang wajib hari ini: data tampil + nama kelompok/anggota + warna sudah diganti.
 
@@ -409,107 +425,113 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Al
 
 ## Slide
 
-### Slide 1 — Alat Kita Masih "Kesepian" 😢
-- P11: data suhu muncul di **Serial Monitor**, cuma di laptop yang tercolok kabel.
-- Firmware sebenarnya **sudah mengirim** data ke internet (`kode respons: 200`).
-- Hari ini: kita **melihat** data itu di **website kalian sendiri**, lalu membuat website itu jadi milik kelompok.
+### Slide 1 — Peran di Kelompok 👥
 
-### Slide 2 — Perjalanan Data 🚀
+| Peran | Tugas |
+|---|---|
+| **Operator** | Mengetik di VS Code |
+| **Desainer** | Memilih 3 warna |
+| **Fotografer** | Foto kelompok + kecilkan ukurannya |
+| **Pengecek** | Cek ejaan nama & aturan folder |
+
+- Ganti peran di Topik 2. Kerja sendiri? Pegang semua peran, minta teman sebelah jadi Pengecek.
+
+### Slide 2 — Alat Kita Masih "Kesepian" 😢
+- P11: angka suhu cuma terlihat di **Serial Monitor** laptop.
+- Padahal firmware **sudah mengirim** angkanya ke internet (`200`).
+- Hari ini: angka itu tampil di **website kalian sendiri**.
+
+### Slide 3 — Perjalanan Data 🚀
 ```
-DHT22 → ESP32 → WiFi → Internet → Server InspiraLabs → Dashboard (website kalian)
+DHT22 → ESP32 → WiFi → Internet → Server → Dashboard
 ```
-- **Server** = komputer yang selalu menyala di internet, **menyimpan** data semua alat.
-- **Dashboard** = halaman web yang **menampilkan** data alat dengan Device ID kalian (tiap ±4 detik).
-- Firmware **tersimpan** di ESP32. Colok ke **power bank** → alat jalan sendiri, **tanpa laptop**.
+- Seperti kirim surat: ESP32 = pengirim, **server** = kantor pos yang menyimpan surat.
+- **Dashboard** = website yang membaca surat terbaru untuk Device ID kalian.
 
-### Slide 3 — Praktek Bareng: Buka Dashboard-mu 🖥️
-1. Colok ESP32 ke **power bank**. Tunggu ±10 detik (ESP32 menyambung WiFi).
-2. Di laptop, buka folder `smp-XX` → **double-click** `index.html` (terbuka di browser).
-3. Tunggu ±5 detik: angka suhu & kelembapan berganti jadi data alat kalian.
-4. **Tiup** sensor → angka di dashboard ikut berubah (tunggu ±5 detik).
+> Catatan tutor: Server = komputer yang selalu menyala di internet, menyimpan data semua alat. Dashboard mengambil data terbaru kira-kira tiap 4 detik.
 
-> Catatan tutor: Sebelum ada data, dashboard menampilkan **angka contoh** (26°C, 60%). Angka itu baru berubah kalau server sudah menerima data dari Device ID kelompok itu.
+### Slide 4 — Praktek Bareng: Buka Dashboard-mu 🖥️
+1. Colok ESP32 ke **power bank**. Tunggu ±10 detik.
+2. Buka folder `smp-XX` → **double-click** `index.html`.
+3. Tunggu ±5 detik: angka berganti jadi data alat kalian.
+4. **Tiup** sensor → angka di dashboard ikut berubah!
 
-### Slide 4 — Tips Engineer: Kalau Dashboard Diam 🛠️
+> Catatan tutor: "Tanpa laptop" bukan berarti tanpa listrik: power bank yang memberi listrik. Sebelum ada data, dashboard menampilkan **angka contoh** (26°C, 60%).
 
-| Gejala | Penyebab | Solusi |
-|---|---|---|
-| Angka tetap 26°C / 60% | ESP32 belum mengirim data | Colok ke laptop, buka Serial Monitor: harus ada `kode respons: 200` |
-| Serial Monitor macet di titik-titik | WiFi salah / 5 GHz / sinyal lemah | Cek zona hijau, dekatkan ke router (lihat tabel P11) |
-| Data muncul tapi tidak berubah saat ditiup | Sensor baru dibaca tiap 4 detik | Tiup lebih lama, tunggu 5–10 detik |
-| ESP32 di power bank mati sendiri | Power bank mode hemat (arus kecil dianggap kosong) | Pakai power bank lain atau colok ke laptop |
-| Dashboard menampilkan data aneh (bukan alat kita) | Folder tertukar dengan kelompok lain | Cek nama folder & Device ID di `README.md`/HANDOUT |
+### Slide 5 — Tips Engineer: Kalau Dashboard Diam 🛠️
 
-> Catatan tutor: Slide ini menjawab pertanyaan pemantik: dashboard hanya **menampilkan** apa yang sudah sampai di server. Kalau alat tidak mengirim, website tidak punya data baru.
+| Gejala | Coba ini |
+|---|---|
+| Angka tetap 26°C / 60% | Colok ke laptop, cek Serial Monitor: harus `200` |
+| Tidak berubah saat ditiup | Tiup lebih lama, tunggu 10 detik |
+| ESP32 di power bank mati sendiri | Ganti power bank / colok laptop |
 
-### Slide 5 — Peta Dashboard: Boleh & Jangan 🗺️
+> Catatan tutor: Slide ini menjawab pertanyaan pemantik: website hanya **menampilkan** apa yang sudah sampai di server. Gejala lain: Serial Monitor macet di titik-titik → WiFi salah / 5 GHz / sinyal lemah (tabel P11); data bukan milik alat kita → folder tertukar, cek nama folder & Device ID; power bank mati sendiri → mode hemat daya (arus ESP32 kecil, dianggap sudah penuh).
 
-| File | Boleh diubah? | Yang diubah |
-|---|---|---|
-| `index.html` | ✅ Boleh (teks) | Nama kelompok, anggota, judul, kalimat |
-| `style.css` | ✅ Boleh (warna) | Warna di `:root` paling atas |
-| `foto-kelompok.jpg` | ✅ Kalian tambahkan | Foto kelompok |
-| `icon.webp` | Biarkan | Ikon tab browser |
-| `api.js` | ❌ **Jangan** | "Kabel" ke server (saat deploy selalu diganti versi asli tutor) |
-| Bagian `<script>` di bawah `index.html` | ❌ **Jangan** | Pengambil data sensor |
+### Slide 6 — Peta Dashboard: Boleh & Jangan 🗺️
 
-- Edit pakai **VS Code** (klik kanan file → Open With Code). **Save** (Ctrl+S), lalu **refresh** browser (F5).
+| File | Boleh? |
+|---|---|
+| `index.html` | ✅ Ganti **teks** |
+| `style.css` | ✅ Ganti **warna** |
+| `foto-kelompok.jpg` | ✅ Tambahkan |
+| `api.js` | ❌ **Jangan** |
 
-### Slide 6 — Kustom 1: Profil & Judul ✍️
-Cari komentar **BAGIAN: PROFIL KELOMPOK** di `index.html`:
+- Edit di **VS Code** → **Save** (Ctrl+S) → **refresh** browser (F5).
+
+> Catatan tutor: `api.js` = "kabel" dashboard ke server; saat online selalu diganti versi asli tutor. Bagian `<script>` di bawah `index.html` juga jangan diubah (pengambil data sensor). `icon.webp` biarkan.
+
+### Slide 7 — Kustom 1: Profil & Judul ✍️
+Cari **BAGIAN: PROFIL KELOMPOK** di `index.html`:
 ```html
-<div class="kartu-profil">
-  <img src="foto-kelompok.jpg" alt="Foto kelompok" onerror="this.remove()">
-  <div>
-    <h2>Nama Kelompok Kami</h2>
-    <p>Anggota: Nama 1, Nama 2</p>
-  </div>
-</div>
+<h2>Nama Kelompok Kami</h2>
+<p>Anggota: Nama 1, Nama 2</p>
 ```
-- Ganti **teks** di antara `<h2>…</h2>` dan `<p>…</p>`. **Jangan** hapus tanda `< >`.
-- Nama anggota sudah diisi tutor, cek ejaannya. Peserta individu: tulis nama sendiri.
-- Ganti juga judul `Smart Room Monitor Junior` di **BAGIAN: HEADER** dengan nama alat kalian.
+- Ganti **teks** di antara tanda `< >`. Tandanya jangan dihapus.
+- Ganti juga judul `Smart Room Monitor Junior` di **BAGIAN: HEADER**.
 
-### Slide 7 — Kustom 2 & 3: Warna dan Foto 🎨
-**Warna** → buka `style.css`, bagian `:root` paling atas:
+> Catatan tutor: Nama anggota sudah diisi tutor, cek ejaannya. Peserta individu: tulis nama sendiri. Tips cari: Ctrl+F lalu ketik "PROFIL".
+
+### Slide 8 — Kustom 2: Warna di :root 🎨
+Buka `style.css`, paling atas:
 ```css
 --warna-primer: #ff8a3d;        /* oranye ceria untuk aksen utama */
 --warna-sekunder: #3ddc97;      /* hijau mint */
 --warna-biru: #4d9de0;          /* biru muda */
 ```
-- Ganti kode warna setelah `#` (6 huruf/angka). Cari kode warna di Google: "color picker".
-- Titik koma `;` di akhir baris jangan terhapus.
+- Klik **kotak warna kecil** di depan kode → pilih warna.
+- Titik koma `;` jangan terhapus.
 
-**Foto** →
-- Kecilkan dulu: Paint → Resize → lebar 800 piksel → Save as JPEG.
-- Nama file **persis**: `foto-kelompok.jpg` (huruf kecil, tanda minus, akhiran `.jpg`).
-- Simpan **di dalam folder** `smp-XX`, sejajar dengan `index.html`.
+> Catatan tutor: VS Code menampilkan kotak warna kecil di depan tiap kode warna di file CSS; klik untuk membuka pemilih warna. Cara lain: Google "color picker", salin 6 huruf/angka setelah `#`.
 
-> Catatan tutor: Kesalahan paling sering: `Foto-Kelompok.JPG`, `foto kelompok.jpg` (spasi), `foto-kelompok.jpeg`, `foto-kelompok.jpg.jpg` (ekstensi tersembunyi di Windows), atau foto disimpan di Downloads. Kalau nama salah, foto tidak tampil (kotaknya hilang).
+### Slide 9 — Kustom 3: Foto Kelompok 📸
+1. Kecilkan: **Paint** → **Resize** → lebar **800 piksel** → Save as **JPEG**.
+2. Beri nama **persis**: `foto-kelompok.jpg`.
+3. Simpan di folder `smp-XX`, sebelah `index.html`.
+4. Refresh browser → foto muncul!
 
-### Slide 8 — Aturan Serah Folder 📦
-Website kalian akan **online** di: **`https://<device-id>.inspiralabs.id`**
-(contoh: `https://smp-07.inspiralabs.id`)
+> Catatan tutor: Kesalahan paling sering: `Foto-Kelompok.JPG`, `foto kelompok.jpg` (spasi), `foto-kelompok.jpeg`, `foto-kelompok.jpg.jpg` (akhiran tersembunyi di Windows: nyalakan View → File name extensions), atau foto disimpan di Downloads. Kalau nama salah, kotak foto hilang.
 
-1. Halaman utama tetap bernama **`index.html`**.
-2. **Semua** file (foto, CSS) ada **di dalam folder** `smp-XX`. Jangan menunjuk file di Downloads/Desktop.
-3. Foto bernama **`foto-kelompok.jpg`**.
-4. **Tidak** pakai `npm`/instalasi. Butuh library (mis. Chart.js)? Pakai **link CDN**.
-5. **Jangan** ubah `api.js` (saat deploy selalu diganti versi asli).
-6. Ukuran folder maksimal **5 MB**. Hapus folder **`firmware/.pio`** (hasil Build, ukurannya besar) sebelum di-zip.
-7. Zip seluruh folder, beri nama sesuai Device ID (mis. `smp-07.zip`), serahkan ke tutor di **P13**.
+### Slide 10 — Aturan Serah Folder 📦
+Website kalian akan **online** di **`smp-XX.inspiralabs.id`**!
 
-> Catatan tutor: Cek ukuran: klik kanan folder → Properties → Size. Folder `firmware/.pio` dibuat otomatis oleh PlatformIO dan bisa ratusan MB; aman dihapus (dibuat ulang saat Build berikutnya).
+1. Halaman utama tetap **`index.html`**.
+2. **Semua** file ada di dalam folder `smp-XX`.
+3. Foto bernama **`foto-kelompok.jpg`**, sudah dikecilkan.
+4. `api.js` **tidak** diubah.
+5. Hapus folder **`firmware/.pio`**. Total maksimal **5 MB**.
 
-### Slide 9 — Peta Proyek Akhir 🗺️
+> Catatan tutor: Contoh alamat: `https://smp-07.inspiralabs.id`. Cek ukuran: klik kanan folder → Properties → Size. `firmware/.pio` dibuat otomatis oleh PlatformIO, bisa ratusan MB, aman dihapus. Zip diserahkan di **P13**. Untuk siswa mahir: tidak boleh pakai `npm`/instalasi; butuh library → link CDN.
+
+### Slide 11 — Peta Proyek Akhir 🗺️
 ```
-[P9]  Kenal ESP32 & breadboard, rakit LED           ✅
-[P10] Upload program jadi (Blink) + rakit DHT22     ✅
-[P11] Upload firmware proyek + jadi "dokter kabel"  ✅
+[P9]  Kenal ESP32 & breadboard, rakit LED           (selesai)
+[P10] Upload program jadi (Blink) + rakit DHT22     (selesai)
+[P11] Upload firmware proyek + jadi "dokter kabel"  (selesai)
 [P12] Data muncul di dashboard + kustom dashboard   ← HARI INI
 [P13] Rapikan alat (casing) + showcase
 ```
-> Catatan tutor: Minggu depan siswa membawa **kotak bekas** (kardus kecil, kotak plastik, kotak pensil bekas) untuk casing alat, plus selotip/double tape.
+> Catatan tutor: Minggu depan siswa membawa **kotak bekas** (kardus kecil, kotak plastik, kotak pensil bekas) untuk casing alat, plus selotip/double tape. Kotak logam/kaleng tidak boleh.
 
 ---
 
@@ -517,8 +539,8 @@ Website kalian akan **online** di: **`https://<device-id>.inspiralabs.id`**
 
 Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab.
 
-- **Topik 1 — Data ke Dashboard:** Kalau laptop dimatikan, apakah data suhu tetap muncul di dashboard? Kenapa?
-- **Topik 2 — Kustom Dashboard:** Foto sudah dimasukkan, tapi tidak muncul di dashboard. Apa saja kemungkinan penyebabnya?
+- **Topik 1 — Data ke Dashboard:** Kalau laptop dimatikan, apakah suhu tetap muncul di dashboard? Kenapa?
+- **Topik 2 — Kustom Dashboard:** Foto sudah dimasukkan, tapi tidak muncul. Apa saja kemungkinan penyebabnya?
 
 Setiap challenge bernilai **+10** poin (leaderboard).
 
@@ -526,20 +548,24 @@ Setiap challenge bernilai **+10** poin (leaderboard).
 
 ## Challenge
 
-### 🟢 Easy — "Data Pertamaku Muncul"
-Nyalakan alat pakai **power bank** (tanpa laptop). Buka dashboard dan buktikan angka suhu kelompokmu **muncul**. Tiup sensor → angka di dashboard ikut berubah. Tunjukkan ke tutor.
+### 🟢 Easy — "Data Pertamaku Muncul" (wajib)
+1. Nyalakan alat pakai **power bank** (tanpa laptop).
+2. Buka dashboard: angka suhu kalian **muncul**.
+3. Tiup sensor → angka ikut berubah. Tunjukkan ke tutor!
 
 ### 🟡 Medium — "Dashboard Punya Kami" 🎨
-Ubah dashboard kalian:
-1. Nama kelompok & anggota di **Profil Kelompok** (cek ejaan).
-2. Judul di **header** jadi nama alat kalian.
-3. **3 warna** di `:root` (`--warna-primer`, `--warna-sekunder`, `--warna-biru`).
-4. `foto-kelompok.jpg` tampil di kartu profil.
+1. Nama kelompok & anggota di **Profil Kelompok**.
+2. Judul **header** = nama alat kalian.
+3. Ganti **3 warna** di `:root` (`--warna-primer`, `--warna-sekunder`, `--warna-biru`).
+4. `foto-kelompok.jpg` tampil.
 
-Data sensor harus **tetap muncul** setelah diubah.
+Angka sensor harus **tetap muncul** setelah diubah!
 
 ### 🔴 Hard — "Inspektur Folder" 🔍
-Tutor menampilkan isi folder kelompok khayalan `smp-99`. Temukan **semua pelanggaran** aturan serah folder (minimal 4), tulis di kertas beserta cara memperbaikinya. Lalu cek folder kalian sendiri: ukurannya berapa MB?
+1. Tutor menampilkan isi folder khayalan `smp-99`.
+2. Temukan **minimal 4** pelanggaran aturan.
+3. Tulis cara memperbaikinya.
+4. Cek folder kalian sendiri: berapa MB?
 
 ---
 
@@ -631,7 +657,7 @@ A. Bernama `foto-kelompok.jpg` dan disimpan di dalam folder website B. Bernama b
 A. `api.js` B. Bagian `<script>` di bawah `index.html` C. Kode warna di `:root` paling atas `style.css` D. `DEVICE_ID` di firmware
 
 **4. Manakah yang MELANGGAR aturan serah folder?**
-A. Halaman utama bernama `index.html` B. Memakai library lewat link CDN C. Ukuran folder 3 MB D. Memasang library dengan `npm install` dan mengubah `api.js`
+A. Halaman utama bernama `index.html` B. Foto bernama `foto-kelompok.jpg` di dalam folder `smp-XX` C. Ukuran folder 3 MB D. Mengubah isi `api.js`
 
 **5. Website kelompok dengan Device ID `smp-07` akan bisa dibuka di alamat…**
 A. `https://smp-07.inspiralabs.id` B. `https://ekskul.inspiralabs.id/kelompok7` C. `http://192.168.1.23` D. `https://smp-07.com`
@@ -644,7 +670,7 @@ A. `https://smp-07.inspiralabs.id` B. `https://ekskul.inspiralabs.id/kelompok7` 
 
 **Easy:** bukti = dashboard menampilkan angka selain angka contoh (26°C / 60%) dan berubah saat sensor ditiup, alat tidak tersambung ke laptop.
 
-**Medium:** cek 4 poin. Kalau data hilang setelah dikustom, biasanya siswa tidak sengaja menghapus `<span id="angkaSuhu">` / `id="angkaLembap"` atau bagian `<script>`. Perbaiki dengan menyalin ulang `index.html` dari zip asli lalu ulangi kustom.
+**Medium:** cek 4 poin. Kalau data hilang setelah dikustom, biasanya siswa tidak sengaja menghapus `<span id="angkaSuhu">` / `id="angkaLembap"` atau bagian `<script>`. Perbaiki dengan menyalin ulang `index.html` dari zip asli lalu ulangi kustom (lebih cepat daripada mencari tanda yang hilang).
 
 **Hard — contoh isi folder `smp-99` (tampilkan di papan/slide):**
 ```
@@ -653,18 +679,17 @@ smp-99/
 ├── style.css
 ├── api.js                    (diubah: MY_DEVICE_ID = "smp-01")   ← pelanggaran 2: api.js tidak boleh diubah
 ├── Foto Kelompok.JPG         (8,7 MB)   ← pelanggaran 3: nama salah; pelanggaran 4: terlalu besar
-├── package.json + node_modules/          ← pelanggaran 5: pakai npm (pakai CDN)
-├── firmware/.pio/            (310 MB)   ← pelanggaran 6: folder hasil Build ikut di-zip
-└── (di index.html) <img src="C:\Users\Budi\Downloads\logo.png">   ← pelanggaran 7: file di luar folder
+├── firmware/.pio/            (310 MB)   ← pelanggaran 5: folder hasil Build ikut di-zip
+└── (di home.html) <img src="C:\Users\Budi\Downloads\logo.png">   ← pelanggaran 6: file di luar folder
 ```
-Minimal 4 benar = lulus. Perbaikan: rename ke `index.html`, ambil `api.js` asli, rename & kecilkan foto, hapus `node_modules`/`package.json` dan pakai CDN, hapus `firmware/.pio`, pindahkan `logo.png` ke dalam folder dan tulis `src="logo.png"`.
+Minimal 4 benar = lulus. Perbaikan: rename ke `index.html`, ambil `api.js` asli, rename jadi `foto-kelompok.jpg` & kecilkan, hapus `firmware/.pio`, pindahkan `logo.png` ke dalam folder dan tulis `src="logo.png"`.
 
 ### Kunci Post-Test
 1. B 2. A 3. C 4. D 5. A
 
 ### Pembahasan singkat
 - No. 1: firmware tersimpan di memori ESP32; power bank hanya memberi listrik.
-- No. 4: `api.js` selalu diganti versi asli saat deploy, dan `npm` tidak dijalankan di server, jadi website yang bergantung pada keduanya akan rusak.
+- No. 4: `api.js` selalu diganti versi asli saat website online, jadi perubahan di sana hilang dan bisa merusak dashboard.
 - No. 5: setiap Device ID mendapat alamat sendiri: `<device-id>.inspiralabs.id`.
 
 ---------- SELESAI ISI MATERI AJAR ----------

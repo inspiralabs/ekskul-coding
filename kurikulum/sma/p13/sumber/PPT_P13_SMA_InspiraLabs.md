@@ -227,7 +227,7 @@ Serahkan folder kelompok ke tutor (mis. `sma-04.zip`)
 4. **1 masalah terberat** dan cara menemukannya (Serial Monitor? multimeter?).
 5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
 
-> 🗣️ SPEAKER NOTES: ±2–3 menit per kelompok/peserta. Nilai dengan rubrik showcase di Materi Ajar (Khusus Tutor). Ingatkan: jangan tampilkan PIN di layar.
+> 🗣️ SPEAKER NOTES: ±2,5 menit per kelompok/peserta, pakai timer. Sebelum tampil, minta penampil mengatur ambang = suhu ruangan + 1°C supaya demo genggam cepat terlihat. Berdua: keduanya wajib bicara. Nilai dengan rubrik showcase di Materi Ajar (Khusus Tutor). Ingatkan: jangan tampilkan PIN di layar.
 
 ---
 

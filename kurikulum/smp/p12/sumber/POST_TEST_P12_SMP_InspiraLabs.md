@@ -40,9 +40,9 @@ Sumber: SMP — Pertemuan 12: Data Muncul di Dashboard & Kustom Website-mu
 
 **4. Manakah yang MELANGGAR aturan serah folder?**
 - A. Halaman utama bernama `index.html`
-- B. Memakai library lewat link CDN
+- B. Foto bernama `foto-kelompok.jpg` di dalam folder `smp-XX`
 - C. Ukuran folder 3 MB
-- D. Memasang library dengan `npm install` dan mengubah `api.js`
+- D. Mengubah isi `api.js`
 
 **Jawaban: D**
 

@@ -4,7 +4,8 @@
      Footer tiap slide: "InspiraLabs • Ekskul Coding • Sekolah Qur'an Asy Syahid P10 SMP | nomor slide".
      Baris "> 🗣️ SPEAKER NOTES" masuk ke speaker notes, JANGAN tampil di slide.
      Blok wiring = perintah gambar diagram rangkaian (aturan di prompt/GENERATE-PPT.md).
-     Jawaban challenge & post-test hanya ada di Materi Ajar. -->
+     Jawaban challenge & post-test hanya ada di Materi Ajar.
+     Siswa SMP (12–15 tahun): teks slide singkat, satu ide per slide. -->
 
 ---
 
@@ -39,47 +40,66 @@ Penyebabnya sering ada di benda yang paling sering kita sepelekan.
 
 Penasaran jawabannya? Yuk kita bongkar.
 
-> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 1.
+> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 1 (slide Tips Engineer).
 
 ---
 
 ### Apa yang kita capai hari ini?
 
-- **01 Upload Program Jadi**: Memasukkan program Blink ke ESP32 dan mengatasi upload gagal.
-- **02 Rakit Sensor DHT22**: Merakit sensor suhu dengan aman dan mengeceknya lewat Serial Monitor.
+- **01 Upload Program Jadi**: LED kedip pakai program Blink.
+- **02 Rakit Sensor DHT22**: Angka suhu muncul di laptop.
+
+---
+
+### Peran di Kelompok
+
+| Peran | Tugas |
+|---|---|
+| **Perakit** | Memasang kabel |
+| **Pengecek** | Membacakan checklist, cek kabel |
+| **Operator** | Klik Upload & Serial Monitor |
+| **Pencatat** | Mencatat hasil challenge |
+
+Ganti peran di Topik 2. Kerja sendiri? Pegang semua peran, minta teman sebelah jadi Pengecek.
+
+> 🗣️ SPEAKER NOTES: Kelompok 2 orang: tiap orang pegang 2 peran. Kelompok 4 orang: 1 peran per orang. Tunjuk peran sekarang, jangan biarkan satu anak memegang laptop terus. Di Topik 2 semua bergeser satu peran.
 
 ---
 
 ### Misteri Minggu Lalu
-- LED di pin 3V3 → menyala.
-- LED di pin D2 → **tidak menyala**. Kenapa?
-- Karena pin D2 menunggu **perintah**. Perintahnya ada di **program**.
-- Kabar baik: programnya **sudah jadi**. Tugas kita: **upload** program dan **merakit sensor**.
+- LED di pin **3V3** → menyala.
+- LED di pin **D2** → **diam**. Kenapa?
+- Pin D2 menunggu **perintah**. Perintahnya ada di **program**.
+- Programnya **sudah jadi**. Kita tinggal memasukkannya.
+
+> 🗣️ SPEAKER NOTES: Tanyakan dulu ke kelas sebelum membuka jawabannya. Ingatkan: di P9 "tanpa coding" artinya tanpa program, bukan tanpa listrik. ESP32 selalu butuh listrik dari kabel USB (laptop atau power bank).
 
 ---
 
-### Upload: Mengisi "Otak" ESP32
-- **Upload** = memindahkan program dari laptop ke ESP32 lewat kabel USB.
-- Program **tersimpan** di ESP32. Dicabut dari laptop pun tetap jalan (pakai power bank).
+### Upload = Memasang Aplikasi ke ESP32
+- Seperti memasang aplikasi ke HP.
+- **Laptop** = toko aplikasi. **Kabel USB** = jalannya. **ESP32** = HP-nya.
+- Program **tersimpan** di ESP32. Dicabut dari laptop pun tetap ingat.
+- Tapi tetap butuh **listrik**: laptop atau power bank.
 
-| Barang | Catatan |
-|---|---|
-| Kabel USB **data** | Kabel charger biasa sering **tidak bisa** kirim data |
-| VS Code + PlatformIO | Sudah dipasang di laptop |
-| File program jadi | `P10_1_Blink.cpp` di folder **Kode** |
+---
 
-**4 langkah upload (hafalkan!):** Buka → Upload → Serial Monitor → Lihat alatnya.
+### 4 Langkah Upload (dipakai sampai P13!)
+1. **Salin** program jadi ke `src/main.cpp`.
+2. **Upload** (ikon panah →) → tunggu `SUCCESS`.
+3. **Serial Monitor** (ikon colokan) = kotak chat dari ESP32.
+4. **Lihat alatnya**: sesuai harapan?
 
-> 🗣️ SPEAKER NOTES: Tekankan bahwa 4 langkah ini sama untuk semua pertemuan berikutnya, termasuk firmware proyek akhir. Siswa tidak perlu mengerti isi programnya hari ini.
+> 🗣️ SPEAKER NOTES: Tekankan bahwa 4 langkah ini sama untuk semua pertemuan berikutnya, termasuk firmware proyek akhir. Siswa tidak perlu mengerti isi programnya. Tunjukkan letak ikon Upload (→) dan Serial Monitor (colokan) di status bar bawah VS Code.
 
 ---
 
 ### Praktek Bareng: Upload Blink
-1. Cabut USB. Pindahkan kabel dari **3V3** ke **D2** (LED + resistor tetap seperti P9).
-2. Colok USB. Salin isi `P10_1_Blink.cpp` ke `src/main.cpp`.
-3. Klik **Upload** (ikon panah) → tunggu `SUCCESS`.
-4. Klik **Serial Monitor** (ikon colokan) → muncul `LED nyala` / `LED mati`.
-5. LED di breadboard **dan** lampu biru kecil di board berkedip bersamaan!
+1. **Cabut USB**. Pindahkan kabel dari **3V3** ke **D2**.
+2. Colok USB. Salin `P10_1_Blink.cpp` ke `src/main.cpp`.
+3. **Upload** → tunggu `SUCCESS`.
+4. **Serial Monitor** → muncul `LED nyala` / `LED mati`.
+5. LED **dan** lampu biru di board berkedip bareng!
 
 ```wiring
 Judul: LED sekarang dikendalikan program lewat pin D2
@@ -94,29 +114,27 @@ Sorot: kabel yang dulu di 3V3 sekarang pindah ke D2 ; lampu biru bawaan board ju
 
 File program jadi: `P10_1_Blink.cpp` (ada di linktr.ee/InspiraLabs_SMP)
 
-> 🗣️ SPEAKER NOTES: Lampu biru bawaan board juga tersambung ke GPIO 2. Kalau lampu biru berkedip tapi LED breadboard tidak, program sudah benar, masalahnya di rakitan (pakai tabel troubleshooting P9).
+> 🗣️ SPEAKER NOTES: Tunggu semua kelompok berkedip, lalu ajak tepuk tangan (quick win pertama). Lampu biru bawaan board juga tersambung ke GPIO 2. Kalau lampu biru berkedip tapi LED breadboard tidak, program sudah benar, masalahnya di rakitan (LED terbalik / dua kaki satu baris / kabel bukan di D2).
 
 ---
 
 ### Tips Engineer: Kalau Upload Gagal
 
-| Pesan / gejala | Penyebab | Solusi |
-|---|---|---|
-| Port tidak muncul | Kabel USB **charger**, driver belum ada | Ganti kabel **data**, pasang driver CP210x/CH340 |
-| `Failed to connect to ESP32` | Belum masuk mode upload | Tahan **BOOT** saat `Connecting....` |
-| `Access denied` / port sibuk | Serial Monitor masih terbuka | Tutup Serial Monitor, upload lagi |
-| Tulisan acak `⸮⸮⸮` | Kecepatan tidak sama | `monitor_speed = 115200` |
-| Lampu biru kedip, LED diam | Rakitan LED salah | Cek LED terbalik / satu baris / bukan di D2 |
+| Gejala | Coba ini |
+|---|---|
+| Port tidak muncul | Ganti ke kabel USB **data** (kabel charger tidak bisa kirim program) |
+| `Failed to connect` | Tahan tombol **BOOT** saat muncul `Connecting....` |
+| Lampu biru kedip, LED diam | Cek rakitan LED |
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik di awal sesi. Tunjukkan dua kabel USB yang mirip: satu kabel data, satu kabel charger. Ingatkan kembali tebakan siswa tadi.
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Tunjukkan dua kabel USB yang mirip: satu kabel data, satu kabel charger. Ingatkan kembali tebakan siswa tadi. Masalah lain (urusan tutor): driver CP210x/CH340 belum terpasang → pasang driver; "Access denied/port sibuk" → tutup Serial Monitor lalu upload lagi; tulisan acak ⸮⸮⸮ → pastikan monitor_speed = 115200 di platformio.ini.
 
 ---
 
 ### Forum Diskusi Live Coding
 
-**Lampu biru di board berkedip, tapi LED di breadboard diam. Masalahnya di program atau di rakitan? Bagaimana kamu tahu?**
+**Lampu biru di board berkedip, tapi LED di breadboard diam. Salah program atau salah rakitan? Kok tahu?**
 
-> 🗣️ SPEAKER NOTES: Topik 1 — Upload Program Jadi. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+> 🗣️ SPEAKER NOTES: Topik 1 — Upload Program Jadi. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Jawaban: rakitan, karena lampu biru membuktikan programnya jalan.
 
 ---
 
@@ -124,7 +142,9 @@ File program jadi: `P10_1_Blink.cpp` (ada di linktr.ee/InspiraLabs_SMP)
 
 **TOPIK 1 DARI 2 — CHALLENGE 🟢**
 
-Cabut semua kabel LED, lalu rakit ulang LED di **D2** **tanpa melihat slide**. Berhasil kalau LED di breadboard berkedip **bersamaan** dengan lampu biru di board.
+1. **Cabut USB**, lepas semua kabel LED.
+2. Rakit ulang LED di **D2** tanpa melihat slide.
+3. Colok USB. Berhasil kalau LED kedip **bareng** lampu biru.
 
 ---
 
@@ -132,21 +152,23 @@ Cabut semua kabel LED, lalu rakit ulang LED di **D2** **tanpa melihat slide**. B
 
 **TOPIK 1 DARI 2 — CHALLENGE 🟡**
 
-1. Cabut USB. Pindahkan kabel LED dari **D2** ke **D18**.
-2. Di `src/main.cpp`, ubah **satu angka** saja: `#define LED_PIN 2` → `#define LED_PIN 18`.
-3. Upload. Amati: LED breadboard berkedip lagi? Lampu biru di board masih berkedip?
-4. Tulis di kertas: kenapa lampu biru sekarang diam?
-5. Kembalikan kabel ke **D2** dan angka ke **2**.
+1. **Cabut USB**. Pindahkan kabel LED dari **D2** ke **D18**.
+2. Ubah **satu angka**: `#define LED_PIN 2` → `18`. Upload.
+3. Lampu biru masih kedip? Tulis kenapa.
+4. **Kembalikan** kabel ke D2 dan angka ke `2`.
 
 Download `P10_1_Blink.cpp` dari linktr.ee/InspiraLabs_SMP
+
+> 🗣️ SPEAKER NOTES: D18 ada di sisi kanan board, di antara D19 dan D5. Pastikan semua kelompok mengembalikan ke D2 dan angka 2 sebelum lanjut.
 
 ---
 
 ### Kenalan: DHT22
-- Sensor kecil yang mengukur **2 hal**: **suhu (°C)** dan **kelembapan udara (%)**.
-- Modul kita punya **3 kaki**: **+** (listrik), **out** (data), **−** (GND).
-- Lubang-lubang di badan sensor = tempat udara masuk. **Jangan ditutup** lakban/lem.
-- Sensor ini "lambat": dibaca paling cepat **1 kali tiap 2 detik** (sudah diatur di program jadi).
+- Sensor kecil pengukur **suhu (°C)** dan **kelembapan udara (%)**.
+- Punya **3 kaki**: **+** (listrik), **out** (data), **−** (GND).
+- Lubang di badannya = tempat udara masuk. **Jangan ditutup**.
+
+> 🗣️ SPEAKER NOTES: Edarkan satu sensor supaya siswa bisa melihat tulisan +, out, − di modulnya. Sensor ini "lambat": dibaca paling cepat tiap 2 detik, sudah diatur di program jadi.
 
 ---
 
@@ -157,6 +179,8 @@ Download `P10_1_Blink.cpp` dari linktr.ee/InspiraLabs_SMP
 | **+** | **3V3** | Merah |
 | **out** | **D4** | Kuning |
 | **−** | **GND** | Hitam |
+
+LED di D2 **tetap terpasang**.
 
 ```wiring
 Judul: Rakitan lengkap hari ini: LED di D2 + sensor DHT22 di D4
@@ -172,49 +196,51 @@ Koneksi:
 Sorot: kabel kuning out ke D4 ; jangan tertukar + dan −
 ```
 
-> 🗣️ SPEAKER NOTES: Cabut USB dulu sebelum merakit. Error paling berbahaya: kabel + dan − tertukar → sensor panas. Minta siswa saling cek rakitan kelompok sebelah sebelum colok USB.
+> 🗣️ SPEAKER NOTES: Cabut USB dulu sebelum merakit. Kesalahan paling berbahaya: kabel + dan − tertukar → sensor panas. ESP32 punya 2 pin GND, boleh pakai yang mana saja (atau lewat jalur − breadboard).
 
 ---
 
-### Checklist Rakit (Sebelum Colok USB)
+### Cek 5 Detik Sebelum Colok USB
 - [ ] USB **dicabut** saat merakit.
-- [ ] Baca tulisan kecil di modul: **+**, **out**, **−** (urutan tiap modul bisa beda!).
-- [ ] **+** ke 3V3 (bukan VIN, bukan GND).
-- [ ] **out** ke D4 (sisi kanan, di antara RX2 dan D2).
-- [ ] **−** ke GND.
-- [ ] Tarik pelan tiap kabel: tidak ada yang goyang/lepas.
-- [ ] Teman kelompok sebelah sudah ikut mengecek.
+- [ ] Baca tulisan di modul: **+**, **out**, **−**.
+- [ ] **+** ke 3V3, **out** ke D4, **−** ke GND.
+- [ ] Tarik pelan tiap kabel: tidak goyang.
+- [ ] Pengecek kelompok lain ikut cek.
+
+> 🗣️ SPEAKER NOTES: Pengecek membacakan checklist keras-keras, Perakit menunjuk kabelnya. Urutan kaki tiap modul bisa beda, jadi selalu baca tulisannya. D4 ada di sisi kanan, di antara RX2 dan D2.
 
 ---
 
 ### Praktek Bareng: Cek Rakitan Sensor
 1. Rakit, lalu centang semua checklist.
-2. Colok USB. Salin `P10_2_CekDHT22.cpp` ke `src/main.cpp` → **Upload** → **Serial Monitor**.
-3. Muncul `Suhu: 28.40 C | Kelembapan: 65.20 %` → rakitan **benar**!
-4. **Tiup** sensor pelan-pelan → kelembapan naik. **Genggam** 10 detik → suhu naik.
+2. Colok USB. Upload `P10_2_CekDHT22.cpp` → **Serial Monitor**.
+3. Muncul `Suhu: 28.40 C` → rakitan **benar**!
+4. **Tiup** pelan → kelembapan naik. **Genggam** 10 detik → suhu naik.
 
 File program jadi: `P10_2_CekDHT22.cpp` (ada di linktr.ee/InspiraLabs_SMP)
 
-> 🗣️ SPEAKER NOTES — gejala umum: (1) `Gagal baca sensor! Cek kabel.` terus → kabel out tidak di D4, kabel longgar, atau + / − tertukar. (2) Sensor terasa panas → cabut USB segera, + dan − tertukar. (3) Tidak muncul apa-apa → tekan tombol EN (reset) di board. (4) Multimeter mode DC volt di kaki + dan − sensor harus ±3,3V.
+> 🗣️ SPEAKER NOTES — gejala umum: (1) `Gagal baca sensor! Cek kabel.` terus → kabel out tidak di D4, kabel longgar, atau + / − tertukar. (2) Sensor terasa panas → cabut USB segera, + dan − tertukar. (3) Tidak muncul apa-apa → tekan tombol EN (reset) di board. (4) Multimeter mode DC volt di kaki + dan − sensor harus ±3,3V. Rayakan angka suhu pertama (quick win kedua).
 
 ---
 
 ### Forum Diskusi Live Coding
 
-**Kenapa kita wajib mencabut USB sebelum memindah kabel sensor?**
+**Kenapa USB wajib dicabut sebelum memindah kabel sensor?**
 
-> 🗣️ SPEAKER NOTES: Topik 2 — Rakit DHT22. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+> 🗣️ SPEAKER NOTES: Topik 2 — Rakit DHT22. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Jawaban: supaya kabel tidak sempat menyentuh pin yang salah saat listrik menyala (bisa korsleting atau sensor panas).
 
 ---
 
-### Challenge 🔴 Hard — "Cari 3 Kabel yang Salah" (+10)
+### Challenge 🔴 Hard — "Detektif Sensor" (+10)
 
 **TOPIK 2 DARI 2 — CHALLENGE 🔴**
 
-Tutor memberi rakitan DHT22 (atau gambarnya) yang membuat Serial Monitor menulis `Gagal baca sensor!`. Ada **3 kesalahan pemasangan**.
+Tutor memberi rakitan DHT22 yang menulis `Gagal baca sensor!`. Ada **3 kesalahan**.
 1. Temukan ketiganya.
-2. Tulis di kertas: kabel mana, seharusnya ke mana.
-3. Perbaiki sampai angka suhu muncul. **Tidak boleh mengubah program.**
+2. Tulis: kabel mana, seharusnya ke mana.
+3. Perbaiki sampai angka suhu muncul. **Program tidak boleh diubah.**
+
+> 🗣️ SPEAKER NOTES: Kelompok yang belum selesai Praktek Bareng boleh menyelesaikan rakitannya dulu. Challenge ini untuk kelompok yang sudah berhasil.
 
 ---
 
@@ -233,7 +259,7 @@ Tutor memberi rakitan DHT22 (atau gambarnya) yang membuat Serial Monitor menulis
 
 ### Tugas 3 (dikerjakan di rumah)
 
-Gambar **diagram rakitanmu** dengan tangan di kertas: ESP32, breadboard, LED + resistor di **D2**, dan DHT22 (+ ke 3V3, out ke D4, − ke GND). Beri warna kabel dan label nama pin di setiap ujung kabel. Foto, kumpulkan di P11.
+Gambar **rakitanmu** di kertas: ESP32, LED di **D2**, dan DHT22 (+ ke 3V3, out ke D4, − ke GND). Warnai kabelnya dan tulis nama pin di ujungnya. Foto, kumpulkan di P11.
 
 ---
 
@@ -246,7 +272,7 @@ Gambar **diagram rakitanmu** dengan tangan di kertas: ESP32, breadboard, LED + r
 - **02** Temukan dan klik tombol bertuliskan **"Post Test"**.
 - **03** Kerjakan 5 soal pilihan ganda tersebut dengan teliti dan jujur!
 
-> 🗣️ SPEAKER NOTES: Pastikan tombol "Post Test Pertemuan 10" di Linktree sudah mengarah ke Google Form P10 SMP.
+> 🗣️ SPEAKER NOTES: Pastikan tombol "Post Test Pertemuan 10" di Linktree sudah mengarah ke Google Form P10 SMP. Post-test dikerjakan sendiri-sendiri, bukan per kelompok.
 
 ---
 

@@ -8,13 +8,13 @@ Sumber: SMA — Pertemuan 13: Rapikan, Kustom, Serahkan: Showcase Smart Room Mon
 
 ---
 
-**1. Supaya foto tampil di kartu Profil Kelompok, file foto harus bernama…**
-- A. `Foto Kelompok.JPG`
-- B. `foto-kelompok.png`
-- C. `foto-kelompok.jpg`
-- D. `IMG_2031.jpeg`
+**1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
+- A. Fotonya terlalu kecil
+- B. Nama file tidak persis `foto-kelompok.jpg` yang dipanggil `index.html`
+- C. `api.js` belum diubah
+- D. ESP32 belum terhubung WiFi
 
-**Jawaban: C**
+**Jawaban: B**
 
 ---
 

@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "author": "InspiraLabs",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": 150,
+      "left": 260,
+      "attrs": {
+        "temperature": "28",
+        "humidity": "60"
+      }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay1",
+      "top": -110,
+      "left": 250,
+      "attrs": {
+        "transistor": "pnp"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 5,
+      "left": 420,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "kipas",
+      "top": -60,
+      "left": 520,
+      "attrs": {
+        "color": "blue",
+        "label": "Kipas"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "dht1:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "dht1:SDA",
+      "esp:D4",
+      "yellow",
+      []
+    ],
+    [
+      "dht1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relay1:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relay1:COM",
+      "esp:VIN",
+      "orange",
+      []
+    ],
+    [
+      "relay1:GND",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "relay1:IN",
+      "esp:D18",
+      "blue",
+      []
+    ],
+    [
+      "relay1:NO",
+      "r1:1",
+      "orange",
+      []
+    ],
+    [
+      "r1:2",
+      "kipas:A",
+      "orange",
+      []
+    ],
+    [
+      "kipas:C",
+      "esp:GND.2",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

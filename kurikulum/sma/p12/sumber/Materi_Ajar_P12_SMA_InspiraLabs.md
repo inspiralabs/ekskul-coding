@@ -17,9 +17,12 @@
 
 ## Persiapan tutor sebelum kelas
 
+Detail lengkap: `kurikulum/sma/p12/Panduan_Pengajar_P12_SMA.md`.
+
 1. Pastikan setiap kelompok sudah lolos P11 (data masuk dashboard). Yang belum: selesaikan dulu di 10 menit pertama.
 2. Siapkan PIN kelompok (`docs/HANDOUT_SISWA.md`). Bagikan **hanya** ke kelompok yang bersangkutan.
 3. Uji 1 rakitan: klik tombol kipas di dashboard → kipas berubah dalam ±4 detik; mode Otomatis + genggam sensor → kipas menyala sendiri.
+4. Siapkan **alat tutor tersambung ke hotspot HP tutor** untuk Challenge Hard langkah 2 (WiFi kelas tidak boleh dimatikan).
 
 ## Alur 70 menit
 
@@ -47,6 +50,8 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Ko
 - Hari ini: perintah **turun**: tombol dashboard → server → ESP32 → relay → kipas.
 - Semua fitur **sudah jadi**. Tugas kalian: **menguji** apakah rakitan benar-benar menurut, dan **membuktikan** perilakunya dengan mata, stopwatch, dan multimeter.
 
+> Catatan tutor: Peran berdua: **Pengendali** (klik dashboard, pegang PIN) & **Pengamat** (stopwatch, amati relay/kipas, multimeter); tukar tiap topik. Peserta individu: pegang HP sebagai stopwatch di tangan kiri.
+
 ### Slide 2 — Perjalanan Perintah Kipas 🛤️
 ```
 [Tombol dashboard] ──► [Server] simpan: "kipas sma-04 = ON"
@@ -60,10 +65,11 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Ko
 - Balasan server berisi `"fanOn":true` atau `"fanOn":false`. Relay mengikuti balasan itu.
 
 ### Slide 3 — Kenapa Sampai ±4 Detik? ⏳
-- ESP32 melapor **tiap ±4 detik**. Perintah dari dashboard baru "terbawa" pada laporan **berikutnya**.
-- Jadi jeda tombol → kipas: **0 sampai ±4 detik** (plus waktu internet). Normal, bukan rusak.
-- Kenapa tidak langsung? ESP32 ada di WiFi sekolah, **di balik router**. Server di internet **tidak bisa** menghubungi alat di balik router secara langsung. Yang bisa: alat yang **menghubungi** server.
-- Banyak smart device sungguhan memakai pola "alat yang bertanya/terhubung ke server" seperti ini.
+- ESP32 melapor **tiap ±4 detik** sambil bertanya "ada perintah untukku?". Perintah dashboard terbawa di balasan **berikutnya**.
+- Jeda tombol → kipas: **0 sampai ±4 detik**. Normal, bukan rusak.
+- Kenapa tidak langsung? ESP32 ada **di balik router** sekolah: server di internet tidak bisa "mengetuk pintunya". Banyak smart device memakai pola ini.
+
+> Catatan tutor: Analogi: siswa yang tiap 4 detik mampir ke meja piket bertanya "ada titipan untukku?". Titipan datang tepat setelah ia pergi → ia baru tahu ±4 detik kemudian.
 
 ### Slide 4 — PIN Kelompok: Publik Hanya Melihat 🔐
 - Nanti dashboard kalian tayang **publik** di `https://sma-04.inspiralabs.id`. Siapa pun bisa **melihat** suhu.
@@ -78,6 +84,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Ko
 | **Otomatis** | **Server**, membandingkan suhu terbaru dengan ambang | Klik **Otomatis**, atur slider |
 - Di mode Otomatis, kipas menyala kalau suhu **di atas** ambang, mati kalau di bawah.
 - Klik tombol kipas besar saat Otomatis = **ambil alih** ke Manual.
+- Belum pernah diubah? Mode awal = **Otomatis, ambang 30°C**.
 
 ### Slide 6 — Slider "Nyala Otomatis di Atas N°C" 🎚️
 - Slider **20–40°C**. Geser lalu **lepas**: nilai dikirim ke server (minta PIN kalau belum).
@@ -152,7 +159,7 @@ Setiap challenge bernilai **+10** poin (leaderboard).
 
 ### 🔴 Hard — "Uji Fail-Safe" 🧯
 1. Nyalakan kipas dari dashboard (Manual ON). **Cabut USB** ESP32. Apa yang terjadi pada kipas? Colok lagi: berapa detik sampai kipas kembali menyala?
-2. Saat kipas ON, **matikan hotspot/WiFi** 30 detik. Apa yang terjadi pada kipas? Klik OFF di dashboard (pakai HP data seluler): apakah kipas menurut? Nyalakan WiFi lagi, amati.
+2. Jaringan putus: saat kipas ON, **matikan hotspot** yang dipakai alat selama 30 detik (alat tutor, atau alat kalian kalau tersambung ke hotspot HP sendiri; **jangan matikan WiFi kelas**). Apa yang terjadi pada kipas? Klik OFF di dashboard: apakah kipas menurut? Nyalakan hotspot lagi, amati.
 3. Eksperimen satu kata: ubah `#define RELAY_ACTIVE_LOW true` → `false`, upload. Bandingkan status kipas di dashboard dengan kipas sungguhan, ukur tegangan pin IN. **Kembalikan ke `true`** dan upload ulang.
 4. Tulis tabel hasil 3 percobaan + 1 kalimat: kapan alat kita **aman**, kapan **tidak**?
 
@@ -274,6 +281,7 @@ A. Mengganti `API_KEY` B. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `fal
 
 ### Catatan tutor
 - Firmware masih mendaftarkan route `/fan` (perintah langsung dalam jaringan lokal), tapi server online tidak bisa menjangkau IP lokal ESP32. Yang benar-benar bekerja di kelas: relay mengikuti `fanOn` di balasan laporan tiap ±4 detik. Jangan ajarkan bahwa server "mendorong" perintah langsung ke ESP32.
+- Hard langkah 2: WiFi kelas dipakai semua kelompok, jadi **jangan** dimatikan. Siapkan alat tutor di hotspot HP tutor untuk demo bersama, atau izinkan kelompok yang cepat mengganti 2 baris WiFi ke hotspot HP sendiri lalu upload (kembalikan ke WiFi kelas setelahnya).
 - PIN: kalau kelompok lupa PIN, browser yang pernah benar menyimpan PIN; browser lain akan bertanya lagi. Jangan bacakan PIN di depan kelas.
 
 ### Kunci Post-Test

@@ -20,7 +20,7 @@ Sumber: SMP — Pertemuan 11: Pasang Firmware Proyek & Jadi Dokter Kabel
 
 **2. Serial Monitor menampilkan `Menghubungkan ke WiFi.........` dan titiknya tidak pernah berhenti. Penyebab paling mungkin adalah…**
 - A. Kabel sensor DHT22 longgar
-- B. Nama/password WiFi salah atau WiFi-nya 5 GHz
+- B. Nama atau password WiFi salah
 - C. LED terbalik
 - D. Suhu ruangan terlalu panas
 
@@ -48,7 +48,7 @@ Sumber: SMP — Pertemuan 11: Pasang Firmware Proyek & Jadi Dokter Kabel
 
 ---
 
-**5. Multimeter mode bunyi (continuity) ditempel ke dua ujung kabel jumper dan TIDAK berbunyi. Artinya…**
+**5. Multimeter mode bunyi ditempel ke dua ujung kabel jumper dan TIDAK berbunyi. Artinya…**
 - A. Kabel itu bagus
 - B. Kabel itu putus di dalam, harus diganti
 - C. ESP32 rusak

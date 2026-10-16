@@ -41,7 +41,7 @@ const POST_TEST = {
       "kode": "",
       "opsi": [
         "Kabel sensor DHT22 longgar",
-        "Nama/password WiFi salah atau WiFi-nya 5 GHz",
+        "Nama atau password WiFi salah",
         "LED terbalik",
         "Suhu ruangan terlalu panas"
       ],
@@ -70,7 +70,7 @@ const POST_TEST = {
       "kunci": 0
     },
     {
-      "q": "5. Multimeter mode bunyi (continuity) ditempel ke dua ujung kabel jumper dan TIDAK berbunyi. Artinya…",
+      "q": "5. Multimeter mode bunyi ditempel ke dua ujung kabel jumper dan TIDAK berbunyi. Artinya…",
       "kode": "",
       "opsi": [
         "Kabel itu bagus",

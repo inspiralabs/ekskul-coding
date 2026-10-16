@@ -84,6 +84,7 @@ Sorot: ikon WiFi di atas ESP32 dengan panah "data tiap ±4 detik → server"
 ```
 - ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat server.
 - **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompok kalian di server. Sudah diisi tutor di firmware **dan** dashboard.
+- **Kenapa tiap ±4 detik?** DHT22 hanya boleh dibaca tiap ≥2 detik, dan server melayani semua kelompok sekaligus.
 
 > 🗣️ SPEAKER NOTES: Kaitkan dengan forum diskusi P9: "Kenapa ESP32 dan dashboard tidak saling bicara langsung?" Hari ini jawabannya terlihat nyata.
 
@@ -125,7 +126,7 @@ const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
 3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
 4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
 
-> 🗣️ SPEAKER NOTES: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di Challenge Easy P10, pastikan sudah dikembalikan ke D18, atau RELAY_PIN disesuaikan.
+> 🗣️ SPEAKER NOTES: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di Challenge Easy P10, pastikan sudah dikembalikan ke D18, atau RELAY_PIN disesuaikan. Peran berdua: Operator (laptop, isi WiFi, upload) & Pengamat (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2. Kipas boleh menyala sendiri kalau kelas di atas 30°C: status awal server = mode Otomatis 30°C (dibahas di P12).
 
 ---
 

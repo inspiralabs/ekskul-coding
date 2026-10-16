@@ -68,9 +68,9 @@ const POST_TEST = {
       "q": "5. Folder website yang diserahkan ke tutor sudah BENAR jika…",
       "kode": "",
       "opsi": [
-        "Di-zip dengan nama Device ID (mis. smp-07.zip), ada index.html, ukuran ≤ 5 MB, tanpa folder firmware/.pio",
+        "Zip bernama smp-07.zip, berisi index.html, ukurannya tidak lebih dari 5 MB",
         "Halaman utama bernama rumah.html dan foto ada di Downloads",
-        "Berisi folder node_modules hasil npm install",
+        "Ukurannya 300 MB karena folder firmware/.pio ikut",
         "api.js sudah diganti dengan Device ID kelompok lain"
       ],
       "kunci": 0

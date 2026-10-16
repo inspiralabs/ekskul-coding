@@ -48,7 +48,7 @@ Sumber: SMP — Pertemuan 10: Upload Program Jadi & Rakit Sensor DHT22
 
 ---
 
-**5. Program jadi menulis `Gagal baca sensor! Cek kabel.` terus-menerus. Langkah pertama yang tepat adalah…**
+**5. Serial Monitor menulis `Gagal baca sensor! Cek kabel.` terus-menerus. Langkah pertama yang tepat adalah…**
 - A. Menulis ulang programnya
 - B. Cabut USB, lalu cek kabel out di D4 dan kabel + / − tidak tertukar
 - C. Mengganti laptop

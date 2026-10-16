@@ -19,6 +19,8 @@
 
 ## Persiapan tutor sebelum kelas
 
+Detail lengkap: `kurikulum/sma/p11/Panduan_Pengajar_P11_SMA.md`.
+
 1. Cek backend online: `https://api-ekskulcoding.inspiralabs.id/health`.
 2. Jalankan `py tools/kelompok.py paket`, bagikan `dist/paket/sma-XX.zip` ke **masing-masing** kelompok/peserta (jangan tertukar: Device ID sudah tertanam di dalamnya).
 3. Isi `docs/HANDOUT_SISWA.md` (WiFi kelas). Pastikan WiFi **2.4 GHz** (ESP32 tidak bisa 5 GHz).
@@ -59,6 +61,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 ```
 - ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat server (jawaban forum P9).
 - **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompok kalian di server. Sudah diisi tutor di firmware **dan** dashboard, jadi pasti cocok.
+- **Kenapa tiap ±4 detik?** DHT22 hanya boleh dibaca tiap ≥2 detik, dan server melayani semua kelompok sekaligus.
 
 ### Slide 3 — Isi Zip Proyek Kelompok 📦
 | File / folder | Untuk apa | Hari ini |
@@ -90,7 +93,7 @@ const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
 3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
 4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
 
-> Catatan tutor: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di P10 (Challenge Easy), pastikan sudah dikembalikan ke D18, atau `RELAY_PIN` disesuaikan.
+> Catatan tutor: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di P10 (Challenge Easy), pastikan sudah dikembalikan ke D18, atau `RELAY_PIN` disesuaikan. Peran berdua: **Operator** (laptop, isi WiFi, upload) & **Pengamat** (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2.
 
 ### Slide 6 — Membaca Serial Monitor Firmware 📟
 ```
@@ -300,7 +303,8 @@ A. Program hilang, harus upload ulang B. ESP32 hanya bisa jalan kalau tersambung
 ### Catatan tutor
 - Kalau ada kelompok mendapat **401/404**: hampir pasti bagian `JANGAN UBAH` tersentuh. Ganti file `.ino` dengan salinan dari zip asli, isi WiFi lagi.
 - Kalau ada dua kelompok yang angka dashboard-nya "saling menimpa": cek zip tertukar (Device ID sama).
-- Relay & kipas belum dipakai hari ini (firmware membuat kipas **mati** saat baru menyala). Kalau kipas justru **menyala** terus sejak awal, kemungkinan modul relay **active-HIGH** → dibahas di P12 (ubah satu kata `RELAY_ACTIVE_LOW`).
+- Relay & kipas belum dibahas hari ini, tapi relay **sudah mengikuti server**: status awal tiap Device ID di server = mode **Otomatis, ambang 30°C**. Jadi kalau kelas di atas 30°C (atau sensor digenggam di Medium), kipas **boleh menyala sendiri**: itu normal, bukan rusak. Supaya tidak membingungkan, set tiap dashboard ke **Manual + OFF** (pakai PIN) sebelum kelas, atau jelaskan singkat "ini bocoran P12".
+- Kipas menyala terus padahal suhu < 30°C / dashboard menunjukkan kipas OFF → kemungkinan modul relay **active-HIGH** → dibahas di P12 (ubah satu kata `RELAY_ACTIVE_LOW`).
 
 ### Kunci Post-Test
 1. C 2. B 3. B 4. B 5. C

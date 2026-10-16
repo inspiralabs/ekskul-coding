@@ -58,9 +58,9 @@ const POST_TEST = {
       "kode": "",
       "opsi": [
         "Halaman utama bernama index.html",
-        "Memakai library lewat link CDN",
+        "Foto bernama foto-kelompok.jpg di dalam folder smp-XX",
         "Ukuran folder 3 MB",
-        "Memasang library dengan npm install dan mengubah api.js"
+        "Mengubah isi api.js"
       ],
       "kunci": 3
     },

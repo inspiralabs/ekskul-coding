@@ -71,6 +71,8 @@ Koneksi:
 Sorot: kabel biru D18 → IN ("LOW = kipas ON") ; terminal NO ("fail-safe")
 ```
 
+> 🗣️ SPEAKER NOTES: Peran berdua: Pengendali (klik dashboard, pegang PIN) & Pengamat (stopwatch, amati relay/kipas, multimeter); tukar tiap topik. Peserta individu: pegang HP sebagai stopwatch di tangan kiri.
+
 ---
 
 ### Perjalanan Perintah Kipas
@@ -88,12 +90,11 @@ Sorot: kabel biru D18 → IN ("LOW = kipas ON") ; terminal NO ("fail-safe")
 ---
 
 ### Kenapa Sampai ±4 Detik?
-- ESP32 melapor **tiap ±4 detik**. Perintah dari dashboard baru "terbawa" pada laporan **berikutnya**.
-- Jeda tombol → kipas: **0 sampai ±4 detik** (plus waktu internet). Normal, bukan rusak.
-- ESP32 ada **di balik router** sekolah. Server di internet **tidak bisa** menghubunginya langsung. Yang bisa: alat yang **menghubungi** server.
-- Banyak smart device sungguhan memakai pola "alat yang bertanya/terhubung ke server" seperti ini.
+- ESP32 melapor **tiap ±4 detik** sambil bertanya "ada perintah untukku?". Perintah dashboard terbawa di balasan **berikutnya**.
+- Jeda tombol → kipas: **0 sampai ±4 detik**. Normal, bukan rusak.
+- Kenapa tidak langsung? ESP32 ada **di balik router** sekolah: server di internet tidak bisa "mengetuk pintunya". Banyak smart device memakai pola ini.
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik: lampu pintar di balik router tidak "didatangi" server; lampunya yang terus terhubung/bertanya ke server. Bandingkan dengan tebakan siswa tadi.
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik: lampu pintar di balik router tidak "didatangi" server; lampunya yang terus terhubung/bertanya ke server. Analogi: siswa yang tiap 4 detik mampir ke meja piket bertanya "ada titipan untukku?". Titipan datang tepat setelah ia pergi → ia baru tahu ±4 detik kemudian. Bandingkan dengan tebakan siswa tadi.
 
 ---
 
@@ -134,6 +135,7 @@ Simpan hasil sebagai `P12_NamaSiswa_C1` (tabel 5 pengukuran)
 | **Otomatis** | **Server**, membandingkan suhu terbaru dengan ambang | Klik **Otomatis**, atur slider |
 - Mode Otomatis: kipas menyala kalau suhu **di atas** ambang, mati kalau di bawah.
 - Klik tombol kipas besar saat Otomatis = **ambil alih** ke Manual.
+- Belum pernah diubah? Mode awal = **Otomatis, ambang 30°C**.
 
 ---
 
@@ -213,7 +215,7 @@ Simpan hasil sebagai `P12_NamaSiswa_C2` (catatan suhu & waktu)
 **TOPIK 3 DARI 3 — CHALLENGE 🔴**
 
 1. Kipas ON dari dashboard, lalu **cabut USB** ESP32. Apa yang terjadi? Colok lagi: berapa detik sampai kipas kembali menyala?
-2. Saat kipas ON, **matikan WiFi/hotspot** 30 detik. Klik OFF di dashboard (HP data seluler): kipas menurut? Nyalakan WiFi lagi, amati.
+2. Jaringan putus: saat kipas ON, **matikan hotspot** yang dipakai alat 30 detik (alat tutor atau hotspot HP sendiri, **bukan WiFi kelas**). Klik OFF di dashboard: kipas menurut? Nyalakan hotspot lagi, amati.
 3. Ubah **satu kata** `RELAY_ACTIVE_LOW true` → `false`, upload. Bandingkan dashboard vs kipas, ukur pin IN. **Kembalikan ke `true`**, upload ulang.
 4. Tulis tabel hasil + 1 kalimat: kapan alat kita **aman**, kapan **tidak**?
 

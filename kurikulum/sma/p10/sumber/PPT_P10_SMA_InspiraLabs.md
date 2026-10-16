@@ -54,8 +54,11 @@ Penasaran jawabannya? Yuk kita bongkar.
 ### Dari Rakitan Lepas ke Rakitan Utuh
 - P9: DHT22 dan relay dirakit **terpisah**, relay dinyalakan dengan **jumper tangan** (IN → GND).
 - Hari ini: semua komponen dirakit jadi **satu alat utuh**, lalu diuji dengan **2 program tes jadi**.
-- Program tes = **alat ukur**, bukan tugas coding. Kalian cukup **buka file → Upload → amati**.
-- Rakitan hari ini = rakitan **final** proyek akhir. Rawat baik-baik, jangan dibongkar setelah kelas.
+- Program tes = **alat ukur**, seperti *factory test* di pabrik sebelum produk dikirim. Cukup **buka file → Upload → amati**.
+- Berdua: **Perakit** & **Penguji**, tukar di Topik 2. Sendiri: baca checklist keras-keras.
+- Rakitan ini = rakitan **final** proyek akhir. Jangan dibongkar setelah kelas.
+
+> 🗣️ SPEAKER NOTES: Perakit memegang kabel. Penguji membaca tabel Peta Rakitan, mencentang, memegang multimeter & Serial Monitor. Peserta individu: minta tetangga atau tutor ikut mengecek sebelum colok USB.
 
 ---
 
@@ -88,20 +91,20 @@ Koneksi:
 Sorot: D4 = DHT_PIN 4 dan D18 = RELAY_PIN 18 ; label "kipas di NO = fail-safe"
 ```
 
-> 🗣️ SPEAKER NOTES: DHT22 di 3V3 karena logika ESP32 3,3V. Relay & kipas di VIN 5V. Kipas di NO supaya kalau ESP32 mati, kipas ikut mati (fail-safe, P9).
+> 🗣️ SPEAKER NOTES: Kenapa DHT22 di 3V3: modul DHT22 punya pull-up ke kaki "+", jadi sinyal datanya setinggi tegangan daya. GPIO ESP32 hanya tahan 3,3V. Kenapa relay di VIN 5V: kumparan relay butuh 5V. Kipas di NO supaya kalau ESP32 mati, kipas ikut mati (fail-safe, P9). Kalau diagram di slide ini tidak akurat, ganti dengan screenshot simulasi Wokwi P10_PetaRakitan (LED biru = pengganti kipas).
 
 ---
 
 ### Urutan Merakit yang Aman
 1. **Cabut USB.** Merakit & memindah kabel selalu dalam keadaan **mati**.
-2. Pasang ESP32 di breadboard, sambungkan **VIN → jalur +** dan **GND → jalur −**.
-3. Rakit **DHT22** (3 kabel).
-4. Rakit **sisi kontrol relay**: VCC, GND, IN.
-5. Rakit **sisi beban relay**: jalur + → COM, NO → kipas +, kipas − → jalur −. Kencangkan sekrup, tarik pelan: tidak boleh lepas.
-6. **Cek ulang** dengan tabel Peta Rakitan, centang satu per satu bersama teman.
-7. Baru colok USB. Ada bau/panas? **Cabut segera.**
+2. Pasang ESP32 di breadboard: **VIN → jalur +**, **GND → jalur −**.
+3. **Sisi kontrol relay**: VCC, GND, IN.
+4. **Sisi beban**: jalur + → COM, NO → kipas +, kipas − → jalur −. Sekrup kencang, tarik pelan: tidak lepas.
+5. Penguji **mencentang** tabel Peta Rakitan satu per satu.
+6. Colok USB. Bau/panas? **Cabut segera.**
+- DHT22 menyusul di Topik 2, dengan aturan yang sama.
 
-> 🗣️ SPEAKER NOTES: Keselamatan: HANYA kipas DC 5V. Tidak ada kabel PLN/stopkontak di meja praktik. Jangan sambungkan kipas langsung ke pin GPIO (arus kipas jauh di atas ±12 mA yang aman untuk GPIO).
+> 🗣️ SPEAKER NOTES: Keselamatan: HANYA kipas DC 5V. Tidak ada kabel PLN/stopkontak di meja praktik. Jangan sambungkan kipas langsung ke pin GPIO (arus kipas jauh di atas ±12 mA yang aman untuk GPIO). Jaga jari & rambut dari baling-baling.
 
 ---
 
@@ -112,6 +115,7 @@ Sorot: D4 = DHT_PIN 4 dan D18 = RELAY_PIN 18 ; label "kipas di NO = fail-safe"
 4. Klik **Upload (→)**, lalu **Serial Monitor (🔌)**. Baud rate **115200**.
 - `Connecting.....` lama? Tahan tombol **BOOT** sampai upload mulai.
 - Port tidak terdeteksi? Kemungkinan kabel USB **khusus charger**. Ganti kabel.
+- Cukup **1 project** untuk semua file hari ini: ganti isi `main.cpp`, Upload lagi.
 
 ---
 
@@ -154,18 +158,19 @@ File live coding: `P10_1_TesRelay.cpp` (ada di linktr.ee/InspiraLabs_SMA)
 |---|---|---|---|
 | `Relay AKTIF` | ±0 V (LOW) | Menyala | Berputar |
 | `Relay MATI` | ±3,3 V (HIGH) | Mati | Berhenti |
-- Ini **bukti fisik** eksperimen P9: modul kita aktif saat IN = **LOW**.
-- Firmware proyek akhir memakai aturan yang sama, jadi kalian **tidak perlu mengubah apa pun**.
+- **Bukti fisik** eksperimen P9: modul aktif saat IN = **LOW**.
+- **Kenapa?** Di dalam modul, arus mengalir dari VCC **keluar lewat pin IN**. IN = LOW membuka "jalan keluar" arus → relay menarik. IN = HIGH menutupnya.
+- Firmware proyek akhir memakai aturan yang sama.
 
-> 🗣️ SPEAKER NOTES: Demo dengan multimeter di proyektor/kamera: probe hitam ke GND, probe merah ke pin IN relay. Angka melompat 0 V ↔ 3,3 V mengikuti bunyi klik.
+> 🗣️ SPEAKER NOTES: Demo dengan multimeter di proyektor/kamera: probe hitam ke GND, probe merah ke pin IN relay. Angka melompat 0 V ↔ 3,3 V mengikuti bunyi klik. Analogi: pin IN seperti keran di ujung bawah selang; dibuka ke bawah (LOW) → arus mengalir → relay bekerja. Yang penasaran: di jalur itu ada LED optocoupler/transistor modul. Cukup sampai situ.
 
 ---
 
 ### Forum Diskusi Live Coding
 
-**Kenapa kita harus mencabut USB dulu setiap kali memindah kabel?**
+**Kenapa kita harus mencabut USB dulu setiap kali memindah kabel? Apa yang terjadi kalau ujung kabel VIN tidak sengaja menyentuh jalur GND?**
 
-> 🗣️ SPEAKER NOTES: Topik 1 — Rakit & Tes Relay. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+> 🗣️ SPEAKER NOTES: Topik 1 — Rakit & Tes Relay. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Arahkan ke istilah korsleting (short circuit): arus besar langsung dari VIN ke GND, bisa merusak ESP32 atau port USB laptop.
 
 ---
 
@@ -246,6 +251,7 @@ File live coding: `P10_2_TesDHT22.cpp` (ada di linktr.ee/InspiraLabs_SMA)
 2. Ubah **satu angka**: `#define AMBANG` = suhu ruangan + 1 (misal `29.5`). Upload lagi.
 3. **Genggam** sensor DHT22 sampai kipas menyala sendiri. Lepas, tunggu sampai kipas mati sendiri.
 4. Catat: berapa detik sampai kipas menyala? Berapa detik sampai mati lagi?
+5. Jawab: kenapa kipas baru mati setelah suhu turun **0,5°C di bawah** AMBANG?
 
 Download `C2_P10_Medium_TermostatTangan.cpp` dari linktr.ee/InspiraLabs_SMA
 Simpan hasil sebagai `P10_NamaSiswa_C2.cpp`
@@ -286,12 +292,14 @@ Simpan hasil sebagai `P10_NamaSiswa_C2.cpp`
 
 **TOPIK 3 DARI 3 — CHALLENGE 🔴**
 
-Tutor menukar **2 kabel** di rakitan kalian tanpa memberi tahu.
+Kelompok lain (atau tutor) menukar **2 kabel** di rakitan kalian memakai **Kartu Sabotase**, tanpa memberi tahu.
 1. Upload `P10_1_TesRelay.cpp` dan `P10_2_TesDHT22.cpp`, catat **gejalanya**.
 2. Pakai tabel **Troubleshooting** dan **multimeter** untuk menemukan kedua kabel yang salah, **tanpa** membongkar semua kabel.
 3. Tulis laporan 3 baris per kabel: **gejala → pengukuran → perbaikan**.
 
 Simpan hasil sebagai `P10_NamaSiswa_C3` (foto laporan)
+
+> 🗣️ SPEAKER NOTES: Sabotase hanya dari kartu, USB dicabut saat menukar. Kabel daya (3V3, VIN, GND) tidak boleh disilangkan. Pemilik rakitan menghadap belakang selama sabotase.
 
 ---
 

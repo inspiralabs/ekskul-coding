@@ -49,9 +49,9 @@ Sumber: SMP — Pertemuan 13: Rapikan Alat & Showcase Proyek Akhir
 ---
 
 **5. Folder website yang diserahkan ke tutor sudah BENAR jika…**
-- A. Di-zip dengan nama Device ID (mis. `smp-07.zip`), ada `index.html`, ukuran ≤ 5 MB, tanpa folder `firmware/.pio`
+- A. Zip bernama `smp-07.zip`, berisi `index.html`, ukurannya tidak lebih dari 5 MB
 - B. Halaman utama bernama `rumah.html` dan foto ada di Downloads
-- C. Berisi folder `node_modules` hasil `npm install`
+- C. Ukurannya 300 MB karena folder `firmware/.pio` ikut
 - D. `api.js` sudah diganti dengan Device ID kelompok lain
 
 **Jawaban: A**

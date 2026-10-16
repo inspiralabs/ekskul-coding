@@ -18,11 +18,11 @@ Sumber: SMA — Pertemuan 10: Merakit Smart Room Monitor: DHT22, Relay & Kipas
 
 ---
 
-**2. Kaki "+" modul DHT22 di rakitan kita disambungkan ke…**
-- A. 3V3
-- B. GPIO 18
-- C. Terminal NO relay
-- D. GPIO 34
+**2. Kenapa kaki "+" modul DHT22 disambungkan ke 3V3, bukan ke VIN (5V)?**
+- A. Supaya sinyal data sensor juga 3,3V, sesuai batas tegangan GPIO ESP32
+- B. Karena pin 3V3 memberi arus paling besar
+- C. Supaya relay ikut aktif
+- D. Karena VIN hanya dipakai untuk WiFi
 
 **Jawaban: A**
 

@@ -21,15 +21,15 @@ const POST_TEST = {
   "judul": "POST TEST - Pertemuan 13 - SMA",
   "soal": [
     {
-      "q": "1. Supaya foto tampil di kartu Profil Kelompok, file foto harus bernama…",
+      "q": "1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya Foto Kelompok.JPG. Penyebab paling mungkin adalah…",
       "kode": "",
       "opsi": [
-        "Foto Kelompok.JPG",
-        "foto-kelompok.png",
-        "foto-kelompok.jpg",
-        "IMG_2031.jpeg"
+        "Fotonya terlalu kecil",
+        "Nama file tidak persis foto-kelompok.jpg yang dipanggil index.html",
+        "api.js belum diubah",
+        "ESP32 belum terhubung WiFi"
       ],
-      "kunci": 2
+      "kunci": 1
     },
     {
       "q": "2. File di folder kelompok yang TIDAK boleh diubah sebelum diserahkan ke tutor adalah…",

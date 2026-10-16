@@ -11,9 +11,9 @@
   "connections": [
     [ "relay1:VCC", "esp:VIN", "red", [] ],
     [ "relay1:GND", "esp:GND.2", "black", [] ],
-    [ "relay1:COM", "esp:VIN", "red", [] ],
-    [ "relay1:NO", "r1:1", "blue", [] ],
-    [ "r1:2", "beban:A", "blue", [] ],
+    [ "relay1:COM", "esp:VIN", "orange", [] ],
+    [ "relay1:NO", "r1:1", "orange", [] ],
+    [ "r1:2", "beban:A", "orange", [] ],
     [ "beban:C", "esp:GND.1", "black", [] ]
   ],
   "dependencies": {}

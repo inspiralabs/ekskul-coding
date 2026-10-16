@@ -12,7 +12,7 @@
 // File ini DIBUAT OTOMATIS oleh tools/build_bahan_ajar.py -- jangan edit isinya di sini.
 // ============================================================
 
-const FOLDER_PERTEMUAN = "TEMPEL_LINK_FOLDER_P10_DI_SINI";  // link atau ID folder Drive P10
+const FOLDER_PERTEMUAN = "https://drive.google.com/drive/folders/1pOjrg_pXWrebh4WlrZvBKlOHLp0ZSAbp";  // link atau ID folder Drive P10
 const JENJANG = 'SMA';
 
 const KODE = {
@@ -39,13 +39,13 @@ const POST_TEST = {
       "kunci": 1
     },
     {
-      "q": "2. Kaki \"+\" modul DHT22 di rakitan kita disambungkan ke…",
+      "q": "2. Kenapa kaki \"+\" modul DHT22 disambungkan ke 3V3, bukan ke VIN (5V)?",
       "kode": "",
       "opsi": [
-        "3V3",
-        "GPIO 18",
-        "Terminal NO relay",
-        "GPIO 34"
+        "Supaya sinyal data sensor juga 3,3V, sesuai batas tegangan GPIO ESP32",
+        "Karena pin 3V3 memberi arus paling besar",
+        "Supaya relay ikut aktif",
+        "Karena VIN hanya dipakai untuk WiFi"
       ],
       "kunci": 0
     },

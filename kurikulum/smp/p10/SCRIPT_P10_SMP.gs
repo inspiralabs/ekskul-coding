@@ -12,7 +12,7 @@
 // File ini DIBUAT OTOMATIS oleh tools/build_bahan_ajar.py -- jangan edit isinya di sini.
 // ============================================================
 
-const FOLDER_PERTEMUAN = "TEMPEL_LINK_FOLDER_P10_DI_SINI";  // link atau ID folder Drive P10
+const FOLDER_PERTEMUAN = "https://drive.google.com/drive/folders/1pOjrg_pXWrebh4WlrZvBKlOHLp0ZSAbp";  // link atau ID folder Drive P10
 const JENJANG = 'SMP';
 
 const KODE = {
@@ -70,7 +70,7 @@ const POST_TEST = {
       "kunci": 2
     },
     {
-      "q": "5. Program jadi menulis Gagal baca sensor! Cek kabel. terus-menerus. Langkah pertama yang tepat adalah…",
+      "q": "5. Serial Monitor menulis Gagal baca sensor! Cek kabel. terus-menerus. Langkah pertama yang tepat adalah…",
       "kode": "",
       "opsi": [
         "Menulis ulang programnya",

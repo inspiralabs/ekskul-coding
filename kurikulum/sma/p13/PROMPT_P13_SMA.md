@@ -300,7 +300,7 @@ Serahkan folder kelompok ke tutor (mis. `sma-04.zip`)
 4. **1 masalah terberat** dan cara menemukannya (Serial Monitor? multimeter?).
 5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
 
-> 🗣️ SPEAKER NOTES: ±2–3 menit per kelompok/peserta. Nilai dengan rubrik showcase di Materi Ajar (Khusus Tutor). Ingatkan: jangan tampilkan PIN di layar.
+> 🗣️ SPEAKER NOTES: ±2,5 menit per kelompok/peserta, pakai timer. Sebelum tampil, minta penampil mengatur ambang = suhu ruangan + 1°C supaya demo genggam cepat terlihat. Berdua: keduanya wajib bicara. Nilai dengan rubrik showcase di Materi Ajar (Khusus Tutor). Ingatkan: jangan tampilkan PIN di layar.
 
 ---
 
@@ -384,6 +384,8 @@ STRUKTUR DOKUMEN:
 
 ## Persiapan tutor sebelum kelas
 
+Detail lengkap: `kurikulum/sma/p13/Panduan_Pengajar_P13_SMA.md`.
+
 1. Siapkan alat tutor yang berjalan sebagai demo & cadangan.
 2. Siapkan tempat pengumpulan folder (flashdisk/Drive), daftar `sma-01`…`sma-06`, dan PIN kelompok (`docs/HANDOUT_SISWA.md`).
 3. Setelah kelas: cek & deploy tiap folder dengan `py tools/kelompok.py deploy <id> <zip|folder>` (pakai `--dry-run` dulu).
@@ -393,17 +395,19 @@ STRUKTUR DOKUMEN:
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–5 | Pembuka | Foto rakitan P10 vs alat jadi tutor: "mana yang siap dipamerkan?" |
-| 5–10 | Pembuka materi | Cover + pertanyaan pemantik |
-| 10–14 | Materi | Prinsip merapikan rakitan + posisi sensor |
-| 14–24 | 🟢 Challenge Easy | Rakitan Rapi |
-| 24–28 | Materi | Kustom dashboard: profil, warna, foto |
-| 28–36 | 🟡 Challenge Medium | Dashboard Kelompok |
-| 36–40 | Materi | Aturan serah terima folder + checklist demo |
-| 40–44 | 🔴 Challenge Hard | Siap Tayang |
-| 44–58 | Showcase | ±2–3 menit per kelompok/peserta |
-| 58–60 | Refleksi | Refleksi semester |
-| 60–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+| 0–3 | Pembuka | Foto rakitan P10 vs alat jadi tutor: "mana yang siap dipamerkan?" |
+| 3–7 | Pembuka materi | Cover + pertanyaan pemantik |
+| 7–11 | Materi | Prinsip merapikan rakitan + posisi sensor, forum |
+| 11–22 | 🟢 Challenge Easy | Rakitan Rapi |
+| 22–25 | Materi | Kustom dashboard: profil, warna, foto, forum |
+| 25–33 | 🟡 Challenge Medium | Dashboard Kelompok |
+| 33–36 | Materi | Aturan serah terima folder + checklist demo, forum |
+| 36–42 | 🔴 Challenge Hard | Siap Tayang |
+| 42–58 | Showcase | 6 penampil × ±2,5 menit (pakai timer) |
+| 58–61 | Refleksi | Refleksi semester |
+| 61–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+
+**Peran.** Berdua: satu **merapikan rakitan**, satu **mengkustom dashboard** (Easy & Medium bisa paralel), lalu sama-sama menyiapkan showcase; keduanya wajib bicara saat showcase. Sendiri: kerjakan Easy dulu, Medium boleh selesai di rumah sebelum folder dikirim (batas waktu dari tutor).
 
 Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Dari Prototipe ke Alat Siap Pamer → Prinsip Merapikan Rakitan → Posisi Sensor & Casing → 💬 Forum Diskusi → 🟢 Easy → Kustom Dashboard Kelompok → Foto Kelompok & Bonus → 💬 Forum Diskusi → 🟡 Medium → Aturan Serah Terima Folder → Website Kelompok Tayang Online → Checklist Sebelum Demo Alat IoT → 💬 Forum Diskusi → 🔴 Hard → Format Showcase → Refleksi Semester → Post-test (Linktree) → Penutup.
 
@@ -487,6 +491,8 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 3. **Bedah rakitan**: tunjukkan jalur kabel & alasan memilih **D4** dan **D18**, kenapa kipas di **NO**, apa itu **active-LOW**.
 4. **1 masalah terberat** dan cara kalian menemukannya (Serial Monitor? multimeter? tabel troubleshooting?).
 5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
+
+> Catatan tutor: ±2,5 menit per penampil, pakai timer. Sebelum tampil, ambang diatur = suhu ruangan + 1°C supaya demo genggam cepat terlihat. Berdua: keduanya wajib bicara.
 
 ### Slide 10 — Refleksi Semester ✨
 - Dari HTML statis → dashboard interaktif → **alat IoT yang kalian rakit sendiri**, tayang online dan bisa dikontrol dua arah.
@@ -623,8 +629,8 @@ Save sebelum lomba / sidang / pameran berikutnya 💾
 
 ## Post-Test (5 soal, pilihan ganda)
 
-**1. Supaya foto tampil di kartu Profil Kelompok, file foto harus bernama…**
-A. `Foto Kelompok.JPG` B. `foto-kelompok.png` C. `foto-kelompok.jpg` D. `IMG_2031.jpeg`
+**1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
+A. Fotonya terlalu kecil B. Nama file tidak persis `foto-kelompok.jpg` yang dipanggil `index.html` C. `api.js` belum diubah D. ESP32 belum terhubung WiFi
 
 **2. File di folder kelompok yang TIDAK boleh diubah sebelum diserahkan ke tutor adalah…**
 A. `api.js` B. `style.css` C. `foto-kelompok.jpg` D. Teks nama anggota di `index.html`
@@ -662,10 +668,10 @@ A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN k
 | Kerapian & keselamatan rakitan | Kabel semrawut, terminal longgar | Kabel rapi & berlabel, sensor di posisi tepat, hanya beban DC 5V |
 | Pemahaman | Tidak bisa menjelaskan rakitan | Menjelaskan pin D4/D18, kipas di NO, active-LOW, dan alur data/perintah (jeda ±4 detik) |
 | Troubleshooting | Tidak bisa menceritakan masalah | Menceritakan masalah, cara menemukannya (Serial/multimeter), dan solusinya |
-| Presentasi & kerja sama | 1 orang bicara, tanpa demo | Semua anggota berperan, dimulai dari masalah, demo lancar |
+| Presentasi & kerja sama | 1 orang bicara, tanpa demo | Semua anggota berperan (peserta individu: dinilai dari kejelasan & demo), dimulai dari masalah, demo lancar |
 
 ### Kunci Post-Test
-1. C 2. A 3. B 4. B 5. C
+1. B 2. A 3. B 4. B 5. C
 
 ### Pembahasan singkat
 - No. 1: `index.html` memanggil persis `foto-kelompok.jpg`; nama file di server peka huruf besar-kecil.
