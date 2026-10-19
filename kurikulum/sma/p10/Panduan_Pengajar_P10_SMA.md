@@ -4,13 +4,13 @@ Sabtu, 17 Oktober 2026 · 70 menit · 6 peserta: **sma-01, sma-02, sma-03 indivi
 Bahan: slide P10, `sumber/Materi_Ajar_P10_SMA_InspiraLabs.md` (kunci di bagian KHUSUS TUTOR), folder Kode di Drive, simulasi `wokwi/P10_PetaRakitan/`.
 
 ## Tujuan (yang bisa dilihat di akhir kelas)
-1. Setiap kelompok punya **satu rakitan utuh** (DHT22 di D4, relay IN di D18, kipas di NO) yang lolos Tes 1 (relay klik tiap 2 detik, kipas ikut) dan Tes 2 (suhu & kelembapan tampil di Serial Monitor).
+1. Setiap kelompok punya **satu rakitan utuh** (DHT22 di D13, relay IN di D14, kipas di NO) yang lolos Tes 1 (relay klik tiap 2 detik, kipas ikut) dan Tes 2 (suhu & kelembapan tampil di Serial Monitor).
 2. Siswa bisa **menunjukkan dengan multimeter** bahwa pin IN ±0 V saat relay aktif dan ±3,3 V saat mati (active-LOW).
 3. Siswa bisa **menebak bagian yang rusak dari gejala** memakai tabel troubleshooting, sebelum membongkar kabel.
 
 ## Persiapan H-1
-- [ ] Jalankan `SCRIPT_P10_SMA.gs`; cek folder **Kode** di Drive berisi `platformio.ini`, `P10_1_TesRelay.cpp`, `P10_2_TesDHT22.cpp`, `C1_...`, `C2_...`. Link Linktree "Kode P10" & "Post Test Pertemuan 10" aktif.
-- [ ] **Build sekali** di tiap laptop (unduh platform ESP32 + library DHT, 5–10 menit). Ini paling sering memakan waktu kalau dilakukan di kelas.
+- [ ] Jalankan `SCRIPT_P10_SMA.gs`; cek folder **Kode** di Drive berisi folder `P10_1_TesRelay`, `P10_2_TesDHT22`, `C1_...`, `C2_...` (masing-masing 1 file `.ino`) + `BACA_DULU.txt`. Link Linktree "Kode P10" & "Post Test Pertemuan 10" aktif.
+- [ ] Di **tiap laptop**: pasang **Arduino IDE 2**, board **esp32 by Espressif Systems**, library **DHT sensor library** (ikuti 3 Panduan Instalasi di `kurikulum/panduan-instalasi/`, ada versi Windows & Mac). Lalu buka `P10_2_TesDHT22.ino` → **Verify (✓)** sekali (compile pertama 2–5 menit). Unduhan board ESP32 ±2 GB (butuh ruang kosong ±9 GB): **jangan dilakukan di kelas**.
 - [ ] Per kelompok (6 set): ESP32 + kabel USB **data**, breadboard, DHT22 3-pin, relay 1-channel 5V, kipas DC 5V, jumper merah/hitam/kuning/biru/oranye (male-male & male-female), obeng kecil.
 - [ ] **Uji setiap relay** dengan Tes 1: klik tiap 2 detik dan **benar-benar mati** saat IN = HIGH. Relay yang tidak mau mati: ganti modul (lihat Khusus Tutor P9 "relay 5V + logika 3,3V"). Tempel stiker "OK" di modul yang lolos.
 - [ ] Cek polaritas kipas (kabel merah = +). Kipas yang berputar terbalik/lemah → ganti.
@@ -33,7 +33,7 @@ Bahan: slide P10, `sumber/Materi_Ajar_P10_SMA_InspiraLabs.md` (kunci di bagian K
 | 7–12 | 5–8 | Rakitan utuh, Peta Rakitan, Urutan Aman, Cara Upload | Tekankan **kenapa** 3V3 vs 5V dan NO |
 | 12–27 | 7–9 | Rakit daya + relay + kipas, upload Tes 1 | Keliling. Jangan colok USB sebelum Penguji selesai mencentang |
 | 27–31 | 10–11 | Active-LOW + multimeter (demo), forum Topik 1 | Demo di kamera: probe hitam GND, merah IN |
-| 31–35 | 12 | Easy: Pindah Pin Relay | Pastikan semua **kembali ke D18** |
+| 31–35 | 12 | Easy: Pindah Pin Relay | Pastikan semua **kembali ke D14** |
 | 35–44 | 13–15 | Rakit DHT22, Tes 2, Membaca Serial, forum Topik 2 | Tukar peran Perakit ↔ Penguji |
 | 44–50 | 16 | Medium: Termostat Tangan | Sambil siswa mengerjakan, buka halaman Kartu Sabotase |
 | 50–53 | 17–19 | Troubleshooting, 3 pengukuran, forum Topik 3 | Hubungkan ke pertanyaan pemantik |
@@ -74,7 +74,7 @@ Waktu molor? Urutan yang boleh dipangkas: (1) Hard jadi 1 kartu saja, (2) Easy d
 | Relay klik, kipas diam | "Relay klik membuktikan sisi mana yang beres? Tinggal sisi mana? Ukur tegangan di kipas +." |
 | Kipas terbalik (berputar saat MATI) | "Saat relay tidak aktif, COM tersambung ke terminal mana? Kabel kipasmu di mana?" |
 | `Gagal baca DHT22` | "Pesan errornya menyebut 3 hal. Centang satu per satu." |
-| Lupa mengembalikan D19 → D18 | "Peta Rakitan bilang IN di pin berapa? Firmware P11 akan memakai pin berapa?" |
+| Lupa mengembalikan D26 → D14 | "Peta Rakitan bilang IN di pin berapa? Firmware P11 akan memakai pin berapa?" |
 | Huruf acak di Serial | "Angka di pojok Serial Monitor berapa? Program kita bicara di 115200." |
 
 Kalau setelah **2 pertanyaan** kelompok masih buntu, tunjukkan **lokasi**-nya ("cek baris ke-3 tabel"), bukan perbaikannya.
@@ -82,12 +82,14 @@ Kalau setelah **2 pertanyaan** kelompok masih buntu, tunjukkan **lokasi**-nya ("
 ## Troubleshooting cepat (tutor)
 | Gejala | Penyebab | Tindakan |
 |---|---|---|
-| Port tidak muncul | Kabel USB khusus charger / driver CH340/CP210x belum ada | Ganti kabel data; pasang driver |
+| Port tidak muncul | Kabel USB khusus charger / driver CH340/CP210x belum ada | Ganti kabel data; pasang driver (Panduan Instalasi Board ESP32) |
 | `Connecting.....` lama | ESP32 tidak masuk mode upload | Tahan BOOT saat "Connecting" |
-| Build sangat lama | Platform/library belum diunduh | Pakai laptop yang sudah build; hotspot cadangan |
+| `DHT.h: No such file or directory` | Library DHT belum dipasang | Library Manager → `DHT sensor library` → INSTALL ALL |
+| Compile pertama lama (2–5 menit) | Wajar untuk ESP32 di Arduino IDE | Tunggu; compile berikutnya cepat. Board ESP32 belum terpasang → pakai laptop cadangan |
+| Upload gagal `Failed to connect` / `Wrong boot mode` | ESP32 tidak masuk mode upload, atau kabel nyasar ke D12 | Tahan BOOT saat `Connecting...`; cek D12 kosong; **Tools → Upload Speed → 115200** |
 | Relay tidak mau mati | Modul 5V vs logika 3,3V | Tukar dengan modul ber-stiker "OK". Darurat (opsi P9: VCC relay ke 3V3) hanya dilakukan tutor dan dicatat |
 | ESP32 restart saat kipas mulai | Brownout USB | Port USB lain / power bank / kabel pendek |
-| Kipas berdetak sesaat saat ESP32 dicolok | Relay di strapping pin | Kembalikan ke D18 |
+| Kipas berdetak berulang saat ESP32 dicolok | Relay di strapping pin | Kembalikan ke D14 (klik **sekali** saat boot masih wajar) |
 | Rakitan tetap gagal > 5 menit | Komponen rusak | Uji dengan **board penguji** cadangan; masih gagal → kelompok pakai **Wokwi** (lihat di bawah) |
 
 **Cadangan kit rusak:** kelompok membuka link Wokwi, mencocokkan kabel di layar dengan tabel Peta Rakitan, lalu mengerjakan Medium dengan klik DHT22 → geser suhu di atas 30°C → relay klik, LED biru (= kipas) menyala. Catat kit yang rusak, ganti sebelum P11.
@@ -126,5 +128,5 @@ Aturan selalu tampil di halaman: cabut USB, jangan pindahkan kabel 3V3/VIN/GND, 
 ## Penutup & PR
 - Foto rakitan yang lolos 2 tes (dipakai lagi di P13 sebagai foto "sebelum").
 - **Rakitan jangan dibongkar**; simpan dalam kotak, kabel tetap tertancap.
-- Pengumuman P11: firmware proyek + data tampil di dashboard. Minta peserta membawa laptop yang sama (sudah ada PlatformIO).
-- Setelah kelas (tutor): catat kit rusak, cek semua relay kembali di D18, jalankan `py tools/kelompok.py paket` untuk zip P11.
+- Pengumuman P11: firmware proyek + data tampil di dashboard. Minta peserta membawa laptop yang sama (sudah ada Arduino IDE + board ESP32 + library DHT).
+- Setelah kelas (tutor): catat kit rusak, cek semua relay kembali di D14 dan DHT22 di D13, jalankan `py tools/kelompok.py paket` untuk zip P11.

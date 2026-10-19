@@ -145,9 +145,9 @@ Website kalian akan **online** di **`smp-XX.inspiralabs.id`**!
 2. **Semua** file ada di dalam folder `smp-XX`.
 3. Foto bernama **`foto-kelompok.jpg`**, sudah dikecilkan.
 4. `api.js` **tidak** diubah.
-5. Hapus folder **`firmware/.pio`**. Total maksimal **5 MB**.
+5. Total ukuran folder maksimal **5 MB** (tanpa video, foto sudah dikecilkan).
 
-> Catatan tutor: Contoh alamat: `https://smp-07.inspiralabs.id`. Cek ukuran: klik kanan folder → Properties → Size. `firmware/.pio` dibuat otomatis oleh PlatformIO, bisa ratusan MB, aman dihapus. Zip diserahkan di **P13**. Untuk siswa mahir: tidak boleh pakai `npm`/instalasi; butuh library → link CDN.
+> Catatan tutor: Contoh alamat: `https://smp-07.inspiralabs.id`. Cek ukuran: klik kanan folder → Properties → Size. Penyebab folder besar biasanya foto/video asli dari HP. Zip diserahkan di **P13**. Untuk siswa mahir: tidak boleh pakai `npm`/instalasi; butuh library → link CDN.
 
 ### Slide 11 — Peta Proyek Akhir 🗺️
 ```
@@ -305,10 +305,10 @@ smp-99/
 ├── style.css
 ├── api.js                    (diubah: MY_DEVICE_ID = "smp-01")   ← pelanggaran 2: api.js tidak boleh diubah
 ├── Foto Kelompok.JPG         (8,7 MB)   ← pelanggaran 3: nama salah; pelanggaran 4: terlalu besar
-├── firmware/.pio/            (310 MB)   ← pelanggaran 5: folder hasil Build ikut di-zip
+├── video-rakitan.mp4         (310 MB)   ← pelanggaran 5: video besar ikut di-zip (folder > 5 MB)
 └── (di home.html) <img src="C:\Users\Budi\Downloads\logo.png">   ← pelanggaran 6: file di luar folder
 ```
-Minimal 4 benar = lulus. Perbaikan: rename ke `index.html`, ambil `api.js` asli, rename jadi `foto-kelompok.jpg` & kecilkan, hapus `firmware/.pio`, pindahkan `logo.png` ke dalam folder dan tulis `src="logo.png"`.
+Minimal 4 benar = lulus. Perbaikan: rename ke `index.html`, ambil `api.js` asli, rename jadi `foto-kelompok.jpg` & kecilkan, hapus video, pindahkan `logo.png` ke dalam folder dan tulis `src="logo.png"`.
 
 ### Kunci Post-Test
 1. B 2. A 3. C 4. D 5. A

@@ -5,14 +5,14 @@ Folder ini **tidak di-deploy** (lihat `.vercelignore`). Cara pakai: `prompt/RUNB
 
 ```
 kurikulum/
-├── platformio-starter/          platformio.ini + src/main.cpp contoh (sumber platformio.ini untuk folder Kode)
+├── panduan-instalasi/           Arduino IDE, board ESP32/ESP8266, library (Windows & Mac, .docx + .pdf)
 ├── sma/
 │   ├── p06..p08/                web (HTML/CSS/JS), file .html live coding
 │   └── p09..p13/
 │       ├── PROMPT_Pn_SMA.md     ← tempel ke Gemini: Google Slides + Google Docs   (DIBUAT OTOMATIS)
 │       ├── SCRIPT_Pn_SMA.gs     ← jalankan di Apps Script: folder, kode, post-test (DIBUAT OTOMATIS)
 │       ├── sumber/              bahan baku yang diedit: Materi_Ajar, PPT (isi slide), POST_TEST
-│       └── kode/                Pn_k_*.cpp/.html (live coding), C1..C3_*.cpp/.html (challenge)
+│       └── kode/                Pn_k_*/Pn_k_*.ino atau .html (live coding), C1..C3_*/…ino atau .html (challenge)
 └── smp/p09..p13/                pola sama: PROMPT_Pn_SMP.md, SCRIPT_Pn_SMP.gs, sumber/, kode/
 ```
 

@@ -192,7 +192,7 @@ Lalu **demo**: tiup sensor, semua lihat angkanya naik!
 ### Serahkan Folder Website
 - [ ] Data sensor & foto tampil di `index.html`
 - [ ] `api.js` tidak diubah
-- [ ] Folder `firmware/.pio` dihapus, total ≤ **5 MB**
+- [ ] Total ukuran folder ≤ **5 MB** (foto sudah dikecilkan, tanpa video)
 - [ ] Zip bernama Device ID: **`smp-07.zip`**
 
 Setelah tutor upload: **`smp-07.inspiralabs.id`**. Bisa dibuka dari HP siapa saja!

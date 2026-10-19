@@ -11,16 +11,14 @@ mengkustom tampilan dashboard.
 |---|---|---|
 | `index.html` | ✅ Ya (profil, teks, bonus) | Tampilan dashboard — HTML, CSS, dan JS ada di sini |
 | `api.js` | ❌ Jangan diubah | "Kabel" penghubung ke backend, sudah disiapkan tutor |
-| `firmware/sma_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 |
-| `firmware/platformio.ini` | ❌ Jangan diubah (kecuali `board`) | Pengaturan PlatformIO |
+| `firmware/sma_room_monitor/sma_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 (buka di Arduino IDE) |
 
 ## Cara mulai
 
-1. Rakit rangkaian: DHT22 data → GPIO 4, relay IN → GPIO 18 (lihat materi pertemuan).
-2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder `firmware`.
-   Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (Device ID sudah
+1. Rakit rangkaian: DHT22 data → GPIO 13, relay IN → GPIO 14 (lihat materi pertemuan).
+2. Buka `firmware/sma_room_monitor/sma_room_monitor.ino` di **Arduino IDE** (double-click). Isi `WIFI_SSID` dan `WIFI_PASSWORD` (Device ID sudah
    diisi tutor). Ubah `DHT_PIN`/`RELAY_PIN` hanya kalau kabelmu di pin lain.
-3. Klik Upload (→) lalu Serial Monitor (🔌), pastikan berhasil connect WiFi dan
+3. Pilih board **ESP32 Dev Module** + port, klik Upload (→) lalu buka Serial Monitor (115200 baud), pastikan berhasil connect WiFi dan
    mengirim data (kode respons 200).
 4. Buka `index.html` di browser: angka sensor muncul, tombol fan bisa dipakai
    (minta PIN kelompok ke tutor).

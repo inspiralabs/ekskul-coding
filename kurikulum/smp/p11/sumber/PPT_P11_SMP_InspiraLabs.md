@@ -89,7 +89,7 @@ Folder **`smp-XX`** (XX = nomor kalian) sudah disiapkan tutor di laptop.
 ---
 
 ### Zona Hijau & Zona Merah
-Buka `firmware/smp_room_monitor.ino`. Cuma **zona hijau** yang boleh disentuh:
+Buka `firmware/smp_room_monitor/smp_room_monitor.ino`. Cuma **zona hijau** yang boleh disentuh:
 ```cpp
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin sensor ============
 const char* DEVICE_ID     = "smp-07";        // sudah diisi tutor, JANGAN diganti
@@ -105,9 +105,9 @@ const char* WIFI_PASSWORD = "ISI_DI_SINI";   // <- isi password WiFi kelas
 
 ### Praktek Bareng: Upload Firmware Proyek
 1. Cek rakitan: DHT22 + ke 3V3, out ke **D4**, − ke GND.
-2. PIO Home → **Open Project** → folder `smp-XX/firmware`.
+2. Buka folder `smp-XX` → `firmware` → `smp_room_monitor` → **double-click** `smp_room_monitor.ino`.
 3. Ganti `ISI_DI_SINI` dengan nama & password WiFi di papan. **Save** (Ctrl+S).
-4. **Upload** → `SUCCESS` → **Serial Monitor**.
+4. **Upload** → `Done uploading` → **Serial Monitor** (115200).
 
 ```wiring
 Judul: Rakitan standar proyek akhir SMP
@@ -165,7 +165,7 @@ Dokter tidak menebak. Baca **gejala**, lalu cek **satu per satu**: listrik → k
 | `Gagal baca sensor DHT22…` | Kabel DHT22 (out di D4?) |
 | `kode respons: -1` | Internet WiFi-nya |
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Ingatkan kembali tebakan siswa tadi. Gejala lain (urusan tutor): titik-titik tak berhenti juga terjadi kalau WiFi 5 GHz (ESP32 hanya bisa 2.4 GHz) → pindah ke hotspot 2.4 GHz; `kode respons: 401` → zona merah (API_KEY) berubah → extract ulang zip asli, isi WiFi lagi; suhu kadang muncul kadang gagal → kabel goyang/jumper hampir putus; tulisan acak ⸮⸮⸮ → monitor_speed = 115200.
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Ingatkan kembali tebakan siswa tadi. Gejala lain (urusan tutor): titik-titik tak berhenti juga terjadi kalau WiFi 5 GHz (ESP32 hanya bisa 2.4 GHz) → pindah ke hotspot 2.4 GHz; `kode respons: 401` → zona merah (API_KEY) berubah → extract ulang zip asli, isi WiFi lagi; suhu kadang muncul kadang gagal → kabel goyang/jumper hampir putus; tulisan acak ⸮⸮⸮ → pilih 115200 baud di Serial Monitor.
 
 ---
 
@@ -181,13 +181,13 @@ Mode **bunyi** (minta tutor menyetel):
 
 ### Alat Dokter: Program Cadangan
 Program kecil untuk mencari masalah (tinggal upload):
-- `P11_1_BacaDHT22.cpp` → cek **sensor** saja.
-- `P11_2_TesWiFi.cpp` → cek **WiFi** saja.
+- `P11_1_BacaDHT22.ino` → cek **sensor** saja.
+- `P11_2_TesWiFi.ino` → cek **WiFi** saja.
 - Masalah ketemu → **upload lagi firmware proyek**.
 
-File program cadangan: `P11_1_BacaDHT22.cpp`, `P11_2_TesWiFi.cpp` (ada di linktr.ee/InspiraLabs_SMP)
+File program cadangan: folder `P11_1_BacaDHT22`, `P11_2_TesWiFi` (ada di linktr.ee/InspiraLabs_SMP)
 
-> 🗣️ SPEAKER NOTES: P11_2_TesWiFi.cpp juga perlu diisi nama & password WiFi. Cara pakai sama seperti P10: salin ke src/main.cpp di proyek PlatformIO latihan (bukan di folder firmware).
+> 🗣️ SPEAKER NOTES: P11_2_TesWiFi.ino juga perlu diisi nama & password WiFi. Cara pakai sama seperti P10: double-click file .ino-nya lalu Upload. Setelah masalah ketemu, buka lagi smp_room_monitor.ino dan Upload.
 
 ---
 
@@ -195,7 +195,7 @@ File program cadangan: `P11_1_BacaDHT22.cpp`, `P11_2_TesWiFi.cpp` (ada di linktr
 
 **Serial Monitor macet di titik-titik WiFi. Mungkinkah kabel sensor penyebabnya? Bagaimana membuktikannya?**
 
-> 🗣️ SPEAKER NOTES: Topik 2 — Dokter Kabel. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Jawaban: bukan, firmware menyambung WiFi dulu sebelum membaca sensor. Bukti: upload P11_2_TesWiFi.cpp.
+> 🗣️ SPEAKER NOTES: Topik 2 — Dokter Kabel. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Jawaban: bukan, firmware menyambung WiFi dulu sebelum membaca sensor. Bukti: upload P11_2_TesWiFi.ino.
 
 ---
 

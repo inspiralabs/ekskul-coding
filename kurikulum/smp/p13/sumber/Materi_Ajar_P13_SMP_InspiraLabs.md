@@ -6,7 +6,7 @@
 | Durasi | 70 menit |
 | Target silabus | Siswa mampu menyelesaikan & mempresentasikan proyek akhir |
 | Penilaian | Presentasi proyek akhir, kerapian rakitan, dan folder website yang diserahkan (rubrik di Khusus Tutor) |
-| Potongan proyek akhir yang dibedah | Seluruh proyek: alat (ESP32 + DHT22 di D4, firmware `smp_room_monitor.ino`) + website dari folder `smp-XX`. Hari ini alat dimasukkan ke **casing**, dipamerkan, dan folder website **diserahkan** ke tutor untuk online di `https://<device-id>.inspiralabs.id`. |
+| Potongan proyek akhir yang dibedah | Seluruh proyek: alat (ESP32 + DHT22 di D4, firmware `smp_room_monitor/smp_room_monitor.ino`) + website dari folder `smp-XX`. Hari ini alat dimasukkan ke **casing**, dipamerkan, dan folder website **diserahkan** ke tutor untuk online di `https://<device-id>.inspiralabs.id`. |
 
 ## Alat & bahan (per kelompok/individu)
 
@@ -128,7 +128,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Pe
 ### Slide 10 — Serahkan Folder Website 📮
 - [ ] Data sensor & foto tampil di `index.html`
 - [ ] `api.js` tidak diubah
-- [ ] Folder `firmware/.pio` dihapus, total ≤ **5 MB**
+- [ ] Total ukuran folder ≤ **5 MB** (foto sudah dikecilkan, tanpa video)
 - [ ] Zip bernama Device ID: **`smp-07.zip`**
 
 Setelah tutor upload: **`smp-07.inspiralabs.id`**. Bisa dibuka dari HP siapa saja!
@@ -284,7 +284,7 @@ D. Server → DHT22 → ESP32 → Dashboard
 **5. Folder website yang diserahkan ke tutor sudah BENAR jika…**
 A. Zip bernama `smp-07.zip`, berisi `index.html`, ukurannya tidak lebih dari 5 MB
 B. Halaman utama bernama `rumah.html` dan foto ada di Downloads
-C. Ukurannya 300 MB karena folder `firmware/.pio` ikut
+C. Ukurannya 300 MB karena video rakitan ikut di dalamnya
 D. `api.js` sudah diganti dengan Device ID kelompok lain
 
 ---
@@ -316,4 +316,4 @@ Lulus = data tetap masuk selama digoyang/dibawa keliling, tanpa `Gagal baca sens
 ### Pembahasan singkat
 - No. 1: ESP32 menghasilkan panas saat WiFi aktif; sensor yang terlalu dekat membaca suhu lebih tinggi dari suhu ruangan.
 - No. 3: urutan dokter kabel dari P11: baca gejala dulu (Serial Monitor), baru cek kabel.
-- No. 5: aturan serah folder dari P12; `firmware/.pio` bisa ratusan MB dan tidak dibutuhkan website.
+- No. 5: aturan serah folder dari P12; video/foto asli HP bisa ratusan MB dan membuat website lambat.

@@ -137,11 +137,11 @@ Koneksi:
 - ESP32 GND → jalur − breadboard (kabel hitam)
 - jalur + → relay VCC (kabel merah)
 - jalur − → relay GND (kabel hitam)
-- ESP32 D18 → relay IN (kabel biru)
+- ESP32 D14 → relay IN (kabel biru)
 - jalur + → relay COM (kabel oranye)
 - relay NO → kipas mini "+" (kabel oranye)
 - kipas mini "−" → jalur − (kabel hitam)
-Sorot: kabel biru D18 → IN ("LOW = kipas ON") ; terminal NO ("fail-safe")
+Sorot: kabel biru D14 → IN ("LOW = kipas ON") ; terminal NO ("fail-safe")
 ```
 
 > 🗣️ SPEAKER NOTES: Peran berdua: Pengendali (klik dashboard, pegang PIN) & Pengamat (stopwatch, amati relay/kipas, multimeter); tukar tiap topik. Peserta individu: pegang HP sebagai stopwatch di tangan kiri.
@@ -253,7 +253,7 @@ Simpan hasil sebagai `P12_NamaSiswa_C2` (catatan suhu & waktu)
 
 ### Satu Kata untuk Relay Active-HIGH
 ```cpp
-// potongan — firmware/sma_room_monitor.ino
+// potongan — firmware/sma_room_monitor/sma_room_monitor.ino
 // Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
 #define RELAY_ACTIVE_LOW true
 ```
@@ -377,7 +377,7 @@ STRUKTUR DOKUMEN:
 
 ## Alat & bahan (per kelompok)
 
-- Rakitan lengkap (DHT22 di D4, relay di D18, kipas DC 5V di NO) dengan firmware proyek P11 yang sudah `kode respons: 200`
+- Rakitan lengkap (DHT22 di D13, relay di D14, kipas DC 5V di NO) dengan firmware proyek P11 yang sudah `kode respons: 200`
 - Laptop + **folder kelompok** dari zip tutor (mis. `sma-04`) dan HP (opsional, untuk membuka dashboard)
 - **PIN kelompok** 4 digit dari tutor (lihat `docs/HANDOUT_SISWA.md`)
 - Stopwatch HP, multimeter (1 per kelas)
@@ -469,7 +469,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Ko
 
 ### Slide 8 — Satu Kata untuk Relay Active-HIGH 🔁
 ```cpp
-// potongan — firmware/sma_room_monitor.ino
+// potongan — firmware/sma_room_monitor/sma_room_monitor.ino
 // Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
 #define RELAY_ACTIVE_LOW true
 ```

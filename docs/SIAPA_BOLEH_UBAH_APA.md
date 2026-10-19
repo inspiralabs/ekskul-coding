@@ -16,7 +16,7 @@ ekskul-coding/
 ├── sma/                                   <- dashboard SMA (fitur jadi, siswa kustom tampilan)
 │   └── firmware/                         <- firmware SMA (program jadi)
 ├── smp/                                   <- materi web dev SMP (rekan Anda)
-│   └── firmware/                         <- materi IoT SMP (Anda), proyek PlatformIO
+│   └── firmware/                         <- materi IoT SMP (Anda), sketch Arduino IDE
 ├── index.html, leaderboard/, materi/,
 │   tentang/, shared/                      <- website ekskul (deploy Vercel, tetap di root)
 ├── kurikulum/                             <- bahan ajar per jenjang & pertemuan (tidak di-deploy)

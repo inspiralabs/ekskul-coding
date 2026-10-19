@@ -158,19 +158,19 @@ Ganti peran di Topik 2. Kerja sendiri? Pegang semua peran, minta teman sebelah j
 ---
 
 ### 4 Langkah Upload (dipakai sampai P13!)
-1. **Salin** program jadi ke `src/main.cpp`.
-2. **Upload** (ikon panah →) → tunggu `SUCCESS`.
-3. **Serial Monitor** (ikon colokan) = kotak chat dari ESP32.
+1. **Buka** program jadi: double-click file `.ino` → terbuka di **Arduino IDE**.
+2. **Upload** (tombol panah → di kiri atas) → tunggu tulisan `Done uploading`.
+3. **Serial Monitor** (ikon kaca pembesar di kanan atas, pilih **115200 baud**) = kotak chat dari ESP32.
 4. **Lihat alatnya**: sesuai harapan?
 
-> 🗣️ SPEAKER NOTES: Tekankan bahwa 4 langkah ini sama untuk semua pertemuan berikutnya, termasuk firmware proyek akhir. Siswa tidak perlu mengerti isi programnya. Tunjukkan letak ikon Upload (→) dan Serial Monitor (colokan) di status bar bawah VS Code.
+> 🗣️ SPEAKER NOTES: Tekankan bahwa 4 langkah ini sama untuk semua pertemuan berikutnya, termasuk firmware proyek akhir. Siswa tidak perlu mengerti isi programnya. Tunjukkan letak tombol Upload (→) di kiri atas dan ikon Serial Monitor (kaca pembesar) di kanan atas Arduino IDE.
 
 ---
 
 ### Praktek Bareng: Upload Blink
 1. **Cabut USB**. Pindahkan kabel dari **3V3** ke **D2**.
-2. Colok USB. Salin `P10_1_Blink.cpp` ke `src/main.cpp`.
-3. **Upload** → tunggu `SUCCESS`.
+2. Colok USB. Buka `P10_1_Blink.ino`. Di kotak **Select Board** pilih **ESP32 Dev Module** + port ESP32 (cukup sekali).
+3. **Upload** → tunggu `Done uploading`.
 4. **Serial Monitor** → muncul `LED nyala` / `LED mati`.
 5. LED **dan** lampu biru di board berkedip bareng!
 
@@ -185,7 +185,7 @@ Koneksi:
 Sorot: kabel yang dulu di 3V3 sekarang pindah ke D2 ; lampu biru bawaan board juga di GPIO 2
 ```
 
-File program jadi: `P10_1_Blink.cpp` (ada di linktr.ee/InspiraLabs_SMP)
+File program jadi: `P10_1_Blink.ino` (ada di linktr.ee/InspiraLabs_SMP)
 
 > 🗣️ SPEAKER NOTES: Tunggu semua kelompok berkedip, lalu ajak tepuk tangan (quick win pertama). Lampu biru bawaan board juga tersambung ke GPIO 2. Kalau lampu biru berkedip tapi LED breadboard tidak, program sudah benar, masalahnya di rakitan (LED terbalik / dua kaki satu baris / kabel bukan di D2).
 
@@ -197,9 +197,10 @@ File program jadi: `P10_1_Blink.cpp` (ada di linktr.ee/InspiraLabs_SMP)
 |---|---|
 | Port tidak muncul | Ganti ke kabel USB **data** (kabel charger tidak bisa kirim program) |
 | `Failed to connect` | Tahan tombol **BOOT** saat muncul `Connecting....` |
+| Masih gagal terus | **Tools → Upload Speed → 115200**, lalu Upload lagi |
 | Lampu biru kedip, LED diam | Cek rakitan LED |
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Tunjukkan dua kabel USB yang mirip: satu kabel data, satu kabel charger. Ingatkan kembali tebakan siswa tadi. Masalah lain (urusan tutor): driver CP210x/CH340 belum terpasang → pasang driver; "Access denied/port sibuk" → tutup Serial Monitor lalu upload lagi; tulisan acak ⸮⸮⸮ → pastikan monitor_speed = 115200 di platformio.ini.
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Tunjukkan dua kabel USB yang mirip: satu kabel data, satu kabel charger. Ingatkan kembali tebakan siswa tadi. Masalah lain (urusan tutor): driver CP210x/CH340 belum terpasang → pasang driver; "Access denied/port sibuk" → tutup Serial Monitor lalu upload lagi; tulisan acak ⸮⸮⸮ → pilih 115200 baud di Serial Monitor. Upload gagal terus → Tools → Upload Speed → 115200.
 
 ---
 
@@ -230,7 +231,7 @@ File program jadi: `P10_1_Blink.cpp` (ada di linktr.ee/InspiraLabs_SMP)
 3. Lampu biru masih kedip? Tulis kenapa.
 4. **Kembalikan** kabel ke D2 dan angka ke `2`.
 
-Download `P10_1_Blink.cpp` dari linktr.ee/InspiraLabs_SMP
+Download folder `P10_1_Blink` dari linktr.ee/InspiraLabs_SMP
 
 > 🗣️ SPEAKER NOTES: D18 ada di sisi kanan board, di antara D19 dan D5. Pastikan semua kelompok mengembalikan ke D2 dan angka 2 sebelum lanjut.
 
@@ -286,11 +287,11 @@ Sorot: kabel kuning out ke D4 ; jangan tertukar + dan −
 
 ### Praktek Bareng: Cek Rakitan Sensor
 1. Rakit, lalu centang semua checklist.
-2. Colok USB. Upload `P10_2_CekDHT22.cpp` → **Serial Monitor**.
+2. Colok USB. Buka `P10_2_CekDHT22.ino` → **Upload** → **Serial Monitor**.
 3. Muncul `Suhu: 28.40 C` → rakitan **benar**!
 4. **Tiup** pelan → kelembapan naik. **Genggam** 10 detik → suhu naik.
 
-File program jadi: `P10_2_CekDHT22.cpp` (ada di linktr.ee/InspiraLabs_SMP)
+File program jadi: `P10_2_CekDHT22.ino` (ada di linktr.ee/InspiraLabs_SMP)
 
 > 🗣️ SPEAKER NOTES — gejala umum: (1) `Gagal baca sensor! Cek kabel.` terus → kabel out tidak di D4, kabel longgar, atau + / − tertukar. (2) Sensor terasa panas → cabut USB segera, + dan − tertukar. (3) Tidak muncul apa-apa → tekan tombol EN (reset) di board. (4) Multimeter mode DC volt di kaki + dan − sensor harus ±3,3V. Rayakan angka suhu pertama (quick win kedua).
 
@@ -405,13 +406,13 @@ STRUKTUR DOKUMEN:
 - Rangkaian LED dari P9 (LED + resistor **220Ω**). Kabel yang dulu di 3V3 **dipindah ke pin D2**.
 - ESP32 DevKit V1 + kabel USB **data** (ESP32 selalu butuh listrik dari USB: laptop atau power bank)
 - Modul DHT22 (3 kaki: **+**, **out**, **−**) + 3 kabel jumper (merah, kuning, hitam)
-- Laptop dengan VS Code + PlatformIO + folder **Kode** pertemuan ini (Drive): `P10_1_Blink.cpp`, `P10_2_CekDHT22.cpp`, `platformio.ini`
+- Laptop dengan **Arduino IDE 2** + board **ESP32** + library **DHT** sudah terpasang (Panduan Instalasi di `kurikulum/panduan-instalasi/`) + folder **Kode** pertemuan ini (Drive): folder `P10_1_Blink` dan `P10_2_CekDHT22` (masing-masing berisi 1 file `.ino`)
 - 1 multimeter per kelas (tutor)
 
 ## Persiapan tutor sebelum kelas
 
 1. Jalankan `SCRIPT_P10_SMP.gs` supaya folder **Kode** ada di Drive.
-2. Di tiap laptop, buat **1 proyek PlatformIO** (board: ESP32 Dev Module, framework: Arduino), ganti isi `platformio.ini` dengan file dari folder Kode, lalu **Build sekali** (download pertama lama dan library DHT ikut terunduh, jangan sampai makan waktu kelas).
+2. Di tiap laptop pasang **Arduino IDE**, board **ESP32**, dan library **DHT** (ikuti 3 Panduan Instalasi, versi Windows/Mac). Lalu buka `P10_2_CekDHT22.ino` → **Verify (✓)** sekali. Unduhan board ESP32 ±2 GB (butuh ruang kosong ±9 GB) dan compile pertama 2–5 menit, jangan sampai terjadi di kelas.
 3. Cek driver USB (CP210x / CH340). Siapkan 2–3 **kabel USB data cadangan**.
 4. Untuk Challenge Hard, siapkan **1 rakitan DHT22 "rusak"** per kelompok cepat (lihat Kunci). Semua kesalahannya **aman** (tidak ada + / − yang ditukar).
 5. Panduan lengkap (timeline per menit, kalimat kunci, troubleshooting): `kurikulum/smp/p10/Panduan_Pengajar_P10_SMP.md`.
@@ -469,17 +470,17 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Pe
 - Tapi tetap butuh **listrik**: laptop atau power bank.
 
 ### Slide 4 — 4 Langkah Upload (dipakai sampai P13!) 🔁
-1. **Salin** program jadi ke `src/main.cpp`.
-2. **Upload** (ikon panah →) → tunggu `SUCCESS`.
-3. **Serial Monitor** (ikon colokan) = kotak chat dari ESP32.
+1. **Buka** program jadi: double-click file `.ino` → terbuka di **Arduino IDE**.
+2. **Upload** (tombol panah → di kiri atas) → tunggu tulisan `Done uploading`.
+3. **Serial Monitor** (ikon kaca pembesar di kanan atas, pilih **115200 baud**) = kotak chat dari ESP32.
 4. **Lihat alatnya**: sesuai harapan?
 
 > Catatan tutor: Langkah ini sama untuk semua pertemuan berikutnya, termasuk firmware proyek akhir. Siswa tidak perlu mengerti isi programnya.
 
 ### Slide 5 — Praktek Bareng: Upload Blink 💡
 1. **Cabut USB**. Pindahkan kabel dari **3V3** ke **D2**.
-2. Colok USB. Salin `P10_1_Blink.cpp` ke `src/main.cpp`.
-3. **Upload** → tunggu `SUCCESS`.
+2. Colok USB. Buka `P10_1_Blink.ino`. Di kotak **Select Board** pilih **ESP32 Dev Module** + port ESP32 (cukup sekali).
+3. **Upload** → tunggu `Done uploading`.
 4. **Serial Monitor** → muncul `LED nyala` / `LED mati`.
 5. LED **dan** lampu biru di board berkedip bareng!
 
@@ -491,9 +492,10 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Pe
 |---|---|
 | Port tidak muncul | Ganti ke kabel USB **data** (kabel charger tidak bisa kirim program) |
 | `Failed to connect` | Tahan tombol **BOOT** saat muncul `Connecting....` |
+| Masih gagal terus | **Tools → Upload Speed → 115200**, lalu Upload lagi |
 | Lampu biru kedip, LED diam | Cek rakitan LED |
 
-> Catatan tutor: Slide ini menjawab pertanyaan pemantik. Masalah lain yang cukup ditangani tutor: driver CP210x/CH340 belum ada → pasang driver; `Access denied` / port sibuk → tutup Serial Monitor, upload lagi; tulisan acak `⸮⸮⸮` → `monitor_speed = 115200` di `platformio.ini`.
+> Catatan tutor: Slide ini menjawab pertanyaan pemantik. Masalah lain yang cukup ditangani tutor: driver CP210x/CH340 belum ada → pasang driver; `Access denied` / port sibuk → tutup Serial Monitor, upload lagi; tulisan acak `⸮⸮⸮` → pilih **115200 baud** di Serial Monitor.
 
 ### Slide 7 — Kenalan: DHT22 🌡️
 - Sensor kecil pengukur **suhu (°C)** dan **kelembapan udara (%)**.
@@ -524,7 +526,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Pe
 
 ### Slide 10 — Praktek Bareng: Cek Rakitan Sensor 💨
 1. Rakit, lalu centang semua checklist.
-2. Colok USB. Upload `P10_2_CekDHT22.cpp` → **Serial Monitor**.
+2. Colok USB. Buka `P10_2_CekDHT22.ino` → **Upload** → **Serial Monitor**.
 3. Muncul `Suhu: 28.40 C` → rakitan **benar**!
 4. **Tiup** pelan → kelembapan naik. **Genggam** 10 detik → suhu naik.
 
@@ -652,7 +654,7 @@ Save biar nggak lupa pas praktikum 💾
 #InspiraLabs #ESP32 #Arduino #IoT #BelajarCoding #EkskulCoding #Elektronika #TipsMaker
 
 #### Yang sengaja tidak dibocorkan
-- Langkah lengkap upload di PlatformIO & cara merakit DHT22.
+- Langkah lengkap upload di Arduino IDE & cara merakit DHT22.
 - Challenge "Detektif Sensor" dan kaitannya ke proyek akhir.
 
 ---

@@ -1,13 +1,13 @@
 // ============================================================
 // P10 SMA — Program Tes 2: Baca DHT22 (PROGRAM JADI, tidak perlu diubah)
-// Rakitan: DHT22 "+" -> 3V3, "out" -> GPIO 4, "-" -> GND.
+// Rakitan: DHT22 "+" -> 3V3, "out" -> GPIO 13, "-" -> GND.
 // Yang harus terlihat: tiap 2 detik muncul suhu & kelembapan di Serial Monitor.
 // Genggam / tiup sensor: angkanya harus berubah.
+// Butuh library "DHT sensor library" by Adafruit (lihat Panduan Instalasi Library).
 // ============================================================
-#include <Arduino.h>
 #include <DHT.h>
 
-#define DHT_PIN 4        // ubah HANYA kalau kabel "out" kamu pasang di pin lain
+#define DHT_PIN 13       // ubah HANYA kalau kabel "out" kamu pasang di pin lain
 
 DHT dht(DHT_PIN, DHT22);
 
@@ -25,7 +25,7 @@ void loop() {
   float lembap = dht.readHumidity();
 
   if (isnan(suhu) || isnan(lembap)) {
-    Serial.println("Gagal baca DHT22 -> cek: out ke GPIO 4? + ke 3V3? - ke GND? kabel longgar?");
+    Serial.println("Gagal baca DHT22 -> cek: out ke GPIO 13? + ke 3V3? - ke GND? kabel longgar?");
     return;
   }
 

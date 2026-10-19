@@ -12,22 +12,24 @@ import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE = os.path.join(ROOT, 'prompt', 'TEMPLATE_PROMPT_PERTEMUAN.md')
-PIO_INI = os.path.join(ROOT, 'kurikulum', 'platformio-starter', 'platformio.ini')
 
 # Pertemuan yang juga membagikan file proyek akhir ke folder Kode/proyek-akhir.
 # Kosong: proyek akhir dibagikan per kelompok (Device ID terisi) lewat `py tools/kelompok.py paket`.
 PROYEK_AKHIR = {}
 
-BACA_DULU = '''CARA PAKAI FILE KODE (VS Code + PlatformIO)
+BACA_DULU = '''CARA PAKAI FILE KODE (Arduino IDE)
 
-File .cpp (kode ESP32):
-1. VS Code -> PlatformIO -> New Project (board: Espressif ESP32 Dev Module, framework: Arduino).
-2. Ganti isi platformio.ini proyekmu dengan file platformio.ini di folder ini.
-3. Salin isi file .cpp yang mau dipakai ke src/main.cpp, lalu Build & Upload.
+Setiap program ESP32 ada di foldernya sendiri, misalnya:
+  P10_1_TesRelay/P10_1_TesRelay.ino
+Nama folder HARUS sama dengan nama file .ino (aturan Arduino IDE), jadi jangan diganti.
 
+1. Download folder Kode ini (klik kanan -> Download), lalu Extract zip-nya.
+2. Buka folder program, double-click file .ino -> terbuka di Arduino IDE.
+3. Pilih board "ESP32 Dev Module" dan port ESP32-mu, lalu klik Upload (panah ->).
+4. Buka Serial Monitor (ikon kaca pembesar kanan atas), pilih 115200 baud.
+
+Belum punya Arduino IDE / board ESP32 / library DHT? Ikuti Panduan Instalasi dari tutor.
 File .html (web): buka langsung di browser (double-click), edit pakai VS Code.
-
-Folder proyek-akhir (kalau ada): buka folder itu langsung lewat PlatformIO (Open Project).
 '''
 
 
@@ -39,9 +41,8 @@ def proyek_akhir_files(jenjang, bagian):
     src = os.path.join(ROOT, jenjang)
     files = {}
     if 'firmware' in bagian:
-        ino = read(os.path.join(src, 'firmware', f'{jenjang}_room_monitor.ino'))
-        files['proyek-akhir/platformio.ini'] = read(PIO_INI)
-        files['proyek-akhir/src/main.cpp'] = '#include <Arduino.h>\n' + ino
+        nama = f'{jenjang}_room_monitor'
+        files[f'proyek-akhir/{nama}/{nama}.ino'] = read(os.path.join(src, 'firmware', nama, nama + '.ino'))
     if 'web' in bagian:
         for f in ('index.html', 'api.js', 'style.css'):
             files[f'proyek-akhir/{f}'] = read(os.path.join(src, f))
@@ -249,12 +250,12 @@ def build(jenjang, n, folders):
 
     kode = {}
     kdir = os.path.join(d, 'kode')
-    if os.path.isdir(kdir):
-        for f in sorted(os.listdir(kdir)):
-            kode[f] = read(os.path.join(kdir, f))
+    if os.path.isdir(kdir):  # sketch Arduino: kode/<nama>/<nama>.ino, path relatif dipertahankan
+        for akar, _, files in sorted(os.walk(kdir)):
+            for f in sorted(files):
+                p = os.path.join(akar, f)
+                kode[os.path.relpath(p, kdir).replace(os.sep, '/')] = read(p)
     kode.update(proyek_akhir_files(jenjang, PROYEK_AKHIR.get(jenjang, {}).get(n, [])))
-    if any(k.endswith('.cpp') and '/' not in k for k in kode):
-        kode.setdefault('platformio.ini', read(PIO_INI))
     if kode:
         kode['BACA_DULU.txt'] = BACA_DULU
 

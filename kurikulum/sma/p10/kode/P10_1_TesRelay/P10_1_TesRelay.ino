@@ -1,13 +1,12 @@
 // ============================================================
 // P10 SMA — Program Tes 1: Relay Berdetak (PROGRAM JADI, tidak perlu diubah)
-// Rakitan: relay IN -> GPIO 18, VCC -> VIN, GND -> GND.
+// Rakitan: relay IN -> GPIO 14, VCC -> VIN, GND -> GND.
 //          VIN -> COM, NO -> kipas (+), kipas (-) -> GND.
 // Yang harus terlihat: tiap 2 detik relay "klik", LED relay menyala,
 // kipas berputar 2 detik lalu berhenti 2 detik.
 // ============================================================
-#include <Arduino.h>
 
-#define RELAY_PIN 18     // ubah HANYA kalau kabel IN kamu pasang di pin lain
+#define RELAY_PIN 14     // ubah HANYA kalau kabel IN kamu pasang di pin lain
 #define RELAY_ON  LOW    // modul relay active-LOW: IN = LOW -> relay aktif
 #define RELAY_OFF HIGH
 

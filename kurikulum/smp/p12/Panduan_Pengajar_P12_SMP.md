@@ -98,7 +98,7 @@ Alat P11 (firmware sudah terpasang) · power bank terisi + kabel USB · laptop d
 | Dashboard menampilkan data kelompok lain | Folder tertukar | Cek nama folder & Device ID di HANDOUT |
 | Halaman berantakan / putih setelah kustom | Tag HTML rusak | Ctrl+Z di VS Code, atau salin ulang `index.html` asli |
 | Warna tidak berubah | Salah file / tidak Save | Warna ada di `style.css`, bukan `index.html` |
-| Folder > 5 MB | `firmware/.pio` atau foto besar | Hapus `firmware/.pio`; resize foto ke lebar 800 px |
+| Folder > 5 MB | Foto/video asli HP | Hapus video; resize foto ke lebar 800 px |
 
 ## 9. Keselamatan
 

@@ -8,7 +8,7 @@ Nomor slide di panduan ini = nomor di PPT (slide 1 = Linktree). Bahan lengkap & 
 ## 1. Tujuan pertemuan (yang bisa dilihat)
 
 Di akhir kelas, setiap kelompok/individu:
-1. Meng-upload `P10_1_Blink.cpp` sendiri dan menunjukkan LED breadboard berkedip **bareng** lampu biru board.
+1. Meng-upload `P10_1_Blink.ino` sendiri dan menunjukkan LED breadboard berkedip **bareng** lampu biru board.
 2. Merakit DHT22 (+ → 3V3, out → D4, − → GND) dan menunjukkan angka suhu di Serial Monitor yang **naik saat ditiup/digenggam**.
 3. Bisa menjawab: "Kalau lampu biru kedip tapi LED diam, salahnya di mana?" (jawaban: rakitan).
 
@@ -16,7 +16,7 @@ Di akhir kelas, setiap kelompok/individu:
 
 ### H-1
 - [ ] Jalankan `SCRIPT_P10_SMP.gs` → folder **Kode** ada di Drive, link di Linktree.
-- [ ] Di **setiap laptop**: buat proyek PlatformIO (ESP32 Dev Module, Arduino), tempel `platformio.ini` dari folder Kode, salin Blink ke `src/main.cpp`, lalu **Build sekali**. Build pertama bisa 5–15 menit (download), jangan sampai terjadi di kelas.
+- [ ] Di **setiap laptop**: pasang **Arduino IDE 2**, board **esp32 by Espressif Systems**, library **DHT sensor library** (3 Panduan Instalasi di `kurikulum/panduan-instalasi/`, versi Windows & Mac). Buka `P10_1_Blink.ino` → pilih **ESP32 Dev Module** → **Verify (✓)** sekali. Unduhan board ±2 GB (ruang kosong ±9 GB) + compile pertama 2–5 menit: jangan sampai terjadi di kelas.
 - [ ] **Upload tes** Blink ke satu board cadangan → pastikan driver CP210x/CH340 terpasang di tiap laptop (port muncul).
 - [ ] Siapkan 2–3 **kabel USB data cadangan**. Tandai kabel data dengan selotip warna supaya tidak tertukar dengan kabel charger.
 - [ ] Siapkan rakitan "rusak" untuk Challenge Hard (3 kesalahan **aman**: out di D5, out di baris breadboard yang beda, kabel − setengah masuk/jumper putus). **Jangan** menukar + dan −. Bisa juga ambil acak dari `ekskulcoding.inspiralabs.id/sabotase/` (lihat *Cara main Kartu Sabotase*).
@@ -35,9 +35,9 @@ ESP32 + kabel USB data · breadboard dengan rakitan LED P9 (LED + resistor **220
 
 | Menit | Slide | Kegiatan | Yang tutor lakukan |
 |---|---|---|---|
-| 0–5 | 1 | Pembuka | Bagikan kit, minta siswa menyalakan laptop & membuka VS Code |
+| 0–5 | 1 | Pembuka | Bagikan kit, minta siswa menyalakan laptop & membuka Arduino IDE |
 | 5–8 | 2–5 | Cover, pemantik, agenda, peran | Tampung 2–3 tebakan pemantik. Tunjuk peran per kelompok |
-| 8–14 | 6–8 | Misteri D2, upload, 4 langkah | Tunjukkan ikon Upload (→) & Serial Monitor (colokan) di layar |
+| 8–14 | 6–8 | Misteri D2, upload, 4 langkah | Tunjukkan tombol Upload (→) kiri atas & ikon Serial Monitor (kaca pembesar) kanan atas |
 | 14–28 | 9 | Praktek Upload Blink | Keliling. Kelompok berhasil → tepuk tangan kecil |
 | 28–31 | 10–11 | Tips upload gagal + forum | Bahas jawaban pemantik (kabel data vs charger) |
 | 31–36 | 12 | 🟢 Easy (wajib) | Cek tiap kelompok, beri +10 |
@@ -94,10 +94,12 @@ Bantu dengan **pertanyaan**, bukan langsung memperbaiki. Biarkan Perakit yang me
 |---|---|---|
 | Port tidak muncul | Kabel charger / driver | Ganti kabel data bertanda. Masih tidak? Cek driver di Device Manager |
 | `Failed to connect to ESP32` | Board belum masuk mode upload | Tahan **BOOT** saat `Connecting....`, lepas saat persen muncul |
-| `Access denied` / port sibuk | Serial Monitor masih terbuka | Tutup Serial Monitor (ikon tempat sampah di terminal), upload lagi |
-| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | Cek `monitor_speed = 115200` di `platformio.ini` |
+| `Access denied` / port sibuk | Serial Monitor masih terbuka | Tutup tab Serial Monitor (tanda ×), upload lagi |
+| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | Pilih **115200 baud** di pojok kanan Serial Monitor |
 | Serial Monitor kosong | Pesan awal terlewat | Tekan tombol **EN** di board |
-| Build lama sekali | Build pertama di laptop itu | Biarkan jalan; kelompok itu ikut lihat layar kelompok sebelah dulu |
+| Compile lama (2–5 menit) | Compile pertama di laptop itu | Biarkan jalan; kelompok itu ikut lihat layar kelompok sebelah dulu |
+| `DHT.h: No such file or directory` | Library DHT belum dipasang | Library Manager → `DHT sensor library` → INSTALL ALL |
+| Upload gagal terus walau BOOT ditahan | Kecepatan upload terlalu tinggi untuk kabel/board | **Tools → Upload Speed → 115200** |
 | Lampu biru kedip, LED diam | Rakitan LED | LED terbalik / satu baris / kabel bukan di D2 |
 | `Gagal baca sensor! Cek kabel.` | Kabel out / longgar / + − tertukar | Cabut USB, cek dengan checklist slide 16 |
 | Sensor terasa hangat/panas | + dan − tertukar | **Cabut USB segera**, tukar kabelnya, tunggu dingin |

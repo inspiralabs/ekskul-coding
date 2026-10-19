@@ -72,7 +72,7 @@ Alat P12 + power bank + kabel USB · kotak bekas · laptop dengan folder `smp-XX
 
 - Setelah slide 9: "Sensor ditaruh di mana?" (dekat lubang, jauh dari ESP32). "Boleh pakai kaleng?" (tidak, korsleting).
 - Setelah slide 12: **jempol**: "Jempol atas kalau dashboard masih jalan setelah masuk casing."
-- Setelah slide 17: "Folder `.pio` diapakan?" (dihapus). "Foto namanya?" (`foto-kelompok.jpg`).
+- Setelah slide 17: "Ukuran folder maksimal berapa?" (5 MB). "Foto namanya?" (`foto-kelompok.jpg`).
 - Saat showcase: pertanyaan tutor ke tiap kelompok: "Tunjuk pin 3V3, GND, dan D4 di alat kalian." (masuk rubrik Pemahaman).
 
 ## 7. Kesalahan yang sering terjadi & cara membantu
@@ -85,7 +85,7 @@ Alat P12 + power bank + kabel USB · kotak bekas · laptop dengan folder `smp-XX
 | Kabel out pindah dari D4 saat merapikan | "Kabel kuning sekarang di pin apa? Program menunggu di pin berapa?" |
 | Tidak ada label Device ID | "Kalau 13 kotak dikumpulkan di meja tutor, bagaimana tahu yang mana punya kalian?" |
 | Foto/logo di luar folder | "Kalau folder ini dikirim ke tutor, foto di Downloads ikut tidak?" |
-| `.pio` belum dihapus (zip ratusan MB) | "Klik kanan folder → Properties. Berapa ukurannya? Batasnya berapa?" |
+| Video/foto asli HP ikut (zip puluhan–ratusan MB) | "Klik kanan folder → Properties. Berapa ukurannya? Batasnya berapa?" |
 | Lupa api.js asli / sudah diubah | "Ingat aturan nomor 4?" → salin `api.js` dari zip asli |
 
 ## 8. Troubleshooting cepat
@@ -98,7 +98,7 @@ Alat P12 + power bank + kabel USB · kotak bekas · laptop dengan folder `smp-XX
 | ESP32 sering restart | Kabel USB tertekuk / power bank lemah | Perlebar lubang, ganti power bank |
 | Breadboard bergeser | Tidak ditempel | Double tape di bawah breadboard |
 | Proyektor tidak menampilkan data | WiFi laptop tutor / tab lama | Refresh tab; pakai laptop kelompok itu |
-| Zip > 5 MB | `firmware/.pio` / foto besar | Hapus `.pio`, resize foto, zip ulang |
+| Zip > 5 MB | Foto/video besar | Hapus video, resize foto, zip ulang |
 | Siswa lupa membawa kotak | — | Pakai kardus cadangan tutor |
 
 ## 9. Keselamatan

@@ -134,13 +134,13 @@ Judul: Rakitan yang dipakai hari ini (sama dengan P10, tidak diubah)
 Komponen: ESP32 DevKit V1, breadboard, modul DHT22 3-pin, modul relay 1-channel 5V, kipas mini DC 5V
 Koneksi:
 - ESP32 3V3 → DHT22 "+" (kabel merah)
-- ESP32 D4 → DHT22 "out" (kabel kuning)
+- ESP32 D13 → DHT22 "out" (kabel kuning)
 - ESP32 GND → DHT22 "−" (kabel hitam)
 - ESP32 VIN → jalur + breadboard (kabel merah)
 - ESP32 GND → jalur − breadboard (kabel hitam)
 - jalur + → relay VCC (kabel merah)
 - jalur − → relay GND (kabel hitam)
-- ESP32 D18 → relay IN (kabel biru)
+- ESP32 D14 → relay IN (kabel biru)
 - jalur + → relay COM (kabel oranye)
 - relay NO → kipas mini "+" (kabel oranye)
 - kipas mini "−" → jalur − (kabel hitam)
@@ -166,7 +166,7 @@ Sorot: ikon WiFi di atas ESP32 dengan panah "data tiap ±4 detik → server"
 ### Isi Zip Proyek Kelompok
 | File / folder | Untuk apa | Hari ini |
 |---|---|---|
-| `firmware/` | Program ESP32 (proyek PlatformIO) | **Dipakai**: isi WiFi, upload |
+| `firmware/` | Program ESP32 (sketch Arduino IDE) | **Dipakai**: isi WiFi, upload |
 | `index.html` | Dashboard kelompok | **Dibuka** di browser |
 | `style.css` | Tampilan dashboard (warna di `:root`) | Belum (P13) |
 | `api.js` | Penghubung ke server | **Jangan diubah** |
@@ -179,14 +179,14 @@ Sorot: ikon WiFi di atas ESP32 dengan panah "data tiap ±4 detik → server"
 
 ### Yang Boleh & Jangan Diubah
 ```cpp
-// potongan — bagian atas firmware/sma_room_monitor.ino
+// potongan — bagian atas firmware/sma_room_monitor/sma_room_monitor.ino
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
 const char* DEVICE_ID     = "sma-04";       // sudah diisi tutor, JANGAN diganti
 const char* WIFI_SSID     = "ISI_DI_SINI";  // <- isi nama WiFi kelas
 const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
 
-#define DHT_PIN 4      // ubah hanya kalau kabel DHT22 tidak di D4
-#define RELAY_PIN 18   // ubah hanya kalau kabel relay IN tidak di D18
+#define DHT_PIN 13     // ubah hanya kalau kabel DHT22 tidak di D13
+#define RELAY_PIN 14   // ubah hanya kalau kabel relay IN tidak di D14
 ```
 - Yang kalian isi: **2 baris WiFi**. `DHT_PIN`/`RELAY_PIN` hanya kalau kabel kalian beda.
 - Bagian `JANGAN UBAH` (alamat server, API key, logika kirim) = "kabel" ke server. Jangan disentuh.
@@ -194,12 +194,12 @@ const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
 ---
 
 ### Upload Firmware Proyek
-1. VS Code → PlatformIO → **PIO Home → Open Project** → pilih folder `firmware` di folder kelompok.
-2. Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
-3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
+1. Di folder kelompok, buka `firmware` → `sma_room_monitor` → **double-click** `sma_room_monitor.ino` (terbuka di **Arduino IDE**).
+2. Isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
+3. Pilih port + board **ESP32 Dev Module**, klik **Upload (→)** (otomatis tersimpan), lalu buka **Serial Monitor** (115200 baud).
 4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
 
-> 🗣️ SPEAKER NOTES: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di Challenge Easy P10, pastikan sudah dikembalikan ke D18, atau RELAY_PIN disesuaikan. Peran berdua: Operator (laptop, isi WiFi, upload) & Pengamat (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2. Kipas boleh menyala sendiri kalau kelas di atas 30°C: status awal server = mode Otomatis 30°C (dibahas di P12).
+> 🗣️ SPEAKER NOTES: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di Challenge Easy P10, pastikan sudah dikembalikan ke D14, atau RELAY_PIN disesuaikan. Peran berdua: Operator (laptop, isi WiFi, upload) & Pengamat (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2. Kipas boleh menyala sendiri kalau kelas di atas 30°C: status awal server = mode Otomatis 30°C (dibahas di P12).
 
 ---
 
@@ -291,7 +291,7 @@ Cek dari lapisan paling bawah, **jangan loncat**:
 | 1. Daya | LED power ESP32 menyala | Kabel USB, charger |
 | 2. Program | Serial Monitor menampilkan tulisan | Upload ulang, baud 115200 |
 | 3. WiFi | `Terhubung! IP ...` | SSID/password, 2.4 GHz, jarak router |
-| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D4, 3V3, GND) |
+| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D13, 3V3, GND) |
 | 5. Server | `kode respons: 200` | Tabel kode respons |
 | 6. Dashboard | Angka berubah di `index.html` | Buka `index.html` dari folder kelompok sendiri, refresh |
 
@@ -310,7 +310,7 @@ Cek dari lapisan paling bawah, **jangan loncat**:
 **TOPIK 3 DARI 3 — CHALLENGE 🔴**
 
 1. Cabut ESP32 dari laptop, colok ke **power bank/charger HP**. Buktikan dashboard tetap berubah saat sensor digenggam.
-2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D4** ke **D27**. Ubah **satu angka** `#define DHT_PIN 4` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D4 dan angka 4 setelahnya.
+2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D13** ke **D27**. Ubah **satu angka** `#define DHT_PIN 13` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D13 dan angka 13 setelahnya.
 3. Jawab: kenapa langkah 2 butuh laptop lagi, padahal langkah 1 tidak?
 
 Simpan hasil sebagai `P11_NamaSiswa_C3` (video pendek / screenshot)
@@ -392,12 +392,12 @@ STRUKTUR DOKUMEN:
 | Durasi | 70 menit |
 | Target silabus | Siswa mampu meng-upload firmware proyek ke rakitan dan memastikan data sensor tampil real-time di dashboard (proyek akhir tahap 1: monitoring) |
 | Penilaian | Progres proyek akhir: Serial `kode respons: 200` + angka suhu di dashboard kelompok berubah saat sensor digenggam |
-| Kaitan dengan proyek akhir | Firmware `firmware/sma_room_monitor.ino` di **zip proyek dari tutor** (mis. `sma-04.zip`). Program sudah **lengkap**: Device ID kelompok sudah terisi. Siswa hanya mengisi `WIFI_SSID` dan `WIFI_PASSWORD` (serta `DHT_PIN`/`RELAY_PIN` kalau kabelnya beda dari D4/D18). Dashboard `index.html` di zip yang sama sudah tersambung ke Device ID kelompok. |
+| Kaitan dengan proyek akhir | Firmware `firmware/sma_room_monitor/sma_room_monitor.ino` di **zip proyek dari tutor** (mis. `sma-04.zip`). Program sudah **lengkap**: Device ID kelompok sudah terisi. Siswa hanya mengisi `WIFI_SSID` dan `WIFI_PASSWORD` (serta `DHT_PIN`/`RELAY_PIN` kalau kabelnya beda dari D4/D18). Dashboard `index.html` di zip yang sama sudah tersambung ke Device ID kelompok. |
 
 ## Alat & bahan (per kelompok)
 
-- Rakitan lengkap P10 (DHT22 di D4, relay di D18, kipas di NO) yang sudah lolos 2 program tes
-- Laptop dengan VS Code + PlatformIO
+- Rakitan lengkap P10 (DHT22 di D13, relay di D14, kipas di NO) yang sudah lolos 2 program tes
+- Laptop dengan **Arduino IDE 2** + board **ESP32** + library **DHT sensor library** (sudah dipasang di P10; lihat `kurikulum/panduan-instalasi/`)
 - **Zip proyek dari tutor** (`sma-01.zip` … `sma-06.zip`, satu per kelompok/peserta)
 - WiFi kelas **2.4 GHz** + hotspot cadangan
 - Power bank / charger HP 5V + kabel USB data (untuk Challenge Hard)
@@ -410,7 +410,7 @@ Detail lengkap: `kurikulum/sma/p11/Panduan_Pengajar_P11_SMA.md`.
 1. Cek backend online: `https://api-ekskulcoding.inspiralabs.id/health`.
 2. Jalankan `py tools/kelompok.py paket`, bagikan `dist/paket/sma-XX.zip` ke **masing-masing** kelompok/peserta (jangan tertukar: Device ID sudah tertanam di dalamnya).
 3. Isi `docs/HANDOUT_SISWA.md` (WiFi kelas). Pastikan WiFi **2.4 GHz** (ESP32 tidak bisa 5 GHz).
-4. Buka sekali folder `firmware` dari salah satu zip lewat PlatformIO dan **Build** di tiap laptop (unduh library).
+4. Di tiap laptop, buka `firmware/sma_room_monitor/sma_room_monitor.ino` dari salah satu zip → **Verify (✓)** sekali. Kalau muncul error `DHT.h` atau board ESP32 tidak ada, pasang dulu lewat Panduan Instalasi.
 
 ## Alur 70 menit
 
@@ -452,7 +452,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 ### Slide 3 — Isi Zip Proyek Kelompok 📦
 | File / folder | Untuk apa | Hari ini |
 |---|---|---|
-| `firmware/` | Program ESP32 (proyek PlatformIO) | **Dipakai**: isi WiFi, upload |
+| `firmware/` | Program ESP32 (sketch Arduino IDE) | **Dipakai**: isi WiFi, upload |
 | `index.html` | Dashboard kelompok | **Dibuka** di browser |
 | `style.css` | Tampilan dashboard (warna di `:root`) | Belum (P13) |
 | `api.js` | Penghubung ke server | **Jangan diubah** |
@@ -461,25 +461,25 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 
 ### Slide 4 — Yang Boleh & Jangan Diubah 🚦
 ```cpp
-// potongan — bagian atas firmware/sma_room_monitor.ino
+// potongan — bagian atas firmware/sma_room_monitor/sma_room_monitor.ino
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
 const char* DEVICE_ID     = "sma-04";       // sudah diisi tutor, JANGAN diganti
 const char* WIFI_SSID     = "ISI_DI_SINI";  // <- isi nama WiFi kelas
 const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
 
-#define DHT_PIN 4      // ubah hanya kalau kabel DHT22 tidak di D4
-#define RELAY_PIN 18   // ubah hanya kalau kabel relay IN tidak di D18
+#define DHT_PIN 13     // ubah hanya kalau kabel DHT22 tidak di D13
+#define RELAY_PIN 14   // ubah hanya kalau kabel relay IN tidak di D14
 ```
 - Yang kalian isi: **2 baris WiFi**. `DHT_PIN`/`RELAY_PIN` hanya kalau kabel kalian beda.
 - Bagian `JANGAN UBAH` (alamat server, API key, logika kirim) = "kabel" ke server. Diubah → data kelompok kalian (dan kelompok lain) bisa kacau.
 
 ### Slide 5 — Upload Firmware Proyek ⬆️
-1. VS Code → PlatformIO → **PIO Home → Open Project** → pilih folder `firmware` di dalam folder kelompok.
-2. Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
-3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
+1. Di folder kelompok, buka `firmware` → `sma_room_monitor` → **double-click** `sma_room_monitor.ino` (terbuka di **Arduino IDE**).
+2. Isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
+3. Pilih port + board **ESP32 Dev Module**, klik **Upload (→)** (otomatis tersimpan), lalu buka **Serial Monitor** (115200 baud).
 4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
 
-> Catatan tutor: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di P10 (Challenge Easy), pastikan sudah dikembalikan ke D18, atau `RELAY_PIN` disesuaikan. Peran berdua: **Operator** (laptop, isi WiFi, upload) & **Pengamat** (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2.
+> Catatan tutor: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di P10 (Challenge Easy), pastikan sudah dikembalikan ke D14, atau `RELAY_PIN` disesuaikan. Peran berdua: **Operator** (laptop, isi WiFi, upload) & **Pengamat** (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2.
 
 ### Slide 6 — Membaca Serial Monitor Firmware 📟
 ```
@@ -522,7 +522,7 @@ Cek dari lapisan paling bawah, **jangan loncat**:
 | 1. Daya | LED power ESP32 menyala | Kabel USB, charger |
 | 2. Program | Serial Monitor menampilkan tulisan | Upload ulang, baud 115200 |
 | 3. WiFi | `Terhubung! IP ...` | SSID/password, 2.4 GHz, jarak router |
-| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D4, 3V3, GND) |
+| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D13, 3V3, GND) |
 | 5. Server | `kode respons: 200` | Tabel kode respons |
 | 6. Dashboard | Angka berubah di `index.html` | Buka `index.html` dari folder kelompok sendiri, refresh |
 
@@ -564,7 +564,7 @@ Setiap challenge bernilai **+10** poin (leaderboard).
 
 ### 🔴 Hard — "Lepas dari Laptop" 🔋
 1. Cabut ESP32 dari laptop, colok ke **power bank/charger HP**. Buktikan dashboard tetap berubah saat sensor digenggam (buka dashboard di laptop/HP).
-2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D4** ke **D27**. Ubah **satu angka** `#define DHT_PIN 4` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D4 dan angka 4 setelah selesai.
+2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D13** ke **D27**. Ubah **satu angka** `#define DHT_PIN 13` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D13 dan angka 13 setelah selesai.
 3. Jawab: kenapa langkah 2 butuh laptop lagi, padahal langkah 1 tidak?
 
 ---
@@ -663,7 +663,7 @@ A. Kabel DHT22 longgar B. Nama/password WiFi salah atau WiFi-nya 5 GHz C. Kipas 
 A. Suhu ruangan 200 derajat B. Server menerima data, dashboard seharusnya ikut berubah C. WiFi terputus D. Sensor gagal dibaca
 
 **4. WiFi sudah `Terhubung!`, tapi Serial terus menulis `Gagal baca sensor DHT22`. Yang paling perlu dicek adalah…**
-A. Password WiFi B. Kabel DHT22: out ke D4, + ke 3V3, − ke GND C. File `api.js` D. Kabel kipas di terminal NO
+A. Password WiFi B. Kabel DHT22: out ke D13, + ke 3V3, − ke GND C. File `api.js` D. Kabel kipas di terminal NO
 
 **5. Setelah firmware ter-upload, ESP32 dicabut dari laptop lalu dicolok ke power bank. Apa yang terjadi?**
 A. Program hilang, harus upload ulang B. ESP32 hanya bisa jalan kalau tersambung laptop C. Program tetap tersimpan: ESP32 menyala, masuk WiFi, dan kirim data lagi D. Data hanya tampil di Serial Monitor

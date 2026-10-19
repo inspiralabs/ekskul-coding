@@ -1,10 +1,9 @@
 // ============================================================
-// P11 SMP — Program Cadangan: Cek Sensor TANPA WiFi
-// Dipakai saat troubleshooting: kalau firmware proyek macet di WiFi, upload ini
-// untuk memastikan kabel sensor benar. Kabel DHT22: + ke 3V3, out ke D4, - ke GND.
-// platformio.ini harus punya: lib_deps = adafruit/DHT sensor library
+// P10 SMP — Program Jadi 2: Cek Rakitan DHT22
+// TIDAK PERLU MENULIS KODE. Buka di Arduino IDE, Upload, buka Serial Monitor.
+// Kabel DHT22: + ke 3V3, out ke D4, - ke GND. Muncul angka suhu = rakitan benar.
+// Butuh library "DHT sensor library" by Adafruit (lihat Panduan Instalasi Library).
 // ============================================================
-#include <Arduino.h>
 #include <DHT.h>
 
 #define DHT_PIN 4               // kaki "out" DHT22 di pin D4

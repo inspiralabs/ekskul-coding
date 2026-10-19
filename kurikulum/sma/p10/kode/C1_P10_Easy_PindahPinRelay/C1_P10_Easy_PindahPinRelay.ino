@@ -1,15 +1,14 @@
 // ============================================================
 // CHALLENGE EASY P10 SMA — Pindah Pin Relay (PROGRAM JADI)
-// 1. CABUT USB. Pindahkan kabel biru relay IN dari D18 ke D19.
-// 2. Ubah SATU angka di bawah: RELAY_PIN 18 -> 19.
+// 1. CABUT USB. Pindahkan kabel biru relay IN dari D14 ke D26.
+// 2. Ubah SATU angka di bawah: RELAY_PIN 14 -> 26.
 // 3. Upload, buka Serial Monitor. Relay harus klik lagi tiap 2 detik.
-// 4. Kembalikan kabel ke D18 dan angka ke 18 setelah selesai.
-// Pin aman lain: 13, 16, 17, 19, 21, 22, 23, 25, 26, 27, 32, 33.
+// 4. Kembalikan kabel ke D14 dan angka ke 14 setelah selesai.
+// Pin aman lain: 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33.
 // JANGAN pakai 0, 2, 5, 12, 15 (strapping) atau 34-39 (input-only).
 // ============================================================
-#include <Arduino.h>
 
-#define RELAY_PIN 18     // <-- UBAH ANGKA INI SAJA
+#define RELAY_PIN 14     // <-- UBAH ANGKA INI SAJA
 #define RELAY_ON  LOW
 #define RELAY_OFF HIGH
 

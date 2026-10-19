@@ -215,9 +215,9 @@ Website kalian akan **online** di **`smp-XX.inspiralabs.id`**!
 2. **Semua** file ada di dalam folder `smp-XX`.
 3. Foto bernama **`foto-kelompok.jpg`**, sudah dikecilkan.
 4. `api.js` **tidak** diubah.
-5. Hapus folder **`firmware/.pio`**. Total maksimal **5 MB**.
+5. Total ukuran folder maksimal **5 MB** (tanpa video, foto sudah dikecilkan).
 
-> 🗣️ SPEAKER NOTES: Contoh alamat: https://smp-07.inspiralabs.id. Cek ukuran: klik kanan folder → Properties → Size. Folder firmware/.pio dibuat otomatis oleh PlatformIO saat Build, bisa ratusan MB, aman dihapus (dibuat ulang saat Build berikutnya). Zip diserahkan di P13. Untuk siswa yang sudah mahir: tidak boleh pakai npm/instalasi; kalau butuh library, pakai link CDN.
+> 🗣️ SPEAKER NOTES: Contoh alamat: https://smp-07.inspiralabs.id. Cek ukuran: klik kanan folder → Properties → Size. Penyebab folder besar biasanya foto/video asli dari HP. Zip diserahkan di P13. Untuk siswa yang sudah mahir: tidak boleh pakai npm/instalasi; kalau butuh library, pakai link CDN.
 
 ---
 

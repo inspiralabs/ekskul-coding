@@ -134,17 +134,17 @@ Judul: Rakitan final Smart Room Monitor (versi rapi)
 Komponen: ESP32 DevKit V1, breadboard, modul DHT22 3-pin, modul relay 1-channel 5V, kipas mini DC 5V
 Koneksi:
 - ESP32 3V3 → DHT22 "+" (kabel merah)
-- ESP32 D4 → DHT22 "out" (kabel kuning)
+- ESP32 D13 → DHT22 "out" (kabel kuning)
 - ESP32 GND → DHT22 "−" (kabel hitam)
 - ESP32 VIN → jalur + breadboard (kabel merah)
 - ESP32 GND → jalur − breadboard (kabel hitam)
 - jalur + → relay VCC (kabel merah)
 - jalur − → relay GND (kabel hitam)
-- ESP32 D18 → relay IN (kabel biru)
+- ESP32 D14 → relay IN (kabel biru)
 - jalur + → relay COM (kabel oranye)
 - relay NO → kipas mini "+" (kabel oranye)
 - kipas mini "−" → jalur − (kabel hitam)
-Sorot: kabel pendek & rapi ; label kecil "DHT22 → D4" dan "RELAY → D18" ; DHT22 diletakkan menjauh dari ESP32
+Sorot: kabel pendek & rapi ; label kecil "DHT22 → D13" dan "RELAY → D14" ; DHT22 diletakkan menjauh dari ESP32
 ```
 
 ---
@@ -154,7 +154,7 @@ Sorot: kabel pendek & rapi ; label kecil "DHT22 → D4" dan "RELAY → D18" ; DH
 2. **Kabel pendek**: ganti jumper panjang dengan yang pas. Kabel berlebih digulung & diikat.
 3. **Warna konsisten**: merah daya, hitam GND, kuning data sensor, biru relay IN, oranye jalur kipas.
 4. **Terminal relay terkunci**: sekrup kencang, tidak ada serabut kabel keluar.
-5. **Label**: "DHT22 → D4", "RELAY → D18", nama kelompok & Device ID (mis. `sma-04`).
+5. **Label**: "DHT22 → D13", "RELAY → D14", nama kelompok & Device ID (mis. `sma-04`).
 6. Setelah rapi: **tes ulang** kontrol manual & otomatis dari dashboard.
 
 ---
@@ -245,7 +245,7 @@ Simpan hasil di folder kelompok (mis. `sma-04`)
 | Semua file **di dalam folder** | Alamat `C:\Users\...` hanya ada di laptopmu |
 | **Tanpa npm**, library via **CDN** | Server hanya menyajikan file |
 | `api.js` **tidak diubah** | Penghubung ke server, Device ID sudah diisi tutor |
-| Folder **≤ ±5 MB**, tanpa `firmware/.pio` | Folder `.pio` (hasil build) bisa ratusan MB |
+| Folder **≤ ±5 MB** | Foto asli HP bisa 3–8 MB; kecilkan dulu |
 | Foto bernama `foto-kelompok.jpg` | Sudah dipanggil oleh `index.html` |
 - Serahkan **seluruh folder kelompok** (boleh di-zip, mis. `sma-04.zip`) ke tutor.
 
@@ -286,7 +286,7 @@ Simpan hasil di folder kelompok (mis. `sma-04`)
 1. Buka `index.html` dari folder kelompok: profil, foto, warna, angka suhu & tombol kipas tampil/jalan.
 2. Tidak ada `C:\...` atau `file://` di `index.html`/`style.css`. Library (kalau ada) hanya `https://` CDN.
 3. `api.js` sama persis dengan dari zip tutor.
-4. Ukuran folder ≤ ±5 MB, `firmware/.pio` sudah dihapus.
+4. Ukuran folder ≤ ±5 MB, foto sudah dikecilkan.
 5. Buka dashboard di **browser lain/incognito**, klik tombol kipas → harus diminta PIN.
 
 Serahkan folder kelompok ke tutor (mis. `sma-04.zip`)
@@ -296,7 +296,7 @@ Serahkan folder kelompok ke tutor (mis. `sma-04.zip`)
 ### Format Showcase
 1. **Masalah**: kenapa ruangan perlu dipantau & kipas dikontrol? (1 kalimat)
 2. **Demo langsung**: genggam sensor → suhu naik di dashboard → mode **Otomatis** menyalakan kipas. Lalu kontrol **Manual**.
-3. **Bedah rakitan**: alasan **D4** dan **D18**, kenapa kipas di **NO**, apa itu **active-LOW**.
+3. **Bedah rakitan**: alasan **D13** dan **D14**, kenapa kipas di **NO**, apa itu **active-LOW**.
 4. **1 masalah terberat** dan cara menemukannya (Serial Monitor? multimeter?).
 5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
 
@@ -425,7 +425,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 2. **Kabel pendek**: ganti jumper panjang dengan yang pas. Kabel berlebih → digulung dan diikat, bukan dibiarkan menjuntai.
 3. **Warna konsisten**: merah = daya, hitam = GND, kuning = data sensor, biru = relay IN, oranye = jalur kipas.
 4. **Terminal relay terkunci**: sekrup kencang, tidak ada serabut kabel keluar. Tarik pelan: tidak lepas.
-5. **Label**: tempel label kecil "DHT22 → D4", "RELAY → D18", nama kelompok & Device ID (mis. `sma-04`).
+5. **Label**: tempel label kecil "DHT22 → D13", "RELAY → D14", nama kelompok & Device ID (mis. `sma-04`).
 6. Setelah rapi: **tes ulang** kontrol manual & otomatis dari dashboard.
 
 ### Slide 3 — Posisi Sensor & Casing 📦
@@ -467,7 +467,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 | Semua file (foto, CSS, ikon) **di dalam folder** | Alamat seperti `C:\Users\...` hanya ada di laptopmu |
 | **Tanpa npm**, library hanya via **CDN** | Server hanya menyajikan file, tidak menjalankan `npm install` |
 | `api.js` **tidak diubah** | Penghubung ke server; Device ID sudah diisi tutor |
-| Ukuran folder **≤ ±5 MB**, tanpa `firmware/.pio` | Folder `.pio` (hasil build) bisa ratusan MB |
+| Ukuran folder **≤ ±5 MB** | Foto asli HP bisa 3–8 MB; kecilkan dulu |
 | Foto bernama `foto-kelompok.jpg` | Sudah dipanggil oleh `index.html` |
 - Serahkan **seluruh folder kelompok** (mis. `sma-04`, boleh di-zip jadi `sma-04.zip`) ke tutor.
 
@@ -488,7 +488,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
 ### Slide 9 — Format Showcase 🎤
 1. **Masalah**: kenapa ruangan perlu dipantau & kipas dikontrol? (1 kalimat)
 2. **Demo langsung**: genggam sensor → suhu naik di dashboard → mode **Otomatis** menyalakan kipas. Lalu kontrol **Manual** dari dashboard.
-3. **Bedah rakitan**: tunjukkan jalur kabel & alasan memilih **D4** dan **D18**, kenapa kipas di **NO**, apa itu **active-LOW**.
+3. **Bedah rakitan**: tunjukkan jalur kabel & alasan memilih **D13** dan **D14** (dan kenapa **D12** di antaranya dibiarkan kosong), kenapa kipas di **NO**, apa itu **active-LOW**.
 4. **1 masalah terberat** dan cara kalian menemukannya (Serial Monitor? multimeter? tabel troubleshooting?).
 5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
 
@@ -531,7 +531,7 @@ Periksa folder kelompok sendiri dengan checklist ini, perbaiki yang belum lolos,
 1. Buka `index.html` dari folder kelompok: profil, foto, warna, angka suhu & tombol kipas semua tampil/jalan.
 2. Tidak ada alamat file `C:\...` atau `file://` di `index.html`/`style.css`. Library (kalau ada) hanya `https://` CDN.
 3. `api.js` sama persis dengan dari zip tutor.
-4. Ukuran folder ≤ ±5 MB (klik kanan → Properties), folder `firmware/.pio` sudah dihapus.
+4. Ukuran folder ≤ ±5 MB (klik kanan → Properties), foto sudah dikecilkan.
 5. Uji PIN: buka dashboard di **browser lain/mode incognito**, klik tombol kipas → harus diminta PIN.
 
 ---
@@ -650,7 +650,7 @@ A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN k
 
 ### Kunci Challenge
 
-**Easy:** rakitan rapi + label + kontrol manual & otomatis tetap jalan. Kesalahan paling sering setelah merapikan: kabel kipas pindah ke NC, kabel IN tergeser satu lubang dari D18, terminal relay longgar. Arahkan siswa ke tabel troubleshooting P10/P12, bukan langsung membetulkan.
+**Easy:** rakitan rapi + label + kontrol manual & otomatis tetap jalan. Kesalahan paling sering setelah merapikan: kabel kipas pindah ke NC, kabel IN tergeser satu lubang dari D14 (ke D12 = ESP32 gagal boot), terminal relay longgar. Arahkan siswa ke tabel troubleshooting P10/P12, bukan langsung membetulkan.
 
 **Medium:** foto tidak tampil biasanya karena: (1) nama file salah (`.JPG`, `.jpeg`, `.png`, spasi), (2) foto di subfolder lain, (3) ekstensi tersembunyi Windows (`foto-kelompok.jpg.jpg`). Aktifkan *View → File name extensions* di File Explorer.
 
@@ -658,7 +658,7 @@ A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN k
 
 ### Serah terima & deploy (tutor)
 - Terima folder/zip per Device ID (`sma-01`…`sma-06`). Jalankan `py tools/kelompok.py deploy sma-04 sma-04.zip --dry-run` untuk cek, lalu tanpa `--dry-run` untuk upload.
-- Folder `firmware/` tidak ikut tayang. Pastikan `firmware/.pio` tidak ikut di zip (ukuran).
+- Folder `firmware/` tidak ikut tayang (otomatis diabaikan saat deploy).
 - Kalau `api.js` berubah: ganti dengan salinan dari paket asli.
 
 ### Rubrik showcase (skor 1–4)
@@ -666,7 +666,7 @@ A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN k
 |---|---|---|
 | Fungsi | Data tidak tampil di dashboard | Monitoring + kontrol manual + mode otomatis jalan saat demo |
 | Kerapian & keselamatan rakitan | Kabel semrawut, terminal longgar | Kabel rapi & berlabel, sensor di posisi tepat, hanya beban DC 5V |
-| Pemahaman | Tidak bisa menjelaskan rakitan | Menjelaskan pin D4/D18, kipas di NO, active-LOW, dan alur data/perintah (jeda ±4 detik) |
+| Pemahaman | Tidak bisa menjelaskan rakitan | Menjelaskan pin D13/D14, kipas di NO, active-LOW, dan alur data/perintah (jeda ±4 detik) |
 | Troubleshooting | Tidak bisa menceritakan masalah | Menceritakan masalah, cara menemukannya (Serial/multimeter), dan solusinya |
 | Presentasi & kerja sama | 1 orang bicara, tanpa demo | Semua anggota berperan (peserta individu: dinilai dari kejelasan & demo), dimulai dari masalah, demo lancar |
 

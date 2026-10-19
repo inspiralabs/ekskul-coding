@@ -6,14 +6,14 @@
 // 2. Ubah SATU angka: AMBANG = suhu ruangan sekarang + 1 (misal 29.5).
 // 3. Upload lagi. Genggam sensor DHT22 -> kipas harus menyala sendiri.
 //    Lepas genggaman, tunggu -> kipas mati sendiri.
+// Butuh library "DHT sensor library" by Adafruit (lihat Panduan Instalasi Library).
 // ============================================================
-#include <Arduino.h>
 #include <DHT.h>
 
 #define AMBANG    30.0   // <-- UBAH ANGKA INI SAJA (derajat Celsius)
 
-#define DHT_PIN   4
-#define RELAY_PIN 18
+#define DHT_PIN   13
+#define RELAY_PIN 14
 #define RELAY_ON  LOW
 #define RELAY_OFF HIGH
 
@@ -34,7 +34,7 @@ void loop() {
 
   float suhu = dht.readTemperature();
   if (isnan(suhu)) {
-    Serial.println("Gagal baca DHT22 -> cek kabel out ke GPIO 4, + ke 3V3, - ke GND");
+    Serial.println("Gagal baca DHT22 -> cek kabel out ke GPIO 13, + ke 3V3, - ke GND");
     return;
   }
 

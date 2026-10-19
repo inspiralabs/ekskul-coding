@@ -16,12 +16,12 @@ Di akhir kelas, setiap kelompok/individu:
 
 ### H-1
 - [ ] `py tools/kelompok.py paket` → `dist/paket/smp-XX.zip`.
-- [ ] **Di laptop tiap kelompok:** extract `smp-XX.zip` ke Desktop, PIO Home → Open Project → `smp-XX/firmware` → **Build sekali** (library WiFi/HTTP/DHT ikut ter-download). Catat laptop mana untuk Device ID mana (tempel stiker `smp-XX` di laptop).
+- [ ] **Di laptop tiap kelompok:** extract `smp-XX.zip` ke Desktop, double-click `smp-XX/firmware/smp_room_monitor/smp_room_monitor.ino` → **Verify (✓)** sekali (WiFi/HTTP sudah ada di board ESP32; library DHT harus sudah dipasang). Catat laptop mana untuk Device ID mana (tempel stiker `smp-XX` di laptop).
 - [ ] Pastikan rakitan P10 (DHT22 di D4) masih utuh; bawa DHT22 & jumper cadangan.
 - [ ] **Uji WiFi kelas** dengan board cadangan: upload firmware salah satu kelompok, lihat `200`. Pastikan WiFi **2.4 GHz**. Siapkan hotspot HP cadangan (2.4 GHz, kuota cukup).
 - [ ] Buat 2–3 kabel jumper **sengaja putus** (potong kawat di dalam isolasi, luar tetap mulus) untuk demo multimeter.
 - [ ] Cek backend: `https://api-ekskulcoding.inspiralabs.id/health`.
-- [ ] Siapkan proyek PlatformIO latihan (dari P10) di tiap laptop untuk program cadangan `P11_1_BacaDHT22.cpp` / `P11_2_TesWiFi.cpp`.
+- [ ] Download folder Kode P11 (`P11_1_BacaDHT22`, `P11_2_TesWiFi`) ke tiap laptop untuk program cadangan.
 
 ### 15 menit sebelum kelas
 - [ ] Tulis di papan: **nama WiFi & password** (huruf besar-kecil persis), plus "Cabut USB sebelum memindah kabel!".
@@ -59,7 +59,7 @@ Rakitan P10 (ESP32 + DHT22 di D4) · kabel USB data · laptop dengan folder `smp
 
 ## 5. Mengelola kelas 12–15 tahun
 
-- **Menunggu upload itu membosankan.** Saat Build/Upload berjalan, beri tugas kecil: Pencatat menyiapkan tabel "sebelum/sesudah tiup" untuk Easy; Perakit menekan ulang semua kabel.
+- **Menunggu upload itu membosankan.** Saat compile/Upload berjalan, beri tugas kecil: Pencatat menyiapkan tabel "sebelum/sesudah tiup" untuk Easy; Perakit menekan ulang semua kabel.
 - **Peran berputar** (slide 5): Operator Topik 1 ≠ Operator Topik 2 (ganti di menit 36). Pencatat menulis angka, bukan hanya menonton.
 - **Peserta individu:** pegang semua peran. Pasangkan dengan individu sebelah sebagai "teman cek" untuk membandingkan nama WiFi dan membaca checklist.
 - **WiFi macet di banyak kelompok sekaligus** → hentikan kelas 1 menit dengan sinyal diam, pindahkan semua ke hotspot cadangan bersama-sama (tulis nama hotspot di papan), daripada membantu satu per satu.
@@ -77,9 +77,9 @@ Rakitan P10 (ESP32 + DHT22 di D4) · kabel USB data · laptop dengan folder `smp
 | Kesalahan | Pertanyaan pancingan |
 |---|---|
 | Nama WiFi beda huruf besar/kecil atau ada spasi | "Bandingkan huruf demi huruf dengan papan. Pengecek, bacakan pelan-pelan." |
-| Tanda kutip `"` ikut terhapus (Build error) | "Lihat baris yang kamu ketik. Bentuknya sama dengan baris di atasnya? Ada yang hilang?" |
+| Tanda kutip `"` ikut terhapus (error merah saat compile) | "Lihat baris yang kamu ketik. Bentuknya sama dengan baris di atasnya? Ada yang hilang?" |
 | Lupa Save sebelum Upload | "Di judul tab file ada titik bulat? Artinya apa?" |
-| Membuka folder `smp-XX` (bukan `smp-XX/firmware`) → Upload tidak ada | "Folder program ESP32 namanya apa di slide 7?" |
+| Arduino IDE bertanya *"needs to be inside a sketch folder"* | "Nama folder dan nama file `.ino` harus sama. Kamu membuka dari folder mana?" → buka dari `firmware/smp_room_monitor/` |
 | Mengubah `DEVICE_ID` | "Device ID itu plat nomor. Boleh diganti?" → kembalikan sesuai nama folder |
 | Langsung menyalahkan program | "Program yang sama jalan di kelompok sebelah? Berarti yang beda apa?" |
 | `Gagal baca sensor` | "Serial Monitor bilang masalahnya di mana? Kabel mana yang ke sensor?" |
@@ -94,10 +94,10 @@ Rakitan P10 (ESP32 + DHT22 di D4) · kabel USB data · laptop dengan folder `smp
 | `kode respons: -1` | WiFi tanpa internet | Cek kuota hotspot, coba WiFi lain |
 | `kode respons: 401` | Zona merah (`API_KEY`) berubah | Extract ulang zip asli, isi WiFi lagi, upload |
 | Serial Monitor kosong | Pesan awal terlewat | Tekan **EN** di board |
-| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | `monitor_speed = 115200` di `firmware/platformio.ini` |
-| Build error merah setelah mengisi WiFi | Tanda kutip/titik koma terhapus | Bandingkan dengan baris di atasnya, atau extract ulang zip |
+| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | Pilih **115200 baud** di Serial Monitor |
+| Error merah saat compile setelah mengisi WiFi | Tanda kutip/titik koma terhapus | Bandingkan dengan baris di atasnya, atau extract ulang zip |
 | Ada baris `{...}` setelah kode respons | Balasan server | Normal, abaikan |
-| Masih bingung WiFi atau sensor? | — | Upload `P11_2_TesWiFi.cpp` (WiFi saja) atau `P11_1_BacaDHT22.cpp` (sensor saja) di proyek latihan, lalu upload lagi firmware proyek |
+| Masih bingung WiFi atau sensor? | — | Upload `P11_2_TesWiFi.ino` (WiFi saja) atau `P11_1_BacaDHT22.ino` (sensor saja), lalu upload lagi firmware proyek |
 
 ## 9. Keselamatan
 
@@ -109,7 +109,7 @@ Rakitan P10 (ESP32 + DHT22 di D4) · kabel USB data · laptop dengan folder `smp
 ## 10. Diferensiasi
 
 - **Siswa cepat:** Challenge Hard; bonus Medium (cabut kabel out, lihat gejalanya); atau minta mereka menjadi "dokter jaga" yang membantu kelompok lain hanya dengan pertanyaan. Tantangan ekstra: "Hitung berapa kali data terkirim dalam 1 menit." (±15 kali, tiap 4 detik).
-- **Siswa kesulitan:** fokus satu target saja: `200`. Tutor duduk di samping dan membimbing langkah demi langkah ("Klik Open Project. Pilih folder firmware. Sekarang cari tulisan ISI_DI_SINI."). Medium cukup dikerjakan lisan bersama tutor.
+- **Siswa kesulitan:** fokus satu target saja: `200`. Tutor duduk di samping dan membimbing langkah demi langkah ("Buka folder firmware, double-click smp_room_monitor.ino. Sekarang cari tulisan ISI_DI_SINI."). Medium cukup dikerjakan lisan bersama tutor.
 
 ## 11. Penilaian
 

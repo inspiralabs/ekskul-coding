@@ -10,7 +10,7 @@
 
 ## Alat & bahan (per kelompok)
 
-- Rakitan lengkap (DHT22 di D4, relay di D18, kipas DC 5V di NO) dengan firmware proyek P11 yang sudah `kode respons: 200`
+- Rakitan lengkap (DHT22 di D13, relay di D14, kipas DC 5V di NO) dengan firmware proyek P11 yang sudah `kode respons: 200`
 - Laptop + **folder kelompok** dari zip tutor (mis. `sma-04`) dan HP (opsional, untuk membuka dashboard)
 - **PIN kelompok** 4 digit dari tutor (lihat `docs/HANDOUT_SISWA.md`)
 - Stopwatch HP, multimeter (1 per kelas)
@@ -102,7 +102,7 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Ko
 
 ### Slide 8 — Satu Kata untuk Relay Active-HIGH 🔁
 ```cpp
-// potongan — firmware/sma_room_monitor.ino
+// potongan — firmware/sma_room_monitor/sma_room_monitor.ino
 // Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
 #define RELAY_ACTIVE_LOW true
 ```

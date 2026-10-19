@@ -94,5 +94,5 @@ Catatan: firmware masih punya route `/fan` lokal, tapi yang bekerja di kelas ada
 
 ## Penutup & PR
 - PR untuk P13: **foto kelompok** (landscape, siap dikecilkan ≤ ±500 KB), ide **2 warna tema**, kotak kecil/kardus untuk casing (opsional).
-- Pastikan `RELAY_ACTIVE_LOW` kembali `true` dan pin D4/D18.
+- Pastikan `RELAY_ACTIVE_LOW` kembali `true` dan pin D13/D14.
 - Tutor: simpan kertas PIN, siapkan rubrik showcase P13.

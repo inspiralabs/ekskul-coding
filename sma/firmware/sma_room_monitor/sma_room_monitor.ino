@@ -23,8 +23,8 @@ const char* DEVICE_ID     = "sma-01";        // sudah diisi tutor, JANGAN digant
 const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
 const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
 
-#define DHT_PIN 4                            // ganti sesuai pemasangan kabel DHT22
-#define RELAY_PIN 18                         // ganti sesuai pemasangan modul relay (hindari GPIO 0,2,5,12,15 = strapping pin)
+#define DHT_PIN 13                           // ganti sesuai pemasangan kabel DHT22
+#define RELAY_PIN 14                         // ganti sesuai pemasangan modul relay (hindari GPIO 0,2,5,12,15 = strapping pin)
 
 DHT dht(DHT_PIN, DHT22);
 WebServer fanServer(80);

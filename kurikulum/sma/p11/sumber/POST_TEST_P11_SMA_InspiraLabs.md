@@ -40,7 +40,7 @@ Sumber: SMA — Pertemuan 11: Firmware Jadi, Data Online: Monitoring Suhu di Das
 
 **4. WiFi sudah `Terhubung!`, tapi Serial terus menulis `Gagal baca sensor DHT22`. Yang paling perlu dicek adalah…**
 - A. Password WiFi
-- B. Kabel DHT22: out ke D4, + ke 3V3, − ke GND
+- B. Kabel DHT22: out ke D13, + ke 3V3, − ke GND
 - C. File `api.js`
 - D. Kabel kipas di terminal NO
 

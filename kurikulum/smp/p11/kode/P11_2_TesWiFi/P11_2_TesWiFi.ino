@@ -1,10 +1,9 @@
 // ============================================================
 // P11 SMP — Program Cadangan: Tes WiFi Saja
-// Salin ke src/main.cpp. Isi nama & password WiFi (harus 2.4 GHz).
+// Buka di Arduino IDE. Isi nama & password WiFi (harus 2.4 GHz).
 // Dipakai saat troubleshooting: kalau titik-titik tidak berhenti di firmware proyek,
 // tes WiFi pakai program kecil ini dulu. Setelah tersambung, upload lagi firmware proyek.
 // ============================================================
-#include <Arduino.h>
 #include <WiFi.h>
 
 const char* WIFI_SSID     = "ISI_DI_SINI";   // nama WiFi

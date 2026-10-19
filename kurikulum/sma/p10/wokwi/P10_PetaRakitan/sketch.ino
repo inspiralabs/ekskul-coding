@@ -10,16 +10,16 @@
 //
 // LED biru + resistor menggantikan kipas (Wokwi tidak punya kipas DC).
 // Kabel sama persis dengan tabel "Peta Rakitan Lengkap":
-//   3V3 -> DHT22 +, D4 -> DHT22 out, GND -> DHT22 -
-//   VIN -> relay VCC & COM, GND -> relay GND & kipas -, D18 -> relay IN,
+//   3V3 -> DHT22 +, D13 -> DHT22 out, GND -> DHT22 -
+//   VIN -> relay VCC & COM, GND -> relay GND & kipas -, D14 -> relay IN,
 //   relay NO -> kipas +
 // ============================================================
 #include <DHT.h>
 
 #define AMBANG    30.0   // suhu (C) kipas mulai menyala
 
-#define DHT_PIN   4
-#define RELAY_PIN 18
+#define DHT_PIN   13
+#define RELAY_PIN 14
 
 // Modul relay di diagram ini diatur ACTIVE-LOW (LOW = nyala), sama
 // seperti modul relay di kit kita. Relaymu active-HIGH? Ganti jadi false.
@@ -46,7 +46,7 @@ void loop() {
   float suhu = dht.readTemperature();
   float lembap = dht.readHumidity();
   if (isnan(suhu) || isnan(lembap)) {
-    Serial.println("Gagal baca DHT22 -> cek kabel out ke D4, + ke 3V3, - ke GND");
+    Serial.println("Gagal baca DHT22 -> cek kabel out ke D13, + ke 3V3, - ke GND");
     return;
   }
 

@@ -70,7 +70,7 @@
     ],
     [
       "dht1:SDA",
-      "esp:D4",
+      "esp:D13",
       "yellow",
       []
     ],
@@ -100,7 +100,7 @@
     ],
     [
       "relay1:IN",
-      "esp:D18",
+      "esp:D14",
       "blue",
       []
     ],

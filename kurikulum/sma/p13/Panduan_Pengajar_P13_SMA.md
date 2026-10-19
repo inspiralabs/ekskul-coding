@@ -56,7 +56,7 @@ Waktu molor? Hard boleh selesai di rumah (folder dikirim sebelum batas waktu). *
 |---|---|---|
 | Setelah Easy | "Tes apa yang membuktikan merapikan tidak merusak apa pun?" | Manual + Otomatis dari dashboard jalan lagi |
 | Setelah Medium | "Foto tidak muncul: 3 kemungkinan?" | Nama file, lokasi folder, ekstensi tersembunyi |
-| Showcase | "Kenapa D18, bukan D5? Kenapa NO?" | Strapping pin; fail-safe |
+| Showcase | "Kenapa D14, bukan D12? Kenapa NO?" | D12 strapping pin; fail-safe |
 
 ## Kesalahan umum & cara membimbing
 | Yang terlihat | Pertanyaan pancingan |
@@ -66,7 +66,7 @@ Waktu molor? Hard boleh selesai di rumah (folder dikirim sebelum batas waktu). *
 | Kabel IN bergeser satu lubang | "Ikuti kabel biru dengan jari: berhenti di pin berapa?" |
 | Foto tidak tampil | "Nyalakan *File name extensions*. Nama lengkap filenya apa?" |
 | `class`/`id` ikut diganti → tampilan rusak | "Yang boleh diganti teks atau tag? Bandingkan dengan zip asli." |
-| Folder > 5 MB | "Folder mana yang paling besar? (`.pio`, foto asli HP)" |
+| Folder > 5 MB | "Folder mana yang paling besar? (foto asli HP)" |
 | Tidak diminta PIN di incognito | Wajar kalau Device ID tidak terdaftar di server → lapor tutor, cek `FAN_PINS` |
 
 ## Troubleshooting cepat (tutor)

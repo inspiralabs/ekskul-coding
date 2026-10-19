@@ -12,13 +12,13 @@ Bahan: slide P11, `sumber/Materi_Ajar_P11_SMA_InspiraLabs.md` (kunci di KHUSUS T
 - [ ] Backend hidup: buka `https://api-ekskulcoding.inspiralabs.id/health`.
 - [ ] `py tools/kelompok.py paket` → 6 zip. Simpan di flashdisk/Drive, **nama file = Device ID**. Zip yang tertukar = data dua kelompok saling menimpa.
 - [ ] Isi WiFi kelas di `docs/HANDOUT_SISWA.md`. Pastikan **2.4 GHz** dan ada **internet** (bukan hanya WiFi). Hotspot HP cadangan, mode 2.4 GHz / "kompatibilitas".
-- [ ] Buka folder `firmware` dari satu zip di tiap laptop → **Build** (unduh library ke laptop; build di kelas bisa makan 5–10 menit).
+- [ ] Di tiap laptop buka `firmware/sma_room_monitor/sma_room_monitor.ino` dari satu zip → **Verify (✓)** sekali. Laptop yang belum punya board ESP32/library DHT: pasang dulu (Panduan Instalasi, unduhan ±2 GB, jangan di kelas).
 - [ ] Status awal server tiap Device ID = **Otomatis, ambang 30°C**. Kalau kelas biasanya > 30°C, set tiap dashboard ke **Manual + OFF** (PIN dari `FAN_PINS` di `backend/.env`) supaya kipas tidak menyala sendiri dan membingungkan. Atau biarkan dan jelaskan "bocoran P12".
 - [ ] Power bank / charger HP 5V + kabel data untuk Hard (minimal 2 untuk bergantian).
 - [ ] Kit yang rusak di P10 sudah diganti dan lolos Tes 1 & Tes 2.
 
 ## 15 menit sebelum kelas
-- Rakitan P10 dikeluarkan utuh. Cek cepat: relay IN di **D18**, DHT out di **D4** (Easy P10 sering lupa dikembalikan).
+- Rakitan P10 dikeluarkan utuh. Cek cepat: relay IN di **D14**, DHT out di **D13**, **D12 kosong** (Easy P10 sering lupa dikembalikan).
 - Tulis nama & password WiFi di papan (atau tampilkan handout). **Jangan** tulis PIN kelompok.
 - Satu alat tutor sudah online sebagai pembanding ("begini seharusnya").
 
@@ -33,7 +33,7 @@ Bahan: slide P11, `sumber/Materi_Ajar_P11_SMA_InspiraLabs.md` (kunci di KHUSUS T
 | 30–36 | 12–14 | Membaca Serial, kode respons, forum Topik 2 | Jawab pertanyaan pemantik di slide 13 |
 | 36–43 | 15 | Medium: Uji Sensor Hidup | Cabut USB sebelum lepas kabel kuning |
 | 43–48 | 16–18 | Alat mandiri, troubleshooting berlapis, forum Topik 3 | |
-| 48–57 | 19 | Hard: Lepas dari Laptop | Power bank bergantian; D27 harus dikembalikan ke D4 |
+| 48–57 | 19 | Hard: Lepas dari Laptop | Power bank bergantian; D27 harus dikembalikan ke D13 |
 | 57–60 | 20 | Peta proyek | Simpan folder kelompok |
 | 60–70 | 21–22 | Post-test + penutup | |
 
@@ -74,7 +74,9 @@ Waktu molor? Hard langkah 2 (pindah D27) boleh dilewati. **Jangan** lewati Easy:
 |---|---|
 | Semua kelompok −1 | Internet WiFi kelas mati → pindah semua ke hotspot cadangan (isi ulang 2 baris WiFi) |
 | Satu kelompok 401/404 | Ganti `sma_room_monitor.ino` dengan salinan zip asli, isi WiFi lagi |
-| Upload gagal setelah buka folder | Pastikan yang dibuka folder `firmware` (ada `platformio.ini`), bukan folder induk |
+| Arduino IDE minta memindah file ke folder baru | File `.ino` dibuka dari luar foldernya / nama folder diganti. Pakai `firmware/sma_room_monitor/sma_room_monitor.ino` dari zip asli |
+| `DHT.h: No such file or directory` | Library Manager → `DHT sensor library` → INSTALL ALL |
+| Upload gagal `Failed to connect` | Tahan BOOT saat `Connecting...`; **Tools → Upload Speed → 115200**; cek D12 kosong |
 | Restart berulang saat kirim data | Daya USB lemah → port lain / power bank |
 | Backend `/health` mati | Lapor admin server; sementara kerjakan Medium bagian Serial saja |
 
@@ -94,5 +96,5 @@ Waktu molor? Hard langkah 2 (pindah D27) boleh dilewati. **Jangan** lewati Easy:
 
 ## Penutup & PR
 - Folder kelompok disimpan baik-baik (dipakai lagi P12 & P13). Jangan tertukar.
-- Semua pin kembali ke D4/D18 (cek Hard).
+- Semua pin kembali ke D13/D14 (cek Hard).
 - Pengumuman P12: kontrol kipas dari dashboard. Tutor menyiapkan PIN per kelompok (dibagikan pribadi).
