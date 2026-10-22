@@ -13,7 +13,7 @@ Folder Drive tujuan: https://drive.google.com/drive/folders/1pOjrg_pXWrebh4WlrZv
 
 ==================== BAGIAN A — GOOGLE SLIDES (kerjakan sekarang) ====================
 
-Judul presentasi: P10 SMA — Merakit Smart Room Monitor: DHT22, Relay & Kipas
+Judul presentasi: P10 SMA — Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
 BRAND SYSTEM — WAJIB KONSISTEN DI SEMUA SLIDE:
 - Warna Maroon: #7A1F2B (background utama/aksen dominan)
@@ -42,8 +42,8 @@ POLA SLIDE (gaya deck P7 SMA InspiraLabs):
 - Slide 3 "PERTANYAAN PEMANTIK": pertanyaan besar di tengah sebagai judul, satu kalimat konteks lebih kecil, lalu ajakan "Penasaran jawabannya? Yuk kita bongkar." Tema terang, layout lega. Ini pembuka materi untuk siswa, BUKAN konten media sosial.
 - Slide "Apa yang kita capai hari ini?": card bernomor 01, 02, 03 (satu card per topik).
 - Slide materi & live coding: kode di card gelap dengan font monospace, ditampilkan utuh; baris "File live coding" jadi badge kecil.
-- Slide "Forum Diskusi Live Coding": label kecil "forum Diskusi Live Coding", pertanyaan besar di tengah, layout lega.
-- Slide Challenge: label "TOPIK X DARI N — CHALLENGE" di atas judul, badge EASY (hijau) / MEDIUM (kuning) / HARD (merah) dan badge "+10", instruksi bernomor dalam card; baris "Download" / "Simpan hasil sebagai" jadi kotak info di bawah.
+- Slide "Forum Diskusi" / "Tanya Jawab": label kecil sesuai judul slide, pertanyaan besar di tengah, layout lega. Kalau judulnya memuat poin (mis. "+2"), tampilkan sebagai badge gold.
+- Slide Challenge: label "TOPIK X DARI N — CHALLENGE" di atas judul, badge EASY (hijau) / MEDIUM (kuning) / HARD (merah) dan badge poin sesuai angka di judul (mis. "+5", "+10", "+15"), instruksi bernomor dalam card; baris "Download" / "Simpan hasil sebagai" jadi kotak info di bawah.
 - Slide "EVALUASI MANDIRI": label "EVALUASI MANDIRI", judul "Post-Test: 5 Soal Pilihan Ganda", link Linktree, 3 langkah bernomor 01–03 dalam card.
 - Slide "Terima kasih!": nuansa cover, info pertemuan berikutnya di card.
 
@@ -71,13 +71,16 @@ GAMBAR RANGKAIAN (bagian berlabel "wiring" di isi slide):
 
 ---------- MULAI ISI SLIDE ----------
 
-# P10 SMA — Merakit Smart Room Monitor: DHT22, Relay & Kipas
+# P10 SMA — Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
 <!-- File ini khusus untuk PPT. 1 blok di antara garis --- = 1 slide, urutan PERSIS seperti di file.
      Footer tiap slide: "InspiraLabs • Ekskul Coding • Sekolah Qur'an Asy Syahid P10 SMA | nomor slide".
      Baris "> 🗣️ SPEAKER NOTES" masuk ke speaker notes, JANGAN tampil di slide.
-     Blok wiring = perintah gambar diagram rangkaian (aturan di prompt/GENERATE-PPT.md).
-     Jawaban challenge & post-test hanya ada di Materi Ajar. -->
+     Jawaban challenge & post-test hanya ada di Materi Ajar.
+     Khusus deck SMA ini, blok kode tampil di card TERANG (light mode): latar #FAF7F0, border 1px #E6DCC6,
+     garis kiri 6px gold #C9A24B, teks #2B2320, komentar abu miring, kata kunci maroon #7A1F2B, angka/string #8A6516;
+     baris yang boleh diubah (di antara "BOLEH DIUBAH" dan garis penutupnya) diberi latar #F3E6C4.
+     Abaikan aturan "kode di card gelap". -->
 
 ---
 
@@ -96,9 +99,9 @@ Pindai QR code di samping menggunakan smartphone Anda, atau kunjungi tautan di b
 
 **P10 SMA**
 
-# Merakit Smart Room Monitor: DHT22, Relay & Kipas
+# Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
-Dari komponen berserakan jadi satu alat utuh yang lolos uji.
+Hari ini benda mati mulai nurut sama kodemu.
 
 > 🗣️ SPEAKER NOTES: Slide pembuka materi. Bacakan judul dan tagline, lalu lanjut ke pertanyaan pemantik.
 
@@ -106,285 +109,253 @@ Dari komponen berserakan jadi satu alat utuh yang lolos uji.
 
 ### PERTANYAAN PEMANTIK
 
-# Kalau alat elektronik tidak jalan, bagaimana teknisi tahu bagian mana yang rusak tanpa membongkar semuanya?
+# Lampu jalan nyala sendiri pas maghrib. Pintu mal kebuka sendiri. Siapa sebenarnya yang "nyuruh" mereka?
 
-Teknisi profesional tidak menebak. Mereka punya urutan merakit, program tes, dan alat ukur. Hari ini kita memakai ketiganya.
+Nggak ada orang yang mencet tombolnya. Ada "otak" kecil yang kerja diam-diam.
 
 Penasaran jawabannya? Yuk kita bongkar.
 
-> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 3.
+> 🗣️ SPEAKER NOTES: Tampung 2–3 tebakan (+2 per penebak, benar atau salah). Jangan dijawab dulu; jawabannya di slide "IoT Itu Apa Sih?" dan "Kenalan: Ini ESP32".
 
 ---
 
 ### Apa yang kita capai hari ini?
 
-- **01 Rakit & Tes Relay + Kipas**: Peta rakitan, urutan merakit aman, active-LOW dilihat langsung.
-- **02 Rakit & Tes DHT22**: Sensor terbaca, membaca laporan Serial Monitor.
-- **03 Troubleshooting**: Tabel gejala–penyebab dan 3 pengukuran multimeter.
+- **01 Kenalan ESP32**: otak kecil yang bisa WiFi.
+- **02 Pasang Bengkel**: Arduino IDE, board ESP32, library.
+- **03 Kedip Pertama**: upload program, lalu utak-atik angkanya.
 
 ---
 
-### Dari Rakitan Lepas ke Rakitan Utuh
-- P9: DHT22 dan relay dirakit **terpisah**, relay dinyalakan dengan **jumper tangan** (IN → GND).
-- Hari ini: semua komponen dirakit jadi **satu alat utuh**, lalu diuji dengan **2 program tes jadi**.
-- Program tes = **alat ukur**, seperti *factory test* di pabrik sebelum produk dikirim. Cukup **buka file → Upload → amati**.
-- Berdua: **Perakit** & **Penguji**, tukar di Topik 2. Sendiri: baca checklist keras-keras.
-- Rakitan ini = rakitan **final** proyek akhir. Jangan dibongkar setelah kelas.
+### Cara Dapat Poin Hari Ini
 
-> 🗣️ SPEAKER NOTES: Perakit memegang kabel. Penguji membaca tabel Peta Rakitan, mencentang, memegang multimeter & Serial Monitor. Peserta individu: minta tetangga atau tutor ikut mengecek sebelum colok USB.
+| Kegiatan | Poin |
+|---|---|
+| Bertanya / menjawab saat **Tanya Jawab** | **+2** |
+| Challenge 🟢 **Easy** | **+5** |
+| Challenge 🟡 **Medium** | **+10** |
+| Challenge 🔴 **Hard** | **+15** |
 
----
+Salah jawab tetap +2. Yang dihitung beraninya. Di akhir kelas: **Post-Test** di Google Form. **Tidak ada PR.**
 
-### Peta Rakitan Lengkap
-| Dari (ESP32) | Ke | Warna kabel |
-|---|---|---|
-| 3V3 | DHT22 **+** | Merah |
-| D13 (GPIO 13) | DHT22 **out** | Kuning |
-| GND | DHT22 **−** | Hitam |
-| VIN (5V) | jalur **+** → relay **VCC** dan relay **COM** | Merah / Oranye |
-| GND | jalur **−** → relay **GND** dan kipas **−** | Hitam |
-| D14 (GPIO 14) | relay **IN** | Biru |
-| relay **NO** | kipas **+** | Oranye |
-
-```wiring
-Judul: Rakitan lengkap Smart Room Monitor
-Komponen: ESP32 DevKit V1, breadboard, modul DHT22 3-pin, modul relay 1-channel 5V, kipas mini DC 5V
-Koneksi:
-- ESP32 3V3 → DHT22 "+" (kabel merah)
-- ESP32 D13 → DHT22 "out" (kabel kuning)
-- ESP32 GND → DHT22 "−" (kabel hitam)
-- ESP32 VIN → jalur + breadboard (kabel merah)
-- ESP32 GND → jalur − breadboard (kabel hitam)
-- jalur + → relay VCC (kabel merah)
-- jalur − → relay GND (kabel hitam)
-- ESP32 D14 → relay IN (kabel biru)
-- jalur + → relay COM (kabel oranye)
-- relay NO → kipas mini "+" (kabel oranye)
-- kipas mini "−" → jalur − (kabel hitam)
-Sorot: D13 = DHT_PIN 13 dan D14 = RELAY_PIN 14 ; D12 (di antara keduanya) dibiarkan kosong ; label "kipas di NO = fail-safe"
-```
-
-> 🗣️ SPEAKER NOTES: Kenapa DHT22 di 3V3: modul DHT22 punya pull-up ke kaki "+", jadi sinyal datanya setinggi tegangan daya. GPIO ESP32 hanya tahan 3,3V. Kenapa relay di VIN 5V: kumparan relay butuh 5V. Kipas di NO supaya kalau ESP32 mati, kipas ikut mati (fail-safe, P9). Kalau diagram di slide ini tidak akurat, ganti dengan screenshot simulasi Wokwi P10_PetaRakitan (LED biru = pengganti kipas).
+> 🗣️ SPEAKER NOTES: Utamakan siswa yang belum dapat poin. Pasangan (sma-04/05/06): poin challenge untuk kedua anggota. Tutor mencatat di leaderboard.
 
 ---
 
-### Urutan Merakit yang Aman
-1. **Cabut USB.** Merakit & memindah kabel selalu dalam keadaan **mati**.
-2. Pasang ESP32 di breadboard: **VIN → jalur +**, **GND → jalur −**.
-3. **Sisi kontrol relay**: VCC, GND, IN.
-4. **Sisi beban**: jalur + → COM, NO → kipas +, kipas − → jalur −. Sekrup kencang, tarik pelan: tidak lepas.
-5. Penguji **mencentang** tabel Peta Rakitan satu per satu.
-6. Colok USB. Bau/panas? **Cabut segera.**
-- DHT22 menyusul di Topik 2, dengan aturan yang sama.
+### IoT Itu Apa Sih?
 
-> 🗣️ SPEAKER NOTES: Keselamatan: HANYA kipas DC 5V. Tidak ada kabel PLN/stopkontak di meja praktik. Jangan sambungkan kipas langsung ke pin GPIO (arus kipas jauh di atas ±12 mA yang aman untuk GPIO). Jaga jari & rambut dari baling-baling.
+- **Internet of Things** = benda sehari-hari yang bisa **merasa**, **mikir**, dan **ngobrol lewat internet**.
+- Rumusnya: **Sensor** (indra) → **Mikrokontroler** (otak) → **Aksi / Internet** (tangan & mulut).
+- Contoh: smartwatch menghitung langkah, CCTV yang bisa dilihat dari HP, lampu kandang ayam otomatis, dan… **Smart Room Monitor** buatan kita.
+
+> 🗣️ SPEAKER NOTES: Jawab pemantik di sini: lampu jalan punya sensor cahaya + mikrokontroler, pintu mal punya sensor gerak. Tidak ada yang "nyuruh"; mereka mengikuti program.
 
 ---
 
-### Cara Upload Program Tes Jadi
-1. Buka folder **Kode** → folder program (misal `P10_1_TesRelay`) → **double-click** file `.ino` → terbuka di **Arduino IDE**.
-2. Klik kotak **Select Board** → pilih port ESP32 (Windows: `COM…`, Mac: `/dev/cu.usbserial-…`) → board **ESP32 Dev Module**.
-3. Klik **Upload (→)**, tunggu sampai muncul **Done uploading**.
-4. Buka **Serial Monitor** (ikon kanan atas, atau `Ctrl+Shift+M` / Mac `⌘+Shift+M`), pilih **115200 baud**.
-- `Connecting.....` lama / gagal? Tahan tombol **BOOT** di ESP32 sampai muncul `Writing at ...`.
-- Port tidak muncul? Kemungkinan kabel USB **khusus charger** atau driver belum ada. Ganti kabel, lihat *Panduan Instalasi*.
-- Masih gagal upload? **Tools → Upload Speed → 115200**, lalu Upload lagi.
-- Ganti program = buka file `.ino` lain, Upload lagi. Tidak perlu membuat project baru.
+### Kenalan: Ini ESP32
+
+- **Chip ESP32** (kotak logam): otaknya. 240 MHz, 2 inti, ribuan kali lebih cepat dari komputer misi Apollo ke bulan.
+- **Antena WiFi** (garis zig-zag): bisa WiFi & Bluetooth tanpa tambahan apa pun.
+- **Port USB**: jalur listrik + jalur kirim program.
+- **Tombol BOOT & EN**: EN = restart, BOOT = "mode terima program".
+- **LED merah** = ada listrik. **LED biru** = bisa kita program (GPIO 2).
+- **Pin di pinggir**: "tangan & telinga" untuk sensor dan relay (dipakai mulai P11).
+
+> 🗣️ SPEAKER NOTES: Tampilkan foto ESP32 DevKit V1 dengan 6 label panah. Edarkan ESP32 asli ke tiap meja, minta siswa menunjuk antena dan tombol BOOT. Harganya kira-kira seharga dua porsi bakso.
 
 ---
 
-### Tes 1: Relay Berdetak
+### Demo: Akhir P12, Alatmu Bisa Begini
+
+- Genggam sensor → angka suhu di dashboard naik.
+- Tekan tombol di HP → kipas menyala.
+- Kodenya **sudah jadi**. Misi kalian di kelas: bikin alat ini hidup dan bikin dashboard-nya jadi milik kalian.
+
+> 🗣️ SPEAKER NOTES: Demo live pakai alat jadi tutor (DHT22 + relay + kipas + firmware proyek) dan dashboard tutor di proyektor. Ini "wow moment" sesi ini, jangan dilewati. Maksimal 2 menit.
+
+---
+
+### Tanya Jawab (+2)
+
+**Sebutkan 1 benda di rumah atau sekolahmu yang menurutmu punya "otak" kecil. Sensornya apa?**
+
+> 🗣️ SPEAKER NOTES: Topik 1 — Kenalan ESP32. Minta 2–3 siswa menjawab (+2 per siswa). Contoh jawaban: rice cooker (sensor suhu), AC (sensor suhu), dispenser, palang parkir (sensor kendaraan), HP (banyak sensor).
+
+---
+
+### Bengkel Kita: 3 Alat
+
+- **Arduino IDE** = dapur: tempat menulis & mengirim program ke ESP32.
+- **Board ESP32** = kompor yang cocok: supaya Arduino IDE kenal ESP32 (buatan Espressif, bukan Arduino).
+- **Library DHT** = bumbu instan: kode jadi untuk membaca sensor suhu (dipakai mulai P11).
+- Pasangnya berurutan: **Level 1 → Level 2 → Level 3**. Tiap level selesai: tempel **sticky note hijau** di laptop. Butuh bantuan: **sticky note merah**.
+
+---
+
+### Level 1: Pasang Arduino IDE
+
+- **Windows**: cek *About your PC* → harus **64-bit** → jalankan installer dari flashdisk tutor (atau arduino.cc/en/software) → **Yes** → **I Agree** → **Install** → **Finish**. Muncul izin driver? **Install**.
+- **Mac**: logo Apple → *About This Mac* → **Apple M1/M2/M3/M4** atau **Intel**? Pilih file `.dmg` yang cocok → seret ke **Applications** → buka → **Open**.
+
+> 🗣️ SPEAKER NOTES: Langkah detail: Panduan Instalasi 1. Edarkan flashdisk supaya tidak semua mengunduh lewat WiFi sekolah. Mac yang menolak membuka aplikasi: System Settings → Privacy & Security → Open Anyway.
+
+---
+
+### Level 2: Pasang Board ESP32
+
+- **File → Preferences** (Mac: **Arduino IDE → Settings**) → kotak *Additional boards manager URLs* → tempel:
+  `https://espressif.github.io/arduino-esp32/package_esp32_index.json` → **OK**.
+- **Boards Manager** (ikon papan di kiri) → ketik `esp32` → pilih **esp32 by Espressif Systems** → **INSTALL**.
+- Bukan "Arduino ESP32 Boards". Ukurannya besar (±2 GB): ikuti arahan tutor.
+
+> 🗣️ SPEAKER NOTES: Langkah detail: Panduan Instalasi 2. Internet lambat → pilih versi 2.0.17 (±0,8 GB), semua program P10–P13 tetap jalan. Selama unduhan berjalan, lanjut ke game slide berikutnya.
+
+---
+
+### Sambil Menunggu: Tebak Benda IoT!
+
+Tutor menampilkan 6 foto benda. Tebak: **IoT atau bukan?** Kalau IoT, sensornya apa?
+
+- Rice cooker biasa · Smart TV · Palang parkir otomatis
+- Kalkulator · Timbangan digital Bluetooth · Pompa air otomatis
+
+Tiap jawaban yang berani: **+2**.
+
+> 🗣️ SPEAKER NOTES: Kunci longgar: smart TV & timbangan Bluetooth = terhubung (IoT); palang parkir & pompa air otomatis = punya sensor + otak, jadi IoT kalau datanya dikirim ke jaringan; kalkulator & rice cooker biasa = punya otak tapi tidak "ngobrol" ke internet. Yang penting siswa menyebut sensornya.
+
+---
+
+### Level 3: Pasang Library DHT
+
+- **Library Manager** (ikon buku di kiri) → ketik `DHT sensor library` → pilih **by Adafruit** → **INSTALL** → **INSTALL ALL**.
+- Jangan pasang library bernama **"WiFi"**. ESP32 sudah punya WiFi bawaan.
+
+> 🗣️ SPEAKER NOTES: Langkah detail: Panduan Instalasi 3. Jangan pilih INSTALL WITHOUT DEPENDENCIES (nanti error Adafruit_Sensor.h).
+
+---
+
+### Colok ESP32: Port Muncul?
+
+- Pakai **kabel USB DATA**, bukan kabel charger.
+- **Windows**: Device Manager → *Ports (COM & LPT)* → ada **COMx**.
+- **Mac**: Terminal → `ls /dev/cu.*` → ada `/dev/cu.usbserial-…`.
+- Tidak muncul? Ganti kabel → pindah port USB → pasang driver CP210x/CH340 dari flashdisk tutor.
+
+---
+
+### Tanya Jawab (+2)
+
+**LED merah ESP32 menyala, tapi port tidak muncul di laptop. Siapa tersangka nomor 1?**
+
+> 🗣️ SPEAKER NOTES: Topik 2 — Pasang Bengkel. Minta 2–3 siswa menjawab (+2 per siswa). Jawaban: kabel USB khusus charger. Kabel itu hanya membawa listrik (LED merah nyala), tidak membawa data.
+
+---
+
+### Kedip Pertama: Cara Upload
+
+1. Folder **Kode** → `P10_1_KedipPertama` → double-click `P10_1_KedipPertama.ino`.
+2. **Select Board** → **ESP32 Dev Module** + port ESP32.
+3. Klik **Upload (→)** → tunggu **Done uploading**. Compile pertama 2–5 menit, wajar.
+4. **Serial Monitor** (`Ctrl+Shift+M` / Mac `⌘+Shift+M`) → **115200 baud**.
+- Macet di `Connecting.....`? **Tahan tombol BOOT** sampai muncul `Writing at …`.
+
+> 🗣️ SPEAKER NOTES: Upload gagal di tengah (timed out)? Tools → Upload Speed → 115200. Huruf acak di Serial Monitor = baud belum 115200.
+
+---
+
+### Kode: Bagian yang Kamu Utak-atik
+
 ```cpp
-#define RELAY_PIN 14     // ubah HANYA kalau kabel IN kamu pasang di pin lain
-#define RELAY_ON  LOW    // modul relay active-LOW: IN = LOW -> relay aktif
-#define RELAY_OFF HIGH
+#define LED_PIN 2        // LED biru bawaan ESP32 DevKit V1 ada di GPIO 2
 
-void setup() {
-  Serial.begin(115200);
-  digitalWrite(RELAY_PIN, RELAY_OFF);  // set OFF dulu supaya relay tidak klik saat boot
-  pinMode(RELAY_PIN, OUTPUT);
-  Serial.println();
-  Serial.printf("Tes relay di GPIO %d dimulai\n", RELAY_PIN);
-}
-
-void loop() {
-  digitalWrite(RELAY_PIN, RELAY_ON);
-  Serial.println("Relay AKTIF (IN = LOW, sekitar 0 V)    -> kipas harus BERPUTAR");
-  delay(2000);
-
-  digitalWrite(RELAY_PIN, RELAY_OFF);
-  Serial.println("Relay MATI  (IN = HIGH, sekitar 3,3 V) -> kipas harus BERHENTI");
-  delay(2000);
-}
+// ===== BOLEH DIUBAH =====
+int lamaNyala = 500;     // berapa milidetik LED menyala (1000 = 1 detik)
+int lamaMati  = 500;     // berapa milidetik LED mati
+// ========================
 ```
-- **Tidak perlu diubah.** Cek: tiap 2 detik relay **klik**, LED relay menyala, kipas berputar lalu berhenti.
 
-File live coding: `P10_1_TesRelay.ino` (ada di linktr.ee/InspiraLabs_SMA)
+- **Tinkering** = ubah angka → Upload → amati. Begitu cara engineer belajar alat baru.
+- Kalian **tidak** menulis kode dari nol. Cukup ubah baris di kotak `BOLEH DIUBAH`.
 
-> 🗣️ SPEAKER NOTES: Tidak perlu membedah kode baris per baris. Tunjukkan 3 hal saja: angka 14 = pin kabel biru, LOW = aktif (active-LOW dari P9), dan teks Serial Monitor sebagai "laporan" alat. Teks di Serial harus cocok dengan yang terjadi di meja.
+File live coding: `P10_1_KedipPertama.ino` (ada di linktr.ee/InspiraLabs_SMA)
 
----
-
-### Active-LOW: Lihat dengan Mata & Multimeter
-| Serial Monitor | Tegangan pin IN (ke GND) | LED relay | Kipas |
-|---|---|---|---|
-| `Relay AKTIF` | ±0 V (LOW) | Menyala | Berputar |
-| `Relay MATI` | ±3,3 V (HIGH) | Mati | Berhenti |
-- **Bukti fisik** eksperimen P9: modul aktif saat IN = **LOW**.
-- **Kenapa?** Di dalam modul, arus mengalir dari VCC **keluar lewat pin IN**. IN = LOW membuka "jalan keluar" arus → relay menarik. IN = HIGH menutupnya.
-- Firmware proyek akhir memakai aturan yang sama.
-
-> 🗣️ SPEAKER NOTES: Demo dengan multimeter di proyektor/kamera: probe hitam ke GND, probe merah ke pin IN relay. Angka melompat 0 V ↔ 3,3 V mengikuti bunyi klik. Analogi: pin IN seperti keran di ujung bawah selang; dibuka ke bawah (LOW) → arus mengalir → relay bekerja. Yang penasaran: di jalur itu ada LED optocoupler/transistor modul. Cukup sampai situ.
+> 🗣️ SPEAKER NOTES: Tidak perlu membedah kode baris per baris. Tunjukkan 3 hal: angka 2 = pin LED biru, 500 = setengah detik, Serial Monitor menulis "Nyala"/"Mati" sesuai LED.
 
 ---
 
-### Forum Diskusi Live Coding
+### Program Tinggal di ESP32
 
-**Kenapa kita harus mencabut USB dulu setiap kali memindah kabel? Apa yang terjadi kalau ujung kabel VIN tidak sengaja menyentuh jalur GND?**
+- Cabut USB dari laptop, colok ke power bank: LED **tetap kedip**.
+- Upload = memindahkan program dari laptop ke "otak" ESP32. Laptop hanya untuk menulis & mengirim.
 
-> 🗣️ SPEAKER NOTES: Topik 1 — Rakit & Tes Relay. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge. Arahkan ke istilah korsleting (short circuit): arus besar langsung dari VIN ke GND, bisa merusak ESP32 atau port USB laptop.
+> 🗣️ SPEAKER NOTES: Demo singkat dengan power bank tutor. Ini bekal Challenge "Lepas dari Laptop" di P11.
 
 ---
 
-### Challenge 🟢 Easy — "Pindah Pin Relay" (+10)
+### Tanya Jawab (+2)
 
-**TOPIK 1 DARI 3 — CHALLENGE 🟢**
+**Kalau lamaNyala = 5 dan lamaMati = 5, LED-nya kelihatan seperti apa? Kenapa?**
 
-1. **Cabut USB.** Pindahkan kabel biru relay IN dari **D14** ke **D26**.
-2. Ubah **satu angka**: `#define RELAY_PIN 14` → `26`.
-3. Upload. Relay harus kembali klik tiap 2 detik, Serial menulis `GPIO 26`.
-4. Jawab: kalau kabel sudah dipindah tapi angkanya **lupa** diubah, apa yang terjadi?
-5. Kembalikan kabel ke D14 dan angka ke 14.
+> 🗣️ SPEAKER NOTES: Topik 3 — Kedip Pertama. Tampung tebakan dulu (+2), lalu biarkan siswa mencoba sendiri. Jawaban: LED kedip 100 kali per detik, terlalu cepat untuk mata, jadi terlihat menyala terus tapi lebih redup. Ini dasar lampu yang bisa diredupkan.
 
-Download folder `C1_P10_Easy_PindahPinRelay` dari linktr.ee/InspiraLabs_SMA
+---
+
+### Challenge 🟢 Easy — "Kedip Gaya Kamu" (+5)
+
+**TOPIK 3 DARI 3 — CHALLENGE 🟢**
+
+1. Di `P10_1_KedipPertama.ino`, ubah `lamaNyala` dan `lamaMati` jadi **100** → Upload.
+2. Ubah lagi keduanya jadi **2000** → Upload.
+3. Tunjukkan kedua versi ke tutor.
+
+Download folder `P10_1_KedipPertama` dari linktr.ee/InspiraLabs_SMA
 Simpan hasil: **File → Save As…** → `P10_NamaSiswa_C1`
 
 ---
 
-### Tes 2: Baca DHT22
-```cpp
-#include <DHT.h>
+### Challenge 🟡 Medium — "Tiru Lampu Asli" (+10)
 
-#define DHT_PIN 13       // ubah HANYA kalau kabel "out" kamu pasang di pin lain
+**TOPIK 3 DARI 3 — CHALLENGE 🟡**
 
-DHT dht(DHT_PIN, DHT22);
+1. Pilih 1 lampu dunia nyata: **lampu sein motor**, **lampu menara/suar** (kedip singkat, gelap lama), atau **lampu hazard**.
+2. Tiru dengan mengubah `lamaNyala` dan `lamaMati` → Upload.
+3. Ganti juga teks `"Halo! ESP32 siap berkedip."` (di bagian `setup`) jadi pesanmu sendiri, misal `"Lampu sein punya Raka siap!"`. Cek di Serial Monitor.
+4. Teman sebelah menebak lampu apa yang kamu tiru. Tebakan benar = lolos.
 
-void setup() {
-  Serial.begin(115200);
-  dht.begin();
-  Serial.println();
-  Serial.printf("Tes DHT22 di GPIO %d dimulai\n", DHT_PIN);
-}
-
-void loop() {
-  delay(2000);  // DHT22: maksimal 1 bacaan tiap 2 detik
-
-  float suhu = dht.readTemperature();
-  float lembap = dht.readHumidity();
-
-  if (isnan(suhu) || isnan(lembap)) {
-    Serial.println("Gagal baca DHT22 -> cek: out ke GPIO 13? + ke 3V3? - ke GND? kabel longgar?");
-    return;
-  }
-
-  Serial.printf("Suhu: %.1f C | Lembap: %.1f %%\n", suhu, lembap);
-}
-```
-- Genggam sensor → suhu naik pelan. Tiup sensor → kelembapan naik cepat.
-
-File live coding: `P10_2_TesDHT22.ino` (ada di linktr.ee/InspiraLabs_SMA)
-
----
-
-### Membaca Serial Monitor
-| Muncul di Serial Monitor | Artinya | Tindakan |
-|---|---|---|
-| `Suhu: 28.4 C \| Lembap: 65.0 %` | Sensor & kabel **beres** | Lanjut |
-| `Gagal baca DHT22 ...` terus-menerus | ESP32 hidup, sensor tidak menjawab | Cek 3 kabel DHT22, terutama **out → D13** |
-| Huruf acak seperti `⸮⸮x⸮` | Baud rate salah | Set ke **115200** |
-| Tidak muncul apa pun | Program belum ter-upload / port salah | Upload ulang, tekan tombol **EN** |
-
----
-
-### Forum Diskusi Live Coding
-
-**Serial Monitor terus menulis "Gagal baca DHT22". Kabel mana yang kalian cek pertama, dan kenapa?**
-
-> 🗣️ SPEAKER NOTES: Topik 2 — Rakit & Tes DHT22. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
-
----
-
-### Challenge 🟡 Medium — "Termostat Tangan" (+10)
-
-**TOPIK 2 DARI 3 — CHALLENGE 🟡**
-
-1. Upload file challenge apa adanya, catat suhu ruangan dari Serial Monitor.
-2. Ubah **satu angka**: `#define AMBANG` = suhu ruangan + 1 (misal `29.5`). Upload lagi.
-3. **Genggam** sensor DHT22 sampai kipas menyala sendiri. Lepas, tunggu sampai kipas mati sendiri.
-4. Catat: berapa detik sampai kipas menyala? Berapa detik sampai mati lagi?
-5. Jawab: kenapa kipas baru mati setelah suhu turun **0,5°C di bawah** AMBANG?
-
-Download folder `C2_P10_Medium_TermostatTangan` dari linktr.ee/InspiraLabs_SMA
+Download folder `P10_1_KedipPertama` dari linktr.ee/InspiraLabs_SMA
 Simpan hasil: **File → Save As…** → `P10_NamaSiswa_C2`
 
 ---
 
-### Troubleshooting Rakitan
-| Gejala | Penyebab paling sering | Cek |
-|---|---|---|
-| Relay tidak klik, LED relay mati | VCC/GND relay lepas, IN bukan di D14 | Kabel merah/hitam/biru relay |
-| Relay klik, kipas **tidak** berputar | COM/NO longgar, kipas − tidak ke GND | Sekrup terminal, kabel oranye |
-| Kipas berputar saat Serial "MATI" | Kipas di **NC**, bukan NO | Pindah ke **NO** |
-| Kipas menyala sesaat saat ESP32 dicolok | Relay di **strapping pin** (0, 2, 5, 12, 15) | Kembalikan ke D14 |
-| Relay **tidak mau mati** | Modul 5V kurang cocok dengan logika 3,3V | Panggil tutor |
-| ESP32 restart saat kipas mulai berputar | Daya USB tidak kuat | Port lain / power bank, kabel pendek |
-| Upload gagal / ESP32 tidak mau jalan setelah dirakit | Ada kabel nyasar ke **D12** (strapping pin, di antara D14 dan D13) | Cabut kabel dari D12 |
-
----
-
-### Tips Engineer: 3 Pengukuran Multimeter
-1. **Tegangan** (DC V): 3V3 ke GND ≈ **3,3 V**; VIN ke GND ≈ **4,7–5 V**.
-2. **Tegangan pin IN** ke GND: ±0 V saat aktif, ±3,3 V saat mati.
-3. **Continuity** ("tiit") dengan **USB dicabut**: COM–NC bunyi, COM–NO diam.
-- Engineer tidak menebak. **Ukur dulu, baru bongkar.**
-
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik di awal sesi: urutan merakit + program tes + alat ukur = cara teknisi menemukan kerusakan tanpa membongkar semuanya. Bandingkan dengan tebakan siswa tadi.
-
----
-
-### Forum Diskusi Live Coding
-
-**Relay klik tapi kipas diam. Apa yang sudah PASTI benar, dan apa yang mungkin salah?**
-
-> 🗣️ SPEAKER NOTES: Topik 3 — Troubleshooting. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
-
----
-
-### Challenge 🔴 Hard — "Detektif Kabel" (+10)
+### Challenge 🔴 Hard — "Pesan Rahasia Morse" (+15)
 
 **TOPIK 3 DARI 3 — CHALLENGE 🔴**
 
-Kelompok lain (atau tutor) menukar **2 kabel** di rakitan kalian memakai **Kartu Sabotase**, tanpa memberi tahu.
-1. Upload `P10_1_TesRelay.ino` dan `P10_2_TesDHT22.ino`, catat **gejalanya**.
-2. Pakai tabel **Troubleshooting** dan **multimeter** untuk menemukan kedua kabel yang salah, **tanpa** membongkar semua kabel.
-3. Tulis laporan 3 baris per kabel: **gejala → pengukuran → perbaikan**.
+1. Buka `C3_P10_Hard_PesanMorse.ino` → ubah `PESAN` jadi kata 3–4 huruf (misal inisialmu) → Upload.
+2. Teman menerjemahkan kedipan LED pakai **tabel Morse** di bawah, **tanpa** melihat Serial Monitor.
+3. Terjemahan benar = lolos. Terlalu cepat? Perbesar angka `TITIK`.
 
-Simpan hasil sebagai `P10_NamaSiswa_C3` (foto laporan)
+| A `.-` | B `-...` | C `-.-.` | D `-..` | E `.` | F `..-.` | G `--.` | H `....` | I `..` |
+|---|---|---|---|---|---|---|---|---|
+| **J** `.---` | **K** `-.-` | **L** `.-..` | **M** `--` | **N** `-.` | **O** `---` | **P** `.--.` | **Q** `--.-` | **R** `.-.` |
+| **S** `...` | **T** `-` | **U** `..-` | **V** `...-` | **W** `.--` | **X** `-..-` | **Y** `-.--` | **Z** `--..` | |
 
-> 🗣️ SPEAKER NOTES: Sabotase hanya dari kartu, USB dicabut saat menukar. Kabel daya (3V3, VIN, GND) tidak boleh disilangkan. Pemilik rakitan menghadap belakang selama sabotase.
+Titik = kedip pendek, garis = kedip panjang.
+
+Download folder `C3_P10_Hard_PesanMorse` dari linktr.ee/InspiraLabs_SMA
+Simpan hasil: **File → Save As…** → `P10_NamaSiswa_C3`
 
 ---
 
-### Peta Proyek Akhir
+### Peta Petualangan IoT
 ```
-[P9]  Pinout, DHT22, relay, active-LOW (tanpa coding)        ✅
-[P10] Rakit DHT22 + relay + kipas, upload program tes jadi    ← HARI INI
-[P11] Upload firmware proyek, data suhu tampil di dashboard
-[P12] Kontrol kipas dari dashboard: manual & mode otomatis
-[P13] Rapikan rakitan + kustom dashboard + showcase
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama          ← HARI INI
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok
+[P12] Kontrol kipas dari dashboard: manual & otomatis
+[P13] Kustom dashboard + website online + Demo Day
 ```
 
-> 🗣️ SPEAKER NOTES: Minta tiap kelompok memotret rakitan yang lolos 2 tes. Foto ini dipakai lagi di P13 sebagai foto "sebelum dirapikan". Rakitan jangan dibongkar.
+> 🗣️ SPEAKER NOTES: Laptop yang belum lulus 3 level dicatat tutor dan diselesaikan di 15 menit awal P11, bukan PR.
 
 ---
 
@@ -405,7 +376,7 @@ Simpan hasil sebagai `P10_NamaSiswa_C3` (foto laporan)
 
 **SAMPAI JUMPA DI P11!**
 
-MINGGU DEPAN (P11): **Firmware Jadi, Data Online: Monitoring Suhu di Dashboard**
+MINGGU DEPAN (P11): **Rakit Smart Room Monitor & Kirim Datanya ke Dashboard Kelompok**. Bawa laptop yang sama.
 
 ---------- SELESAI ISI SLIDE ----------
 
@@ -414,7 +385,7 @@ Buat presentasi Google Slides BAGIAN A sekarang. Setelah selesai, tunggu saya me
 
 ==================== BAGIAN B — GOOGLE DOCS MATERI AJAR (kerjakan setelah "LANJUT B") ====================
 
-Judul dokumen: Materi Ajar P10 SMA — Merakit Smart Room Monitor: DHT22, Relay & Kipas
+Judul dokumen: Materi Ajar P10 SMA — Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
 BRAND SYSTEM — WAJIB DIIKUTI KONSISTEN:
 - Warna Maroon: #7A1F2B (untuk heading utama, judul besar)
@@ -442,346 +413,272 @@ STRUKTUR DOKUMEN:
 
 ---------- MULAI ISI MATERI AJAR ----------
 
-# SMA — Pertemuan 10: Merakit Smart Room Monitor: DHT22, Relay & Kipas
+# SMA — Pertemuan 10: Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
 | Info | Isi |
 |---|---|
 | Tanggal | Sabtu, 17 Oktober 2026 |
 | Durasi | 70 menit |
-| Target silabus | Siswa mampu merakit sensor DHT22 + relay + kipas ke ESP32 dengan benar dan mengujinya memakai program tes jadi |
-| Penilaian | Hasil praktek: rakitan lengkap lolos 2 program tes (relay berdetak & DHT22 terbaca) |
-| Kaitan dengan proyek akhir | Rakitan hari ini **sama persis** dengan yang dipakai firmware `sma/firmware/sma_room_monitor/sma_room_monitor.ino`: `#define DHT_PIN 13` dan `#define RELAY_PIN 14`, relay **active-LOW**. Kalau rakitan lolos tes hari ini, firmware proyek di P11 tinggal di-upload. |
+| Target silabus | Siswa mengenal ESP32 sebagai otak alat IoT, memasang Arduino IDE + board ESP32 + library DHT, dan meng-upload program pertamanya (kedip LED) |
+| Penilaian | Keaktifan Tanya Jawab (+2), Challenge (Easy +5, Medium +10, Hard +15), Post-test 5 soal (Google Form). **Tidak ada PR.** |
+| Kaitan dengan proyek akhir | Hari ini belum merakit. Laptop disiapkan untuk P11–P13: di P11 firmware proyek `sma_room_monitor.ino` (DHT22 + relay + kipas → dashboard kelompok) di-upload dengan cara **persis sama** seperti `P10_1_KedipPertama.ino` hari ini. **Siswa tidak menulis kode**: hanya mengubah baris di kotak `BOLEH DIUBAH` (tinkering). |
 
-## Alat & bahan (per kelompok)
+## Alat & bahan (per kelompok/individu)
 
-- ESP32 DevKit V1 30-pin + kabel USB **data** (bukan kabel yang hanya untuk charger)
-- Breadboard + kabel jumper male-male & male-female (merah, hitam, kuning, biru, oranye)
-- Modul DHT22 3-pin (+, out, −)
-- Modul relay 1-channel 5V active-LOW (VCC, GND, IN | COM, NO, NC) + obeng kecil
-- **Kipas mini DC 5V** (bukan kipas listrik PLN 220V)
-- Laptop dengan **Arduino IDE 2** + board **esp32 by Espressif Systems** + library **DHT sensor library** (3 Panduan Instalasi di `kurikulum/panduan-instalasi/`), folder **Kode** pertemuan ini: `P10_1_TesRelay`, `P10_2_TesDHT22`, `C1_P10_*`, `C2_P10_*` (tiap folder berisi 1 file `.ino`)
-- Multimeter (minimal 1 per kelas)
+- Laptop **Windows 10/11 64-bit** atau **Mac (macOS 12+)**, ruang kosong **±9 GB**
+- ESP32 DevKit V1 30-pin (ber-stiker Device ID `sma-01` … `sma-06`) + kabel USB **data**
+- Flashdisk tutor: installer **Arduino IDE 2.3.10** (Windows `.exe`, Mac Apple Silicon & Intel `.dmg`), driver CP210x & CH340, 3 PDF Panduan Instalasi (`kurikulum/panduan-instalasi/`)
+- Folder **Kode** pertemuan ini (Drive): `P10_1_KedipPertama` dan `C3_P10_Hard_PesanMorse` (masing-masing berisi 1 file `.ino`)
+- Sticky note hijau & merah
+- Dipegang tutor: alat demo jadi (DHT22 + relay + kipas + firmware proyek) + dashboard tutor, power bank, 6 foto benda untuk game "Tebak Benda IoT"
+- **Tidak perlu** breadboard, sensor, atau kabel jumper hari ini
 
 ## Persiapan tutor sebelum kelas
 
-Detail lengkap (H-1, 15 menit sebelum, timeline, troubleshooting): `kurikulum/sma/p10/Panduan_Pengajar_P10_SMA.md`.
+Detail lengkap (H-1, timeline, troubleshooting): `kurikulum/sma/p10/Panduan_Pengajar_P10_SMA.md`.
 
-1. Jalankan `SCRIPT_P10_SMA.gs` supaya folder **Kode** (berisi folder-folder sketch `.ino`) ada di Drive.
-2. Di tiap laptop **sebelum kelas**: pasang Arduino IDE, board ESP32, dan library DHT (ikuti 3 Panduan Instalasi), lalu buka `P10_2_TesDHT22.ino` → **Verify (✓)** sekali. Compile pertama 2–5 menit; berikutnya jauh lebih cepat.
-3. Uji **setiap** modul relay dengan Tes 1. Pastikan relay **benar-benar mati** saat IN = HIGH (lihat "relay 5V + logika 3,3V" di Khusus Tutor P9).
-4. Siapkan simulasi Wokwi `kurikulum/sma/p10/wokwi/P10_PetaRakitan/` (simpan di akun Wokwi, salin link-nya): untuk screenshot slide Peta Rakitan dan cadangan kalau ada kit rusak.
-5. Buka halaman **Kartu Sabotase** `ekskulcoding.inspiralabs.id/sabotase/` untuk Challenge Hard (tidak perlu menulis kartu, lihat Khusus Tutor).
+1. Jalankan `SCRIPT_P10_SMA.gs` supaya folder **Kode** dan Google Form post-test ada di Drive. Pasang link-nya di Linktree.
+2. Salin installer Arduino IDE + driver ke 2–3 flashdisk. 6 laptop mengunduh bersamaan lewat WiFi sekolah = lambat.
+3. Siapkan 1–2 **laptop cadangan** yang sudah lulus 3 level dan pernah upload `P10_1_KedipPertama`.
+4. Tes WiFi kelas. Lambat → semua memilih board ESP32 versi **2.0.17** (±0,8 GB) di Level 2.
+5. Siapkan alat demo jadi + dashboard tutor (PIN fan siap) untuk slide Demo.
+6. Uji tiap ESP32 dengan `P10_1_KedipPertama`: LED biru (GPIO 2) harus berkedip. Klon tanpa LED biru → ganti papan.
 
 ## Alur 70 menit
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–3 | Pembuka | Kumpulkan Tugas 3, bagi peran (Perakit & Penguji) |
-| 3–7 | Pembuka materi | Cover + pertanyaan pemantik |
-| 7–12 | Materi | Peta rakitan lengkap + urutan merakit aman |
-| 12–27 | Praktek | Rakit daya + relay + kipas, upload **Tes 1: Relay Berdetak** |
-| 27–31 | Materi | Active-LOW dilihat dengan mata & multimeter, forum |
-| 31–35 | 🟢 Challenge Easy | Pindah Pin Relay |
-| 35–44 | Praktek | Rakit DHT22, upload **Tes 2: Baca DHT22**, membaca Serial Monitor, forum |
-| 44–50 | 🟡 Challenge Medium | Termostat Tangan |
-| 50–53 | Materi | Tabel troubleshooting + 3 pengukuran multimeter, forum |
-| 53–61 | 🔴 Challenge Hard | Detektif Kabel |
-| 61–63 | Peta proyek | Slide peta proyek akhir + foto rakitan |
-| 63–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+| 0–5 | Pembuka & pembuka materi | Laptop dinyalakan, cover, pemantik, agenda, cara dapat poin |
+| 5–15 | Materi Topik 1 | IoT, kenalan ESP32 (diedarkan), **demo alat jadi**, Tanya Jawab |
+| 15–25 | Praktek Level 1 + Level 2 | Pasang Arduino IDE, tempel alamat board, mulai INSTALL board ESP32 |
+| 25–35 | Game (sambil mengunduh) | Tebak Benda IoT (+2 tiap jawaban) |
+| 35–45 | Praktek Level 3 + cek port | Library DHT, colok ESP32, Tanya Jawab |
+| 45–52 | Praktek Topik 3 | Upload Kedip Pertama, utak-atik angka, demo power bank, Tanya Jawab |
+| 52–62 | 🟢 Easy + 🟡 Medium + 🔴 Hard | Kedip Gaya Kamu, Tiru Lampu Asli, Pesan Rahasia Morse |
+| 62–64 | Peta petualangan | |
+| 64–70 | Post-test | 5 soal pilihan ganda (Google Form), dikerjakan sendiri-sendiri |
 
-**Peran.** Berdua: **Perakit** (pegang kabel) & **Penguji** (baca tabel Peta Rakitan, centang, pegang multimeter & Serial Monitor); **tukar peran** di Topik 2. Sendiri: baca checklist **keras-keras** saat mencentang, minta tetangga/tutor ikut cek sebelum colok USB.
+**Peran.** Berdua (sma-04/05/06): **Operator** (klik di laptop) & **Pengecek** (bacakan langkah dari slide, pasang sticky note); tukar di Topik 3. Sendiri (sma-01/02/03): bacakan langkah pelan-pelan, tetangga boleh jadi Pengecek.
 
-Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Dari Rakitan Lepas ke Rakitan Utuh → Peta Rakitan Lengkap → Urutan Merakit yang Aman → Cara Upload Program Tes Jadi → Tes 1: Relay Berdetak → Active-LOW: Lihat dengan Mata & Multimeter → 💬 Forum Diskusi → 🟢 Easy → Tes 2: Baca DHT22 → Membaca Serial Monitor → 💬 Forum Diskusi → 🟡 Medium → Troubleshooting Rakitan → Tips Engineer: 3 Pengukuran Multimeter → 💬 Forum Diskusi → 🔴 Hard → Peta Proyek Akhir → Post-test (Linktree) → Penutup.
+Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Cara Dapat Poin → IoT Itu Apa Sih? → Kenalan: Ini ESP32 → Demo: Akhir P12 → 💬 Tanya Jawab → Bengkel Kita: 3 Alat → Level 1 → Level 2 → Sambil Menunggu: Tebak Benda IoT → Level 3 → Colok ESP32: Port Muncul? → 💬 Tanya Jawab → Kedip Pertama: Cara Upload → Kode: Bagian yang Kamu Utak-atik → Program Tinggal di ESP32 → 💬 Tanya Jawab → 🟢 Easy → 🟡 Medium → 🔴 Hard → Peta Petualangan → Post-test (Linktree) → Penutup.
+
+> Buffer: bagian paling rawan adalah unduhan board ESP32 (Level 2). Kalau sampai menit 45 belum selesai, siswa itu upload Kedip Pertama di **laptop cadangan** sementara laptopnya tetap mengunduh. Sisa instalasi diselesaikan di 15 menit awal P11, **bukan PR siswa**.
 
 ---
 
 ## Slide
 
-### Slide 1 — Dari Rakitan Lepas ke Rakitan Utuh 🔧
-- P9: DHT22 dan relay dirakit **terpisah**, relay dinyalakan dengan **jumper tangan** (IN → GND).
-- Hari ini: semua komponen dirakit jadi **satu alat utuh**, lalu diuji dengan **2 program tes jadi**.
-- Program tes = **alat ukur**, seperti *factory test* di pabrik sebelum produk dikirim. Cukup **buka file → Upload → amati**.
-- Berdua: **Perakit** & **Penguji**, tukar di Topik 2. Sendiri: baca checklist keras-keras.
-- Rakitan ini = rakitan **final** proyek akhir. Jangan dibongkar setelah kelas.
+### IoT Itu Apa Sih? 🌐
+- **Internet of Things** = benda sehari-hari yang bisa **merasa**, **mikir**, dan **ngobrol lewat internet**.
+- Rumusnya: **Sensor** (indra) → **Mikrokontroler** (otak) → **Aksi / Internet** (tangan & mulut).
+- Contoh: smartwatch menghitung langkah, CCTV yang dilihat dari HP, lampu kandang ayam otomatis, dan **Smart Room Monitor** yang kita bangun sampai P13.
 
-### Slide 2 — Peta Rakitan Lengkap 🗺️
-| Dari (ESP32) | Ke | Warna kabel |
+### Kenalan: Ini ESP32 🧠
+| Bagian | Gunanya |
+|---|---|
+| **Chip ESP32** (kotak logam) | Otak: 240 MHz, 2 inti |
+| **Antena WiFi** (garis zig-zag) | WiFi & Bluetooth bawaan |
+| **Port USB** | Listrik + jalur kirim program |
+| **Tombol EN / BOOT** | EN = restart, BOOT = mode terima program |
+| **LED merah / LED biru** | Merah = ada listrik, biru = bisa diprogram (GPIO 2) |
+| **Pin di pinggir** | "Tangan & telinga" untuk sensor dan relay (mulai P11) |
+
+### Demo: Akhir P12, Alatmu Bisa Begini 🎬
+- Genggam sensor → angka di dashboard naik. Tekan tombol di HP → kipas menyala.
+- Kode alat ini **sudah jadi**. Misi kalian sampai P13: merakit, meng-upload, dan menjadikan dashboard-nya milik kalian.
+
+### Bengkel Kita: 3 Alat 🧰
+| Alat | Analogi | Gunanya |
 |---|---|---|
-| 3V3 | DHT22 **+** | Merah |
-| D13 (GPIO 13) | DHT22 **out** | Kuning |
-| GND | DHT22 **−** | Hitam |
-| VIN (5V) | jalur **+** breadboard → relay **VCC** dan relay **COM** | Merah / Oranye |
-| GND | jalur **−** breadboard → relay **GND** dan kipas **−** | Hitam |
-| D14 (GPIO 14) | relay **IN** | Biru |
-| relay **NO** | kipas **+** | Oranye |
+| **Arduino IDE** | Dapur | Menulis & mengirim (upload) program ke ESP32 |
+| **Board ESP32** | Kompor yang cocok | Supaya Arduino IDE kenal ESP32 (buatan Espressif, bukan Arduino) |
+| **Library DHT** | Bumbu instan | Kode jadi untuk membaca sensor suhu (P11) |
 
-- **Kenapa DHT22 di 3V3?** Sinyal data sensor setinggi tegangan dayanya. GPIO ESP32 hanya tahan **3,3V**.
-- **Kenapa relay di VIN 5V?** Kumparan relay butuh 5V untuk menarik saklarnya.
-- Kipas di **NO** → ESP32 mati, kipas ikut mati (*fail-safe*, P9).
+Dipasang berurutan **Level 1 → 2 → 3**. Selesai satu level → sticky note **hijau**. Butuh bantuan → **merah**.
 
-> Catatan tutor: Kalau diagram dari Gemini tidak akurat, ganti dengan screenshot simulasi Wokwi `wokwi/P10_PetaRakitan` (LED biru = pengganti kipas, Wokwi tidak punya kipas DC).
+### Level 1: Pasang Arduino IDE 💻
+- **Windows**: cek *About your PC* → **64-bit** → jalankan installer → **Yes** → **I Agree** → **Install** → **Finish**. Izin driver muncul → **Install**.
+- **Mac**: *About This Mac* → **Apple M1/M2/M3/M4** atau **Intel** → file `.dmg` yang cocok → seret ke **Applications** → buka → **Open**.
 
-### Slide 3 — Urutan Merakit yang Aman ✅
-1. **Cabut USB.** Merakit & memindah kabel selalu dalam keadaan **mati**.
-2. Pasang ESP32 di breadboard: **VIN → jalur +**, **GND → jalur −**.
-3. **Sisi kontrol relay**: VCC, GND, IN.
-4. **Sisi beban**: jalur + → COM, NO → kipas +, kipas − → jalur −. Sekrup kencang, tarik pelan: tidak lepas.
-5. Penguji **mencentang** tabel Peta Rakitan satu per satu.
-6. Colok USB. Bau/panas? **Cabut segera.**
-- DHT22 menyusul di Topik 2, dengan aturan yang sama.
+### Level 2: Pasang Board ESP32 📦
+1. **File → Preferences** (Mac: **Arduino IDE → Settings**) → *Additional boards manager URLs* → tempel `https://espressif.github.io/arduino-esp32/package_esp32_index.json` → **OK**.
+2. **Boards Manager** → ketik `esp32` → **esp32 by Espressif Systems** → **INSTALL** (bukan "Arduino ESP32 Boards").
+3. Tunggu sampai tertulis *installed*. Ukurannya ±2 GB; versi **2.0.17** (±0,8 GB) juga boleh.
 
-> Catatan tutor: Keselamatan: **hanya kipas DC 5V**. Tidak ada kabel PLN/stopkontak di meja praktik. Jangan sambungkan kipas langsung ke pin GPIO (arus kipas jauh di atas ±12 mA yang aman untuk GPIO). Jaga jari & rambut dari baling-baling.
+### Sambil Menunggu: Tebak Benda IoT! 🎯
+Tutor menampilkan 6 foto: rice cooker biasa, smart TV, palang parkir otomatis, kalkulator, timbangan digital Bluetooth, pompa air otomatis. Tebak: **IoT atau bukan?** Sensornya apa? (+2 tiap jawaban)
 
-### Slide 4 — Cara Upload Program Tes Jadi ⬆️
-1. Buka folder **Kode** → folder program (misal `P10_1_TesRelay`) → **double-click** file `.ino` → terbuka di **Arduino IDE**.
-2. Klik kotak **Select Board** → pilih port ESP32 (Windows: `COM…`, Mac: `/dev/cu.usbserial-…`) → board **ESP32 Dev Module**.
-3. Klik **Upload (→)**, tunggu sampai muncul **Done uploading**.
-4. Buka **Serial Monitor** (ikon kanan atas, atau `Ctrl+Shift+M` / Mac `⌘+Shift+M`), pilih **115200 baud**.
-- `Connecting.....` lama / gagal? Tahan tombol **BOOT** di ESP32 sampai muncul `Writing at ...`.
-- Port tidak muncul? Kemungkinan kabel USB **khusus charger** atau driver belum ada. Ganti kabel, lihat *Panduan Instalasi*.
-- Masih gagal upload? **Tools → Upload Speed → 115200**, lalu Upload lagi.
-- Ganti program = buka file `.ino` lain, Upload lagi. Tidak perlu membuat project baru.
+### Level 3: Pasang Library DHT 📚
+- **Library Manager** → `DHT sensor library` → **by Adafruit** → **INSTALL** → **INSTALL ALL**.
+- Jangan pasang library bernama **"WiFi"**: bentrok dengan WiFi bawaan ESP32.
 
-### Slide 5 — Tes 1: Relay Berdetak ⏱️
+### Colok ESP32: Port Muncul? 🔌
+- Pakai **kabel USB DATA**, bukan kabel charger.
+- Windows: Device Manager → *Ports (COM & LPT)* → **COMx**. Mac: Terminal → `ls /dev/cu.*` → `/dev/cu.usbserial-…`.
+- Tidak muncul → ganti kabel → port USB lain → driver CP210x/CH340.
+
+### Kedip Pertama: Cara Upload ⬆️
+1. Folder **Kode** → `P10_1_KedipPertama` → double-click `P10_1_KedipPertama.ino`.
+2. **Select Board** → **ESP32 Dev Module** + port ESP32.
+3. **Upload (→)** → tunggu **Done uploading** (compile pertama 2–5 menit).
+4. **Serial Monitor** → **115200 baud** → muncul `Halo! ESP32 siap berkedip.` lalu `Nyala` / `Mati` bergantian.
+- `Connecting.....` lalu gagal → tahan **BOOT** sampai muncul `Writing at …`.
+
+### Kode: Bagian yang Kamu Utak-atik 🔧
 ```cpp
-#define RELAY_PIN 14     // ubah HANYA kalau kabel IN kamu pasang di pin lain
-#define RELAY_ON  LOW    // modul relay active-LOW: IN = LOW -> relay aktif
-#define RELAY_OFF HIGH
+// potongan — P10_1_KedipPertama.ino
+#define LED_PIN 2        // LED biru bawaan ESP32 DevKit V1 ada di GPIO 2
 
-void setup() {
-  Serial.begin(115200);
-  digitalWrite(RELAY_PIN, RELAY_OFF);  // set OFF dulu supaya relay tidak klik saat boot
-  pinMode(RELAY_PIN, OUTPUT);
-  Serial.println();
-  Serial.printf("Tes relay di GPIO %d dimulai\n", RELAY_PIN);
-}
-
-void loop() {
-  digitalWrite(RELAY_PIN, RELAY_ON);
-  Serial.println("Relay AKTIF (IN = LOW, sekitar 0 V)    -> kipas harus BERPUTAR");
-  delay(2000);
-
-  digitalWrite(RELAY_PIN, RELAY_OFF);
-  Serial.println("Relay MATI  (IN = HIGH, sekitar 3,3 V) -> kipas harus BERHENTI");
-  delay(2000);
-}
+// ===== BOLEH DIUBAH =====
+int lamaNyala = 500;     // berapa milidetik LED menyala (1000 = 1 detik)
+int lamaMati  = 500;     // berapa milidetik LED mati
+// ========================
 ```
-- **Tidak perlu diubah.** Yang dicek: tiap 2 detik relay **klik**, LED relay menyala, kipas berputar lalu berhenti.
-- Tulisan di Serial Monitor harus **cocok** dengan yang terjadi di meja.
+- **Tinkering** = ubah angka → Upload → amati. Kode tidak ditulis dari nol.
+- Satuan waktu = **milidetik**: 1000 = 1 detik, 500 = setengah detik.
 
-> Catatan tutor: Tidak perlu membedah kode baris per baris. Cukup tunjukkan 3 hal: angka `14` = pin kabel biru, `LOW` = aktif (active-LOW dari P9), dan teks di Serial Monitor sebagai "laporan" alat.
+### Program Tinggal di ESP32 🔋
+- Cabut USB dari laptop, colok ke power bank: LED **tetap kedip**.
+- Upload memindahkan program ke memori ESP32. Laptop hanya untuk menulis & mengirim.
 
-### Slide 6 — Active-LOW: Lihat dengan Mata & Multimeter 🔍
-| Serial Monitor | Tegangan pin IN (multimeter, ke GND) | LED relay | Kipas |
-|---|---|---|---|
-| `Relay AKTIF` | ±0 V (LOW) | Menyala | Berputar |
-| `Relay MATI` | ±3,3 V (HIGH) | Mati | Berhenti |
-- **Bukti fisik** eksperimen P9: modul aktif saat IN = **LOW**.
-- **Kenapa?** Di dalam modul, arus mengalir dari VCC **keluar lewat pin IN**. IN = LOW membuka "jalan keluar" arus → relay menarik. IN = HIGH menutupnya.
-- Firmware proyek akhir memakai aturan yang sama.
-
-> Catatan tutor: Analogi: pin IN seperti **keran di ujung bawah** selang. Keran dibuka ke bawah (LOW) → air (arus) mengalir → relay bekerja. Untuk yang penasaran: di jalur itu ada LED optocoupler/transistor modul. Jangan masuk lebih dalam dari ini.
-
-### Slide 7 — Tes 2: Baca DHT22 🌡️
-```cpp
-#include <DHT.h>
-
-#define DHT_PIN 13       // ubah HANYA kalau kabel "out" kamu pasang di pin lain
-
-DHT dht(DHT_PIN, DHT22);
-
-void setup() {
-  Serial.begin(115200);
-  dht.begin();
-  Serial.println();
-  Serial.printf("Tes DHT22 di GPIO %d dimulai\n", DHT_PIN);
-}
-
-void loop() {
-  delay(2000);  // DHT22: maksimal 1 bacaan tiap 2 detik
-
-  float suhu = dht.readTemperature();
-  float lembap = dht.readHumidity();
-
-  if (isnan(suhu) || isnan(lembap)) {
-    Serial.println("Gagal baca DHT22 -> cek: out ke GPIO 13? + ke 3V3? - ke GND? kabel longgar?");
-    return;
-  }
-
-  Serial.printf("Suhu: %.1f C | Lembap: %.1f %%\n", suhu, lembap);
-}
+### Peta Petualangan IoT 🗺️
 ```
-- Genggam sensor → suhu naik pelan. Tiup sensor → kelembapan naik cepat.
-
-### Slide 8 — Membaca Serial Monitor 📟
-| Muncul di Serial Monitor | Artinya | Tindakan |
-|---|---|---|
-| `Suhu: 28.4 C \| Lembap: 65.0 %` | Sensor & kabel **beres** | Lanjut |
-| `Gagal baca DHT22 ...` terus-menerus | ESP32 hidup, tapi sensor tidak menjawab | Cek 3 kabel DHT22, terutama **out → D13** |
-| Huruf acak seperti `⸮⸮x⸮` | Baud rate salah | Set Serial Monitor ke **115200** |
-| Tidak muncul apa pun | Program belum ter-upload / port salah | Upload ulang, tekan tombol **EN** (reset) |
-
-### Slide 9 — Troubleshooting Rakitan 🧰
-| Gejala | Penyebab paling sering | Cek |
-|---|---|---|
-| Relay tidak klik, LED relay mati | VCC/GND relay lepas, IN bukan di D14 | Kabel merah/hitam/biru relay |
-| Relay klik, kipas **tidak** berputar | Sisi beban: COM/NO longgar, kipas − tidak ke GND | Sekrup terminal, kabel oranye |
-| Kipas berputar saat Serial menulis "MATI" (terbalik) | Kipas di **NC**, bukan NO | Pindah kabel ke **NO** |
-| Kipas menyala sesaat saat ESP32 baru dicolok | Relay di **strapping pin** (0, 2, 5, 12, 15) | Kembalikan ke D14 |
-| Upload gagal / ESP32 tidak mau jalan setelah dirakit | Ada kabel nyasar ke **D12** (strapping pin, di antara D14 dan D13) | Cabut kabel dari D12 |
-| Relay **tidak mau mati** | Modul relay 5V kurang cocok dengan logika 3,3V | Panggil tutor |
-| ESP32 restart saat kipas mulai berputar | Daya USB laptop tidak kuat | Port USB lain / power bank, kabel pendek |
-
-### Slide 10 — Tips Engineer: 3 Pengukuran Multimeter 📏
-1. **Tegangan** (DC V): 3V3 ke GND ≈ **3,3 V**; VIN ke GND ≈ **4,7–5 V**. Kurang? Masalah daya/kabel USB.
-2. **Tegangan pin IN** ke GND: ±0 V saat aktif, ±3,3 V saat mati (Slide 6).
-3. **Continuity** (bunyi "tiit") dengan **USB dicabut**: COM–NC bunyi, COM–NO diam. Artinya relay dalam posisi normal (tidak aktif).
-- Engineer tidak menebak. **Ukur dulu, baru bongkar.**
-
-### Slide 11 — Peta Proyek Akhir 🗺️
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama          ← HARI INI
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok
+[P12] Kontrol kipas dari dashboard: manual & otomatis
+[P13] Kustom dashboard + website online + Demo Day
 ```
-[P9]  Pinout, DHT22, relay, active-LOW (tanpa coding)        ✅
-[P10] Rakit DHT22 + relay + kipas, upload program tes jadi    ← HARI INI
-[P11] Upload firmware proyek, data suhu tampil di dashboard
-[P12] Kontrol kipas dari dashboard: manual & mode otomatis
-[P13] Rapikan rakitan + kustom dashboard + showcase
-```
-> Catatan tutor: Minta tiap kelompok memotret rakitan yang lolos 2 tes. Foto ini dipakai lagi di P13 sebagai foto "sebelum dirapikan".
 
 ---
 
-## Forum Diskusi Live Coding
+## Tanya Jawab (+2 keaktifan)
 
-Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab.
+Ditampilkan di akhir tiap topik, sebelum lanjut. Minta 2–3 siswa menjawab; setiap siswa yang bertanya/menjawab mendapat **+2**.
 
-- **Topik 1 — Rakit & Tes Relay:** Kenapa kita harus mencabut USB dulu setiap kali memindah kabel? Apa yang terjadi kalau ujung kabel VIN tidak sengaja menyentuh jalur GND?
-- **Topik 2 — Rakit & Tes DHT22:** Serial Monitor terus menulis "Gagal baca DHT22". Kabel mana yang kalian cek pertama, dan kenapa?
-- **Topik 3 — Troubleshooting:** Relay klik tapi kipas diam. Apa yang sudah PASTI benar, dan apa yang mungkin salah?
+- **Pemantik:** Lampu jalan nyala sendiri pas maghrib. Pintu mal kebuka sendiri. Siapa sebenarnya yang "nyuruh" mereka?
+- **Topik 1 — Kenalan ESP32:** Sebutkan 1 benda di rumah atau sekolahmu yang menurutmu punya "otak" kecil. Sensornya apa?
+- **Topik 2 — Pasang Bengkel:** LED merah ESP32 menyala, tapi port tidak muncul di laptop. Siapa tersangka nomor 1?
+- **Topik 3 — Kedip Pertama:** Kalau `lamaNyala = 5` dan `lamaMati = 5`, LED-nya kelihatan seperti apa? Kenapa?
 
-Setiap challenge bernilai **+10** poin (leaderboard).
+Challenge: 🟢 Easy **+5**, 🟡 Medium **+10**, 🔴 Hard **+15** (leaderboard). Pasangan: poin untuk kedua anggota.
 
 ---
 
 ## Challenge
 
-### 🟢 Easy — "Pindah Pin Relay"
-1. **Cabut USB.** Pindahkan kabel biru relay IN dari **D14** ke **D26**.
-2. Buka `C1_P10_Easy_PindahPinRelay.ino`, ubah **satu angka**: `#define RELAY_PIN 14` → `26`.
-3. Upload. Relay harus kembali klik tiap 2 detik, Serial menulis `GPIO 26`.
-4. Jawab: kalau kabel sudah dipindah tapi angkanya **lupa** diubah, apa yang terjadi?
-5. Kembalikan kabel ke D14 dan angka ke 14.
+### 🟢 Easy — "Kedip Gaya Kamu" (+5)
+1. Di `P10_1_KedipPertama.ino`, ubah `lamaNyala` dan `lamaMati` jadi **100** → Upload.
+2. Ubah lagi keduanya jadi **2000** → Upload.
+3. Tunjukkan kedua versi ke tutor.
 
-### 🟡 Medium — "Termostat Tangan" 🌡️➡️🌀
-1. Upload `C2_P10_Medium_TermostatTangan.ino` apa adanya, catat suhu ruangan dari Serial Monitor.
-2. Ubah **satu angka**: `#define AMBANG` = suhu ruangan + 1 (misal `29.5`). Upload lagi.
-3. **Genggam** sensor DHT22 sampai kipas menyala sendiri. Lepas, tunggu sampai kipas mati sendiri.
-4. Catat: berapa detik sampai kipas menyala? Berapa detik sampai mati lagi?
-5. Jawab: kenapa kipas baru mati setelah suhu turun **0,5°C di bawah** AMBANG, bukan tepat di AMBANG? (Petunjuk: bayangkan suhu naik-turun 29,9 ↔ 30,1.)
+### 🟡 Medium — "Tiru Lampu Asli" (+10) 🚦
+1. Pilih 1 lampu dunia nyata: **lampu sein motor**, **lampu menara/suar** (kedip singkat, gelap lama), atau **lampu hazard**.
+2. Tiru dengan mengubah `lamaNyala` dan `lamaMati` → Upload.
+3. Ganti teks `"Halo! ESP32 siap berkedip."` (di bagian `setup`) jadi pesanmu sendiri. Cek di Serial Monitor (tekan tombol **EN** kalau pesannya terlewat).
+4. Teman sebelah menebak lampu apa yang kamu tiru. Benar = lolos.
 
-### 🔴 Hard — "Detektif Kabel" 🕵️
-Kelompok lain (atau tutor) menukar **2 kabel** di rakitan kalian memakai **Kartu Sabotase** dari tutor, tanpa memberi tahu.
-1. Upload `P10_1_TesRelay.ino` dan `P10_2_TesDHT22.ino`, catat **gejalanya**.
-2. Pakai tabel **Troubleshooting** dan **multimeter** untuk menemukan kedua kabel yang salah, **tanpa** membongkar semua kabel.
-3. Tulis laporan 3 baris per kabel: **gejala → pengukuran → perbaikan**.
-- Penyabot **hanya** boleh memakai sabotase di kartu. Kabel daya (3V3, VIN, GND) tidak boleh disilangkan. USB dicabut saat menukar.
+### 🔴 Hard — "Pesan Rahasia Morse" (+15) 🔦
+1. Buka `C3_P10_Hard_PesanMorse.ino` → ubah `PESAN` jadi kata 3–4 huruf (misal inisialmu) → Upload.
+2. Teman menerjemahkan kedipan LED pakai **tabel Morse** di slide, **tanpa** melihat Serial Monitor.
+3. Terjemahan benar = lolos. Terlalu cepat? Perbesar angka `TITIK`.
 
 ---
 
 ## Pembuka Materi: Cover & Pertanyaan Pemantik
 
-- **Tagline cover:** Dari komponen berserakan jadi satu alat utuh yang lolos uji.
-- **Pertanyaan pemantik:** Kalau alat elektronik tidak jalan, bagaimana teknisi tahu bagian mana yang rusak tanpa membongkar semuanya?
-- **Konteks:** Teknisi profesional tidak menebak. Mereka punya urutan merakit, program tes, dan alat ukur. Hari ini kita memakai ketiganya.
-- Tampung 2–3 tebakan siswa, jawabannya dibahas di Topik 3 (slide *Tips Engineer: 3 Pengukuran Multimeter*).
+- **Tagline cover:** Hari ini benda mati mulai nurut sama kodemu.
+- **Pertanyaan pemantik:** Lampu jalan nyala sendiri pas maghrib. Pintu mal kebuka sendiri. Siapa sebenarnya yang "nyuruh" mereka?
+- **Konteks:** Nggak ada orang yang mencet tombolnya. Ada "otak" kecil yang kerja diam-diam.
+- Tampung 2–3 tebakan siswa (+2 per penebak), jawabannya dibahas di slide *IoT Itu Apa Sih?* dan *Kenalan: Ini ESP32*.
 
 ---
 
 ## Konten Reels (khusus tim InspiraLabs, tidak ditampilkan di slide)
 
-**Template hook #1 (Negative Hooks — Psikologi Terbalik)**
+**Template hook #7 (Curiosity & Secrets — Rasa Penasaran)**
 
-# "Stop nyolok kipas langsung ke pin ESP32 kalau nggak mau board-mu gosong." 🛑
+# "Lampu ini sebenarnya kedip 100 kali per detik. Kamu nggak sadar, kan?" 👀
 
 Isi slide:
-- 🔥 Pin GPIO ESP32 cuma kuat **±12 mA**. Kipas mini butuh **ratusan mA**. Colok langsung = pin rusak.
-- 🔀 Pakai **relay**: pin ESP32 cuma "menekan saklar", arus kipas lewat jalur lain (COM–NO).
-- 🧯 Pasang kipas di **NO**, bukan NC: ESP32 mati → kipas ikut mati (*fail-safe*).
-- 🙃 Kebanyakan modul relay murah **active-LOW**: aktif saat IN = LOW. Jangan kaget kalau logikanya kebalik.
-- 📏 Cek pakai multimeter: pin IN ±0 V saat aktif, ±3,3 V saat mati.
+- 💡 Mata manusia tidak bisa melihat kedipan yang sangat cepat. Kedip 100× per detik = kelihatan **menyala terus**.
+- 🔅 Makin lama "mati"-nya dibanding "nyala"-nya, lampu kelihatan makin **redup**. Begitulah banyak lampu LED diredupkan.
+- 🧠 Yang mengatur kedipan secepat itu: mikrokontroler kecil seperti **ESP32**, cukup dengan mengubah **2 angka**.
+- 📱 Coba rekam lampu LED pakai mode slow-motion HP: kedipannya kelihatan!
 
-🎙️ **Kalimat hook (pembuka rekaman):** "Stop nyolok kipas langsung ke pin ESP32 kalau nggak mau board-mu gosong."
+> Catatan tutor: Kaitkan dengan kelas: "Di P10 siswa membuktikan sendiri: `lamaNyala = 5`, `lamaMati = 5` → LED terlihat menyala redup."
+
+🎙️ **Kalimat hook (pembuka rekaman):** "Lampu ini sebenarnya kedip 100 kali per detik. Kamu nggak sadar, kan?"
 
 📌 **Teks di layar:**
-- GPIO cuma ±12 mA 🔥
-- Kipas = ratusan mA ❌
-- Pakai relay 🔀
-- Kipas di NO = fail-safe 🧯
-- Active-LOW: LOW = NYALA 🙃
+- Lampu ini KEDIP terus lho 👀
+- 100× per detik = kelihatan nyala
+- Mati lebih lama = makin redup 🔅
+- Diatur ESP32 cuma pakai 2 angka 🧠
+- Cek pakai slow-mo HP 📱
 
-🎬 **Penutup:** "Rakit dulu dengan benar, baru pintar. Save dan follow buat part selanjutnya."
+🎬 **Penutup:** "Minggu depan ESP32 ini kita sambungin ke sensor suhu dan internet. Follow biar nggak ketinggalan!"
 
 > Catatan tutor: Narasi lengkap saat rekam:
-> - [0–4 detik] "Stop nyolok kipas langsung ke pin ESP32 kalau nggak mau board-mu gosong."
-> - [4–14 detik] "Pin ESP32 itu cuma kuat sekitar dua belas miliampere. Kipas mini butuh ratusan. Dicolok langsung? Pinnya yang jadi korban."
-> - [14–26 detik] "Caranya pakai relay. Pin ESP32 cuma 'menekan saklar' kecil. Arus kipas lewat jalur sendiri, dari COM ke NO."
-> - [26–36 detik] "Pasang kipas di NO, bukan NC. Kalau ESP32 mati atau restart, kipas ikut mati. Namanya fail-safe."
-> - [36–48 detik] "Satu lagi yang sering bikin bingung: relay murah biasanya active-LOW. Dia nyala waktu pinnya LOW. Ukur pakai multimeter: nol volt, relay nyala."
-> - [48–60 detik] "Rakit dulu dengan benar, baru pintar. Save dan follow buat part selanjutnya."
+> - [0–4 detik] "Lampu ini sebenarnya kedip 100 kali per detik. Kamu nggak sadar, kan?"
+> - [4–14 detik] "Mata kita lambat. Kalau lampu nyala-mati lebih cepat dari kira-kira 50 kali per detik, otak kita nganggepnya nyala terus."
+> - [14–26 detik] "Triknya: kalau waktu matinya dibikin lebih lama dari nyalanya, lampu kelihatan lebih redup. Banyak lampu LED diredupkan dengan cara ini."
+> - [26–38 detik] "Yang ngatur kedipan secepat itu cuma papan kecil ini, ESP32. Kita cuma ganti dua angka: lama nyala, lama mati."
+> - [38–48 detik] "Mau bukti? Rekam lampu LED pakai slow motion HP. Kedipannya langsung kelihatan."
+> - [48–55 detik] "Minggu depan ESP32 ini kita sambungin ke sensor suhu dan internet. Follow biar nggak ketinggalan!"
 
-### 🎥 Script Reels Lengkap (untuk rekaman konten)
+### Script Reels Lengkap (untuk rekaman konten)
 
 | Info | Isi |
 |---|---|
-| Template hook | #1 — Negative Hooks (Psikologi Terbalik) |
-| Judul | Stop nyolok kipas langsung ke pin ESP32 |
-| Durasi | ±60 detik |
-| Pembicara | Tutor (close-up rakitan + multimeter) |
+| Template hook | #7 — Curiosity & Secrets (Rasa Penasaran) |
+| Judul | Lampu ini kedip 100 kali per detik |
+| Durasi | ±55 detik |
+| Pembicara | Tutor (close-up ESP32 + layar Arduino IDE) |
 
 #### Script
 
 | Detik | Visual / B-roll | Narasi | Teks di layar |
 |---|---|---|---|
-| 0–4 | Kabel kipas didekatkan ke pin GPIO, tanda silang merah besar | "Stop nyolok kipas langsung ke pin ESP32 kalau nggak mau board-mu gosong." | JANGAN! 🛑 |
-| 4–14 | Close-up pin GPIO, angka 12 mA vs 200 mA | "Pin ESP32 itu cuma kuat sekitar dua belas miliampere. Kipas mini butuh ratusan. Dicolok langsung? Pinnya yang jadi korban." | GPIO ±12 mA 🔥 Kipas ratusan mA ❌ |
-| 14–26 | Relay klik, kipas berputar | "Caranya pakai relay. Pin ESP32 cuma 'menekan saklar' kecil. Arus kipas lewat jalur sendiri, dari COM ke NO." | Pakai relay 🔀 |
-| 26–36 | USB dicabut, kipas langsung berhenti | "Pasang kipas di NO, bukan NC. Kalau ESP32 mati atau restart, kipas ikut mati. Namanya fail-safe." | Kipas di NO = fail-safe 🧯 |
-| 36–48 | Multimeter di pin IN: 0,0 V → relay nyala | "Satu lagi yang sering bikin bingung: relay murah biasanya active-LOW. Dia nyala waktu pinnya LOW. Ukur pakai multimeter: nol volt, relay nyala." | Active-LOW: LOW = NYALA 🙃 |
-| 48–60 | Tutor ke kamera dengan rakitan lengkap | "Rakit dulu dengan benar, baru pintar. Save dan follow buat part selanjutnya." | Save & follow 👉 |
+| 0–4 | Close-up LED biru ESP32 tampak menyala diam | "Lampu ini sebenarnya kedip 100 kali per detik. Kamu nggak sadar, kan?" | Lampu ini KEDIP terus lho 👀 |
+| 4–14 | Animasi mata + garis nyala-mati yang makin rapat | "Mata kita lambat. Kalau lampu nyala-mati lebih cepat dari kira-kira 50 kali per detik, otak kita nganggepnya nyala terus." | 100× per detik = kelihatan nyala |
+| 14–26 | Dua LED berdampingan: satu terang, satu redup | "Triknya: kalau waktu matinya dibikin lebih lama dari nyalanya, lampu kelihatan lebih redup. Banyak lampu LED diredupkan dengan cara ini." | Mati lebih lama = makin redup 🔅 |
+| 26–38 | Screen record Arduino IDE: angka `lamaNyala`/`lamaMati` diganti, klik Upload | "Yang ngatur kedipan secepat itu cuma papan kecil ini, ESP32. Kita cuma ganti dua angka: lama nyala, lama mati." | Diatur ESP32 cuma pakai 2 angka 🧠 |
+| 38–48 | Rekaman slow-motion HP: LED berkedip jelas | "Mau bukti? Rekam lampu LED pakai slow motion HP. Kedipannya langsung kelihatan." | Cek pakai slow-mo HP 📱 |
+| 48–55 | Tutor ke kamera memegang sensor DHT22 | "Minggu depan ESP32 ini kita sambungin ke sensor suhu dan internet. Follow biar nggak ketinggalan!" | Follow buat part selanjutnya 👉 |
 
 #### Caption
 
-Kipas langsung ke pin ESP32? Jangan! 🛑
+Lampu LED di sekitarmu mungkin lagi kedip ratusan kali per detik dan kamu nggak sadar 👀
 
-🔥 GPIO cuma ±12 mA, kipas butuh ratusan mA
-🔀 Pakai relay: ESP32 cuma "menekan saklar"
-🧯 Kipas di NO → ESP32 mati, kipas ikut mati
-🙃 Relay murah biasanya active-LOW (LOW = nyala)
-📏 Ragu? Ukur pakai multimeter
+💡 Kedip super cepat = kelihatan nyala terus
+🔅 Waktu mati lebih lama = lampu makin redup
+🧠 Semua diatur mikrokontroler kecil seperti ESP32
+📱 Buktikan sendiri pakai slow-mo HP
 
-#InspiraLabs #ESP32 #IoT #Elektronika #Relay #EkskulCoding #Arduino #BelajarElektronika
+#InspiraLabs #ESP32 #Arduino #IoT #EkskulCoding #Elektronika #BelajarCoding #FaktaUnik
 
 #### Yang sengaja tidak dibocorkan
-- Peta rakitan lengkap proyek akhir (pin, warna kabel).
-- Program tes dan tabel troubleshooting kelas.
+- Langkah instalasi Arduino IDE, board ESP32, dan library DHT.
+- Isi program Kedip Pertama dan challenge Pesan Rahasia Morse.
 
 ---
 
 ## Post-Test (5 soal, pilihan ganda)
 
-**1. Sebelum memindah kabel di rakitan ESP32, langkah pertama yang benar adalah…**
-A. Menekan tombol BOOT B. Mencabut kabel USB C. Membuka Serial Monitor D. Mengencangkan sekrup terminal relay
+**1. Bagian ESP32 yang berfungsi sebagai "otak" yang menjalankan program adalah…**
+A. Port USB B. Chip ESP32 (kotak logam) C. Tombol EN D. LED merah
 
-**2. Kenapa kaki "+" modul DHT22 disambungkan ke 3V3, bukan ke VIN (5V)?**
-A. Supaya sinyal data sensor juga 3,3V, sesuai batas tegangan GPIO ESP32 B. Karena pin 3V3 memberi arus paling besar C. Supaya relay ikut aktif D. Karena VIN hanya dipakai untuk WiFi
+**2. LED merah ESP32 menyala, tapi port tidak muncul di Arduino IDE. Penyebab paling sering adalah…**
+A. Library DHT belum dipasang B. Baud rate Serial Monitor salah C. Kabel USB yang dipakai hanya kabel charger D. WiFi sedang mati
 
-**3. Serial Monitor menulis "Relay AKTIF", tapi relay tidak klik dan LED relay tidak menyala. Penyebab paling mungkin adalah…**
-A. Sensor DHT22 terbalik B. Kipas rusak C. Kabel IN atau VCC/GND relay tidak tersambung dengan benar D. Baud rate Serial Monitor salah
+**3. Di kode Kedip Pertama kamu menulis `lamaNyala = 2000;`. Apa yang terjadi?**
+A. LED berkedip 2000 kali lalu berhenti B. LED mati selamanya C. ESP32 restart setiap 2 detik D. LED menyala 2 detik setiap kali berkedip
 
-**4. Relay klik dan LED relay menyala, tetapi kipas tidak berputar. Bagian yang paling perlu dicek adalah…**
-A. Kabel DHT22 B. Sisi beban: kabel COM, NO, dan kabel kipas ke GND C. Kabel USB laptop D. Pengaturan WiFi
+**4. Supaya Arduino IDE bisa memprogram ESP32, yang dipasang di Boards Manager adalah…**
+A. esp32 by Espressif Systems B. Arduino ESP32 Boards by Arduino C. Library WiFi by Arduino D. DHT sensor library
 
-**5. Modul relay active-LOW sedang AKTIF. Jika pin IN diukur dengan multimeter (terhadap GND), hasilnya sekitar…**
-A. 0 V B. 3,3 V C. 5 V D. 12 V
+**5. Upload macet di tulisan `Connecting.....` lalu gagal. Yang sebaiknya dilakukan adalah…**
+A. Mengganti baud rate Serial Monitor ke 9600 B. Menahan tombol BOOT di ESP32 sampai muncul `Writing at…` C. Memasang library WiFi dari Library Manager D. Mengganti nama folder program
 
 ---
 
@@ -789,41 +686,19 @@ A. 0 V B. 3,3 V C. 5 V D. 12 V
 
 ### Kunci Challenge
 
-**Easy:** relay kembali berdetak dari GPIO 26. Jawaban no. 4: kalau angka lupa diubah, program tetap "menekan" GPIO 14 yang sudah kosong → relay **diam**, padahal Serial tetap menulis AKTIF/MATI. Pelajaran: **angka di kode harus cocok dengan kabel di meja**.
+**Easy:** `100` → LED kedip cepat (5× nyala-mati per detik), tulisan Serial mengalir cepat. `2000` → nyala 2 detik, mati 2 detik. Pelajaran: angka = lama menunggu dalam **milidetik**.
 
-**Medium:** kipas menyala ±5–20 detik setelah digenggam (suhu naik pelan; DHT22 dibaca tiap 2 detik). Mati lagi setelah suhu turun **0,5°C di bawah AMBANG**, biasanya lebih lama (30–90 detik). Jawaban no. 5: tanpa jeda, suhu yang naik-turun 29,9 ↔ 30,1 membuat relay "cetak-cetek" ON-OFF tiap 2 detik (relay cepat aus, kipas tersendat). Jeda 0,5°C ini disebut **histeresis**; AC dan kulkas sungguhan juga memakainya. Mode Otomatis di dashboard P12 memakai ide ambang yang sama.
+**Medium:** patokan (bebas asal mirip): sein ±400/400, menara/suar ±100/1900, hazard ±500/500. Pesan Serial berubah sesuai teks siswa. Pesan hanya tercetak sekali saat ESP32 mulai, jadi kalau terlewat tekan tombol **EN**. Pelajaran: teks di dalam tanda kutip boleh diganti bebas; tanda kutip dan titik koma jangan dihapus.
 
-**Hard — Kartu Sabotase.** Kartu diambil acak dari `ekskulcoding.inspiralabs.id/sabotase/` (pilih **SMA**, tiap ambilan memberi 2 kartu yang mengubah kabel berbeda). Daftar lengkap kartu:
-
-| Sabotase | Gejala | Cara menemukan |
-|---|---|---|
-| DHT22 out pindah ke D25 | `Gagal baca DHT22` terus | Ikuti kabel kuning: tidak di D13 |
-| Kipas pindah dari NO ke NC | Kipas berputar saat Serial "MATI" | Continuity COM–NC bunyi saat USB dicabut, kabel kipas ada di NC |
-| Relay IN pindah dari D14 ke D34 | Relay diam, Serial tetap AKTIF/MATI | Tegangan IN tidak berubah; D34 input-only |
-| Kipas − dilepas dari GND | Relay klik, kipas diam | Tegangan kipas + ke GND ±5 V saat aktif, tapi kipas − tidak tersambung |
-| Ujung kabel kuning di sisi sensor digeser 1 baris | `Gagal baca DHT22`, kabel terlihat di D13 | Continuity kaki out ↔ D13 tidak bunyi |
-| Relay IN dilepas (menggantung) | Relay tidak pernah klik | Kabel biru tidak tersambung ke D14 |
-| DHT22 − dilepas dari GND | `Gagal baca DHT22` | Continuity kaki − ↔ GND tidak bunyi |
-| Kipas + pindah dari NO ke COM | Kipas menyala terus, tidak ikut relay | Kabel kipas + ada di COM, bukan NO |
-
-Aturan: sabotase dilakukan dengan **USB dicabut**, hanya dari kartu. **Jangan pernah** menyilangkan 3V3/VIN/GND (bisa korsleting). Pemilik rakitan menghadap belakang selama sabotase. Kelompok yang selesai cepat boleh menyabotase kelompok lain; kalau waktu mepet, tutor yang menyabotase saat Challenge Medium.
-
-### Cadangan kalau kit rusak
-Rakitan tidak bisa diperbaiki di kelas (ESP32/relay rusak)? Kelompok itu memakai **simulasi Wokwi** `wokwi/P10_PetaRakitan` dari link tutor: cocokkan kabel di layar dengan tabel Peta Rakitan, lalu kerjakan Medium dengan klik DHT22 → geser suhu. Rakitan fisik diganti kit cadangan di P11.
-
-### Catatan keselamatan & daya
-- Kipas mini 5V menarik ±100–250 mA dari VIN (USB). Kalau ESP32 restart saat kipas mulai berputar (*brownout*), pindah ke port USB lain/power bank dan pendekkan kabel.
-- Jangan izinkan kipas/lampu 220V walau relay mendukung. Tidak ada pengecualian.
-- **Pin rakitan SMA: DHT22 → D13, relay IN → D14.** Di ESP32 DevKit 30-pin, **D12 ada di antara D14 dan D13**. D12 adalah *strapping pin*: kabel yang nyasar ke D12 (apalagi kabel DHT22 yang punya pull-up) bisa membuat ESP32 gagal boot/upload. Cek ini dulu kalau upload tiba-tiba gagal setelah merakit.
-- GPIO 14 bisa sempat berkedip sesaat ketika ESP32 baru menyala/di-reset, sebelum program berjalan. Relay klik **sekali** saat dicolok itu wajar; yang tidak wajar adalah klik berulang.
+**Hard:** lolos jika teman menerjemahkan dengan benar tanpa melihat Serial Monitor. Pemula: sarankan `TITIK = 400`. Huruf di luar A–Z/0–9 dianggap spasi (jeda panjang). Pelajaran: satu program yang sama bisa "berbicara" apa saja hanya dengan mengganti teks.
 
 ### Kunci Post-Test
-1. B 2. A 3. C 4. B 5. A
+1. B 2. C 3. D 4. A 5. B
 
 ### Pembahasan singkat
-- No. 2: modul DHT22 punya resistor pull-up ke kaki "+", jadi sinyal data setinggi tegangan dayanya. Diberi 5V → sinyal 5V masuk GPIO yang hanya tahan 3,3V.
-- No. 3: Serial menulis AKTIF berarti program jalan. Masalahnya di jalur sinyal/daya relay, bukan di sensor atau Serial.
-- No. 4: relay klik = sisi kontrol beres. Yang tersisa sisi beban.
-- No. 5: active-LOW → aktif saat IN = LOW = ±0 V.
+- No. 2: kabel charger hanya punya jalur listrik (LED merah nyala), tidak punya jalur data.
+- No. 3: `lamaNyala` = berapa milidetik LED menyala; 2000 ms = 2 detik.
+- No. 4: "Arduino ESP32 Boards by Arduino" hanya untuk papan Arduino Nano ESP32, bukan ESP32 DevKit kita.
+- No. 5: tombol BOOT memaksa ESP32 masuk mode terima program; lepas setelah muncul `Writing at…`.
 
 ---------- SELESAI ISI MATERI AJAR ----------

@@ -1,6 +1,6 @@
 # POST TEST — Pertemuan 10 — SMA
 
-Sumber: SMA — Pertemuan 10: Merakit Smart Room Monitor: DHT22, Relay & Kipas
+Sumber: SMA — Pertemuan 10: Kenalan dengan ESP32 & Siapkan Bengkel IoT di Laptop
 
 > Untuk tutor: buat Google Form → Settings → **Make this a quiz**. Tiap soal = Multiple choice, 1 poin, isi kunci sesuai baris **Jawaban**. Aktifkan "Shuffle option order" kalau mau.
 
@@ -8,50 +8,50 @@ Sumber: SMA — Pertemuan 10: Merakit Smart Room Monitor: DHT22, Relay & Kipas
 
 ---
 
-**1. Sebelum memindah kabel di rakitan ESP32, langkah pertama yang benar adalah…**
-- A. Menekan tombol BOOT
-- B. Mencabut kabel USB
-- C. Membuka Serial Monitor
-- D. Mengencangkan sekrup terminal relay
+**1. Bagian ESP32 yang berfungsi sebagai "otak" yang menjalankan program adalah…**
+- A. Port USB
+- B. Chip ESP32 (kotak logam)
+- C. Tombol EN
+- D. LED merah
 
 **Jawaban: B**
 
 ---
 
-**2. Kenapa kaki "+" modul DHT22 disambungkan ke 3V3, bukan ke VIN (5V)?**
-- A. Supaya sinyal data sensor juga 3,3V, sesuai batas tegangan GPIO ESP32
-- B. Karena pin 3V3 memberi arus paling besar
-- C. Supaya relay ikut aktif
-- D. Karena VIN hanya dipakai untuk WiFi
-
-**Jawaban: A**
-
----
-
-**3. Serial Monitor menulis "Relay AKTIF", tapi relay tidak klik dan LED relay tidak menyala. Penyebab paling mungkin adalah…**
-- A. Sensor DHT22 terbalik
-- B. Kipas rusak
-- C. Kabel IN atau VCC/GND relay tidak tersambung dengan benar
-- D. Baud rate Serial Monitor salah
+**2. LED merah ESP32 menyala, tapi port tidak muncul di Arduino IDE. Penyebab paling sering adalah…**
+- A. Library DHT belum dipasang
+- B. Baud rate Serial Monitor salah
+- C. Kabel USB yang dipakai hanya kabel charger
+- D. WiFi sedang mati
 
 **Jawaban: C**
 
 ---
 
-**4. Relay klik dan LED relay menyala, tetapi kipas tidak berputar. Bagian yang paling perlu dicek adalah…**
-- A. Kabel DHT22
-- B. Sisi beban: kabel COM, NO, dan kabel kipas ke GND
-- C. Kabel USB laptop
-- D. Pengaturan WiFi
+**3. Di kode Kedip Pertama kamu menulis `lamaNyala = 2000;`. Apa yang terjadi?**
+- A. LED berkedip 2000 kali lalu berhenti
+- B. LED mati selamanya
+- C. ESP32 restart setiap 2 detik
+- D. LED menyala 2 detik setiap kali berkedip
 
-**Jawaban: B**
+**Jawaban: D**
 
 ---
 
-**5. Modul relay active-LOW sedang AKTIF. Jika pin IN diukur dengan multimeter (terhadap GND), hasilnya sekitar…**
-- A. 0 V
-- B. 3,3 V
-- C. 5 V
-- D. 12 V
+**4. Supaya Arduino IDE bisa memprogram ESP32, yang dipasang di Boards Manager adalah…**
+- A. esp32 by Espressif Systems
+- B. Arduino ESP32 Boards by Arduino
+- C. Library WiFi by Arduino
+- D. DHT sensor library
 
 **Jawaban: A**
+
+---
+
+**5. Upload macet di tulisan `Connecting.....` lalu gagal. Yang sebaiknya dilakukan adalah…**
+- A. Mengganti baud rate Serial Monitor ke 9600
+- B. Menahan tombol BOOT di ESP32 sampai muncul `Writing at…`
+- C. Memasang library WiFi dari Library Manager
+- D. Mengganti nama folder program
+
+**Jawaban: B**

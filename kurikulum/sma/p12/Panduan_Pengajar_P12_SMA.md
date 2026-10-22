@@ -4,95 +4,104 @@ Sabtu, 7 November 2026 · 70 menit · 6 peserta: **sma-01, sma-02, sma-03 indivi
 Bahan: slide P12, `sumber/Materi_Ajar_P12_SMA_InspiraLabs.md` (kunci di KHUSUS TUTOR), folder kelompok dari P11.
 
 ## Tujuan (yang bisa dilihat di akhir kelas)
-1. Kipas mengikuti tombol dashboard dalam **≤ ±4 detik**, diukur dengan stopwatch (5 kali).
+1. Kipas di meja **nyala & mati dari HP** lewat dashboard kelompok (mode Manual + PIN).
 2. Di mode **Otomatis**, kipas menyala sendiri saat sensor digenggam dan mati sendiri setelah dilepas.
-3. Siswa bisa menjelaskan **kenapa ada jeda** (ESP32 yang bertanya ke server, bukan server yang mendorong) dan **kapan alat aman/tidak aman** (listrik putus vs jaringan putus).
+3. Siswa bisa menjelaskan dengan bahasanya sendiri **kenapa ada jeda ±4 detik** (ESP32 yang bertanya ke server, seperti anak kos yang nanya "ada titipan?").
 
 ## Persiapan H-1
-- [ ] Semua kelompok lolos P11 (`kode respons: 200`). Catat yang belum: mereka mulai 10 menit pertama dengan troubleshooting berlapis P11.
-- [ ] **PIN kelompok**: ambil dari `FAN_PINS` di `backend/.env`. Tulis di **kertas lipat per Device ID**. Jangan dibacakan, jangan di slide.
-- [ ] Uji 1 alat: klik dashboard → kipas berubah ≤ ±4 detik; Otomatis + genggam → kipas menyala.
-- [ ] **Alat tutor tersambung ke hotspot HP tutor** (bukan WiFi kelas), untuk demo "jaringan putus" di Hard langkah 2. Upload ulang alat tutor dengan SSID hotspot.
-- [ ] Multimeter, stopwatch (HP siswa cukup).
-- [ ] Kalau di P11 tutor men-set dashboard ke Manual OFF: biarkan; siswa sendiri yang memindah ke Otomatis hari ini.
+- [ ] Semua kelompok lolos P11 (`kode respons: 200`, angka muncul di dashboard). Catat yang belum: mereka mulai 10 menit pertama dengan tutor.
+- [ ] **PIN kelompok**: ambil dari `FAN_PINS` di `.env` server. Tulis di **kertas lipat per Device ID**. Jangan dibacakan, jangan di slide.
+- [ ] Set semua dashboard: **Manual + kipas mati**, ambang **30°C** (pakai PIN tiap kelompok).
+- [ ] Uji 1 alat: tombol di HP → kipas berubah ≤ ±4 detik; Otomatis + genggam → kipas menyala.
+- [ ] Alat tutor + dashboard tutor siap untuk demo pembuka di proyektor.
+- [ ] Linktree: tombol "Post Test Pertemuan 12" mengarah ke Google Form P12 SMA.
 
 ## 15 menit sebelum kelas
 - Semua alat dinyalakan, cek dashboard tiap kelompok menampilkan angka hidup.
 - Alat tutor di meja depan, kipas terlihat kelas, dashboard tutor di proyektor.
-- Kertas PIN siap dibagikan saat slide 8.
+- Kertas PIN siap dibagikan saat slide PIN Kelompok.
 
 ## Timeline (menit → slide)
 | Menit | Slide | Kegiatan | Catatan tutor |
 |---|---|---|---|
-| 0–5 | — | Demo alat tutor: klik → kipas | Minta kelas menghitung detiknya keras-keras |
-| 5–10 | 2–4 | Cover, pemantik (lampu pintar di balik router), agenda | Tampung tebakan |
-| 10–17 | 5–9 | Dua arah, perjalanan perintah, kenapa ±4 detik, PIN, forum Topik 1 | Bagikan PIN pribadi di slide 8 |
-| 17–25 | 10 | Easy: Saklar dari Dashboard | Pengendali & Pengamat |
-| 25–31 | 11–13 | Manual vs Otomatis, slider, forum Topik 2 | Status awal = Otomatis 30°C |
-| 31–41 | 14 | Medium: Uji Otomatis dengan Tangan | |
-| 41–47 | 15–18 | Fail-safe, satu kata `RELAY_ACTIVE_LOW`, troubleshooting, forum Topik 3 | Arahkan ke pemanas, pompa |
-| 47–57 | 19 | Hard: Uji Fail-Safe | Langkah 2 pakai alat tutor; **WiFi kelas tidak dimatikan** |
-| 57–60 | 20 | Peta proyek + PR foto | |
-| 60–70 | 21–22 | Post-test + penutup | |
+| 0–5 | — | Demo alat tutor: tekan tombol di HP → kipas | Minta kelas menghitung detiknya keras-keras |
+| 5–10 | 2–5 | Cover, pemantik, agenda, cara dapat poin | Tampung tebakan (+2) |
+| 10–18 | 6–9 | Dua arah, ESP32 yang bertanya, PIN, Tanya Jawab Topik 1 | Bagikan PIN pribadi di slide 8 |
+| 18–25 | 10 | Easy: Saklar dari HP | Pengendali & Pengamat |
+| 25–32 | 11–13 | Manual vs Otomatis, slider, Tanya Jawab Topik 2 | Contoh rice cooker / AC |
+| 32–42 | 14 | Medium: Kipas Otomatis | Genggam cukup lama, lihat angka di dashboard |
+| 42–47 | 15–17 | Kipas nggak nurut, `RELAY_ACTIVE_LOW`, Tanya Jawab Topik 3 | Cek kabel NO dulu, baru kode |
+| 47–58 | 18 | Hard: Kipas Lebih Gesit | Pastikan semua kembali ke 4000 |
+| 58–60 | 19 | Peta Petualangan IoT | Alat dikumpulkan utuh |
+| 60–70 | 20–21 | Post-test + penutup | |
 
-Waktu molor? Hard langkah 3 (ubah `RELAY_ACTIVE_LOW`) boleh dijadikan demo tutor. **Jangan** lewati Easy & Medium: itu yang didemokan di showcase P13.
+Waktu molor? Hard boleh dijadikan demo tutor di proyektor (ubah 4000 → 2000 di alat tutor, kelas mengukur bersama). **Jangan** lewati Easy & Medium: itu yang didemokan di Demo Day P13.
 
 ## Kalimat kunci
-- "Server **tidak bisa** mengetuk pintu alat di balik router. Jadi alatnya yang bertanya tiap ±4 detik: 'ada perintah untukku?'"
-- "Jeda 0–4 detik itu **desain**, bukan rusak. Kalian akan mengukurnya sendiri."
+- "Server **tidak bisa** mengetuk pintu alat di balik router. Jadi alatnya yang bertanya tiap ±4 detik: 'ada titipan buat aku?'"
+- "Jeda 0–4 detik itu **desain**, bukan rusak."
 - "Publik boleh **melihat**, hanya pemegang PIN yang boleh **mengubah**. PIN = kunci rumah."
-- "Kipas di NO melindungi saat **listrik** hilang. Tapi saat **jaringan** hilang, kipas diam di status terakhir. Engineer harus tahu dua-duanya."
+- "Mode Otomatis itu cuma satu aturan: **kalau suhu lebih dari ambang, kipas nyala.** AC dan kulkas di rumah kalian kerjanya begitu juga."
 
-## Manajemen kelas
-- **Berdua:** **Pengendali** (klik dashboard, pegang PIN) & **Pengamat** (stopwatch, amati relay/kipas, multimeter). Tukar tiap topik.
-- **Individu:** HP di tangan kiri sebagai stopwatch, laptop di kanan. Untuk Hard, minta tetangga menjadi pengamat 2 menit.
-- PIN: kalau ada yang iseng mencoba PIN kelompok lain, bahas sebagai **etika keamanan** (bukan hukuman): "Di dunia nyata, mencoba PIN orang lain itu pelanggaran."
-- Medium butuh suhu naik: tangan harus menggenggam 20–60 detik. Siswa sering berhenti terlalu cepat; minta mereka melihat angka di dashboard, bukan menebak.
+## Gaya mengajar: ringan & penasaran
+- Mulai dari **rasa**, bukan teori: biarkan siswa menekan tombol di HP dan melihat kipasnya bergerak sebelum menjelaskan kenapa.
+- Satu analogi per konsep: anak kos (jeda), kunci rumah (PIN), rice cooker (otomatis). Tidak perlu membahas HTTP, polling, atau router lebih dalam.
+- Kelompok yang selesai duluan langsung lanjut challenge berikutnya, jangan ditahan.
+
+## Sistem poin & cara mencatat
+- **+2**: bertanya/menjawab (pemantik & Tanya Jawab), benar atau salah. Utamakan yang belum dapat poin.
+- Challenge: Easy **+5**, Medium **+10**, Hard **+15**. Pasangan: poin untuk kedua anggota.
+- Bukti: demo langsung ke tutor (Easy, Medium), catatan stopwatch + jawaban (Hard).
+- Rekap ke gradebook setelah kelas. **Tidak ada PR.**
 
 ## Titik cek pemahaman
 | Kapan | Tanya | Jawaban yang dicari |
 |---|---|---|
-| Setelah Easy | "Kenapa 5 pengukuran kalian beda-beda?" | Tergantung kapan klik terjadi terhadap laporan berikutnya |
-| Setelah Medium | "Ambang 40°C, kipas mati. Kenapa?" | Suhu tidak akan mencapai 40°C |
-| Setelah Hard | "Kapan alat kita aman, kapan tidak?" | Aman saat listrik putus (NO); tidak saat jaringan putus (status terakhir) |
+| Setelah Easy | "Kenapa jedanya kadang cepat, kadang lama?" | Tergantung kapan tombol ditekan terhadap laporan ESP32 berikutnya |
+| Setelah Medium | "Siapa yang memutuskan kipas nyala barusan?" | Aturan di server: suhu > ambang |
+| Setelah Hard | "Kenapa 2000 lebih gesit, dan kenapa tidak 500?" | ESP32 bertanya lebih sering; DHT22 butuh ≥ 2 detik |
 
 ## Kesalahan umum & cara membimbing
 | Yang terlihat | Pertanyaan pancingan |
 |---|---|
-| Klik berkali-kali karena "tidak jalan" | "Berapa detik kalian tunggu? Slide 7 bilang paling lama berapa?" |
+| Menekan tombol berkali-kali karena "tidak jalan" | "Berapa detik kalian tunggu? Slide bilang paling lama berapa?" |
 | "PIN salah" | "PIN siapa yang kalian ketik? Device ID dashboard ini apa?" |
-| Tidak terjadi apa-apa > 10 detik | "Lihat Serial: masih `kode respons: 200`? Lapisan P11 mana yang gagal?" |
-| Kipas terbalik dari dashboard | "Kabel kipas di NO atau NC? Kalau sudah NO, apa satu kata di slide 16?" |
+| Tidak terjadi apa-apa > 10 detik | "Lihat Serial Monitor: masih `kode respons: 200`?" |
+| Kipas kebalikan dari dashboard | "Kabel kipas di NO atau NC? Kalau sudah NO, satu kata apa yang bisa diganti?" |
 | Otomatis, kipas tidak menyala | "Ambang berapa, suhu dashboard berapa? Mana yang lebih besar?" |
-| Kipas ON-OFF cepat di Otomatis | "Suhu kalian berapa jauh dari ambang? Ingat Termostat Tangan P10: apa yang mencegah cetak-cetek?" |
-| Lupa mengembalikan `RELAY_ACTIVE_LOW` | "Modul kita active apa? Dashboard OFF, kipas berputar: itu benar?" |
+| Kipas nyala-mati cepat di Otomatis | "Suhu kalian berapa jauh dari ambang? Coba geser 1°C." |
+| Lupa mengembalikan `SEND_INTERVAL_MS` | "Angka di firmware sekarang berapa? Kalau semua kelompok 2000, server makin capek." |
+
+Kalau setelah **2 pertanyaan** kelompok masih buntu, tunjukkan **lokasi**-nya, bukan perbaikannya.
 
 ## Troubleshooting cepat (tutor)
 | Gejala | Tindakan |
 |---|---|
-| Semua kelompok lambat > 10 detik | Internet lambat/putus → cek `/health`, pindah ke hotspot cadangan |
-| PIN benar tapi tetap "PIN salah" | Setelah "PIN salah", dashboard otomatis menghapus PIN tersimpan; klik lagi & ketik ulang. Masih salah → cocokkan dengan `FAN_PINS` di `backend/.env` |
-| Slider berubah tapi kipas tidak | Mode masih Manual → klik **Otomatis** |
-| Kipas berputar terus walau OFF | Kipas di NC, atau modul active-HIGH → `RELAY_ACTIVE_LOW false` |
-| Relay klik, kipas diam | Sisi beban (P10): COM, NO, kipas − ke GND |
+| Semua kelompok lambat > 10 detik | Internet lambat/putus → cek `https://api-ekskulcoding.inspiralabs.id/health`, pindah ke hotspot cadangan |
+| PIN benar tapi tetap "PIN salah" | Setelah "PIN salah", PIN tersimpan dihapus; tekan lagi & ketik ulang. Masih salah → cocokkan dengan `FAN_PINS` di `.env` server |
+| Slider berubah tapi kipas tidak | Mode masih Manual → tekan **Otomatis** |
+| Kipas berputar terus walau mati | Kipas di NC, atau modul active-HIGH → `RELAY_ACTIVE_LOW false` |
+| Relay klik, kipas diam | Sisi beban: COM, NO, kipas − ke GND, sekrup terminal |
+| `Gagal baca sensor` setelah Hard | `SEND_INTERVAL_MS` < 2000 → kembalikan ke 4000 |
 
 Catatan: firmware masih punya route `/fan` lokal, tapi yang bekerja di kelas adalah relay mengikuti `fanOn` di balasan server. **Jangan ajarkan** server "mendorong" perintah ke ESP32.
 
 ## Keselamatan
-- **WiFi kelas tidak boleh dimatikan** untuk eksperimen; pakai hotspot alat tutor.
-- Cabut USB (Hard langkah 1) dengan menarik konektor, bukan kabelnya.
-- Diskusi Topik 3 menghubungkan ke dunia nyata: pemanas/pompa/kompor yang menyala terus saat jaringan putus berbahaya → produk sungguhan butuh **timeout** atau saklar pengaman. Cukup dibahas, tidak dibuat.
+- **Hanya kipas DC 5V.** Tidak ada perangkat listrik PLN di meja praktik.
+- Cabut USB sebelum memindah kabel apa pun.
+- Jari & rambut jauh dari baling-baling saat menguji mode Otomatis.
 
 ## Diferensiasi
-- **Cepat:** buka dashboard di HP pakai data seluler, kontrol kipas dari "luar sekolah"; buat tabel 3 kejadian fail-safe tambahan (mis. server mati) dan prediksi hasilnya; jelaskan ke tetangga kenapa smart lamp di rumah juga punya jeda.
-- **Kesulitan:** fokus Easy + Medium. Hard cukup langkah 1 (cabut USB) yang paling mudah diamati.
+- **Cepat selesai:** buka dashboard pakai data seluler (bukan WiFi kelas) dan nyalakan kipas "dari luar sekolah"; jelaskan ke tetangga kenapa smart lamp di rumah juga punya jeda.
+- **Kesulitan:** fokus Easy + Medium. Tutor/tetangga jadi Pengamat.
 
 ## Penilaian
-- **Wajib (syarat P13):** kipas mengikuti tombol (tabel 5 pengukuran) + Otomatis menyala saat digenggam.
-- Challenge Easy/Medium/Hard **+10** masing-masing; Hard dinilai dari tabel hasil + 1 kalimat kesimpulan.
-- Post-test: kunci B, B, A, C, B.
+- **Wajib (syarat Demo Day P13):** kipas mengikuti tombol di HP + mode Otomatis menyala saat sensor digenggam.
+- Challenge Easy **+5**, Medium **+10**, Hard **+15**.
+- Post-test: 5 soal, kunci B, C, A, D, B.
 
-## Penutup & PR
-- PR untuk P13: **foto kelompok** (landscape, siap dikecilkan ≤ ±500 KB), ide **2 warna tema**, kotak kecil/kardus untuk casing (opsional).
-- Pastikan `RELAY_ACTIVE_LOW` kembali `true` dan pin D13/D14.
-- Tutor: simpan kertas PIN, siapkan rubrik showcase P13.
+## Penutup
+- Pastikan semua firmware kembali `SEND_INTERVAL_MS = 4000` dan `RELAY_ACTIVE_LOW` sesuai modulnya.
+- Alat dikumpulkan ke tutor dalam keadaan utuh (kabel tetap tertancap) untuk Demo Day P13. **Tidak ada PR.**
+- Pengumuman P13: kustom tampilan dashboard, website online di `sma-0X.inspiralabs.id`, lalu Demo Day.
+- Tutor setelah kelas: simpan kertas PIN, siapkan zip kelompok (`py tools/kelompok.py paket`) untuk P13.

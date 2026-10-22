@@ -1,6 +1,6 @@
 # POST TEST — Pertemuan 13 — SMA
 
-Sumber: SMA — Pertemuan 13: Rapikan, Kustom, Serahkan: Showcase Smart Room Monitor
+Sumber: SMA — Pertemuan 13: Dashboard Punya Kita + Demo Day
 
 > Untuk tutor: buat Google Form → Settings → **Make this a quiz**. Tiap soal = Multiple choice, 1 poin, isi kunci sesuai baris **Jawaban**. Aktifkan "Shuffle option order" kalau mau.
 
@@ -8,7 +8,37 @@ Sumber: SMA — Pertemuan 13: Rapikan, Kustom, Serahkan: Showcase Smart Room Mon
 
 ---
 
-**1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
+**1. Untuk mengubah warna utama seluruh dashboard sekaligus, bagian yang paling tepat diubah adalah…**
+- A. `api.js`
+- B. Variabel di `:root` dalam `style.css`
+- C. Firmware ESP32
+- D. Nama file `index.html`
+
+**Jawaban: B**
+
+---
+
+**2. File di folder kelompok yang TIDAK boleh diubah karena berisi koneksi ke server adalah…**
+- A. `index.html`
+- B. `style.css`
+- C. `api.js`
+- D. `foto-kelompok.jpg`
+
+**Jawaban: C**
+
+---
+
+**3. Di dashboard ada aturan `if (suhuSaatIni > 32) { tampilkan peringatan }`. Sensor membaca 30°C. Apa yang terjadi?**
+- A. Peringatan tidak muncul
+- B. Peringatan muncul
+- C. Dashboard error
+- D. Kipas mati
+
+**Jawaban: A**
+
+---
+
+**4. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
 - A. Fotonya terlalu kecil
 - B. Nama file tidak persis `foto-kelompok.jpg` yang dipanggil `index.html`
 - C. `api.js` belum diubah
@@ -18,40 +48,10 @@ Sumber: SMA — Pertemuan 13: Rapikan, Kustom, Serahkan: Showcase Smart Room Mon
 
 ---
 
-**2. File di folder kelompok yang TIDAK boleh diubah sebelum diserahkan ke tutor adalah…**
-- A. `api.js`
-- B. `style.css`
-- C. `foto-kelompok.jpg`
-- D. Teks nama anggota di `index.html`
+**5. Batas status "Panas" di dashboard diubah dari 29 jadi 25. Suhu ruangan 27°C. Apa yang terjadi?**
+- A. Suhu ruangan turun jadi 25°C
+- B. Dashboard menampilkan status Dingin
+- C. Kipas langsung rusak
+- D. Dashboard menampilkan status Panas, padahal suhu ruangan tetap 27°C
 
-**Jawaban: A**
-
----
-
-**3. Kelompokmu ingin menambah grafik memakai library JavaScript. Cara yang sesuai aturan serah terima adalah…**
-- A. `npm install` lalu serahkan folder `node_modules`
-- B. Memanggil library lewat CDN: `<script src="https://...">`
-- C. Menyalin library dari `C:\Users\...`
-- D. Mengubah `api.js`
-
-**Jawaban: B**
-
----
-
-**4. Kenapa sensor DHT22 sebaiknya tidak ditaruh menempel di sebelah ESP32 di dalam kotak tertutup?**
-- A. Sinyal WiFi terganggu
-- B. Panas dari ESP32 membuat suhu terbaca lebih tinggi dari suhu ruangan
-- C. Relay jadi active-HIGH
-- D. Kipas berputar terbalik
-
-**Jawaban: B**
-
----
-
-**5. Seorang pengunjung membuka `https://sma-04.inspiralabs.id` lalu menekan tombol kipas. Apa yang terjadi?**
-- A. Kipas langsung berubah tanpa syarat
-- B. Website rusak
-- C. Website meminta PIN kelompok; tanpa PIN yang benar, pengunjung hanya bisa melihat
-- D. Data suhu terhapus
-
-**Jawaban: C**
+**Jawaban: D**

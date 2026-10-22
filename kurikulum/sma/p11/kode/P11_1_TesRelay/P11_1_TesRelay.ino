@@ -1,5 +1,5 @@
 // ============================================================
-// P10 SMA — Program Tes 1: Relay Berdetak (PROGRAM JADI, tidak perlu diubah)
+// P11 SMA — Program Tes 1: Relay Berdetak (PROGRAM JADI, tidak perlu diubah)
 // Rakitan: relay IN -> GPIO 14, VCC -> VIN, GND -> GND.
 //          VIN -> COM, NO -> kipas (+), kipas (-) -> GND.
 // Yang harus terlihat: tiap 2 detik relay "klik", LED relay menyala,

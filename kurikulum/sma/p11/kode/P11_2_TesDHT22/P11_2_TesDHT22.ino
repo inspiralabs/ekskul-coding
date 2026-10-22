@@ -1,5 +1,5 @@
 // ============================================================
-// P10 SMA — Program Tes 2: Baca DHT22 (PROGRAM JADI, tidak perlu diubah)
+// P11 SMA — Program Tes 2: Baca DHT22 (PROGRAM JADI, tidak perlu diubah)
 // Rakitan: DHT22 "+" -> 3V3, "out" -> GPIO 13, "-" -> GND.
 // Yang harus terlihat: tiap 2 detik muncul suhu & kelembapan di Serial Monitor.
 // Genggam / tiup sensor: angkanya harus berubah.

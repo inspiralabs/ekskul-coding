@@ -1,5 +1,5 @@
 // ============================================================
-// SIMULASI WOKWI P10 SMA — Peta Rakitan Lengkap (DHT22 + relay + kipas)
+// SIMULASI WOKWI P11 SMA — Peta Rakitan Lengkap (DHT22 + relay + kipas)
 // Cara pakai: wokwi.com -> New Project -> ESP32. Ganti isi tab
 // sketch.ino, diagram.json, dan libraries.txt dengan file di folder ini,
 // lalu tekan Play (hijau).

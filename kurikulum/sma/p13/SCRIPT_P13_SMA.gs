@@ -16,13 +16,49 @@
 const FOLDER_PERTEMUAN = "https://drive.google.com/drive/folders/1cyCZCwob46KBKH6sKKiPQvYf5c5fkAtz";  // link atau ID folder Drive P13
 const JENJANG = 'SMA';
 
-const KODE = {};
+const KODE = {
+  "C3_P13_Hard_PanelTips/panel_tips.txt": "<!-- ============================================================\n     Challenge Hard P13 SMA - \"Panel Tips Pintar\"\n     CARA PAKAI:\n     1. Buka index.html di folder kelompokmu (VS Code / Notepad).\n     2. Cari baris:  <div class=\"kartu-kosong\" id=\"bagianEdukasi\">\n     3. Ganti baris komentar \"TULIS KODEMU DI SINI\" di bawahnya\n        dengan kode di bawah ini (dari baris <h2> sampai </script>).\n     4. Simpan, refresh browser. Lalu ubah 3 teks tips dengan gaya\n        kalian dan tambah 1 aturan baru untuk kelembapan.\n     ============================================================ -->\n<h2>Tips Ruangan</h2>\n<p id=\"teksTips\">Menunggu data...</p>\n<script>\nsetInterval(function () {\n  var tips;\n  if (suhuSaatIni > 30) tips = \"Panas! Buka jendela atau nyalakan kipas.\";\n  else if (suhuSaatIni < 22) tips = \"Dingin, pakai jaket ya.\";\n  else tips = \"Suhu nyaman, pas buat ngoding!\";\n  document.getElementById(\"teksTips\").textContent = tips;\n}, 2000);\n</script>\n",
+  "BACA_DULU.txt": "CARA PAKAI FILE KODE (Arduino IDE)\n\nSetiap program ESP32 ada di foldernya sendiri, misalnya:\n  P10_1_TesRelay/P10_1_TesRelay.ino\nNama folder HARUS sama dengan nama file .ino (aturan Arduino IDE), jadi jangan diganti.\n\n1. Download folder Kode ini (klik kanan -> Download), lalu Extract zip-nya.\n2. Buka folder program, double-click file .ino -> terbuka di Arduino IDE.\n3. Pilih board \"ESP32 Dev Module\" dan port ESP32-mu, lalu klik Upload (panah ->).\n4. Buka Serial Monitor (ikon kaca pembesar kanan atas), pilih 115200 baud.\n\nBelum punya Arduino IDE / board ESP32 / library DHT? Ikuti Panduan Instalasi dari tutor.\nFile .html (web): buka langsung di browser (double-click), edit pakai VS Code.\n"
+};
 
 const POST_TEST = {
   "judul": "POST TEST - Pertemuan 13 - SMA",
   "soal": [
     {
-      "q": "1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya Foto Kelompok.JPG. Penyebab paling mungkin adalah…",
+      "q": "1. Untuk mengubah warna utama seluruh dashboard sekaligus, bagian yang paling tepat diubah adalah…",
+      "kode": "",
+      "opsi": [
+        "api.js",
+        "Variabel di :root dalam style.css",
+        "Firmware ESP32",
+        "Nama file index.html"
+      ],
+      "kunci": 1
+    },
+    {
+      "q": "2. File di folder kelompok yang TIDAK boleh diubah karena berisi koneksi ke server adalah…",
+      "kode": "",
+      "opsi": [
+        "index.html",
+        "style.css",
+        "api.js",
+        "foto-kelompok.jpg"
+      ],
+      "kunci": 2
+    },
+    {
+      "q": "3. Di dashboard ada aturan if (suhuSaatIni > 32) { tampilkan peringatan }. Sensor membaca 30°C. Apa yang terjadi?",
+      "kode": "",
+      "opsi": [
+        "Peringatan tidak muncul",
+        "Peringatan muncul",
+        "Dashboard error",
+        "Kipas mati"
+      ],
+      "kunci": 0
+    },
+    {
+      "q": "4. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya Foto Kelompok.JPG. Penyebab paling mungkin adalah…",
       "kode": "",
       "opsi": [
         "Fotonya terlalu kecil",
@@ -33,53 +69,20 @@ const POST_TEST = {
       "kunci": 1
     },
     {
-      "q": "2. File di folder kelompok yang TIDAK boleh diubah sebelum diserahkan ke tutor adalah…",
+      "q": "5. Batas status \"Panas\" di dashboard diubah dari 29 jadi 25. Suhu ruangan 27°C. Apa yang terjadi?",
       "kode": "",
       "opsi": [
-        "api.js",
-        "style.css",
-        "foto-kelompok.jpg",
-        "Teks nama anggota di index.html"
+        "Suhu ruangan turun jadi 25°C",
+        "Dashboard menampilkan status Dingin",
+        "Kipas langsung rusak",
+        "Dashboard menampilkan status Panas, padahal suhu ruangan tetap 27°C"
       ],
-      "kunci": 0
-    },
-    {
-      "q": "3. Kelompokmu ingin menambah grafik memakai library JavaScript. Cara yang sesuai aturan serah terima adalah…",
-      "kode": "",
-      "opsi": [
-        "npm install lalu serahkan folder node_modules",
-        "Memanggil library lewat CDN: <script src=\"https://...\">",
-        "Menyalin library dari C:\\Users\\...",
-        "Mengubah api.js"
-      ],
-      "kunci": 1
-    },
-    {
-      "q": "4. Kenapa sensor DHT22 sebaiknya tidak ditaruh menempel di sebelah ESP32 di dalam kotak tertutup?",
-      "kode": "",
-      "opsi": [
-        "Sinyal WiFi terganggu",
-        "Panas dari ESP32 membuat suhu terbaca lebih tinggi dari suhu ruangan",
-        "Relay jadi active-HIGH",
-        "Kipas berputar terbalik"
-      ],
-      "kunci": 1
-    },
-    {
-      "q": "5. Seorang pengunjung membuka https://sma-04.inspiralabs.id lalu menekan tombol kipas. Apa yang terjadi?",
-      "kode": "",
-      "opsi": [
-        "Kipas langsung berubah tanpa syarat",
-        "Website rusak",
-        "Website meminta PIN kelompok; tanpa PIN yang benar, pengunjung hanya bisa melihat",
-        "Data suhu terhapus"
-      ],
-      "kunci": 2
+      "kunci": 3
     }
   ]
 };
 
-const PANDUAN = {"judul": "Panduan Pengajar P13 SMA — Rapikan, Kustom, Serahkan: Showcase Smart Room Monitor", "blok": [["h1", "Panduan Pengajar — P13 SMA: Rapikan, Kustom, Serahkan + Showcase"], ["p", "Sabtu, 14 November 2026 · 70 menit · 6 peserta: **sma-01, sma-02, sma-03 individu**, **sma-04, sma-05, sma-06 berpasangan**."], ["p", "Bahan: slide P13, sumber/Materi_Ajar_P13_SMA_InspiraLabs.md (rubrik & kunci di KHUSUS TUTOR), folder kelompok, foto P10 (\"sebelum\")."], ["h2", "Tujuan (yang bisa dilihat di akhir kelas)"], ["p", "1. Rakitan **rapi & berlabel** dan **tetap lolos** kontrol Manual + Otomatis setelah dirapikan."], ["p", "2. Dashboard kelompok punya **profil, foto, dan ≥ 2 warna tema** sendiri; folder lolos checklist Siap Tayang dan diserahkan."], ["p", "3. Setiap penampil melakukan **showcase ±2,5 menit**: masalah → demo → bedah rakitan → 1 masalah terberat → rencana."], ["h2", "Persiapan H-1"], ["li", "☐ Alat tutor berjalan (demo pembuka & cadangan kalau alat kelompok gagal saat showcase)."], ["li", "☐ Bahan rapikan: jumper pendek, cable tie/selotip, label/spidol, gunting (cutter **hanya** dipegang tutor)."], ["li", "☐ Tempat pengumpulan folder (flashdisk / folder Drive per Device ID) + daftar centang sma-01…sma-06."], ["li", "☐ Print **rubrik showcase** (Khusus Tutor), 1 lembar per penampil."], ["li", "☐ Siapkan foto P10 tiap kelompok untuk dibandingkan."], ["li", "☐ Hotspot cadangan 2.4 GHz, 2 power bank untuk demo."], ["li", "☐ Tentukan **batas waktu** kirim folder untuk yang belum selesai (mis. Senin 16 November) dan umumkan."], ["h2", "15 menit sebelum kelas"], ["li", "Urutan showcase ditulis di papan (acak atau sukarela). Penampil berikutnya bersiap selama penampil sekarang."], ["li", "Proyektor menampilkan dashboard penampil (laptop siswa atau https://sma-XX.inspiralabs.id kalau sudah tayang)."], ["li", "Timer 2,5 menit siap (HP)."], ["h2", "Timeline (menit → slide)"], ["tabel", [["Menit", "Slide", "Kegiatan", "Catatan tutor"], ["0–3", "—", "Foto P10 vs alat tutor", "\"Mana yang siap dibawa ke pameran?\""], ["3–7", "2–4", "Cover, pemantik (demo gagal), agenda", "Tampung tebakan"], ["7–11", "5–8", "Prototipe → alat, prinsip rapi, posisi sensor, forum Topik 1", ""], ["11–22", "9", "Easy: Rakitan Rapi", "Cabut USB, satu kabel per waktu"], ["22–25", "10–12", "Kustom dashboard, foto, forum Topik 2", "Aktifkan *File name extensions*"], ["25–33", "13", "Medium: Dashboard Kelompok", "Berdua: paralel dengan Easy"], ["33–36", "14–17", "Serah terima, website tayang, checklist demo, forum Topik 3", "Jawab pemantik di slide 16"], ["36–42", "18", "Hard: Siap Tayang", "Kumpulkan folder yang lolos"], ["42–58", "19", "Showcase 6 × ±2,5 menit", "Isi rubrik sambil menonton"], ["58–61", "20", "Refleksi semester", "1 kalimat per siswa: \"skill yang paling berguna\""], ["61–70", "21–22", "Post-test + penutup", ""]]], ["p", "Waktu molor? Hard boleh selesai di rumah (folder dikirim sebelum batas waktu). **Showcase tidak dipotong**: itu penilaian utama."], ["h2", "Kalimat kunci"], ["li", "\"Merapikan = memindah kabel. Aturan P10 berlaku: **cabut USB, satu kabel per waktu, tes ulang**.\""], ["li", "\"Sensor di sebelah ESP32 dalam kotak tertutup ikut kepanasan: angkanya bohong.\""], ["li", "\"Website yang jalan di laptopmu bisa rusak online kalau memanggil file dari C:\\Users\\.... Semua file harus di dalam folder.\""], ["li", "\"Mulai cerita dari **masalah** ('kelas kami panas'), bukan dari 'ini ESP32'.\""], ["h2", "Manajemen kelas"], ["li", "**Berdua:** satu merapikan rakitan (Easy), satu mengkustom dashboard (Medium), lalu sama-sama latihan showcase. **Keduanya wajib bicara** saat showcase (mis. satu cerita masalah & demo, satu bedah rakitan & troubleshooting)."], ["li", "**Individu:** Easy dulu (rakitan harus jalan untuk showcase). Medium minimal profil + 1 warna; sisanya boleh di rumah."], ["li", "Remaja sering grogi tampil. Beri struktur 5 langkah slide 19 sebagai \"naskah\", izinkan membaca catatan. Tepuk tangan setelah tiap penampil."], ["li", "Pertanyaan audiens: maksimal 1 per penampil, dari siswa lain dulu, baru tutor."], ["h2", "Titik cek pemahaman"], ["tabel", [["Kapan", "Tanya", "Jawaban yang dicari"], ["Setelah Easy", "\"Tes apa yang membuktikan merapikan tidak merusak apa pun?\"", "Manual + Otomatis dari dashboard jalan lagi"], ["Setelah Medium", "\"Foto tidak muncul: 3 kemungkinan?\"", "Nama file, lokasi folder, ekstensi tersembunyi"], ["Showcase", "\"Kenapa D14, bukan D12? Kenapa NO?\"", "D12 strapping pin; fail-safe"]]], ["h2", "Kesalahan umum & cara membimbing"], ["tabel", [["Yang terlihat", "Pertanyaan pancingan"], ["Setelah dirapikan kipas tidak jalan", "\"Apa yang berubah sejak terakhir jalan? Cek tabel troubleshooting P10 baris mana?\""], ["Kabel kipas pindah ke NC", "\"Saat relay tidak aktif, COM tersambung ke mana?\""], ["Kabel IN bergeser satu lubang", "\"Ikuti kabel biru dengan jari: berhenti di pin berapa?\""], ["Foto tidak tampil", "\"Nyalakan *File name extensions*. Nama lengkap filenya apa?\""], ["class/id ikut diganti → tampilan rusak", "\"Yang boleh diganti teks atau tag? Bandingkan dengan zip asli.\""], ["Folder > 5 MB", "\"Folder mana yang paling besar? (foto asli HP)\""], ["Tidak diminta PIN di incognito", "Wajar kalau Device ID tidak terdaftar di server → lapor tutor, cek FAN_PINS"]]], ["h2", "Troubleshooting cepat (tutor)"], ["tabel", [["Gejala", "Tindakan"], ["Alat gagal online saat showcase", "Cek Serial (lapisan P11). > 1 menit → demo pakai alat tutor + video cadangan; nilai pemahaman tetap penuh"], ["WiFi kelas putus", "Semua pindah ke hotspot cadangan (isi 2 baris WiFi + upload) atau showcase dari video + penjelasan"], ["api.js diubah", "Ganti dengan salinan zip asli (saat deploy juga selalu diganti)"], ["Deploy setelah kelas", "py tools/kelompok.py deploy sma-XX sma-XX.zip --dry-run, lalu tanpa --dry-run; cek https://sma-XX.inspiralabs.id"]]], ["h2", "Keselamatan"], ["li", "Cabut USB saat merapikan. Cutter hanya dipakai tutor; gunting dipakai di meja, bukan di atas rakitan menyala."], ["li", "Hanya kipas DC 5V; terminal logam relay tidak boleh menonjol keluar casing."], ["li", "Saat showcase: PIN tidak ditampilkan di layar; foto anggota hanya dengan persetujuan anggota (dan wali, bila sekolah mewajibkan)."], ["h2", "Diferensiasi"], ["li", "**Cepat:** Bonus dashboard (grafik riwayat via CDN, mode gelap, panel edukasi DHT22) atau casing kardus dengan lubang ventilasi untuk sensor; bantu cek checklist Siap Tayang kelompok lain."], ["li", "**Kesulitan:** prioritas = rakitan jalan + profil nama anggota. Warna & foto boleh dikirim menyusul sebelum batas waktu."], ["h2", "Penilaian"], ["li", "**Showcase (rubrik 1–4, 5 aspek):** Fungsi · Kerapian & keselamatan · Pemahaman · Troubleshooting · Presentasi & kerja sama. Peserta individu dinilai kejelasan & demo pada aspek kerja sama."], ["li", "**Serah terima:** folder lolos 5 poin Siap Tayang (dicek tutor saat deploy)."], ["li", "Challenge Easy/Medium/Hard **+10** masing-masing. Post-test: kunci B, A, B, B, C."], ["h2", "Penutup"], ["li", "Refleksi: apa yang dulu terasa sulit (pinout? active-LOW? WiFi?) dan sekarang bisa dijelaskan. Kaitkan ke profesi: IoT engineer, teknisi elektronika, embedded engineer."], ["li", "Umumkan kapan website tayang di https://sma-XX.inspiralabs.id dan bahwa alat harus **menyala & online** supaya angkanya hidup."], ["li", "Tutor setelah kelas: deploy semua folder, kirim link ke tiap kelompok, arsipkan rubrik & nilai."]]};
+const PANDUAN = {"judul": "Panduan Pengajar P13 SMA — Dashboard Punya Kita + Demo Day", "blok": [["h1", "Panduan Pengajar — P13 SMA: Dashboard Punya Kita + Demo Day"], ["p", "Sabtu, 14 November 2026 · 70 menit · 6 peserta: **sma-01, sma-02, sma-03 individu**, **sma-04, sma-05, sma-06 berpasangan**."], ["p", "Bahan: slide P13, sumber/Materi_Ajar_P13_SMA_InspiraLabs.md (rubrik & kunci di KHUSUS TUTOR), folder kelompok dari zip P11, folder Kode P13 (C3_P13_Hard_PanelTips/panel_tips.txt)."], ["h2", "Tujuan (yang bisa dilihat di akhir kelas)"], ["p", "1. Dashboard tiap kelompok punya **nama, warna, dan (bila ada) foto sendiri**, dan siswa bisa menunjuk di mana mengubahnya (:root, PROFIL KELOMPOK)."], ["p", "2. Siswa bisa **mengubah aturan** dashboard (ambang & teks peringatan) dan membuktikannya dengan banner yang muncul."], ["p", "3. Website kelompok **tayang** di https://sma-0X.inspiralabs.id dan tiap kelompok **mendemokan** alat + website ±2 menit."], ["h2", "Persiapan H-1"], ["li", "☐ Backend online: https://api-ekskulcoding.inspiralabs.id/health → ok. Semua alat kelompok masih mengirim data (buka sma-01 … sma-06)."], ["li", "☐ py tools/kelompok.py paket → simpan dist/paket/sma-0X.zip di flashdisk, untuk kelompok yang folder P11-nya hilang."], ["li", "☐ Jalankan SCRIPT_P13_SMA.gs: folder Kode berisi C3_P13_Hard_PanelTips/panel_tips.txt; link \"Kode P13\" & \"Post Test Pertemuan 13\" di Linktree aktif."], ["li", "☐ Coba sendiri snippet panel tips di satu folder kelompok: panel muncul, tips berubah saat sensor digenggam/ditiup."], ["li", "☐ Laptop tutor siap deploy: repo ter-update, py tools/kelompok.py deploy jalan (--dry-run dulu), akses push ke master."], ["li", "☐ Tempat pengumpulan zip (flashdisk / folder Drive) + daftar centang sma-01 … sma-06."], ["li", "☐ Print **rubrik Demo Day** (Khusus Tutor). Kertas PIN kelompok (dari P12) dibawa untuk yang lupa."], ["li", "☐ WiFi kelas 2.4 GHz + hotspot cadangan, 2 power bank."], ["h2", "15 menit sebelum kelas"], ["li", "Nyalakan semua alat, pastikan angka di tiap dashboard hidup."], ["li", "Urutan Demo Day ditulis di papan (sukarela dulu, sisanya undian)."], ["li", "Proyektor + HDMI siap; timer HP 2,5 menit."], ["h2", "Timeline (menit → slide)"], ["tabel", [["Menit", "Slide", "Kegiatan", "Catatan tutor"], ["0–5", "1–5", "Cover, pemantik, agenda, cara dapat poin", "Tampung 2–3 jawaban (+2), jangan dijawab dulu"], ["5–12", "6–9", "Folder website, :root, profil & foto, Tanya Jawab", "Jawab pemantik di slide 6. Demo live: ganti 1 warna di proyektor"], ["12–17", "10", "Easy: Ganti Baju Dashboard", "Pastikan semua bisa membuka index.html di Chrome"], ["17–21", "11–12", "Otak dashboard, Tanya Jawab", "Ctrl+F AMBANG_BATAS_SUHU_TINGGI"], ["21–28", "13", "Medium: Aturan Kita Sendiri", "Ingatkan: kembalikan ambang ke angka masuk akal"], ["28–31", "14–15", "Panggung bonus, Tanya Jawab", "Kode disalin, bukan diketik"], ["31–39", "16", "Hard: Panel Tips Pintar", "Mulai terima zip & deploy yang sudah siap"], ["39–42", "17–18", "Serahkan website, website online", "Kumpulkan semua zip apa adanya"], ["42–58", "19", "Demo Day 6 × ±2,5 menit", "Isi rubrik sambil menonton; penanya +2"], ["58–62", "20–21", "Tanya Jawab pengembangan + peta", "2–3 siswa berbagi (+2)"], ["62–70", "22–23", "Post-test + penutup + foto bersama", ""]]], ["p", "Waktu molor? Urutan yang boleh dipangkas: (1) Hard jadi demo tutor (tempel snippet di proyektor), (2) Medium cukup ganti teks peringatan. **Demo Day tidak dipotong.** Yang belum selesai **tidak** jadi PR: zip dikumpulkan apa adanya."], ["h2", "Kalimat kunci"], ["li", "\"Fitur dashboard kalian semua sama. Yang bikin beda: tampilannya dan cara dia 'ngomong' ke pengunjung.\""], ["li", "\":root itu remote tema. Ganti di satu tempat, seluruh website ikut.\""], ["li", "\"if artinya 'kalau'. Kalian yang menentukan kapan website menganggap ruangan panas.\""], ["li", "\"Edit → Save → Refresh. Tiga langkah itu siklus kerja web developer.\""], ["li", "\"Website-nya online, tapi tombol kipas tetap dikunci PIN. Lihat boleh, pencet jangan.\""], ["h2", "Manajemen kelas"], ["li", "**Berdua (sma-04/05/06):** satu pegang laptop (edit kode), satu pegang alat & foto (cek alat online, latihan demo). Tukar di Topik 2. Saat Demo Day **keduanya bicara**."], ["li", "**Individu (sma-01/02/03):** Easy dulu, lalu Medium. Hard kalau waktu cukup. Saat Demo Day boleh minta tetangga memegang alat."], ["li", "Siswa yang cepat selesai Easy: tunjukkan dashboard-nya di proyektor 10 detik (\"siapa yang berani warna paling nyeleneh?\"). Ini memancing yang lain."], ["li", "Remaja grogi tampil: format 4 langkah di slide 19 adalah \"naskah\"; boleh membaca catatan. Tepuk tangan setelah tiap penampil."], ["li", "Pertanyaan penonton: maksimal 1 per penampil, utamakan siswa yang belum dapat +2."], ["h2", "Titik cek pemahaman"], ["tabel", [["Kapan", "Tanya", "Jawaban yang dicari"], ["Setelah Easy", "\"Kalau mau ganti warna tombol & judul sekaligus, ubah di mana?\"", "Variabel di :root"], ["Setelah Medium", "\"Ambang 31, suhu 30. Banner muncul?\"", "Tidak, 30 tidak lebih besar dari 31"], ["Setelah Hard", "\"Kenapa aturan kelembapan harus sebelum else terakhir?\"", "Aturan dicek dari atas; else = sisanya"], ["Demo Day", "\"Angka di website ini datang dari mana?\"", "Sensor → ESP32 → WiFi → server → website"]]], ["h2", "Kesalahan umum & cara membimbing (jangan langsung beri jawaban)"], ["tabel", [["Yang terlihat", "Pertanyaan pancingan"], ["Perubahan tidak terlihat", "\"Sudah Save? Sudah Refresh? Yang kamu buka di Chrome file dari folder mana?\""], ["Seluruh tampilan berantakan setelah edit CSS", "\"Bandingkan baris yang kamu ubah dengan aslinya: ada ; atau } yang hilang?\""], ["Warna kembali default", "\"Nama variabelnya masih persis --warna-primer?\""], ["Banner tidak muncul padahal ambang sudah diturunkan", "\"Tanda kutip & tanda + masih lengkap? Buka Console (F12), ada tulisan merah?\""], ["Panel tetap \"Menunggu data...\"", "\"id di <p> dan di getElementById sama persis?\""], ["Foto tidak tampil", "\"Nyalakan *File name extensions*. Nama lengkap filenya apa?\""], ["class/id ikut diganti → tampilan rusak", "\"Yang boleh diganti teks atau tag? Bandingkan dengan zip asli.\""]]], ["p", "Kalau setelah **2 pertanyaan** masih buntu, tunjukkan **lokasi**-nya (\"cek baris yang kamu ubah terakhir\"), bukan perbaikannya."], ["h2", "Troubleshooting cepat (tutor)"], ["tabel", [["Gejala", "Penyebab", "Tindakan"], ["Angka dashboard -- terus", "Alat mati/tidak online, atau folder kelompok lain", "Cek Serial Monitor alat (kode respons 200?), cek Device ID di api.js"], ["Folder kelompok hilang", "Belum disimpan dari P11", "Pakai dist/paket/sma-0X.zip dari flashdisk"], ["Kotak PIN muncul terus saat demo kipas", "PIN salah tersimpan di browser", "Masukkan ulang PIN dari kertas P12"], ["Deploy ditolak", "Tidak ada index.html / zip > 10 MB", "Kecilkan foto, cek nama file, zip ulang"], ["api.js diubah siswa", "—", "Tidak masalah: saat deploy selalu diganti versi tutor"], ["Alat gagal online saat Demo Day", "WiFi/daya", "> 1 menit → demo dari website kelompok lain/alat tutor + penjelasan; nilai penjelasan tetap penuh"], ["WiFi kelas putus", "—", "Pindah hotspot cadangan (isi 2 baris WiFi firmware + upload), atau Demo Day dari website + cerita"]]], ["h2", "Serah terima & deploy (selama kelas)"], ["p", "1. Terima sma-0X.zip, centang di daftar."], ["p", "2. py tools/kelompok.py deploy sma-0X D:\\kiriman\\sma-0X.zip --dry-run → kalau aman, ulangi tanpa --dry-run."], ["p", "3. git add kelompok/sma-0X → commit → push (bisa beberapa kelompok sekaligus). Deploy otomatis berjalan di server."], ["p", "4. Buka https://sma-0X.inspiralabs.id di proyektor saat Demo Day kelompok itu: momen \"website kita online!\"."], ["li", "Yang belum sempat: tutor deploy setelah kelas dan membagikan link di grup. Siswa **tidak** perlu mengerjakan apa pun lagi."], ["h2", "Keselamatan"], ["li", "Alat tidak dibongkar hari ini. Hanya kipas DC 5V; cabut USB kalau ada kabel yang harus dibetulkan."], ["li", "PIN kelompok **tidak** ditampilkan di proyektor."], ["li", "Foto anggota di website hanya dengan persetujuan anggota (dan wali, bila sekolah mewajibkan). Boleh pakai foto alat saja."], ["h2", "Diferensiasi"], ["li", "**Cepat selesai:** isi kotak kosong bagianGrafik (grafik riwayat via CDN) atau ubah aturan status suhu (22/29) di kartu suhu; bantu tetangga dengan **bertanya**, bukan mengambil alih keyboard."], ["li", "**Kesulitan:** fokus Easy (nama + 1 warna) + siap Demo Day. Medium cukup ganti teks peringatan."], ["h2", "Penilaian"], ["li", "**Keaktifan:** +2 per bertanya/menjawab, termasuk penonton Demo Day."], ["li", "**Challenge:** Easy **+5**, Medium **+10**, Hard **+15** (leaderboard), untuk kedua anggota pasangan."], ["li", "**Demo Day:** rubrik 1–4 (Fungsi · Dashboard · Penjelasan · Presentasi), lihat Khusus Tutor."], ["li", "**Post-test:** 5 soal, kunci B, C, A, B, D."], ["h2", "Penutup"], ["li", "Refleksi: 1 hal yang dulu terasa susah (instal Arduino IDE? WiFi? kabel relay?) dan sekarang bisa dijelaskan. Kaitkan ke profesi: IoT engineer, web developer, teknisi elektronika."], ["li", "Umumkan: website tetap online di https://sma-0X.inspiralabs.id; angkanya hidup selama alat menyala & tersambung WiFi."], ["li", "**Tidak ada PR.** Tutor setelah kelas: deploy sisa zip, kirim link ke tiap kelompok, arsipkan rubrik & nilai."]]};
 
 function jalankan() {
   const id = (FOLDER_PERTEMUAN.match(/folders\/([\w-]+)/) || [null, FOLDER_PERTEMUAN])[1];
