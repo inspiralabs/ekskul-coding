@@ -1,6 +1,6 @@
 # POST TEST — Pertemuan 13 — SMP
 
-Sumber: SMP — Pertemuan 13: Rapikan Alat & Showcase Proyek Akhir
+Sumber: SMP — Pertemuan 13: Sempurnakan Alat & Showcase Proyek Akhir
 
 > Untuk tutor: buat Google Form → Settings → **Make this a quiz**. Tiap soal = Multiple choice, 1 poin, isi kunci sesuai baris **Jawaban**. Aktifkan "Shuffle option order" kalau mau.
 
@@ -51,7 +51,7 @@ Sumber: SMP — Pertemuan 13: Rapikan Alat & Showcase Proyek Akhir
 **5. Folder website yang diserahkan ke tutor sudah BENAR jika…**
 - A. Zip bernama `smp-07.zip`, berisi `index.html`, ukurannya tidak lebih dari 5 MB
 - B. Halaman utama bernama `rumah.html` dan foto ada di Downloads
-- C. Ukurannya 300 MB karena folder `firmware/.pio` ikut
+- C. Ukurannya 300 MB karena video rakitan ikut di dalamnya
 - D. `api.js` sudah diganti dengan Device ID kelompok lain
 
 **Jawaban: A**

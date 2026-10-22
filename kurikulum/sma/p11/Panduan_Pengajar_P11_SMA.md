@@ -1,98 +1,120 @@
-# Panduan Pengajar — P11 SMA: Firmware Jadi, Data Online
+# Panduan Pengajar — P11 SMA: Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
 Sabtu, 31 Oktober 2026 · 70 menit · 6 peserta: **sma-01, sma-02, sma-03 individu**, **sma-04, sma-05, sma-06 berpasangan**.
-Bahan: slide P11, `sumber/Materi_Ajar_P11_SMA_InspiraLabs.md` (kunci di KHUSUS TUTOR), zip `dist/paket/sma-XX.zip`, `docs/HANDOUT_SISWA.md`.
+Nomor slide = nomor di PPT (slide 1 = Linktree). Bahan lengkap & kunci: `sumber/Materi_Ajar_P11_SMA_InspiraLabs.md`. Zip `dist/paket/sma-XX.zip`.
 
-## Tujuan (yang bisa dilihat di akhir kelas)
-1. Setiap kelompok menunjukkan Serial Monitor dengan `Terhubung!` dan `kode respons: 200`.
-2. Angka suhu di dashboard kelompok **naik saat sensor digenggam** (bukti data hidup, bukan angka lama).
-3. Siswa bisa menyebut **lapisan mana** yang bermasalah dari satu baris Serial (daya → program → WiFi → sensor → server → dashboard).
+> Prinsip hari ini: **rakit, upload, lihat angkanya online.** Firmware dan dashboard sudah jadi. Siswa hanya merakit sesuai Peta Rakitan, mengisi 2 baris WiFi, lalu membuktikan datanya sampai. **Tidak ada coding dari nol, tidak ada multimeter, tidak ada PR.**
 
-## Persiapan H-1
-- [ ] Backend hidup: buka `https://api-ekskulcoding.inspiralabs.id/health`.
-- [ ] `py tools/kelompok.py paket` → 6 zip. Simpan di flashdisk/Drive, **nama file = Device ID**. Zip yang tertukar = data dua kelompok saling menimpa.
-- [ ] Isi WiFi kelas di `docs/HANDOUT_SISWA.md`. Pastikan **2.4 GHz** dan ada **internet** (bukan hanya WiFi). Hotspot HP cadangan, mode 2.4 GHz / "kompatibilitas".
-- [ ] Buka folder `firmware` dari satu zip di tiap laptop → **Build** (unduh library ke laptop; build di kelas bisa makan 5–10 menit).
-- [ ] Status awal server tiap Device ID = **Otomatis, ambang 30°C**. Kalau kelas biasanya > 30°C, set tiap dashboard ke **Manual + OFF** (PIN dari `FAN_PINS` di `backend/.env`) supaya kipas tidak menyala sendiri dan membingungkan. Atau biarkan dan jelaskan "bocoran P12".
-- [ ] Power bank / charger HP 5V + kabel data untuk Hard (minimal 2 untuk bergantian).
-- [ ] Kit yang rusak di P10 sudah diganti dan lolos Tes 1 & Tes 2.
+## 1. Tujuan (yang bisa dilihat di akhir kelas)
+1. Setiap kelompok punya **satu rakitan utuh** sesuai Peta Rakitan (DHT22 out di D13, relay IN di D14, kipas di NO, D12 kosong).
+2. Serial Monitor menampilkan `Terhubung!` dan `kode respons: 200`.
+3. Angka suhu di dashboard kelompok **naik saat sensor digenggam** (bukti data hidup).
 
-## 15 menit sebelum kelas
-- Rakitan P10 dikeluarkan utuh. Cek cepat: relay IN di **D18**, DHT out di **D4** (Easy P10 sering lupa dikembalikan).
-- Tulis nama & password WiFi di papan (atau tampilkan handout). **Jangan** tulis PIN kelompok.
-- Satu alat tutor sudah online sebagai pembanding ("begini seharusnya").
+## 2. Persiapan
 
-## Timeline (menit → slide)
-| Menit | Slide | Kegiatan | Catatan tutor |
+### H-1
+- [ ] Backend hidup: buka `https://api-ekskulcoding.inspiralabs.id/health` → `ok`. Dashboard `sma-01.inspiralabs.id` … `sma-06.inspiralabs.id` bisa dibuka.
+- [ ] `py tools/kelompok.py paket` → 6 zip. Simpan di flashdisk/Drive, **nama file = Device ID**. Zip tertukar = data dua kelompok saling menimpa.
+- [ ] **Set semua dashboard ke Manual + OFF** (PIN dari `FAN_PINS` di `.env` server). Status awal server = **Otomatis, ambang 30°C**; tanpa ini kipas bisa menyala sendiri dan membingungkan. Kontrol kipas baru dibahas di P12.
+- [ ] WiFi kelas: **2,4 GHz**, ada internet, **tanpa halaman login**. Tulis nama & password-nya di kertas untuk papan. Hotspot HP cadangan (mode 2,4 GHz / "kompatibilitas").
+- [ ] Di tiap laptop: buka `firmware/sma_room_monitor/sma_room_monitor.ino` dari salah satu zip → **Verify (✓)** sekali. Laptop yang belum lulus instalasi P10: selesaikan sekarang.
+- [ ] Jalankan `SCRIPT_P11_SMA.gs` → folder **Kode** (`P11_1_TesRelay`, `P11_2_TesDHT22`) + Google Form post-test ada di Drive. Perbarui tombol "Post Test Pertemuan 11" di Linktree.
+- [ ] Per kelompok (6 set): ESP32 + kabel USB **data**, breadboard, DHT22 3-pin, relay 1-channel 5V, kipas DC 5V, jumper merah/hitam/kuning/biru/oranye, obeng kecil. Uji tiap relay & DHT22 dengan program tes; tempel stiker "OK".
+- [ ] Cadangan: 1 DHT22, 1 relay, 2 kabel USB data, 2 power bank (untuk Hard, bergantian).
+- [ ] **Wokwi** (cadangan kit rusak & gambar Peta Rakitan): wokwi.com → New Project → ESP32, tempel `sketch.ino`, `diagram.json`, `libraries.txt` dari `p11/wokwi/P11_PetaRakitan/`, Save, salin link.
+
+### 15 menit sebelum kelas
+- [ ] Tulis di papan: nama & password WiFi kelas, "Cabut USB sebelum memindah kabel!", "DHT out → D13 · relay IN → D14 · D12 kosong". **Jangan** tulis PIN kelompok.
+- [ ] Satu rakitan tutor sudah online, dashboard tutor terbuka di proyektor sebagai pembanding ("begini seharusnya").
+- [ ] Duduk berdekatan: **sma-01 ↔ sma-02**, **sma-03 ↔ sma-04**, **sma-05 ↔ sma-06** (tetangga saling cek kabel & ejaan WiFi).
+- [ ] Kertas/spreadsheet pencatat poin (nama siswa, +2, Easy, Medium, Hard).
+
+## 3. Timeline (menit → slide)
+| Menit | Slide | Kegiatan | Yang tutor lakukan |
 |---|---|---|---|
-| 0–5 | — | Bagikan zip sesuai Device ID, ekstrak | Cek nama folder = Device ID di zip |
-| 5–10 | 2–4 | Cover, pemantik ("404"), agenda | Tampung tebakan |
-| 10–15 | 5–8 | Offline → online, perjalanan data, isi zip, BOLEH/JANGAN UBAH | Tekankan: isi **2 baris** WiFi saja |
-| 15–25 | 9–10 | Isi WiFi → Upload → Serial, forum Topik 1 | Operator & Pengamat |
-| 25–30 | 11 | Easy: Online! | Screenshot Serial + dashboard |
-| 30–36 | 12–14 | Membaca Serial, kode respons, forum Topik 2 | Jawab pertanyaan pemantik di slide 13 |
-| 36–43 | 15 | Medium: Uji Sensor Hidup | Cabut USB sebelum lepas kabel kuning |
-| 43–48 | 16–18 | Alat mandiri, troubleshooting berlapis, forum Topik 3 | |
-| 48–57 | 19 | Hard: Lepas dari Laptop | Power bank bergantian; D27 harus dikembalikan ke D4 |
-| 57–60 | 20 | Peta proyek | Simpan folder kelompok |
-| 60–70 | 21–22 | Post-test + penutup | |
+| 0–5 | 1, 5–6 | Bagikan kit & zip sesuai Device ID, peran, aturan poin | Cek nama zip = stiker Device ID |
+| 5–8 | 2–4 | Cover, pemantik (ojol), agenda | Tampung tebakan (+2), jangan dijawab dulu |
+| 8–25 | 7–9 | Kenalan 3 komponen, Peta Rakitan, urutan aman, **rakit** | Keliling. Tidak boleh colok USB sebelum Pengecek selesai mencentang |
+| 25–27 | 10 | Tanya Jawab Topik 1 | +2 per penjawab |
+| 27–40 | 11–15 | Isi zip, isi WiFi, upload, baca Serial Monitor | **Tukar peran.** Kelompok bermasalah → slide 15 (cek cepat) |
+| 40–42 | 16 | Tanya Jawab Topik 2 | |
+| 42–46 | 17 | 🟢 Easy: Online! | +5. Rayakan tiap dashboard yang pertama kali menampilkan angka |
+| 46–52 | 18–19 | Perjalanan data, dashboard kelompok | Jawab pemantik di slide 18. Demo genggam sensor di proyektor |
+| 52–54 | 20 | Tanya Jawab Topik 3 | |
+| 54–58 | 21 | 🟡 Medium: Uji Sensor Hidup | +10 |
+| 58–63 | 22 | 🔴 Hard: Lepas dari Laptop | +15. Power bank bergantian |
+| 63–64 | 23 | Peta petualangan | Rakitan dikumpulkan utuh dalam kotak |
+| 64–70 | 24–25 | Post-test + penutup | Sendiri-sendiri. Teaser P12 |
 
-Waktu molor? Hard langkah 2 (pindah D27) boleh dilewati. **Jangan** lewati Easy: itu syarat P12.
+Waktu molor? Urutan yang boleh dipangkas: (1) Hard, (2) Medium jadi demo tutor. **Jangan** pangkas rakit + Easy: itu syarat P12.
 
-## Kalimat kunci
-- "Hari ini **tidak ada coding**. Yang kalian isi hanya 2 baris WiFi. Bagian JANGAN UBAH itu 'kabel' ke server."
-- "ESP32 dan dashboard tidak saling bicara. Keduanya lewat server, dengan Device ID sebagai alamat rumah."
-- "Jangan panik, **baca angkanya**. 200 beres, 401 kunci salah, 404 alamat salah, negatif = tidak sampai."
-- "Cek dari lapisan paling bawah. Jangan bongkar kabel kalau ternyata password WiFi salah ketik."
+## 4. Kalimat kunci
+- **Pembuka:** "Di P10 ESP32 kita baru bisa kedip. Hari ini dia dapat indera, dapat tangan, dan bisa lapor ke internet."
+- **Relay:** "Relay itu jari yang menekan saklar kipas. Yang menyuruh menekan: ESP32."
+- **Sebelum colok USB:** "Siapa yang bilang boleh colok? Pengecek, setelah semua baris Peta Rakitan dicentang."
+- **Firmware:** "Programnya sudah jadi. Yang kalian isi cuma 2 baris WiFi. Bagian JANGAN UBAH itu 'kabel' ke server."
+- **Serial Monitor:** "Jangan panik, baca angkanya. 200 sampai, minus berarti internetnya yang macet."
+- **Dashboard:** "ESP32 dan dashboard nggak ngobrol langsung. Mereka ketemu di server, alamatnya Device ID."
 
-## Manajemen kelas
-- **Berdua:** **Operator** (laptop, isi WiFi, upload) & **Pengamat** (baca Serial, cocokkan dengan tabel slide 12, catat waktu di Medium). Tukar di Topik 2.
-- **Individu:** tetangga (01↔02, 03↔04, 05↔06) saling cek ejaan SSID/password sebelum upload: 1 huruf salah = titik-titik selamanya.
-- Pantau yang mengubah bagian JANGAN UBAH "karena penasaran": tidak dimarahi, tapi minta ganti file dengan salinan zip asli. Rasa ingin tahu boleh, di salinan terpisah.
-- Data publik: ingatkan dashboard bisa dilihat orang lain; nama & foto pribadi baru dipasang di P13.
+## 5. Gaya mengajar & memancing interaksi
+- Momen paling penting: saat dashboard pertama berubah angka. Hentikan kelas 10 detik, sebut nama kelompoknya, minta mereka menggenggam sensor di depan teman.
+- Error = materi. Kalau ada Serial yang menarik (titik-titik terus, `-1`), tampilkan di proyektor dan tanya kelas: "Menurut kalian kenapa?" (+2).
+- **Berdua (sma-04/05/06):** Perakit/Operator & Pengecek/Pengamat, tukar di Topik 2. Kalau satu orang mendominasi, tanya langsung ke yang diam: "Coba kamu yang jelaskan kenapa kipas di NO."
+- **Individu (sma-01/02/03):** tetangga jadi Pengecek sebelum colok USB, dan saling cek ejaan SSID/password sebelum upload.
+- Yang penasaran mengubah bagian JANGAN UBAH: tidak dimarahi, minta ganti file dengan salinan zip asli.
 
-## Titik cek pemahaman
-| Kapan | Tanya | Jawaban yang dicari |
+## 6. Titik cek pemahaman
+| Kapan | Tanya / minta tunjukkan | Jawaban yang dicari |
 |---|---|---|
+| Sebelum colok USB | "Tunjukkan kabel yang membuat kipas mati kalau ESP32 mati." | Kabel kipas + di **NO** |
 | Setelah upload | "Baris mana yang membuktikan WiFi beres? Server beres?" | `Terhubung!` · `kode respons: 200` |
-| Medium | "Dashboard Online tapi angka tidak berubah. Lapisan apa?" | Sensor (ESP32 tidak kirim data baru) |
-| Hard | "Kenapa ganti pin butuh laptop, colok power bank tidak?" | Program tersimpan; mengubah = upload program baru |
+| Medium | "Kenapa angka di dashboard tidak langsung berubah?" | Sensor butuh waktu hangat + ESP32 lapor tiap ±4 detik |
+| Hard | "Kenapa alat tetap jalan tanpa laptop?" | Program tersimpan di ESP32 |
 
-## Kesalahan umum & cara membimbing
+## 7. Kesalahan umum & cara membimbing (jangan langsung beri jawaban)
 | Yang terlihat | Pertanyaan pancingan |
 |---|---|
-| `Menghubungkan ke WiFi.....` tanpa henti | "Bandingkan huruf per huruf SSID kalian dengan papan. WiFi ini 2.4 atau 5 GHz?" |
+| USB masih tercolok saat memindah kabel | "Aturan nomor 1 di slide Urutan Aman apa?" |
+| `Menghubungkan ke WiFi.....` tanpa henti | "Bandingkan huruf per huruf SSID kalian dengan papan. WiFi ini 2,4 atau 5 GHz?" |
 | `kode respons: -1` | "WiFi-nya tersambung. Bisakah laptop membuka google.com lewat WiFi yang sama?" |
-| 401 / 404 | "Tabel kode respons bilang apa? Bagian mana yang mungkin tersentuh?" → ganti `.ino` dari zip asli |
-| Data dua kelompok tertukar | "Device ID di firmware kalian apa? Di Serial? Di nama folder?" |
-| `Gagal baca sensor DHT22` | "Lapisan WiFi sudah beres. Lapisan berikutnya apa? Ingat Tes 2 P10." |
-| Dashboard kosong | "File `index.html` yang kalian buka dari folder siapa?" |
-| Kipas menyala sendiri | "Lihat dashboard: mode apa? Ambang berapa? Suhu berapa?" (status awal Otomatis 30°C) |
+| `kode respons: 401` | "Tabel bilang apa? Bagian mana yang mungkin tersentuh?" → ganti `.ino` dari zip asli |
+| `Gagal baca sensor DHT22` | "Pesan errornya menyebut sensor. Ikuti kabel kuning: ujungnya di pin berapa?" |
+| Dashboard kosong / angka diam | "File `index.html` yang kalian buka dari folder siapa? Device ID-nya apa?" |
+| Kipas menyala sendiri | "Lihat dashboard: mode apa? Ambang berapa?" → set Manual + OFF |
 
-## Troubleshooting cepat (tutor)
+Kalau setelah **2 pertanyaan** kelompok masih buntu, tunjukkan **lokasinya** ("cek baris ke-2 Peta Rakitan"), bukan perbaikannya.
+
+## 8. Troubleshooting cepat (tutor)
 | Gejala | Tindakan |
 |---|---|
-| Semua kelompok −1 | Internet WiFi kelas mati → pindah semua ke hotspot cadangan (isi ulang 2 baris WiFi) |
-| Satu kelompok 401/404 | Ganti `sma_room_monitor.ino` dengan salinan zip asli, isi WiFi lagi |
-| Upload gagal setelah buka folder | Pastikan yang dibuka folder `firmware` (ada `platformio.ini`), bukan folder induk |
-| Restart berulang saat kirim data | Daya USB lemah → port lain / power bank |
-| Backend `/health` mati | Lapor admin server; sementara kerjakan Medium bagian Serial saja |
+| Semua kelompok `-1` | Internet WiFi kelas mati → pindah semua ke hotspot cadangan (isi ulang 2 baris WiFi) |
+| Port tidak muncul | Kabel USB data, port lain, driver CP210x/CH340 (Panduan Instalasi 2) |
+| Upload gagal `Failed to connect` | Tahan BOOT saat `Connecting...`; **Tools → Upload Speed → 115200**; cek D12 kosong |
+| Arduino IDE minta memindah file ke folder baru | `.ino` dibuka dari dalam zip / nama folder diganti. Ekstrak ulang zip asli |
+| `DHT.h: No such file or directory` | Library Manager → `DHT sensor library` → INSTALL ALL |
+| Relay tidak klik / kipas diam | Upload `P11_1_TesRelay.ino`. Tes lolos → rakitan beres (dashboard memang Manual + OFF). Tes gagal → cek VCC/GND/IN relay, COM/NO, kipas − |
+| Sensor tidak terbaca | Upload `P11_2_TesDHT22.ino`, cek 3 kabel DHT22 |
+| Kipas berputar terus walau dashboard OFF | Relay kebalikan (active-HIGH) → tukar modul ber-stiker "OK" (perbaikan lewat kode dibahas P12) |
+| ESP32 restart saat kipas mulai / saat kirim data | Daya USB lemah → port lain / power bank / kabel pendek |
+| Kit tetap gagal > 5 menit | Kelompok pakai link **Wokwi** untuk memahami rakitan; catat kit rusak, ganti sebelum P12 |
 
-## Keselamatan
-- Cabut USB sebelum melepas/memasang kabel (Medium langkah 3, Hard langkah 2).
-- Power bank/charger: hanya 5V USB. Kipas tetap DC 5V.
-- WiFi password kelas jangan diunggah/difoto ke media sosial.
+## 9. Keselamatan (tidak bisa ditawar)
+- **Hanya kipas DC 5V.** Tidak ada perangkat 220V/PLN, walaupun relay tertulis 250VAC.
+- **Cabut USB** setiap memindah kabel.
+- Jari & rambut jauh dari baling-baling. Bau/panas → cabut USB, panggil tutor.
+- Password WiFi kelas jangan difoto/diunggah ke media sosial.
 
-## Diferensiasi
-- **Cepat:** buka dashboard di HP pakai data seluler (bukti "dari mana saja"); jelaskan ke tetangga arti tiap baris Serial; ukur berapa detik dari genggam sampai dashboard berubah, lalu jelaskan dua sumber jeda (sensor lambat + kirim tiap 4 detik).
-- **Kesulitan:** cukup Easy + Medium langkah 1. Tutor duduk bersama membaca Serial baris per baris memakai tabel berlapis.
+## 10. Diferensiasi
+- **Cepat selesai:** jadi "asisten" tetangga (bertanya, bukan membetulkan); buka dashboard di HP pakai data seluler (bukti "dari mana saja").
+- **Kesulitan:** fokus rakit + Easy (syarat P12). Tutor duduk bersama membaca Serial Monitor baris per baris memakai tabel slide 14.
 
-## Penilaian
-- **Wajib (syarat P12):** screenshot Serial `kode respons: 200` + dashboard menampilkan angka yang berubah. Catat per Device ID.
-- Challenge Easy/Medium/Hard **+10** masing-masing.
-- Post-test: kunci C, B, B, B, C.
+## 11. Penilaian
+- **Wajib (syarat P12):** rakitan sesuai Peta Rakitan + Serial `kode respons: 200` + dashboard menampilkan angka yang berubah. Catat per Device ID.
+- **Keaktifan:** +2 per bertanya/menjawab.
+- **Challenge:** Easy **+5**, Medium **+10**, Hard **+15**.
+- **Post-test:** 5 soal, kunci C, B, B, B, C.
 
-## Penutup & PR
-- Folder kelompok disimpan baik-baik (dipakai lagi P12 & P13). Jangan tertukar.
-- Semua pin kembali ke D4/D18 (cek Hard).
-- Pengumuman P12: kontrol kipas dari dashboard. Tutor menyiapkan PIN per kelompok (dibagikan pribadi).
+## 12. Penutup
+- Rakitan **jangan dibongkar**: dikumpulkan ke tutor dalam kotak, kabel tetap tertancap. Siswa tidak membawa apa pun pulang dan **tidak ada PR**.
+- Pengumuman P12: kipas dikendalikan dari dashboard (manual & otomatis). Tutor menyiapkan PIN per kelompok (dibagikan pribadi).
+- Setelah kelas (tutor): catat kit rusak, cek semua rakitan masih DHT22 di D13 dan relay di D14, simpan folder kelompok di laptop masing-masing atau Drive.

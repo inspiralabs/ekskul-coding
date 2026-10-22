@@ -8,50 +8,50 @@ Sumber: SMA — Pertemuan 12: Kontrol Kipas dari Dashboard: Manual & Otomatis
 
 ---
 
-**1. Kamu klik "kipas ON" di dashboard. Bagaimana perintah itu sampai ke ESP32?**
-- A. Server langsung mengirim perintah ke IP ESP32 di WiFi sekolah
-- B. ESP32 melapor data tiap ±4 detik dan membaca status kipas dari balasan server
-- C. Dashboard mengirim sinyal Bluetooth ke ESP32
-- D. Relay membaca website sendiri
+**1. Kamu menekan tombol kipas di dashboard. Bagaimana perintah itu sampai ke ESP32?**
+- A. Server langsung mengetuk ESP32 lewat WiFi sekolah
+- B. ESP32 lapor suhu tiap ±4 detik, lalu membaca status kipas dari balasan server
+- C. HP mengirim sinyal Bluetooth ke ESP32
+- D. Relay membuka website sendiri
 
 **Jawaban: B**
 
 ---
 
-**2. Jeda dari klik tombol sampai kipas berputar paling lama sekitar…**
-- A. 0,01 detik
-- B. ±4 detik (ditambah waktu internet)
-- C. 1 menit
-- D. Sampai ESP32 di-restart
-
-**Jawaban: B**
-
----
-
-**3. Mode Otomatis aktif, slider "Nyala otomatis di atas 29°C", suhu terbaca 31°C. Apa yang terjadi?**
-- A. Kipas menyala
-- B. Kipas mati
-- C. Dashboard meminta upload ulang
-- D. Relay rusak
-
-**Jawaban: A**
-
----
-
-**4. Kipas terpasang di terminal NO. ESP32 tiba-tiba dicabut saat kipas menyala. Apa yang terjadi pada kipas?**
-- A. Tetap menyala selamanya
-- B. Menyala lebih kencang
-- C. Mati, karena relay tidak aktif dan COM–NO terputus
-- D. Berputar terbalik
+**2. Teman dari kelas lain membuka dashboard kelompokmu tanpa tahu PIN. Apa yang bisa dia lakukan?**
+- A. Menyalakan dan mematikan kipas
+- B. Mengubah ambang suhu di slider
+- C. Hanya melihat suhu, kelembapan, dan status kipas
+- D. Mengganti firmware ESP32
 
 **Jawaban: C**
 
 ---
 
-**5. Kipas di NO. Dashboard menunjukkan kipas MATI, tetapi kipas sungguhan BERPUTAR (dan sebaliknya). Perbaikan yang tepat di firmware adalah…**
-- A. Mengganti `API_KEY`
-- B. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `false` lalu upload ulang
-- C. Mengganti `DEVICE_ID`
-- D. Menghapus `api.js`
+**3. Mode Otomatis aktif dengan slider "Nyala otomatis di atas 29°C". Suhu terbaca 31°C. Apa yang terjadi?**
+- A. Kipas menyala sendiri tanpa tombol ditekan
+- B. Kipas mati
+- C. Dashboard meminta upload ulang
+- D. ESP32 restart
+
+**Jawaban: A**
+
+---
+
+**4. Kipas sudah di terminal NO. Dashboard bilang kipas MATI, tapi kipasnya BERPUTAR (dan sebaliknya). Perbaikan yang tepat di firmware adalah…**
+- A. Mengganti `DEVICE_ID`
+- B. Mengganti `WIFI_PASSWORD`
+- C. Menghapus `api.js`
+- D. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `false`, lalu upload ulang
+
+**Jawaban: D**
+
+---
+
+**5. Kenapa `SEND_INTERVAL_MS` di firmware tidak boleh diubah ke angka di bawah 2000?**
+- A. Supaya kipas berputar lebih pelan
+- B. Sensor DHT22 butuh jeda minimal 2 detik antar pembacaan
+- C. Karena WiFi hanya menyala 2 detik sekali
+- D. Karena dashboard hanya bisa menampilkan 2 angka
 
 **Jawaban: B**

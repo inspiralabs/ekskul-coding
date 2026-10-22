@@ -41,22 +41,22 @@ data kalian akan saling menimpa di dashboard.
 
 ## Untuk siswa SMP
 
-File kamu: `smp/firmware/smp_room_monitor.ino`
+File kamu: `smp/firmware/smp_room_monitor/smp_room_monitor.ino`
 
-Buka folder `smp/firmware` lewat PlatformIO (PIO Home → Open Project), lalu buka file itu. Cari baris ini, isi WiFi saja (Device ID sudah diisi tutor):
+Buka file itu di **Arduino IDE** (double-click). Cari baris ini, isi WiFi saja (Device ID sudah diisi tutor):
 ```cpp
 const char* DEVICE_ID     = "smp-01";        // sudah diisi tutor
 const char* WIFI_SSID     = "ISI_DI_SINI";
 const char* WIFI_PASSWORD = "ISI_DI_SINI";
 #define DHT_PIN 4                            // ganti kalau kabel DHT22 di pin lain
 ```
-Jangan ubah bagian lain yang bertanda `JANGAN UBAH DI BAWAH INI`. Klik Upload (→), lalu buka
-Serial Monitor (🔌), dan kamu akan lihat suhu/kelembapan terkirim ke dashboard yang sudah
+Jangan ubah bagian lain yang bertanda `JANGAN UBAH DI BAWAH INI`. Pilih board **ESP32 Dev Module** + port, klik Upload (→), lalu buka
+Serial Monitor (115200 baud), dan kamu akan lihat suhu/kelembapan terkirim ke dashboard yang sudah
 disiapkan tutor.
 
 ## Untuk siswa SMA
 
-File kamu: `sma/firmware/sma_room_monitor.ino` — program sudah **jadi**, tidak ada yang perlu
+File kamu: `sma/firmware/sma_room_monitor/sma_room_monitor.ino` — program sudah **jadi**, tidak ada yang perlu
 dilengkapi. Sama seperti SMP: isi WiFi, cek `DHT_PIN` dan `RELAY_PIN` sesuai pemasangan
 kabelmu, lalu Upload. Modul relay biasanya **active-LOW** (`LOW` = nyala) — sudah diatur
 di program; kalau relaymu kebalikannya, ganti `RELAY_ACTIVE_LOW` jadi `false`.

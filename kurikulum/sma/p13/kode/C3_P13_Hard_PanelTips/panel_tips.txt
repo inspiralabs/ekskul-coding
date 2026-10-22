@@ -1,0 +1,21 @@
+<!-- ============================================================
+     Challenge Hard P13 SMA - "Panel Tips Pintar"
+     CARA PAKAI:
+     1. Buka index.html di folder kelompokmu (VS Code / Notepad).
+     2. Cari baris:  <div class="kartu-kosong" id="bagianEdukasi">
+     3. Ganti baris komentar "TULIS KODEMU DI SINI" di bawahnya
+        dengan kode di bawah ini (dari baris <h2> sampai </script>).
+     4. Simpan, refresh browser. Lalu ubah 3 teks tips dengan gaya
+        kalian dan tambah 1 aturan baru untuk kelembapan.
+     ============================================================ -->
+<h2>Tips Ruangan</h2>
+<p id="teksTips">Menunggu data...</p>
+<script>
+setInterval(function () {
+  var tips;
+  if (suhuSaatIni > 30) tips = "Panas! Buka jendela atau nyalakan kipas.";
+  else if (suhuSaatIni < 22) tips = "Dingin, pakai jaket ya.";
+  else tips = "Suhu nyaman, pas buat ngoding!";
+  document.getElementById("teksTips").textContent = tips;
+}, 2000);
+</script>

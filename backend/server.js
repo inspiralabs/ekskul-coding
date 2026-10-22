@@ -112,8 +112,9 @@ app.post("/api/readings", checkApiKey, async (req, res) => {
   const fc = await getFanControl(deviceId);
   const fanOn = computeFanOn(fc, temp);
 
-  await supabase.from("readings").insert({ device_id: deviceId, payload: { temp, humidity, fanOn } });
-  await supabase.from("fan_control").upsert({
+  const { error: insertError } = await supabase.from("readings").insert({ device_id: deviceId, payload: { temp, humidity, fanOn } });
+  if (insertError) console.error("[readings] error insert Supabase:", insertError.message);
+  const { error: fcError } = await supabase.from("fan_control").upsert({
     device_id: deviceId,
     fan_mode: fc.fan_mode,
     manual_fan_on: fc.manual_fan_on,
@@ -121,6 +122,7 @@ app.post("/api/readings", checkApiKey, async (req, res) => {
     esp32_ip: ip || fc.esp32_ip,
     updated_at: new Date().toISOString(),
   });
+  if (fcError) console.error("[readings] error upsert fan_control Supabase:", fcError.message);
 
   broadcast({
     type: "reading",

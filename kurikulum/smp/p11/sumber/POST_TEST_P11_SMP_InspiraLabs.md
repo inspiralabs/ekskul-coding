@@ -1,6 +1,6 @@
 # POST TEST — Pertemuan 11 — SMP
 
-Sumber: SMP — Pertemuan 11: Pasang Firmware Proyek & Jadi Dokter Kabel
+Sumber: SMP — Pertemuan 11: Kenalan Sensor DHT22: ESP32 Bisa Merasakan Suhu
 
 > Untuk tutor: buat Google Form → Settings → **Make this a quiz**. Tiap soal = Multiple choice, 1 poin, isi kunci sesuai baris **Jawaban**. Aktifkan "Shuffle option order" kalau mau.
 
@@ -8,50 +8,50 @@ Sumber: SMP — Pertemuan 11: Pasang Firmware Proyek & Jadi Dokter Kabel
 
 ---
 
-**1. Di firmware proyek akhir, baris yang perlu diisi siswa hari ini adalah…**
-- A. `SERVER_URL` dan `API_KEY`
-- B. `WIFI_SSID` dan `WIFI_PASSWORD`
-- C. Semua baris di bawah tulisan `JANGAN UBAH`
-- D. `DEVICE_ID` diganti nama sendiri
+**1. Sensor DHT22 mengukur…**
+- A. Cahaya dan suara
+- B. Suhu dan kelembapan udara
+- C. Jarak dan kecepatan
+- D. Kekuatan sinyal WiFi
 
 **Jawaban: B**
 
 ---
 
-**2. Serial Monitor menampilkan `Menghubungkan ke WiFi.........` dan titiknya tidak pernah berhenti. Penyebab paling mungkin adalah…**
-- A. Kabel sensor DHT22 longgar
-- B. Nama atau password WiFi salah
-- C. LED terbalik
-- D. Suhu ruangan terlalu panas
+**2. Kaki DHT22 yang membawa data suhu ke ESP32 adalah kaki…**
+- A. +
+- B. −
+- C. out
+- D. Semua kaki sama saja
 
-**Jawaban: B**
-
----
-
-**3. Serial Monitor menampilkan `Gagal baca sensor DHT22, coba lagi 4 detik lagi...`. Yang paling tepat dicek pertama adalah…**
-- A. Password WiFi
-- B. Kabel DHT22: out di D4, kabel tidak longgar, + / − tidak tertukar
-- C. Warna dashboard
-- D. Mengganti `SERVER_URL`
-
-**Jawaban: B**
+**Jawaban: C**
 
 ---
 
-**4. Kabel out DHT22 dipindah ke D27. Agar sensor terbaca lagi, yang harus diubah adalah…**
-- A. `#define DHT_PIN 4` menjadi `#define DHT_PIN 27`
-- B. `DEVICE_ID`
-- C. `API_KEY`
-- D. Tidak perlu mengubah apa pun
+**3. Rakitan yang BENAR untuk DHT22 di proyek kita adalah…**
+- A. + ke GND, out ke D4, − ke 3V3
+- B. + ke 3V3, out ke D2, − ke GND
+- C. + ke D4, out ke 3V3, − ke GND
+- D. + ke 3V3, out ke D4, − ke GND
+
+**Jawaban: D**
+
+---
+
+**4. Serial Monitor menulis `Gagal baca sensor! Cek kabel.` terus-menerus. Langkah pertama yang tepat adalah…**
+- A. Cabut USB, lalu cek kabel out di D4, kabel tidak longgar, dan + / − tidak tertukar
+- B. Menulis ulang programnya
+- C. Mengganti laptop
+- D. Menambah resistor di kaki sensor
 
 **Jawaban: A**
 
 ---
 
-**5. Multimeter mode bunyi ditempel ke dua ujung kabel jumper dan TIDAK berbunyi. Artinya…**
-- A. Kabel itu bagus
-- B. Kabel itu putus di dalam, harus diganti
-- C. ESP32 rusak
-- D. Sensor sedang membaca suhu
+**5. Saat sensor ditiup, garis di Serial Plotter yang paling cepat naik adalah…**
+- A. Suhu
+- B. Kelembapan
+- C. Tidak ada yang berubah
+- D. Grafiknya hilang
 
 **Jawaban: B**

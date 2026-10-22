@@ -10,18 +10,17 @@ belajar HTML & CSS dulu.
 |---|---|---|
 | `index.html` | ✅ Ya, ini tugasmu | Tampilan dashboard — HTML, CSS, dan JS ada di sini |
 | `api.js` | ❌ Jangan diubah | "Kabel" penghubung ke backend, sudah disiapkan tutor |
-| `firmware/smp_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 |
-| `firmware/platformio.ini` | ❌ Jangan diubah (kecuali `board`) | Pengaturan PlatformIO |
+| `firmware/smp_room_monitor/smp_room_monitor.ino` | Sebagian — lihat catatan di file | Program untuk ESP32 (buka di Arduino IDE) |
 
 ## Cara mulai
 
 1. Buka `index.html` langsung di browser untuk lihat tampilan dashboard.
-2. Di VS Code buka PlatformIO: PIO Home → Open Project → pilih folder
-   `firmware`. Buka `smp_room_monitor.ino`, isi `WIFI_SSID` dan
+2. Buka `firmware/smp_room_monitor/smp_room_monitor.ino` di **Arduino IDE**
+   (double-click). Isi `WIFI_SSID` dan
    `WIFI_PASSWORD` (Device ID sudah diisi tutor). Ubah `DHT_PIN` hanya kalau
    kabel DHT22 di pin lain. Bagian berlabel `JANGAN UBAH` jangan disentuh — itu
    koneksi ke server.
-3. Klik Upload (→) lalu Serial Monitor (🔌) di status bar PlatformIO, pastikan berhasil
+3. Pilih board **ESP32 Dev Module** + port, klik Upload (→) lalu buka Serial Monitor (115200 baud), pastikan berhasil
    connect WiFi dan mengirim data.
 4. Kustom dashboard: isi **Profil Kelompok** (nama, anggota, `foto-kelompok.jpg`),
    ganti warna di `:root` (`style.css`). Bonus: isi kotak kosong `.kotak-kosong`

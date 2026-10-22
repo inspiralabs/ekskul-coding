@@ -4,173 +4,174 @@
 |---|---|
 | Tanggal | Sabtu, 7 November 2026 |
 | Durasi | 70 menit |
-| Target silabus | Siswa mampu mengontrol relay/kipas dari dashboard (manual & mode otomatis) dan menguji perilaku rakitan secara fisik (proyek akhir tahap 2: kontrol dua arah) |
-| Penilaian | Progres proyek akhir: kipas mengikuti tombol dashboard (≤ ±4 detik) dan menyala sendiri di mode Otomatis saat sensor digenggam |
-| Kaitan dengan proyek akhir | Fitur kontrol kipas **sudah jadi** di folder kelompok (mis. `sma-04`): tombol kipas besar, tombol **Manual/Otomatis**, slider **"Nyala otomatis di atas N°C"** (20–40) di `index.html`, dan `setRelay()` + `#define RELAY_ACTIVE_LOW true` di `firmware/sma_room_monitor.ino`. Tidak ada kode yang ditulis; satu-satunya kemungkinan edit = **satu kata** `RELAY_ACTIVE_LOW` kalau modul relay ternyata active-HIGH. |
+| Target silabus | Siswa mampu mengontrol kipas dari dashboard (mode Manual & Otomatis) dan menjelaskan secara sederhana bagaimana perintah dari HP sampai ke alat (proyek akhir tahap 2: kontrol dua arah) |
+| Penilaian | Progres proyek akhir: kipas mengikuti tombol dashboard di HP, dan menyala sendiri di mode Otomatis saat sensor digenggam |
+| Kaitan dengan proyek akhir | Fitur kontrol kipas **sudah jadi** di folder kelompok (mis. `sma-04`): tombol kipas besar, tombol **Manual/Otomatis**, slider **"Nyala otomatis di atas N°C"** (20–40) di `index.html`. Firmware `firmware/sma_room_monitor/sma_room_monitor.ino` dari P11 **tidak diubah**. Tinkering hanya 2 tempat: **satu kata** `RELAY_ACTIVE_LOW` (kalau kipas kebalikan) dan **satu angka** `SEND_INTERVAL_MS` (Challenge Hard, lalu dikembalikan). |
 
 ## Alat & bahan (per kelompok)
 
-- Rakitan lengkap (DHT22 di D4, relay di D18, kipas DC 5V di NO) dengan firmware proyek P11 yang sudah `kode respons: 200`
-- Laptop + **folder kelompok** dari zip tutor (mis. `sma-04`) dan HP (opsional, untuk membuka dashboard)
-- **PIN kelompok** 4 digit dari tutor (lihat `docs/HANDOUT_SISWA.md`)
-- Stopwatch HP, multimeter (1 per kelas)
+- Rakitan P11 (DHT22 di D13, relay IN di D14, kipas DC 5V di NO) dengan firmware proyek yang sudah `kode respons: 200`
+- Laptop + **folder kelompok** dari zip tutor (mis. `sma-04`) + **HP** untuk membuka dashboard
+- **PIN kelompok** dari tutor (kertas lipat, pribadi)
+- Stopwatch HP
 
 ## Persiapan tutor sebelum kelas
 
 Detail lengkap: `kurikulum/sma/p12/Panduan_Pengajar_P12_SMA.md`.
 
 1. Pastikan setiap kelompok sudah lolos P11 (data masuk dashboard). Yang belum: selesaikan dulu di 10 menit pertama.
-2. Siapkan PIN kelompok (`docs/HANDOUT_SISWA.md`). Bagikan **hanya** ke kelompok yang bersangkutan.
-3. Uji 1 rakitan: klik tombol kipas di dashboard → kipas berubah dalam ±4 detik; mode Otomatis + genggam sensor → kipas menyala sendiri.
-4. Siapkan **alat tutor tersambung ke hotspot HP tutor** untuk Challenge Hard langkah 2 (WiFi kelas tidak boleh dimatikan).
+2. Siapkan PIN kelompok (dari `FAN_PINS` di `.env` server). Bagikan **hanya** ke kelompok yang bersangkutan.
+3. Set semua dashboard ke mode **Manual + kipas mati**, ambang **30°C**, supaya kelas mulai dari kondisi yang sama.
+4. Uji 1 rakitan: tombol di HP → kipas berubah dalam ±4 detik; Otomatis + genggam sensor → kipas menyala sendiri.
 
 ## Alur 70 menit
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–5 | Pembuka | Demo alat tutor: klik dashboard → kipas berputar |
-| 5–10 | Pembuka materi | Cover + pertanyaan pemantik |
-| 10–17 | Materi | Perjalanan perintah kipas, kenapa ±4 detik, PIN kelompok |
-| 17–25 | 🟢 Challenge Easy | Saklar dari Dashboard |
-| 25–31 | Materi | Mode Manual vs Otomatis, slider ambang |
-| 31–41 | 🟡 Challenge Medium | Uji Otomatis dengan Tangan |
-| 41–47 | Materi | Fail-safe, `RELAY_ACTIVE_LOW`, troubleshooting kipas |
-| 47–57 | 🔴 Challenge Hard | Uji Fail-Safe |
-| 57–60 | Peta proyek | Slide peta proyek akhir |
+| 0–5 | Pembuka | Demo alat tutor: tekan tombol di HP → kipas berputar. Kelas menghitung detiknya |
+| 5–10 | Pembuka materi | Cover + pertanyaan pemantik + cara dapat poin |
+| 10–18 | Materi | IoT dua arah, ESP32 yang bertanya, PIN kelompok |
+| 18–25 | 🟢 Challenge Easy | Saklar dari HP |
+| 25–32 | Materi | Manual vs Otomatis, slider ambang, cetak-cetek |
+| 32–42 | 🟡 Challenge Medium | Kipas Otomatis |
+| 42–47 | Materi | Kipas nggak nurut, satu kata `RELAY_ACTIVE_LOW` |
+| 47–58 | 🔴 Challenge Hard | Kipas Lebih Gesit |
+| 58–60 | Peta | Peta Petualangan IoT |
 | 60–70 | Post-test | 5 soal pilihan ganda (Google Form) |
 
-Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Kontrol Dua Arah → Perjalanan Perintah Kipas → Kenapa Sampai ±4 Detik? → PIN Kelompok: Publik Hanya Melihat → 💬 Forum Diskusi → 🟢 Easy → Mode Manual vs Otomatis → Slider "Nyala Otomatis di Atas N°C" → 💬 Forum Diskusi → 🟡 Medium → Fail-Safe: Kalau Ada yang Putus → Satu Kata untuk Relay Active-HIGH → Troubleshooting Kontrol Kipas → 💬 Forum Diskusi → 🔴 Hard → Peta Proyek Akhir → Post-test (Linktree) → Penutup.
+Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Cara Dapat Poin Hari Ini → IoT Dua Arah → Perintah Kipas: ESP32 yang Bertanya → PIN Kelompok → 💬 Tanya Jawab (+2) → 🟢 Easy → Manual vs Otomatis → Slider "Nyala Otomatis di Atas N°C" → 💬 Tanya Jawab (+2) → 🟡 Medium → Kipas Nggak Nurut? Cek Ini → Satu Kata untuk Kipas yang Kebalikan → 💬 Tanya Jawab (+2) → 🔴 Hard → Peta Petualangan IoT → Post-test (Linktree) → Penutup.
 
 ---
 
 ## Slide
 
-### Slide 1 — Kontrol Dua Arah 🔄
+### Slide 1 — Cara Dapat Poin Hari Ini 🏅
+| Kegiatan | Poin |
+|---|---|
+| Bertanya / menjawab saat **Tanya Jawab** | **+2** |
+| Challenge 🟢 **Easy** | **+5** |
+| Challenge 🟡 **Medium** | **+10** |
+| Challenge 🔴 **Hard** | **+15** |
+- Post-test di Google Form di akhir kelas. **Tidak ada PR.**
+
+> Catatan tutor: +2 untuk yang berani bertanya/menjawab, benar atau salah. Utamakan siswa yang belum dapat poin hari itu.
+
+### Slide 2 — IoT Dua Arah 🔄
 - P11: data **naik**: sensor → ESP32 → server → dashboard. ✅
 - Hari ini: perintah **turun**: tombol dashboard → server → ESP32 → relay → kipas.
-- Semua fitur **sudah jadi**. Tugas kalian: **menguji** apakah rakitan benar-benar menurut, dan **membuktikan** perilakunya dengan mata, stopwatch, dan multimeter.
+- Rakitan & firmware **tidak diubah**. Fitur kipas **sudah jadi**. Tugas kalian: **mencoba & membuktikan**.
 
-> Catatan tutor: Peran berdua: **Pengendali** (klik dashboard, pegang PIN) & **Pengamat** (stopwatch, amati relay/kipas, multimeter); tukar tiap topik. Peserta individu: pegang HP sebagai stopwatch di tangan kiri.
+> Catatan tutor: Peran berdua: **Pengendali** (HP + PIN) & **Pengamat** (stopwatch, amati relay & kipas); tukar tiap topik. Peserta individu: HP sebagai stopwatch di tangan kiri.
 
-### Slide 2 — Perjalanan Perintah Kipas 🛤️
+### Slide 3 — Perintah Kipas: ESP32 yang Bertanya 🙋
 ```
-[Tombol dashboard] ──► [Server] simpan: "kipas sma-04 = ON"
-                              ▲
-                              │ tiap ±4 detik ESP32 kirim data suhu,
-                              │ server MEMBALAS dengan status kipas terbaru
-                              ▼
-                         [ESP32] → relay IN = LOW → relay klik → kipas berputar
+[Tombol di HP] ──► [Server] mencatat: "kipas sma-04 = NYALA"
+                         ▲
+                         │ tiap ±4 detik ESP32 lapor suhu,
+                         │ server membalas: "fanOn": true
+                         ▼
+                    [ESP32] → relay klik → kipas berputar
 ```
-- Server **tidak** mengirim perintah langsung ke ESP32. ESP32 yang **bertanya** setiap kali melapor suhu.
-- Balasan server berisi `"fanOn":true` atau `"fanOn":false`. Relay mengikuti balasan itu.
+- Server **tidak bisa** "mengetuk pintu" ESP32 yang ada di balik router sekolah.
+- Jadi ESP32 yang **bertanya** tiap ±4 detik: *"Ada titipan buat aku?"* Mirip anak kos yang bolak-balik nanya ke ibu kos.
+- Jeda tombol → kipas **0 sampai ±4 detik**. Normal, bukan rusak.
 
-### Slide 3 — Kenapa Sampai ±4 Detik? ⏳
-- ESP32 melapor **tiap ±4 detik** sambil bertanya "ada perintah untukku?". Perintah dashboard terbawa di balasan **berikutnya**.
-- Jeda tombol → kipas: **0 sampai ±4 detik**. Normal, bukan rusak.
-- Kenapa tidak langsung? ESP32 ada **di balik router** sekolah: server di internet tidak bisa "mengetuk pintunya". Banyak smart device memakai pola ini.
+> Catatan tutor: Firmware juga punya jalur perintah langsung lewat jaringan lokal (route `/fan`), tapi server kita ada di internet sehingga tidak bisa menjangkaunya. Yang bekerja di kelas: relay mengikuti `fanOn` di balasan server. Tidak perlu dibahas ke siswa.
 
-> Catatan tutor: Analogi: siswa yang tiap 4 detik mampir ke meja piket bertanya "ada titipan untukku?". Titipan datang tepat setelah ia pergi → ia baru tahu ±4 detik kemudian.
+### Slide 4 — PIN Kelompok: Lihat Boleh, Pencet Jangan 🔐
+- Dashboard kalian **publik** di `https://sma-04.inspiralabs.id`. Siapa pun bisa **melihat** suhunya.
+- **Mengubah kipas** (tombol, mode, slider) butuh **PIN kelompok** dari tutor.
+- PIN ditanya **sekali** di browser itu, lalu diingat.
+- Jangan tulis PIN di website, foto, atau grup chat. PIN = kunci rumah.
 
-### Slide 4 — PIN Kelompok: Publik Hanya Melihat 🔐
-- Nanti dashboard kalian tayang **publik** di `https://sma-04.inspiralabs.id`. Siapa pun bisa **melihat** suhu.
-- Tapi **mengubah kipas** (tombol, mode, slider) butuh **PIN kelompok 4 digit** dari tutor.
-- PIN ditanya **sekali** di browser itu, lalu diingat. PIN salah → muncul "PIN salah", kipas tidak berubah.
-- **Jangan** tulis PIN di `index.html`, foto, atau slide presentasi. PIN = kunci rumah.
-
-### Slide 5 — Mode Manual vs Otomatis 🤖
-| Mode | Siapa yang memutuskan kipas | Cara pakai |
+### Slide 5 — Manual vs Otomatis 🤖
+| Mode | Siapa yang memutuskan | Contoh di dunia nyata |
 |---|---|---|
-| **Manual** | **Kalian**, lewat tombol kipas besar | Klik tombol kipas: ON ↔ OFF |
-| **Otomatis** | **Server**, membandingkan suhu terbaru dengan ambang | Klik **Otomatis**, atur slider |
-- Di mode Otomatis, kipas menyala kalau suhu **di atas** ambang, mati kalau di bawah.
-- Klik tombol kipas besar saat Otomatis = **ambil alih** ke Manual.
-- Belum pernah diubah? Mode awal = **Otomatis, ambang 30°C**.
+| **Manual** | **Kamu**, lewat tombol | Saklar lampu, remote TV |
+| **Otomatis** | **Aturan**: kalau suhu > ambang → kipas nyala | AC, kulkas, rice cooker |
+- Di mode Otomatis, server membandingkan suhu terbaru dengan **ambang**. Di atas ambang → nyala. Di bawah → mati.
+- Tekan tombol kipas saat Otomatis = **ambil alih** jadi Manual.
 
 ### Slide 6 — Slider "Nyala Otomatis di Atas N°C" 🎚️
-- Slider **20–40°C**. Geser lalu **lepas**: nilai dikirim ke server (minta PIN kalau belum).
-- Tips: atur ambang = **suhu ruangan + 1°C**, supaya bisa diuji dengan **genggaman tangan**.
-- Ide yang sama dengan **Termostat Tangan** (Challenge Medium P10), bedanya sekarang ambang diatur dari **website**, tanpa upload ulang.
+- Slider **20–40°C**. Geser, lalu **lepas**: ambang baru dikirim ke server.
+- Tips uji cepat: ambang = **suhu ruangan + 1°C**, lalu **genggam** sensor.
+- Awas **cetak-cetek**: kalau ambang terlalu dekat suhu ruangan, kipas bisa nyala-mati terus. Geser ambang sedikit menjauh.
 
-### Slide 7 — Fail-Safe: Kalau Ada yang Putus 🧯
-| Kejadian | Yang terjadi pada kipas | Kenapa |
-|---|---|---|
-| ESP32 dicabut / mati | **Mati** | Relay tidak aktif → COM–NO terputus (kipas di **NO**) |
-| ESP32 baru menyala | **Mati** dulu | Firmware mematikan relay saat start, lalu ikut balasan server |
-| WiFi/internet putus | **Tetap** di status terakhir | ESP32 tidak dapat balasan baru, relay tidak diubah |
-| Sensor DHT22 lepas | **Tetap** di status terakhir | Data tidak terkirim, balasan baru tidak datang |
-- Kesimpulan: kipas di **NO** membuat alat aman saat listrik ESP32 hilang. Tapi saat **jaringan** putus, kipas bisa **terus menyala**. Di produk sungguhan (pemanas, pompa) ini perlu pengaman tambahan.
+### Slide 7 — Kipas Nggak Nurut? Cek Ini 🧰
+| Gejala | Cek |
+|---|---|
+| Muncul "PIN salah" | PIN kelompok sendiri? Tanya tutor |
+| Ditekan, > 10 detik tidak ada apa-apa | Serial Monitor: masih `kode respons: 200`? |
+| Relay klik, kipas diam | Kabel COM, NO, dan kipas − ke GND |
+| Kipas **kebalikan** dari dashboard | Kipas di NC? Kalau sudah di NO → Slide 8 |
+| Otomatis, kipas tidak mau nyala | Ambang terlalu tinggi, genggam lebih lama |
 
-### Slide 8 — Satu Kata untuk Relay Active-HIGH 🔁
+### Slide 8 — Satu Kata untuk Kipas yang Kebalikan 🔁
 ```cpp
-// potongan — firmware/sma_room_monitor.ino
+// potongan — firmware/sma_room_monitor/sma_room_monitor.ino
 // Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
 #define RELAY_ACTIVE_LOW true
 ```
-- Modul kita **active-LOW** (sudah dibuktikan di P9 & P10) → biarkan `true`.
-- Tanda modul **active-HIGH**: dashboard bilang kipas **mati**, tapi kipas **berputar** (dan sebaliknya).
-- Perbaikannya **satu kata**: `true` → `false`, lalu upload ulang. Kabel tidak perlu diubah.
+- Modul relay kita biasanya **active-LOW** → biarkan `true`.
+- Dashboard bilang **mati** tapi kipas **berputar** (dan sebaliknya)? Ganti **satu kata** `true` → `false`, upload ulang. Kabel tidak perlu diubah.
 
-### Slide 9 — Troubleshooting Kontrol Kipas 🧰
-| Gejala | Cek |
-|---|---|
-| Klik tombol, muncul "PIN salah" | PIN kelompok sendiri? Tanya tutor |
-| Klik tombol, tidak terjadi apa-apa > 10 detik | Serial Monitor: masih `kode respons: 200`? Lapisan WiFi/sensor (P11) |
-| Relay klik, kipas diam | Sisi beban: COM, NO, kipas − ke GND (P10) |
-| Kipas **terbalik** dari dashboard | Kipas di NC? Kalau sudah di NO → modul active-HIGH (`RELAY_ACTIVE_LOW`) |
-| Mode Otomatis, kipas tidak mau menyala | Ambang terlalu tinggi; genggam lebih lama; cek suhu di dashboard benar-benar di atas ambang |
-| Kipas menyala-mati cepat di mode Otomatis | Suhu tepat di sekitar ambang. Naikkan/turunkan ambang 1°C |
+> Catatan tutor: Satu kalimat fail-safe saja: kipas dipasang di NO supaya kalau ESP32 mati/dicabut, kipas ikut mati.
 
-### Slide 10 — Peta Proyek Akhir 🗺️
+### Slide 9 — Peta Petualangan IoT 🗺️
 ```
-[P9]  Pinout, DHT22, relay, active-LOW (tanpa coding)        ✅
-[P10] Rakit DHT22 + relay + kipas, upload program tes jadi    ✅
-[P11] Upload firmware proyek, data suhu tampil di dashboard   ✅
-[P12] Kontrol kipas dari dashboard: manual & mode otomatis    ← HARI INI
-[P13] Rapikan rakitan + kustom dashboard + showcase
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama                           ✅
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok  ✅
+[P12] Kontrol kipas dari dashboard: manual & otomatis                                  ← HARI INI
+[P13] Kustom dashboard + website online + Demo Day
 ```
-> Catatan tutor: Tugas rumah ringan untuk P13: siapkan **foto kelompok** (landscape, ukuran wajar) dan ide **warna tema**. Bawa kotak kecil/kardus untuk casing kalau ada.
+> Catatan tutor: Alat dikumpulkan ke tutor dalam keadaan utuh untuk Demo Day P13. Tidak ada yang perlu disiapkan siswa di rumah.
 
 ---
 
-## Forum Diskusi Live Coding
+## Tanya Jawab (+2 keaktifan)
 
-Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab.
+Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab, masing-masing **+2**.
 
-- **Topik 1 — Kontrol Manual:** Kenapa kipas tidak langsung berubah saat tombol diklik, dan kenapa itu bukan kerusakan?
-- **Topik 2 — Mode Otomatis:** Kalau ambang diatur 20°C di kelas yang suhunya 28°C, apa yang terjadi? Kalau 40°C?
-- **Topik 3 — Fail-Safe:** Saat WiFi putus, kipas bisa terus menyala. Untuk alat apa hal ini berbahaya?
+- **Topik 1 — Kontrol Manual:** Kipas tidak langsung berubah saat tombol ditekan. Kenapa itu bukan kerusakan?
+- **Topik 2 — Mode Otomatis:** Ambang 30°C, suhu kelas 29,9°C dan naik-turun sedikit. Apa yang terjadi pada kipas? Gimana cara mencegahnya?
+- **Topik 3 — Kipas Nggak Nurut:** Dashboard bilang kipas MATI, tapi kipasnya berputar. Apa yang kamu cek dulu sebelum mengubah kode?
 
-Setiap challenge bernilai **+10** poin (leaderboard).
+Poin challenge: 🟢 Easy **+5**, 🟡 Medium **+10**, 🔴 Hard **+15**.
 
 ---
 
 ## Challenge
 
-### 🟢 Easy — "Saklar dari Dashboard"
-1. Buka `index.html` kelompok, mode **Manual**. Klik tombol kipas besar, masukkan **PIN kelompok** saat diminta.
-2. Pakai stopwatch: ukur waktu dari klik sampai relay **klik**. Ulangi 5 kali (ON dan OFF), tulis rata-ratanya.
-3. Jelaskan dengan slide *Kenapa Sampai ±4 Detik?*: kenapa hasilnya tidak selalu sama?
+### 🟢 Easy — "Saklar dari HP" (+5) 📱
+1. Buka dashboard kelompok di **HP**: `https://sma-0X.inspiralabs.id`.
+2. Pilih mode **Manual**, tekan tombol kipas besar, masukkan **PIN kelompok**.
+3. Kipas di meja harus **menyala**. Tekan lagi: kipas **mati**.
+4. Tunjukkan ke tutor: HP di tangan, kipas di meja ikut nurut.
 
-### 🟡 Medium — "Uji Otomatis dengan Tangan" 🖐️
-1. Klik **Otomatis**. Geser slider ke **suhu ruangan + 1°C**, lepas.
-2. **Genggam** sensor. Catat: suhu di dashboard saat kipas mulai berputar, dan berapa detik sejak digenggam.
-3. Lepas genggaman, tunggu kipas mati sendiri. Catat suhunya.
-4. Geser slider ke **40°C**. Apa yang terjadi pada kipas? Kenapa?
+### 🟡 Medium — "Kipas Otomatis" (+10) 🖐️
+1. Pilih mode **Otomatis**. Geser slider ke **suhu ruangan + 1°C**, lepas.
+2. **Genggam** sensor DHT22. Catat: berapa detik sampai kipas **menyala sendiri**?
+3. Lepas genggaman. Catat: berapa detik sampai kipas **mati sendiri**?
+4. Tunjukkan ke tutor: kipas bergerak tanpa tombol disentuh.
 
-### 🔴 Hard — "Uji Fail-Safe" 🧯
-1. Nyalakan kipas dari dashboard (Manual ON). **Cabut USB** ESP32. Apa yang terjadi pada kipas? Colok lagi: berapa detik sampai kipas kembali menyala?
-2. Jaringan putus: saat kipas ON, **matikan hotspot** yang dipakai alat selama 30 detik (alat tutor, atau alat kalian kalau tersambung ke hotspot HP sendiri; **jangan matikan WiFi kelas**). Apa yang terjadi pada kipas? Klik OFF di dashboard: apakah kipas menurut? Nyalakan hotspot lagi, amati.
-3. Eksperimen satu kata: ubah `#define RELAY_ACTIVE_LOW true` → `false`, upload. Bandingkan status kipas di dashboard dengan kipas sungguhan, ukur tegangan pin IN. **Kembalikan ke `true`** dan upload ulang.
-4. Tulis tabel hasil 3 percobaan + 1 kalimat: kapan alat kita **aman**, kapan **tidak**?
+### 🔴 Hard — "Kipas Lebih Gesit" (+15) ⚡
+1. Mode **Manual**. Ukur jeda tombol → kipas **3 kali** pakai stopwatch, hitung rata-ratanya.
+2. Di firmware, ubah satu angka:
+```cpp
+const unsigned long SEND_INTERVAL_MS = 4000;  // ubah jadi 2000
+```
+3. Upload, lalu ukur lagi 3 kali. Bandingkan rata-ratanya.
+4. Jawab: kenapa angka ini **tidak boleh** di bawah 2000?
+5. Kembalikan ke **4000**, upload ulang.
 
 ---
 
 ## Pembuka Materi: Cover & Pertanyaan Pemantik
 
-- **Tagline cover:** Satu klik di website, kipas di meja ikut bergerak.
-- **Pertanyaan pemantik:** Kalau kamu menyalakan lampu pintar dari luar kota, bagaimana perintah dari HP-mu bisa sampai ke lampu yang ada di balik router rumah?
-- **Konteks:** Server di internet tidak bisa "mengetuk pintu" alat di balik router. Hari ini kita lihat cara alat kita tetap bisa menerima perintah.
-- Tampung 2–3 tebakan siswa, jawabannya dibahas di Topik 1 (slide *Kenapa Sampai ±4 Detik?*).
+- **Tagline cover:** Satu klik di HP, kipas di meja ikut bergerak.
+- **Pertanyaan pemantik:** Kamu masih di sekolah, tapi pengin kipas kamar sudah nyala pas kamu pulang. Mungkin nggak? Gimana perintah dari HP bisa sampai ke kipas?
+- **Konteks:** Smart lamp dan smart AC sudah bisa begini. Hari ini alat buatan kalian juga.
+- Tampung 2–3 tebakan siswa (+2 per siswa), jawabannya dibahas di Topik 1 (slide *Perintah Kipas: ESP32 yang Bertanya*).
 
 ---
 
@@ -185,7 +186,7 @@ Isi slide:
 - 🙋 Solusinya: **alat yang bertanya** ke server secara berkala: "ada perintah buat aku?"
 - ⏳ Alat kami bertanya tiap ±4 detik → jeda tombol ke kipas **0–4 detik**. Normal!
 - 🔐 Dashboard publik: semua orang bisa **lihat**, hanya pemegang **PIN** yang bisa **mengubah**.
-- 🧯 Fail-safe: kipas di terminal **NO** → alat mati, kipas ikut mati.
+- 🤖 Mode Otomatis: kipas nyala sendiri kalau suhu lewat ambang, persis AC.
 
 🎙️ **Kalimat hook (pembuka rekaman):** "Kenapa kipas pintarku telat 4 detik? Ternyata ini rahasia smart device."
 
@@ -196,15 +197,15 @@ Isi slide:
 - Alat yang BERTANYA tiap 4 detik 🙋
 - Lihat = publik · Ubah = PIN 🔐
 
-🎬 **Penutup:** "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat showcase-nya!"
+🎬 **Penutup:** "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat Demo Day-nya!"
 
 > Catatan tutor: Narasi lengkap saat rekam:
 > - [0–5 detik] "Kenapa kipas pintarku telat 4 detik? Ternyata ini rahasia smart device."
-> - [5–15 detik] "Alat ini ada di WiFi sekolah, di balik router. Server di internet nggak bisa ngetuk pintunya langsung. Router nggak bakal ngizinin."
+> - [5–15 detik] "Alat ini ada di WiFi sekolah, di balik router. Server di internet nggak bisa ngetuk pintunya langsung."
 > - [15–28 detik] "Jadi dibalik: alatnya yang bertanya. Tiap empat detik dia lapor suhu sambil tanya, 'ada perintah buat aku?' Server jawab: kipas nyala. Relay klik."
-> - [28–38 detik] "Makanya jedanya nol sampai empat detik. Bukan lemot, memang desainnya begitu. Banyak smart device pakai pola alat-yang-terhubung-ke-server kayak gini."
-> - [38–50 detik] "Dashboard-nya publik: semua orang bisa lihat suhunya. Tapi buat ngubah kipas, harus pakai PIN kelompok. Lihat boleh, pegang jangan."
-> - [50–58 detik] "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat showcase-nya!"
+> - [28–38 detik] "Makanya jedanya nol sampai empat detik. Bukan lemot, memang desainnya begitu."
+> - [38–50 detik] "Dashboard-nya publik: semua orang bisa lihat suhunya. Tapi buat ngubah kipas, harus pakai PIN kelompok. Lihat boleh, pencet jangan."
+> - [50–58 detik] "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat Demo Day-nya!"
 
 ### 🎥 Script Reels Lengkap (untuk rekaman konten)
 
@@ -219,12 +220,12 @@ Isi slide:
 
 | Detik | Visual / B-roll | Narasi | Teks di layar |
 |---|---|---|---|
-| 0–5 | Jari klik tombol di HP, hitungan 1-2-3, kipas berputar | "Kenapa kipas pintarku telat 4 detik? Ternyata ini rahasia smart device." | Klik… 1… 2… 3… ⏳ |
-| 5–15 | Animasi router sebagai pintu tertutup | "Alat ini ada di WiFi sekolah, di balik router. Server di internet nggak bisa ngetuk pintunya langsung. Router nggak bakal ngizinin." | Server nggak bisa "ngetuk pintu" 🚪 |
+| 0–5 | Jari menekan tombol di HP, hitungan 1-2-3, kipas berputar | "Kenapa kipas pintarku telat 4 detik? Ternyata ini rahasia smart device." | Klik… 1… 2… 3… ⏳ |
+| 5–15 | Animasi router sebagai pintu tertutup | "Alat ini ada di WiFi sekolah, di balik router. Server di internet nggak bisa ngetuk pintunya langsung." | Server nggak bisa "ngetuk pintu" 🚪 |
 | 15–28 | Animasi ESP32 mengirim pesan berkala, server membalas | "Jadi dibalik: alatnya yang bertanya. Tiap empat detik dia lapor suhu sambil tanya, 'ada perintah buat aku?' Server jawab: kipas nyala. Relay klik." | Alat yang BERTANYA 🙋 |
-| 28–38 | Stopwatch di layar 0–4 detik | "Makanya jedanya nol sampai empat detik. Bukan lemot, memang desainnya begitu. Banyak smart device pakai pola alat-yang-terhubung-ke-server kayak gini." | Jeda 0–4 detik = normal ✅ |
-| 38–50 | Dashboard publik, pop-up PIN | "Dashboard-nya publik: semua orang bisa lihat suhunya. Tapi buat ngubah kipas, harus pakai PIN kelompok. Lihat boleh, pegang jangan." | Lihat = publik · Ubah = PIN 🔐 |
-| 50–58 | Siswa SMA dengan rakitannya (pastikan izin) | "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat showcase-nya!" | Follow 👉 |
+| 28–38 | Stopwatch di layar 0–4 detik | "Makanya jedanya nol sampai empat detik. Bukan lemot, memang desainnya begitu." | Jeda 0–4 detik = normal ✅ |
+| 38–50 | Dashboard publik, pop-up PIN | "Dashboard-nya publik: semua orang bisa lihat suhunya. Tapi buat ngubah kipas, harus pakai PIN kelompok. Lihat boleh, pencet jangan." | Lihat = publik · Ubah = PIN 🔐 |
+| 50–58 | Siswa SMA dengan rakitannya (pastikan izin) | "Yang bikin ini siswa SMA, rakit sendiri. Follow buat lihat Demo Day-nya!" | Follow 👉 |
 
 #### Caption
 
@@ -234,7 +235,7 @@ Kipas pintar telat beberapa detik? Itu bukan rusak ⏳
 🙋 Alat yang bertanya ke server tiap ±4 detik
 ✅ Jeda 0–4 detik = sesuai desain
 🔐 Dashboard publik: lihat boleh, ubah pakai PIN
-🧯 Kipas di NO → alat mati, kipas ikut mati
+🤖 Mode Otomatis: kipas nyala sendiri kalau suhu lewat ambang
 
 #InspiraLabs #IoT #ESP32 #SmartHome #EkskulCoding #STEM #ProyekSiswa
 
@@ -246,20 +247,20 @@ Kipas pintar telat beberapa detik? Itu bukan rusak ⏳
 
 ## Post-Test (5 soal, pilihan ganda)
 
-**1. Kamu klik "kipas ON" di dashboard. Bagaimana perintah itu sampai ke ESP32?**
-A. Server langsung mengirim perintah ke IP ESP32 di WiFi sekolah B. ESP32 melapor data tiap ±4 detik dan membaca status kipas dari balasan server C. Dashboard mengirim sinyal Bluetooth ke ESP32 D. Relay membaca website sendiri
+**1. Kamu menekan tombol kipas di dashboard. Bagaimana perintah itu sampai ke ESP32?**
+A. Server langsung mengetuk ESP32 lewat WiFi sekolah B. ESP32 lapor suhu tiap ±4 detik, lalu membaca status kipas dari balasan server C. HP mengirim sinyal Bluetooth ke ESP32 D. Relay membuka website sendiri
 
-**2. Jeda dari klik tombol sampai kipas berputar paling lama sekitar…**
-A. 0,01 detik B. ±4 detik (ditambah waktu internet) C. 1 menit D. Sampai ESP32 di-restart
+**2. Teman dari kelas lain membuka dashboard kelompokmu tanpa tahu PIN. Apa yang bisa dia lakukan?**
+A. Menyalakan dan mematikan kipas B. Mengubah ambang suhu di slider C. Hanya melihat suhu, kelembapan, dan status kipas D. Mengganti firmware ESP32
 
-**3. Mode Otomatis aktif, slider "Nyala otomatis di atas 29°C", suhu terbaca 31°C. Apa yang terjadi?**
-A. Kipas menyala B. Kipas mati C. Dashboard meminta upload ulang D. Relay rusak
+**3. Mode Otomatis aktif dengan slider "Nyala otomatis di atas 29°C". Suhu terbaca 31°C. Apa yang terjadi?**
+A. Kipas menyala sendiri tanpa tombol ditekan B. Kipas mati C. Dashboard meminta upload ulang D. ESP32 restart
 
-**4. Kipas terpasang di terminal NO. ESP32 tiba-tiba dicabut saat kipas menyala. Apa yang terjadi pada kipas?**
-A. Tetap menyala selamanya B. Menyala lebih kencang C. Mati, karena relay tidak aktif dan COM–NO terputus D. Berputar terbalik
+**4. Kipas sudah di terminal NO. Dashboard bilang kipas MATI, tapi kipasnya BERPUTAR (dan sebaliknya). Perbaikan yang tepat di firmware adalah…**
+A. Mengganti `DEVICE_ID` B. Mengganti `WIFI_PASSWORD` C. Menghapus `api.js` D. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `false`, lalu upload ulang
 
-**5. Kipas di NO. Dashboard menunjukkan kipas MATI, tetapi kipas sungguhan BERPUTAR (dan sebaliknya). Perbaikan yang tepat di firmware adalah…**
-A. Mengganti `API_KEY` B. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `false` lalu upload ulang C. Mengganti `DEVICE_ID` D. Menghapus `api.js`
+**5. Kenapa `SEND_INTERVAL_MS` di firmware tidak boleh diubah ke angka di bawah 2000?**
+A. Supaya kipas berputar lebih pelan B. Sensor DHT22 butuh jeda minimal 2 detik antar pembacaan C. Karena WiFi hanya menyala 2 detik sekali D. Karena dashboard hanya bisa menampilkan 2 angka
 
 ---
 
@@ -267,27 +268,28 @@ A. Mengganti `API_KEY` B. Mengganti `#define RELAY_ACTIVE_LOW true` menjadi `fal
 
 ### Kunci Challenge
 
-**Easy:** jeda bervariasi **±0,5–5 detik**, rata-rata ±2–3 detik. Tidak selalu sama karena bergantung pada **kapan** klik terjadi relatif terhadap laporan ESP32 berikutnya (tiap ±4 detik), plus waktu internet.
+**Easy:** kipas menyala & mati mengikuti tombol di HP dalam ±0–5 detik. Bukti = demo langsung ke tutor.
 
 **Medium:**
-- Kipas menyala setelah suhu yang **diterima server** melewati ambang. Ingat ada 2 jeda: suhu sensor naik pelan, lalu laporan tiap ±4 detik.
-- Ambang 40°C → kipas **mati** (suhu ruangan + genggaman tidak akan mencapai 40°C). Ini cara cepat "mematikan" mode otomatis tanpa pindah ke Manual.
-- Kalau kipas menyala-mati bergantian di dekat ambang: bahas lagi jeda 0,5°C (histeresis) di Termostat Tangan P10. Server di proyek ini cukup membandingkan suhu dengan ambang, jadi atur ambang agak jauh dari suhu ruangan.
+- Kipas menyala setelah suhu yang **diterima server** melewati ambang. Ada 2 jeda: suhu DHT22 naik pelan (±10–40 detik digenggam), lalu laporan tiap ±4 detik.
+- Mati sendiri biasanya lebih lama (sensor butuh waktu dingin lagi, bisa 30–90 detik). Angka berapa pun diterima asal kipas nyala & mati sendiri.
+- Kipas cetak-cetek di dekat ambang: geser slider naik 1°C.
 
 **Hard:**
-1. Cabut USB → kipas **langsung mati** (fail-safe NO). Colok lagi → kipas mati dulu (firmware memanggil `setRelay(false)` saat start), lalu menyala lagi setelah WiFi tersambung + laporan pertama (±5–15 detik).
-2. WiFi mati → kipas **tetap menyala** (status terakhir). Perintah OFF dari HP tersimpan di server tapi **tidak sampai**; begitu WiFi kembali, laporan berikutnya membawa `fanOn:false` → kipas mati. Pelajaran: fail-safe NO hanya melindungi dari **hilang listrik**, bukan dari **hilang jaringan**.
-3. `RELAY_ACTIVE_LOW false` pada modul active-LOW → semua **terbalik**: dashboard OFF, kipas berputar; IN ±0 V saat dashboard OFF. Kembalikan ke `true`.
+- Rata-rata jeda 4000 ms ≈ **2–3 detik** (0–4 detik + waktu internet). Dengan 2000 ms ≈ **1–1,5 detik**, kira-kira separuhnya, karena ESP32 bertanya dua kali lebih sering.
+- Tidak boleh di bawah 2000: DHT22 hanya bisa dibaca **maksimal tiap 2 detik** (lebih cepat → `Gagal baca sensor`), dan server melayani semua kelompok sekaligus (makin sering = makin berat).
+- Wajib dikembalikan ke **4000** dan di-upload ulang sebelum kelas selesai.
 
 ### Catatan tutor
-- Firmware masih mendaftarkan route `/fan` (perintah langsung dalam jaringan lokal), tapi server online tidak bisa menjangkau IP lokal ESP32. Yang benar-benar bekerja di kelas: relay mengikuti `fanOn` di balasan laporan tiap ±4 detik. Jangan ajarkan bahwa server "mendorong" perintah langsung ke ESP32.
-- Hard langkah 2: WiFi kelas dipakai semua kelompok, jadi **jangan** dimatikan. Siapkan alat tutor di hotspot HP tutor untuk demo bersama, atau izinkan kelompok yang cepat mengganti 2 baris WiFi ke hotspot HP sendiri lalu upload (kembalikan ke WiFi kelas setelahnya).
-- PIN: kalau kelompok lupa PIN, browser yang pernah benar menyimpan PIN; browser lain akan bertanya lagi. Jangan bacakan PIN di depan kelas.
+- Firmware masih mendaftarkan route `/fan` (perintah langsung dalam jaringan lokal), tapi server online tidak bisa menjangkau IP lokal ESP32. Yang bekerja di kelas: relay mengikuti `fanOn` di balasan laporan. Jangan ajarkan bahwa server "mendorong" perintah ke ESP32.
+- PIN: browser yang pernah benar menyimpan PIN; browser/HP lain akan bertanya lagi. Setelah "PIN salah", PIN tersimpan dihapus, tekan tombol lagi untuk mengetik ulang. Jangan bacakan PIN di depan kelas.
+- Kalau ada yang iseng mencoba PIN kelompok lain: bahas sebagai etika keamanan, bukan hukuman.
 
 ### Kunci Post-Test
-1. B 2. B 3. A 4. C 5. B
+1. B 2. C 3. A 4. D 5. B
 
 ### Pembahasan singkat
-- No. 1: alat di balik router tidak bisa dihubungi langsung dari internet; alatnya yang bertanya.
-- No. 4: NO = fail-safe terhadap hilangnya listrik ESP32.
-- No. 5: gejala terbalik padahal kipas di NO = modul active-HIGH → satu kata `RELAY_ACTIVE_LOW`.
+- No. 1: alat di balik router tidak bisa dihubungi langsung dari internet; alatnya yang bertanya tiap ±4 detik.
+- No. 2: dashboard publik untuk dilihat; mengubah kipas/mode/slider butuh PIN.
+- No. 4: gejala kebalikan padahal kipas di NO = modul active-HIGH → satu kata `RELAY_ACTIVE_LOW`.
+- No. 5: batas kecepatan baca DHT22 = 2 detik.

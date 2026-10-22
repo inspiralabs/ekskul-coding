@@ -38,7 +38,7 @@
 <div class="kontainer">
   <a class="kembali" href="/">← Ekskul Coding</a>
   <h1>Kartu Sabotase</h1>
-  <p class="sub">Challenge Hard P10: rusak rakitan tetangga dengan aman, lalu mereka jadi detektif.</p>
+  <p class="sub">Challenge Hard P10 SMA &amp; P11 SMP: rusak rakitan tetangga dengan aman, lalu mereka jadi detektif.</p>
 
   <div class="panel">
     <div class="pilih">
@@ -69,15 +69,15 @@
 </div>
 
 <script>
-  // Hanya sabotase aman: tidak ada yang menyilangkan jalur daya. Sesuai tabel Hard di materi P10.
+  // Hanya sabotase aman: tidak ada yang menyilangkan jalur daya. Sesuai tabel Hard di materi P10 SMA / P11 SMP.
   // [sabotase, gejala, kabel yang diubah] -- satu ambilan tidak pernah mengubah kabel yang sama dua kali.
   var DEK = {
     sma: { jumlah: 2, kartu: [
-      ["Kabel kuning DHT22: pindah dari D4 ke D5", "Serial terus menulis Gagal baca DHT22", "dht-out"],
+      ["Kabel kuning DHT22: pindah dari D13 ke D25", "Serial terus menulis Gagal baca DHT22", "dht-out"],
       ["Kabel kipas di relay: pindah dari NO ke NC", "Kipas menyala saat relay mati (kebalikan)", "kipas+"],
-      ["Kabel biru relay IN: pindah dari D18 ke D34", "Relay diam, padahal Serial bilang AKTIF/MATI (D34 input-only)", "relay-in"],
+      ["Kabel biru relay IN: pindah dari D14 ke D34", "Relay diam, padahal Serial bilang AKTIF/MATI (D34 input-only)", "relay-in"],
       ["Lepas kabel kipas − dari jalur GND", "Relay klik, kipas tidak pernah berputar", "kipas-"],
-      ["Geser kabel kuning DHT22 satu baris di breadboard", "Gagal baca DHT22, padahal kabel terlihat di D4", "dht-out"],
+      ["Geser ujung kabel kuning DHT22 di sisi SENSOR satu baris di breadboard", "Gagal baca DHT22, padahal kabel terlihat di D13", "dht-out"],
       ["Lepas kabel relay IN (biarkan menggantung)", "Relay tidak pernah klik", "relay-in"],
       ["Lepas kabel DHT22 − dari GND", "Gagal baca DHT22", "dht-"],
       ["Kabel kipas +: pindah dari NO ke COM", "Kipas menyala terus, tidak ikut relay", "kipas+"]

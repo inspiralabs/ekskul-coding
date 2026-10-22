@@ -13,7 +13,7 @@ Folder Drive tujuan: https://drive.google.com/drive/folders/1mfjMURkXw5rTnvrlF2K
 
 ==================== BAGIAN A — GOOGLE SLIDES (kerjakan sekarang) ====================
 
-Judul presentasi: P11 SMA — Firmware Jadi, Data Online: Monitoring Suhu di Dashboard
+Judul presentasi: P11 SMA — Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
 BRAND SYSTEM — WAJIB KONSISTEN DI SEMUA SLIDE:
 - Warna Maroon: #7A1F2B (background utama/aksen dominan)
@@ -42,8 +42,8 @@ POLA SLIDE (gaya deck P7 SMA InspiraLabs):
 - Slide 3 "PERTANYAAN PEMANTIK": pertanyaan besar di tengah sebagai judul, satu kalimat konteks lebih kecil, lalu ajakan "Penasaran jawabannya? Yuk kita bongkar." Tema terang, layout lega. Ini pembuka materi untuk siswa, BUKAN konten media sosial.
 - Slide "Apa yang kita capai hari ini?": card bernomor 01, 02, 03 (satu card per topik).
 - Slide materi & live coding: kode di card gelap dengan font monospace, ditampilkan utuh; baris "File live coding" jadi badge kecil.
-- Slide "Forum Diskusi Live Coding": label kecil "forum Diskusi Live Coding", pertanyaan besar di tengah, layout lega.
-- Slide Challenge: label "TOPIK X DARI N — CHALLENGE" di atas judul, badge EASY (hijau) / MEDIUM (kuning) / HARD (merah) dan badge "+10", instruksi bernomor dalam card; baris "Download" / "Simpan hasil sebagai" jadi kotak info di bawah.
+- Slide "Forum Diskusi" / "Tanya Jawab": label kecil sesuai judul slide, pertanyaan besar di tengah, layout lega. Kalau judulnya memuat poin (mis. "+2"), tampilkan sebagai badge gold.
+- Slide Challenge: label "TOPIK X DARI N — CHALLENGE" di atas judul, badge EASY (hijau) / MEDIUM (kuning) / HARD (merah) dan badge poin sesuai angka di judul (mis. "+5", "+10", "+15"), instruksi bernomor dalam card; baris "Download" / "Simpan hasil sebagai" jadi kotak info di bawah.
 - Slide "EVALUASI MANDIRI": label "EVALUASI MANDIRI", judul "Post-Test: 5 Soal Pilihan Ganda", link Linktree, 3 langkah bernomor 01–03 dalam card.
 - Slide "Terima kasih!": nuansa cover, info pertemuan berikutnya di card.
 
@@ -71,13 +71,17 @@ GAMBAR RANGKAIAN (bagian berlabel "wiring" di isi slide):
 
 ---------- MULAI ISI SLIDE ----------
 
-# P11 SMA — Firmware Jadi, Data Online: Monitoring Suhu di Dashboard
+# P11 SMA — Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
 <!-- File ini khusus untuk PPT. 1 blok di antara garis --- = 1 slide, urutan PERSIS seperti di file.
      Footer tiap slide: "InspiraLabs • Ekskul Coding • Sekolah Qur'an Asy Syahid P11 SMA | nomor slide".
      Baris "> 🗣️ SPEAKER NOTES" masuk ke speaker notes, JANGAN tampil di slide.
      Blok wiring = perintah gambar diagram rangkaian (aturan di prompt/GENERATE-PPT.md).
-     Jawaban challenge & post-test hanya ada di Materi Ajar. -->
+     Jawaban challenge & post-test hanya ada di Materi Ajar.
+     Khusus deck SMA ini, blok kode tampil di card TERANG (light mode): latar #FAF7F0, border 1px #E6DCC6,
+     garis kiri 6px gold #C9A24B, teks #2B2320, komentar abu miring, kata kunci maroon #7A1F2B,
+     angka/string #8A6516; baris yang boleh diubah diberi latar #F3E6C4. Abaikan aturan "kode di card gelap".
+     Siswa SMA (16–18 tahun): bahasa santai, satu ide per slide, kode sudah jadi (siswa hanya mengisi bagian BOLEH DIUBAH). -->
 
 ---
 
@@ -96,9 +100,9 @@ Pindai QR code di samping menggunakan smartphone Anda, atau kunjungi tautan di b
 
 **P11 SMA**
 
-# Firmware Jadi, Data Online: Monitoring Suhu di Dashboard
+# Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
-Firmware jadi, rakitan siap: saatnya data suhu kelas tampil online.
+Sensor, relay, dan kipas dirakit hari ini. Datanya online hari ini juga.
 
 > 🗣️ SPEAKER NOTES: Slide pembuka materi. Bacakan judul dan tagline, lalu lanjut ke pertanyaan pemantik.
 
@@ -106,227 +110,265 @@ Firmware jadi, rakitan siap: saatnya data suhu kelas tampil online.
 
 ### PERTANYAAN PEMANTIK
 
-# Saat membuka website lalu muncul tulisan "404 Not Found", sebenarnya siapa yang sedang berbicara dengan siapa?
+# Di aplikasi ojol, kamu bisa lihat motor driver bergerak di peta. Siapa yang terus-terusan "lapor", dan lapornya ke mana?
 
-Setiap kali browser atau alat meminta sesuatu, server selalu menjawab dengan sebuah angka. Hari ini alat kita ikut "mengobrol" dengan server.
+Alat yang kita rakit hari ini bekerja dengan cara yang sama persis.
 
 Penasaran jawabannya? Yuk kita bongkar.
 
-> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa tanpa langsung dijawab. Jawabannya dibahas di Topik 2.
+> 🗣️ SPEAKER NOTES: Lempar pertanyaan ke kelas dan tampung 2–3 tebakan siswa (+2 per penebak) tanpa langsung dijawab. Jawabannya dibahas di Topik 3 (slide Perjalanan Data).
 
 ---
 
 ### Apa yang kita capai hari ini?
 
-- **01 Upload Firmware Proyek**: Isi zip kelompok, isi WiFi, upload, data online.
-- **02 Membaca Serial Monitor**: Laporan firmware dan kode respons server.
-- **03 Alat Mandiri**: Jalan tanpa laptop, troubleshooting berlapis.
+- **01 Rakit Lengkap**: DHT22, relay, dan kipas jadi satu alat.
+- **02 Upload Firmware Proyek**: isi WiFi, upload, baca laporan ESP32.
+- **03 Dashboard Online**: angka suhu kelas tampil di website kelompok.
 
 ---
 
-### Dari Alat Offline ke Alat Online
-- P10: rakitan lolos tes, tapi datanya hanya terlihat di **laptop sendiri** (Serial Monitor).
-- Hari ini: upload **firmware proyek jadi** → ESP32 melapor ke server **tiap ±4 detik** → suhu tampil di **dashboard** yang bisa dibuka dari mana saja.
-- Tidak ada kode yang ditulis. Tugas kalian: **isi WiFi, upload, buktikan datanya sampai**.
+### Cara Dapat Poin Hari Ini
+
+| Kegiatan | Poin |
+|---|---|
+| Bertanya / menjawab saat **Tanya Jawab** | **+2** |
+| Challenge 🟢 **Easy** | **+5** |
+| Challenge 🟡 **Medium** | **+10** |
+| Challenge 🔴 **Hard** | **+15** |
+
+Di akhir kelas: **Post-Test** di Google Form, dikerjakan sendiri-sendiri. Tidak ada PR.
+
+> 🗣️ SPEAKER NOTES: Poin +2 untuk siswa yang bertanya atau menjawab (benar atau salah, yang penting berani). Utamakan yang belum pernah dapat. Poin challenge diberikan ke setiap anggota kelompok yang ikut mengerjakan.
+
+---
+
+### Kerja Berdua: Perakit & Pengecek
+| Peran | Topik 1 (rakit) | Topik 2–3 (upload & dashboard) |
+|---|---|---|
+| **Perakit** | Memasang kabel | Jadi **Operator**: isi WiFi, klik Upload |
+| **Pengecek** | Membacakan Peta Rakitan, mencentang | Jadi **Pengamat**: baca Serial Monitor & dashboard |
+- Tukar peran di Topik 2.
+- Kerja sendiri? Minta teman sebelah jadi Pengecek **sebelum** USB dicolok.
+
+---
+
+### Kenalan 3 Komponen Hari Ini
+| Komponen | Perannya | Gampangnya |
+|---|---|---|
+| **DHT22** | Mengukur suhu & kelembapan | "Indera perasa" alat |
+| **Relay** | Saklar yang dipencet oleh ESP32 | "Jari" yang menekan tombol kipas |
+| **Kipas DC 5V** | Beban yang dinyalakan | Yang bikin ruangan adem |
+- Otaknya tetap **ESP32**, yang sudah kalian program di P10.
+
+> 🗣️ SPEAKER NOTES: Edarkan 1 relay. Minta siswa menekan relay dekat telinga saat dinyalakan tutor: bunyi "klik" = saklar di dalamnya berpindah. Cukup sampai situ, tidak perlu teori kumparan.
+
+---
+
+### Peta Rakitan Lengkap
+| Dari (ESP32) | Ke | Warna kabel |
+|---|---|---|
+| 3V3 | DHT22 **+** | Merah |
+| D13 (GPIO 13) | DHT22 **out** | Kuning |
+| GND | DHT22 **−** | Hitam |
+| VIN (5V) | jalur **+** → relay **VCC** dan relay **COM** | Merah / Oranye |
+| GND | jalur **−** → relay **GND** dan kipas **−** | Hitam |
+| D14 (GPIO 14) | relay **IN** | Biru |
+| relay **NO** | kipas **+** | Oranye |
 
 ```wiring
-Judul: Rakitan yang dipakai hari ini (sama dengan P10, tidak diubah)
+Judul: Rakitan lengkap Smart Room Monitor
 Komponen: ESP32 DevKit V1, breadboard, modul DHT22 3-pin, modul relay 1-channel 5V, kipas mini DC 5V
 Koneksi:
 - ESP32 3V3 → DHT22 "+" (kabel merah)
-- ESP32 D4 → DHT22 "out" (kabel kuning)
+- ESP32 D13 → DHT22 "out" (kabel kuning)
 - ESP32 GND → DHT22 "−" (kabel hitam)
 - ESP32 VIN → jalur + breadboard (kabel merah)
 - ESP32 GND → jalur − breadboard (kabel hitam)
 - jalur + → relay VCC (kabel merah)
 - jalur − → relay GND (kabel hitam)
-- ESP32 D18 → relay IN (kabel biru)
+- ESP32 D14 → relay IN (kabel biru)
 - jalur + → relay COM (kabel oranye)
 - relay NO → kipas mini "+" (kabel oranye)
 - kipas mini "−" → jalur − (kabel hitam)
-Sorot: ikon WiFi di atas ESP32 dengan panah "data tiap ±4 detik → server"
+Sorot: D13 = DHT_PIN 13 dan D14 = RELAY_PIN 14 ; D12 (di antara keduanya) dibiarkan kosong ; label "kipas di NO"
 ```
+
+> 🗣️ SPEAKER NOTES: Kipas di NO (Normally Open) supaya kalau ESP32 mati, kipas ikut mati. DHT22 di 3V3 karena pin ESP32 hanya tahan 3,3V; relay di VIN karena relay butuh 5V. Kalau diagram tidak akurat, ganti dengan screenshot simulasi Wokwi P11_PetaRakitan (LED biru = pengganti kipas).
 
 ---
 
-### Perjalanan Data: Sensor sampai Dashboard
-```
-[DHT22] → [ESP32] ──WiFi sekolah──► [Server InspiraLabs] ◄── [Dashboard kelompok]
-           tiap ±4 detik kirim:                              ambil data terbaru
-           Device ID + suhu + kelembapan                     lalu tampilkan angka
-```
-- ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat server.
-- **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompok kalian di server. Sudah diisi tutor di firmware **dan** dashboard.
-- **Kenapa tiap ±4 detik?** DHT22 hanya boleh dibaca tiap ≥2 detik, dan server melayani semua kelompok sekaligus.
+### Urutan Merakit yang Aman
+1. **Cabut USB.** Memasang & memindah kabel selalu dalam keadaan **mati**.
+2. Pasang ESP32 di breadboard: **VIN → jalur +**, **GND → jalur −**.
+3. **DHT22**: 3 kabel (merah, kuning, hitam).
+4. **Relay**: VCC, GND, IN (biru ke D14).
+5. **Kipas**: jalur + → COM, NO → kipas +, kipas − → jalur −. Sekrup terminal kencang, tarik pelan: tidak lepas.
+6. Pengecek **mencentang** Peta Rakitan satu per satu, baru colok USB. Bau/panas? **Cabut segera.**
 
-> 🗣️ SPEAKER NOTES: Kaitkan dengan forum diskusi P9: "Kenapa ESP32 dan dashboard tidak saling bicara langsung?" Hari ini jawabannya terlihat nyata.
+> 🗣️ SPEAKER NOTES: Keselamatan: HANYA kipas DC 5V, tidak ada kabel PLN/stopkontak di meja. Jangan sambungkan kipas langsung ke pin GPIO. Pin D12 ada di antara D14 dan D13: kabel nyasar ke D12 bikin upload gagal. Jaga jari & rambut dari baling-baling.
+
+---
+
+### Tanya Jawab (+2)
+
+**Kalau ESP32 tiba-tiba mati, kipasnya ikut mati atau tetap berputar? Kenapa kita sengaja pasang kipas di NO?**
+
+> 🗣️ SPEAKER NOTES: Topik 1 — Rakit Lengkap. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab (+2 per siswa). Jawaban: ikut mati. NO = "normalnya terbuka": tanpa perintah dari ESP32, saklar terbuka dan kipas tidak dapat listrik. Alat yang aman: kalau otaknya mati, mesinnya ikut berhenti.
 
 ---
 
 ### Isi Zip Proyek Kelompok
 | File / folder | Untuk apa | Hari ini |
 |---|---|---|
-| `firmware/` | Program ESP32 (proyek PlatformIO) | **Dipakai**: isi WiFi, upload |
+| `firmware/` | Program ESP32 (buka di Arduino IDE) | **Dipakai**: isi WiFi, upload |
 | `index.html` | Dashboard kelompok | **Dibuka** di browser |
-| `style.css` | Tampilan dashboard (warna di `:root`) | Belum (P13) |
-| `api.js` | Penghubung ke server | **Jangan diubah** |
-| `icon.webp`, `README.md` | Ikon & petunjuk | Dibaca saja |
-- Ekstrak zip (mis. `sma-04.zip`) ke folder yang mudah dicari. **Jangan** dibuka langsung dari dalam zip.
-
-> 🗣️ SPEAKER NOTES: Setiap kelompok/peserta menerima zip sendiri dari tutor (sma-01.zip sampai sma-06.zip). Pastikan tidak tertukar: Device ID sudah tertanam di dalamnya.
+| `style.css` | Warna & tampilan dashboard | Nanti di P13 |
+| `api.js` | "Kabel" ke server | **Jangan diubah** |
+- Zip dari tutor sudah berisi **Device ID** kelompok kalian (mis. `sma-04`). Ekstrak dulu, **jangan** dibuka dari dalam zip.
 
 ---
 
-### Yang Boleh & Jangan Diubah
+### Yang Kamu Isi Cuma Ini
 ```cpp
-// potongan — bagian atas firmware/sma_room_monitor.ino
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
 const char* DEVICE_ID     = "sma-04";       // sudah diisi tutor, JANGAN diganti
-const char* WIFI_SSID     = "ISI_DI_SINI";  // <- isi nama WiFi kelas
-const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
+const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
+const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
 
-#define DHT_PIN 4      // ubah hanya kalau kabel DHT22 tidak di D4
-#define RELAY_PIN 18   // ubah hanya kalau kabel relay IN tidak di D18
+#define DHT_PIN 13                           // ganti sesuai pemasangan kabel DHT22
+#define RELAY_PIN 14                         // ganti sesuai pemasangan modul relay
 ```
-- Yang kalian isi: **2 baris WiFi**. `DHT_PIN`/`RELAY_PIN` hanya kalau kabel kalian beda.
-- Bagian `JANGAN UBAH` (alamat server, API key, logika kirim) = "kabel" ke server. Jangan disentuh.
+- Isi **2 baris WiFi**. Huruf besar/kecil & spasi harus **persis**.
+- `DHT_PIN` & `RELAY_PIN` cukup **dicek**: 13 dan 14 = sesuai Peta Rakitan.
+- Bagian `JANGAN UBAH` (alamat server, kunci API) sudah diurus tutor.
+
+> 🗣️ SPEAKER NOTES: Ini potongan dari firmware proyek. Program lengkapnya sudah jadi; siswa tidak menulis kode. ESP32 hanya bisa WiFi 2,4 GHz: pakai WiFi kelas yang ditulis di papan.
 
 ---
 
 ### Upload Firmware Proyek
-1. VS Code → PlatformIO → **PIO Home → Open Project** → pilih folder `firmware` di folder kelompok.
-2. Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
-3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
-4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
-
-> 🗣️ SPEAKER NOTES: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di Challenge Easy P10, pastikan sudah dikembalikan ke D18, atau RELAY_PIN disesuaikan. Peran berdua: Operator (laptop, isi WiFi, upload) & Pengamat (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2. Kipas boleh menyala sendiri kalau kelas di atas 30°C: status awal server = mode Otomatis 30°C (dibahas di P12).
-
----
-
-### Forum Diskusi Live Coding
-
-**Kenapa Device ID sudah diisi tutor, dan apa jadinya kalau dua kelompok memakai Device ID yang sama?**
-
-> 🗣️ SPEAKER NOTES: Topik 1 — Upload Firmware Proyek. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+1. Buka folder kelompok → `firmware` → `sma_room_monitor` → **double-click** `sma_room_monitor.ino`.
+2. Isi `WIFI_SSID` dan `WIFI_PASSWORD` sesuai papan tulis.
+3. **Select Board** → **ESP32 Dev Module** + port ESP32 → klik **Upload (→)**.
+4. Buka **Serial Monitor** (`Ctrl+Shift+M` / Mac `⌘+Shift+M`) → **115200 baud**.
+- Macet di `Connecting.....`? Tahan tombol **BOOT** sampai muncul `Writing at ...`.
 
 ---
 
-### Challenge 🟢 Easy — "Online!" (+10)
-
-**TOPIK 1 DARI 3 — CHALLENGE 🟢**
-
-1. Isi `WIFI_SSID` dan `WIFI_PASSWORD`, upload firmware proyek.
-2. Buktikan di Serial Monitor: `Terhubung!` dan `kode respons: 200`.
-3. Buka `index.html` kelompok: angka suhu & kelembapan muncul.
-
-Simpan hasil sebagai `P11_NamaSiswa_C1` (screenshot Serial + dashboard berdampingan)
-
----
-
-### Membaca Serial Monitor Firmware
+### Membaca Laporan ESP32
 ```
 Menghubungkan ke WiFi.....
 Terhubung! IP ESP32 ini: 192.168.1.23
 Suhu: 28.40 C, Kelembapan: 65.20 %
 Kirim data -> kode respons: 200
 ```
-| Baris | Artinya |
-|---|---|
-| `Menghubungkan ke WiFi.....` | ESP32 sedang mencoba masuk WiFi |
-| `Terhubung! IP ...` | WiFi **beres** |
-| `Suhu: ... Kelembapan: ...` | Sensor **beres** |
-| `kode respons: 200` | Server **menerima** data. Cek dashboard! |
-| `Gagal baca sensor DHT22 ...` | WiFi beres, sensor tidak menjawab → cek kabel DHT22 |
-
----
-
-### Tips Engineer: Kode Respons Server
-| Kode | Arti | Di proyek kita biasanya karena… |
+| Muncul | Artinya | Tindakan |
 |---|---|---|
-| **200** | OK | Sukses |
-| **400** | Bad Request | Data rusak (bagian JANGAN UBAH tersentuh?) |
-| **401** | Unauthorized | `API_KEY` terubah. Kembalikan dari zip asli |
-| **404** | Not Found | `SERVER_URL` salah ketik |
-| **5xx** | Server Error | Masalah di server, lapor tutor |
-| **−1** | Tidak sampai | Ada WiFi tapi tidak ada internet / host salah |
-- Satu angka langsung menunjuk **di mana** masalahnya. Baca angkanya dulu sebelum panik.
-
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik: "404 Not Found" adalah server yang menjawab browser dengan angka. Alat kita juga mendapat angka seperti ini setiap kirim data. Bandingkan dengan tebakan siswa tadi.
+| Titik-titik `.....` terus | Belum masuk WiFi | Cek ejaan SSID/password, WiFi harus 2,4 GHz |
+| `kode respons: 200` | Server **menerima** data | Buka dashboard! |
+| `kode respons: 401` | Kunci server salah | Bagian JANGAN UBAH tersentuh → ambil file asli dari zip |
+| `kode respons: -1` (angka minus) | Data tidak sampai server | WiFi ada, tapi internetnya tidak jalan |
+| `Gagal baca sensor DHT22` | WiFi beres, sensor diam | Cek 3 kabel DHT22, terutama **out → D13** |
 
 ---
 
-### Forum Diskusi Live Coding
+### Cek Cepat: Relay atau Sensor yang Bermasalah?
+- Firmware jalan tapi ada bagian yang aneh? Upload **program tes jadi** dulu, tidak perlu diubah:
+  - `P11_1_TesRelay.ino`: relay harus **klik** tiap 2 detik, kipas ikut berputar–berhenti.
+  - `P11_2_TesDHT22.ino`: Serial menampilkan suhu & kelembapan tiap 2 detik.
+- Tes lolos → rakitan beres. Upload lagi firmware proyek.
 
-**Serial menulis `Terhubung!` tapi lalu `kode respons: -1`. Lapisan mana yang sudah beres, lapisan mana yang bermasalah?**
+File cek cepat: `P11_1_TesRelay.ino`, `P11_2_TesDHT22.ino` (ada di linktr.ee/InspiraLabs_SMA)
 
-> 🗣️ SPEAKER NOTES: Topik 2 — Membaca Serial Monitor. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
+> 🗣️ SPEAKER NOTES: Slide ini dipakai hanya untuk kelompok yang bermasalah, tidak perlu dikerjakan semua. Program tes = alat ukur seperti factory test di pabrik: kalau tes relay lolos tapi kipas di firmware tidak jalan, berarti rakitan beres dan yang perlu dicek pengaturan dashboard (dibahas P12).
+
+---
+
+### Tanya Jawab (+2)
+
+**Serial Monitor cuma menulis titik-titik terus, tidak pernah muncul "Terhubung!". Sebutkan 2 kemungkinan penyebabnya.**
+
+> 🗣️ SPEAKER NOTES: Topik 2 — Upload Firmware Proyek. Minta 2–3 siswa menjawab (+2 per siswa) sebelum lanjut ke challenge. Jawaban: nama/password WiFi salah ketik (huruf besar/kecil, spasi), WiFi-nya 5 GHz, terlalu jauh dari router, atau WiFi minta login lewat browser.
+
+---
+
+### Challenge 🟢 Easy — "Online!" (+5)
+
+**TOPIK 2 DARI 3 — CHALLENGE 🟢**
+
+1. Isi `WIFI_SSID` dan `WIFI_PASSWORD`, upload firmware proyek.
+2. Buktikan di Serial Monitor: `Terhubung!` dan `kode respons: 200`.
+3. Buka `index.html` kelompok: angka suhu & kelembapan muncul.
+4. Tunjukkan ke tutor (atau screenshot Serial + dashboard berdampingan).
+
+---
+
+### Perjalanan Data: Sensor sampai Dashboard
+```
+[DHT22] → [ESP32] ──WiFi──► [Server InspiraLabs] ◄── [Dashboard kelompok]
+           tiap ±4 detik lapor:                       ambil data terbaru,
+           Device ID + suhu + kelembapan              tampilkan di layar
+```
+- ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat **server**.
+- **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompokmu di server.
+- Persis seperti ojol: HP driver lapor posisi ke server, aplikasi kamu mengambilnya dari server.
+
+> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik. Bandingkan dengan tebakan siswa di awal sesi. Kenapa tiap ±4 detik: DHT22 hanya boleh dibaca tiap ≥2 detik, dan server melayani semua kelompok sekaligus.
+
+---
+
+### Dashboard Kelompok Online
+- Buka `index.html` di folder kelompok, atau dari HP: **`sma-0X.inspiralabs.id`** (X = nomor Device ID).
+- Kartu suhu otomatis berwarna: **Dingin** di bawah 22°C, **Normal** sampai 29°C, **Panas** di atasnya. Di atas 32°C muncul **banner peringatan**.
+- Titik **Online** = dashboard tersambung ke server (bukan tanda ESP32 hidup).
+- Tombol **Kontrol Fan** sudah ada, tapi butuh **PIN kelompok**. Bocoran P12: kipasnya bakal kalian kendalikan dari HP!
+
+> 🗣️ SPEAKER NOTES: Tampilkan dashboard tutor di proyektor, lalu genggam sensor tutor supaya kelas melihat angkanya naik. Rayakan setiap kelompok yang dashboard-nya pertama kali menampilkan angka.
+
+---
+
+### Tanya Jawab (+2)
+
+**Dashboard menulis "Online", tapi angka suhu tidak berubah sama sekali walau sensor digenggam lama. Bagian mana yang mungkin bermasalah?**
+
+> 🗣️ SPEAKER NOTES: Topik 3 — Dashboard Online. Minta 2–3 siswa menjawab (+2 per siswa). Jawaban: "Online" hanya berarti dashboard bisa menghubungi server. Kalau angka diam, ESP32 tidak mengirim data baru: cek Serial Monitor (WiFi putus? Gagal baca sensor?) atau dashboard yang dibuka milik Device ID lain.
 
 ---
 
 ### Challenge 🟡 Medium — "Uji Sensor Hidup" (+10)
 
-**TOPIK 2 DARI 3 — CHALLENGE 🟡**
+**TOPIK 3 DARI 3 — CHALLENGE 🟡**
 
-1. **Genggam** sensor 20 detik. Berapa detik sampai angka suhu di dashboard mulai naik?
-2. **Tiup** pelan sensor. Mana yang lebih cepat berubah: suhu atau kelembapan?
-3. **Cabut USB**, lepas kabel kuning (out DHT22), colok USB lagi. Apa tulisan di Serial? Apa yang terjadi pada angka di dashboard? Cabut USB, pasang kembali kabelnya, buktikan data normal lagi.
-
-Simpan hasil sebagai `P11_NamaSiswa_C2` (catatan waktu + screenshot)
-
----
-
-### Alat Mandiri: Daya & WiFi
-- Laptop hanya dibutuhkan untuk **upload**. Setelah itu ESP32 cukup diberi listrik **5V USB**: charger HP atau power bank.
-- Program **tersimpan** di ESP32. Dicabut lalu dicolok lagi → otomatis jalan, masuk WiFi, kirim data.
-- WiFi harus **2.4 GHz**. Hotspot HP: aktifkan opsi "2.4 GHz"/"kompatibilitas".
-- Pindah tempat dengan WiFi lain? Ganti nama & password WiFi di firmware lalu **upload ulang**.
+1. **Genggam** sensor DHT22 selama 20 detik. Catat: berapa detik sampai angka suhu di dashboard mulai naik?
+2. **Tiup** pelan sensornya. Mana yang berubah lebih cepat: suhu atau kelembapan?
+3. Jawab: kenapa angka di dashboard tidak langsung berubah saat sensor digenggam?
+4. Tunjukkan catatanmu ke tutor.
 
 ---
 
-### Troubleshooting Berlapis
-Cek dari lapisan paling bawah, **jangan loncat**:
-
-| Lapisan | Bukti beres | Kalau gagal, cek |
-|---|---|---|
-| 1. Daya | LED power ESP32 menyala | Kabel USB, charger |
-| 2. Program | Serial Monitor menampilkan tulisan | Upload ulang, baud 115200 |
-| 3. WiFi | `Terhubung! IP ...` | SSID/password, 2.4 GHz, jarak router |
-| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D4, 3V3, GND) |
-| 5. Server | `kode respons: 200` | Tabel kode respons |
-| 6. Dashboard | Angka berubah di `index.html` | Buka `index.html` dari folder kelompok sendiri, refresh |
-
----
-
-### Forum Diskusi Live Coding
-
-**Kalau alat dibawa ke rumah, apa saja yang harus diubah supaya tetap online?**
-
-> 🗣️ SPEAKER NOTES: Topik 3 — Alat Mandiri. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab sebelum lanjut ke challenge.
-
----
-
-### Challenge 🔴 Hard — "Lepas dari Laptop" (+10)
+### Challenge 🔴 Hard — "Lepas dari Laptop" (+15)
 
 **TOPIK 3 DARI 3 — CHALLENGE 🔴**
 
-1. Cabut ESP32 dari laptop, colok ke **power bank/charger HP**. Buktikan dashboard tetap berubah saat sensor digenggam.
-2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D4** ke **D27**. Ubah **satu angka** `#define DHT_PIN 4` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D4 dan angka 4 setelahnya.
-3. Jawab: kenapa langkah 2 butuh laptop lagi, padahal langkah 1 tidak?
+1. Cabut ESP32 dari laptop, colok ke **power bank** atau charger HP 5V.
+2. Buka **`sma-0X.inspiralabs.id`** di **HP** kalian.
+3. Genggam sensor: buktikan angka di HP tetap naik.
+4. Jawab: kenapa alat tetap jalan padahal laptop sudah dicabut? Kalau alat ini dibawa ke rumah, apa yang harus diubah supaya tetap online?
 
-Simpan hasil sebagai `P11_NamaSiswa_C3` (video pendek / screenshot)
+Simpan hasil sebagai `P11_NamaSiswa_C3` (video pendek: alat + power bank + dashboard di HP)
 
 ---
 
-### Peta Proyek Akhir
+### Peta Petualangan IoT
 ```
-[P9]  Pinout, DHT22, relay, active-LOW (tanpa coding)        ✅
-[P10] Rakit DHT22 + relay + kipas, upload program tes jadi    ✅
-[P11] Upload firmware proyek, data suhu tampil di dashboard   ← HARI INI
-[P12] Kontrol kipas dari dashboard: manual & mode otomatis
-[P13] Rapikan rakitan + kustom dashboard + showcase
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama                     ✅
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok   ← HARI INI
+[P12] Kontrol kipas dari dashboard: manual & otomatis
+[P13] Kustom dashboard + website online + Demo Day
 ```
 
-> 🗣️ SPEAKER NOTES: Ingatkan: simpan folder kelompok baik-baik, jangan tertukar dengan kelompok lain. Folder yang sama dipakai di P12 dan diserahkan ke tutor di P13.
+> 🗣️ SPEAKER NOTES: Rakitan jangan dibongkar: dikumpulkan ke tutor dalam kotak, kabel tetap tertancap. Folder kelompok yang sama dipakai lagi di P12 dan P13.
 
 ---
 
@@ -356,7 +398,7 @@ Buat presentasi Google Slides BAGIAN A sekarang. Setelah selesai, tunggu saya me
 
 ==================== BAGIAN B — GOOGLE DOCS MATERI AJAR (kerjakan setelah "LANJUT B") ====================
 
-Judul dokumen: Materi Ajar P11 SMA — Firmware Jadi, Data Online: Monitoring Suhu di Dashboard
+Judul dokumen: Materi Ajar P11 SMA — Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
 BRAND SYSTEM — WAJIB DIIKUTI KONSISTEN:
 - Warna Maroon: #7A1F2B (untuk heading utama, judul besar)
@@ -384,24 +426,26 @@ STRUKTUR DOKUMEN:
 
 ---------- MULAI ISI MATERI AJAR ----------
 
-# SMA — Pertemuan 11: Firmware Jadi, Data Online: Monitoring Suhu di Dashboard
+# SMA — Pertemuan 11: Rakit & Online: Smart Room Monitor Tampil di Dashboard
 
 | Info | Isi |
 |---|---|
 | Tanggal | Sabtu, 31 Oktober 2026 |
 | Durasi | 70 menit |
-| Target silabus | Siswa mampu meng-upload firmware proyek ke rakitan dan memastikan data sensor tampil real-time di dashboard (proyek akhir tahap 1: monitoring) |
-| Penilaian | Progres proyek akhir: Serial `kode respons: 200` + angka suhu di dashboard kelompok berubah saat sensor digenggam |
-| Kaitan dengan proyek akhir | Firmware `firmware/sma_room_monitor.ino` di **zip proyek dari tutor** (mis. `sma-04.zip`). Program sudah **lengkap**: Device ID kelompok sudah terisi. Siswa hanya mengisi `WIFI_SSID` dan `WIFI_PASSWORD` (serta `DHT_PIN`/`RELAY_PIN` kalau kabelnya beda dari D4/D18). Dashboard `index.html` di zip yang sama sudah tersambung ke Device ID kelompok. |
+| Target silabus | Siswa mampu merakit DHT22 + relay + kipas, meng-upload firmware proyek, dan memastikan data sensor tampil real-time di dashboard kelompok (proyek akhir tahap 1: monitoring) |
+| Penilaian | Keaktifan Tanya Jawab (+2), Challenge (Easy +5, Medium +10, Hard +15), Post-test 5 soal (Google Form). **Tidak ada PR.** |
+| Kaitan dengan proyek akhir | Rakitan hari ini = rakitan **final** proyek akhir. Firmware `firmware/sma_room_monitor/sma_room_monitor.ino` ada di **zip proyek dari tutor** (mis. `sma-04.zip`): program sudah **lengkap** dan Device ID kelompok sudah terisi. Siswa hanya mengisi `WIFI_SSID` dan `WIFI_PASSWORD`, lalu mengecek `DHT_PIN 13` / `RELAY_PIN 14`. Dashboard `index.html` di zip yang sama sudah tersambung ke Device ID kelompok. **Siswa tidak menulis kode.** |
 
-## Alat & bahan (per kelompok)
+## Alat & bahan (per kelompok/individu)
 
-- Rakitan lengkap P10 (DHT22 di D4, relay di D18, kipas di NO) yang sudah lolos 2 program tes
-- Laptop dengan VS Code + PlatformIO
+- ESP32 DevKit V1 + kabel USB **data**, breadboard
+- Modul DHT22 3-pin, modul relay 1-channel 5V, kipas mini **DC 5V**
+- Jumper merah/hitam/kuning/biru/oranye (male-male & male-female), obeng kecil untuk terminal relay
+- Laptop dengan **Arduino IDE 2** + board **ESP32** + library **DHT sensor library** (dari P10; lihat `kurikulum/panduan-instalasi/`)
 - **Zip proyek dari tutor** (`sma-01.zip` … `sma-06.zip`, satu per kelompok/peserta)
-- WiFi kelas **2.4 GHz** + hotspot cadangan
-- Power bank / charger HP 5V + kabel USB data (untuk Challenge Hard)
-- `docs/HANDOUT_SISWA.md` (nama & password WiFi kelas, daftar Device ID)
+- WiFi kelas **2,4 GHz tanpa halaman login** + hotspot cadangan
+- Power bank / charger HP 5V (untuk Challenge Hard)
+- Folder **Kode** pertemuan ini (Drive), hanya untuk cek cepat: `P11_1_TesRelay`, `P11_2_TesDHT22`
 
 ## Persiapan tutor sebelum kelas
 
@@ -409,245 +453,273 @@ Detail lengkap: `kurikulum/sma/p11/Panduan_Pengajar_P11_SMA.md`.
 
 1. Cek backend online: `https://api-ekskulcoding.inspiralabs.id/health`.
 2. Jalankan `py tools/kelompok.py paket`, bagikan `dist/paket/sma-XX.zip` ke **masing-masing** kelompok/peserta (jangan tertukar: Device ID sudah tertanam di dalamnya).
-3. Isi `docs/HANDOUT_SISWA.md` (WiFi kelas). Pastikan WiFi **2.4 GHz** (ESP32 tidak bisa 5 GHz).
-4. Buka sekali folder `firmware` dari salah satu zip lewat PlatformIO dan **Build** di tiap laptop (unduh library).
+3. Set semua dashboard ke **Manual + OFF** (pakai PIN kelompok). Status awal server = **Otomatis, ambang 30°C**, jadi tanpa ini kipas bisa menyala sendiri dan membingungkan.
+4. Di tiap laptop, buka `firmware/sma_room_monitor/sma_room_monitor.ino` dari salah satu zip → **Verify (✓)** sekali.
+5. Jalankan `SCRIPT_P11_SMA.gs` supaya folder **Kode** dan Google Form post-test ada di Drive. Pasang link-nya di Linktree.
 
 ## Alur 70 menit
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–5 | Pembuka | "Rakitan kalian sudah lolos tes. Hari ini kita online-kan." |
-| 5–10 | Pembuka materi | Cover + pertanyaan pemantik |
-| 10–15 | Materi | Perjalanan data, isi zip proyek, aturan "BOLEH/JANGAN UBAH" |
-| 15–25 | Praktek | Isi WiFi → Upload → Serial Monitor |
-| 25–30 | 🟢 Challenge Easy | Online! |
-| 30–36 | Materi | Membaca Serial Monitor firmware + kode respons |
-| 36–43 | 🟡 Challenge Medium | Uji Sensor Hidup |
-| 43–48 | Materi | Alat mandiri: daya, WiFi, troubleshooting berlapis |
-| 48–57 | 🔴 Challenge Hard | Lepas dari Laptop |
-| 57–60 | Peta proyek | Slide peta proyek akhir |
-| 60–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+| 0–5 | Pembuka | Bagikan kit & zip, peran, cara dapat poin |
+| 5–8 | Pembuka materi | Cover + pertanyaan pemantik + agenda |
+| 8–25 | Topik 1: Rakit lengkap | Kenalan 3 komponen, Peta Rakitan, urutan aman. Pengecek mencentang sebelum USB dicolok |
+| 25–27 | Tanya Jawab | Topik 1 |
+| 27–40 | Topik 2: Upload firmware | Isi zip, isi WiFi, upload, baca Serial Monitor. **Tukar peran** |
+| 40–42 | Tanya Jawab | Topik 2 |
+| 42–46 | 🟢 Challenge Easy | Online! |
+| 46–52 | Topik 3: Dashboard online | Perjalanan data, dashboard kelompok, bocoran P12 |
+| 52–54 | Tanya Jawab | Topik 3 |
+| 54–58 | 🟡 Challenge Medium | Uji Sensor Hidup |
+| 58–63 | 🔴 Challenge Hard | Lepas dari Laptop (untuk yang sudah lulus Easy) |
+| 63–64 | Peta petualangan | Rakitan dikumpulkan utuh |
+| 64–70 | Post-test | 5 soal pilihan ganda (Google Form), dikerjakan sendiri-sendiri |
 
-Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Dari Alat Offline ke Alat Online → Perjalanan Data: Sensor sampai Dashboard → Isi Zip Proyek Kelompok → Yang Boleh & Jangan Diubah → Upload Firmware Proyek → 💬 Forum Diskusi → 🟢 Easy → Membaca Serial Monitor Firmware → Tips Engineer: Kode Respons Server → 💬 Forum Diskusi → 🟡 Medium → Alat Mandiri: Daya & WiFi → Troubleshooting Berlapis → 💬 Forum Diskusi → 🔴 Hard → Peta Proyek Akhir → Post-test (Linktree) → Penutup.
+Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Cara Dapat Poin → Kerja Berdua → Kenalan 3 Komponen → Peta Rakitan Lengkap → Urutan Merakit yang Aman → 💬 Tanya Jawab → Isi Zip Proyek Kelompok → Yang Kamu Isi Cuma Ini → Upload Firmware Proyek → Membaca Laporan ESP32 → Cek Cepat: Relay atau Sensor → 💬 Tanya Jawab → 🟢 Easy → Perjalanan Data → Dashboard Kelompok Online → 💬 Tanya Jawab → 🟡 Medium → 🔴 Hard → Peta Petualangan → Post-test (Linktree) → Penutup.
+
+> Buffer: kalau merakit molor, Challenge Hard dilewati. Yang wajib hari ini: rakitan sesuai Peta Rakitan **dan** angka suhu tampil di dashboard kelompok (syarat P12).
 
 ---
 
 ## Slide
 
-### Slide 1 — Dari Alat Offline ke Alat Online ☁️
-- P10: rakitan lolos tes, tapi datanya hanya terlihat di **laptop sendiri** (Serial Monitor).
-- Hari ini: upload **firmware proyek jadi** → ESP32 melapor ke server **tiap ±4 detik** → suhu tampil di **dashboard** yang bisa dibuka dari mana saja.
-- Tidak ada kode yang ditulis. Tugas kalian: **isi WiFi, upload, buktikan datanya sampai**.
+### Kerja Berdua: Perakit & Pengecek 👥
+| Peran | Topik 1 (rakit) | Topik 2–3 (upload & dashboard) |
+|---|---|---|
+| **Perakit** | Memasang kabel | Jadi **Operator**: isi WiFi, klik Upload |
+| **Pengecek** | Membacakan Peta Rakitan, mencentang | Jadi **Pengamat**: baca Serial Monitor & dashboard |
+- Tukar peran di Topik 2. Kerja sendiri? Minta teman sebelah jadi Pengecek **sebelum** USB dicolok.
 
-### Slide 2 — Perjalanan Data: Sensor sampai Dashboard 🔄
-```
-[DHT22] → [ESP32] ──WiFi sekolah──► [Server InspiraLabs] ◄── [Dashboard kelompok]
-           tiap ±4 detik kirim:                              ambil data terbaru
-           Device ID + suhu + kelembapan                     lalu tampilkan angka
-```
-- ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat server (jawaban forum P9).
-- **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompok kalian di server. Sudah diisi tutor di firmware **dan** dashboard, jadi pasti cocok.
-- **Kenapa tiap ±4 detik?** DHT22 hanya boleh dibaca tiap ≥2 detik, dan server melayani semua kelompok sekaligus.
+### Cara Dapat Poin Hari Ini 🏅
+| Kegiatan | Poin |
+|---|---|
+| Bertanya / menjawab saat **Tanya Jawab** | **+2** |
+| Challenge 🟢 **Easy** | **+5** |
+| Challenge 🟡 **Medium** | **+10** |
+| Challenge 🔴 **Hard** | **+15** |
+- Di akhir kelas: **Post-Test** di Google Form, dikerjakan sendiri-sendiri. Tidak ada PR.
 
-### Slide 3 — Isi Zip Proyek Kelompok 📦
+### Kenalan 3 Komponen Hari Ini 🧩
+| Komponen | Perannya | Gampangnya |
+|---|---|---|
+| **DHT22** | Mengukur suhu & kelembapan | "Indera perasa" alat |
+| **Relay** | Saklar yang dipencet oleh ESP32 | "Jari" yang menekan tombol kipas |
+| **Kipas DC 5V** | Beban yang dinyalakan | Yang bikin ruangan adem |
+- Otaknya tetap **ESP32**, yang sudah kalian program di P10.
+
+### Peta Rakitan Lengkap 🗺️
+| Dari (ESP32) | Ke | Warna kabel |
+|---|---|---|
+| 3V3 | DHT22 **+** | Merah |
+| D13 (GPIO 13) | DHT22 **out** | Kuning |
+| GND | DHT22 **−** | Hitam |
+| VIN (5V) | jalur **+** → relay **VCC** dan relay **COM** | Merah / Oranye |
+| GND | jalur **−** → relay **GND** dan kipas **−** | Hitam |
+| D14 (GPIO 14) | relay **IN** | Biru |
+| relay **NO** | kipas **+** | Oranye |
+- **D12** (di antara D14 dan D13) dibiarkan **kosong**.
+- Kipas di **NO** supaya kalau ESP32 mati, kipas ikut mati.
+
+> Catatan tutor: DHT22 di 3V3 karena pin ESP32 hanya tahan 3,3V; relay di VIN karena relay butuh 5V. Cadangan diagram: screenshot simulasi Wokwi `p11/wokwi/P11_PetaRakitan/` (LED biru = pengganti kipas).
+
+### Urutan Merakit yang Aman 🔌
+1. **Cabut USB.** Memasang & memindah kabel selalu dalam keadaan **mati**.
+2. Pasang ESP32 di breadboard: **VIN → jalur +**, **GND → jalur −**.
+3. **DHT22**: 3 kabel (merah, kuning, hitam).
+4. **Relay**: VCC, GND, IN (biru ke D14).
+5. **Kipas**: jalur + → COM, NO → kipas +, kipas − → jalur −. Sekrup terminal kencang, tarik pelan: tidak lepas.
+6. Pengecek **mencentang** Peta Rakitan satu per satu, baru colok USB. Bau/panas? **Cabut segera.**
+
+> Catatan tutor: HANYA kipas DC 5V, tidak ada kabel PLN/stopkontak di meja. Jangan sambungkan kipas langsung ke pin GPIO.
+
+### Isi Zip Proyek Kelompok 📦
 | File / folder | Untuk apa | Hari ini |
 |---|---|---|
-| `firmware/` | Program ESP32 (proyek PlatformIO) | **Dipakai**: isi WiFi, upload |
+| `firmware/` | Program ESP32 (buka di Arduino IDE) | **Dipakai**: isi WiFi, upload |
 | `index.html` | Dashboard kelompok | **Dibuka** di browser |
-| `style.css` | Tampilan dashboard (warna di `:root`) | Belum (P13) |
-| `api.js` | Penghubung ke server | **Jangan diubah** |
-| `icon.webp`, `README.md` | Ikon & petunjuk | Dibaca saja |
-- Ekstrak zip ke folder yang mudah dicari (mis. `Documents/sma-04`). **Jangan** dibuka langsung dari dalam zip.
+| `style.css` | Warna & tampilan dashboard | Nanti di P13 |
+| `api.js` | "Kabel" ke server | **Jangan diubah** |
+- Zip sudah berisi **Device ID** kelompok kalian. Ekstrak dulu, **jangan** dibuka dari dalam zip.
 
-### Slide 4 — Yang Boleh & Jangan Diubah 🚦
+### Yang Kamu Isi Cuma Ini ✏️
 ```cpp
-// potongan — bagian atas firmware/sma_room_monitor.ino
+// potongan — bagian atas firmware/sma_room_monitor/sma_room_monitor.ino
 // ============ BOLEH DIUBAH: identitas device, WiFi & pin ============
 const char* DEVICE_ID     = "sma-04";       // sudah diisi tutor, JANGAN diganti
-const char* WIFI_SSID     = "ISI_DI_SINI";  // <- isi nama WiFi kelas
-const char* WIFI_PASSWORD = "ISI_DI_SINI";  // <- isi password WiFi kelas
+const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
+const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
 
-#define DHT_PIN 4      // ubah hanya kalau kabel DHT22 tidak di D4
-#define RELAY_PIN 18   // ubah hanya kalau kabel relay IN tidak di D18
+#define DHT_PIN 13                           // ganti sesuai pemasangan kabel DHT22
+#define RELAY_PIN 14                         // ganti sesuai pemasangan modul relay
 ```
-- Yang kalian isi: **2 baris WiFi**. `DHT_PIN`/`RELAY_PIN` hanya kalau kabel kalian beda.
-- Bagian `JANGAN UBAH` (alamat server, API key, logika kirim) = "kabel" ke server. Diubah → data kelompok kalian (dan kelompok lain) bisa kacau.
+- Isi **2 baris WiFi** (huruf besar/kecil & spasi harus **persis**). `DHT_PIN` & `RELAY_PIN` cukup **dicek**.
+- Bagian `JANGAN UBAH` (alamat server, kunci API) sudah diurus tutor. ESP32 hanya bisa WiFi **2,4 GHz**.
 
-### Slide 5 — Upload Firmware Proyek ⬆️
-1. VS Code → PlatformIO → **PIO Home → Open Project** → pilih folder `firmware` di dalam folder kelompok.
-2. Buka `sma_room_monitor.ino`, isi `WIFI_SSID` dan `WIFI_PASSWORD` (huruf besar/kecil & spasi harus **persis**).
-3. **Save**, klik **Upload (→)**, lalu **Serial Monitor (🔌)**.
-4. Buka `index.html` (double-click). Tunggu beberapa detik: angka suhu & kelembapan muncul.
+### Upload Firmware Proyek ⬆️
+1. Buka folder kelompok → `firmware` → `sma_room_monitor` → **double-click** `sma_room_monitor.ino`.
+2. Isi `WIFI_SSID` dan `WIFI_PASSWORD` sesuai papan tulis.
+3. **Select Board** → **ESP32 Dev Module** + port ESP32 → klik **Upload (→)**.
+4. Buka **Serial Monitor** (`Ctrl+Shift+M` / Mac `⌘+Shift+M`) → **115200 baud**.
+- Macet di `Connecting.....`? Tahan tombol **BOOT** sampai muncul `Writing at ...`.
 
-> Catatan tutor: Rakitan tidak diubah sama sekali dari P10. Kalau ada kelompok yang memindah kabel di P10 (Challenge Easy), pastikan sudah dikembalikan ke D18, atau `RELAY_PIN` disesuaikan. Peran berdua: **Operator** (laptop, isi WiFi, upload) & **Pengamat** (baca Serial Monitor, cocokkan dengan tabel); tukar di Topik 2.
-
-### Slide 6 — Membaca Serial Monitor Firmware 📟
+### Membaca Laporan ESP32 📟
 ```
 Menghubungkan ke WiFi.....
 Terhubung! IP ESP32 ini: 192.168.1.23
 Suhu: 28.40 C, Kelembapan: 65.20 %
 Kirim data -> kode respons: 200
-{ ... "fanOn":false ... }        <- balasan server (berisi status kipas)
 ```
-| Baris | Artinya |
-|---|---|
-| `Menghubungkan ke WiFi.....` | ESP32 sedang mencoba masuk WiFi |
-| `Terhubung! IP ...` | WiFi **beres** |
-| `Suhu: ... Kelembapan: ...` | Sensor **beres** |
-| `kode respons: 200` | Server **menerima** data. Cek dashboard! |
-| `Gagal baca sensor DHT22 ...` | WiFi beres, tapi sensor tidak menjawab → cek kabel DHT22 |
-
-### Slide 7 — Tips Engineer: Kode Respons Server 🔢
-| Kode | Arti | Di proyek kita biasanya karena… |
+| Muncul | Artinya | Tindakan |
 |---|---|---|
-| **200** | OK | Sukses 🎉 |
-| **400** | Bad Request | Data rusak (bagian JANGAN UBAH tersentuh?) |
-| **401** | Unauthorized | `API_KEY` terubah. Kembalikan dari zip asli |
-| **404** | Not Found | `SERVER_URL` salah ketik |
-| **5xx** | Server Error | Masalah di server, lapor tutor |
-| **−1** | Tidak sampai | Ada WiFi tapi tidak ada internet / host salah |
-- Satu angka langsung menunjuk **di mana** masalahnya. Baca angkanya dulu sebelum panik.
+| Titik-titik `.....` terus | Belum masuk WiFi | Cek ejaan SSID/password, WiFi harus 2,4 GHz |
+| `kode respons: 200` | Server **menerima** data | Buka dashboard! |
+| `kode respons: 401` | Kunci server salah | Bagian JANGAN UBAH tersentuh → ambil file asli dari zip |
+| `kode respons: -1` (angka minus) | Data tidak sampai server | WiFi ada, tapi internetnya tidak jalan |
+| `Gagal baca sensor DHT22` | WiFi beres, sensor diam | Cek 3 kabel DHT22, terutama **out → D13** |
 
-### Slide 8 — Alat Mandiri: Daya & WiFi 🔋
-- Laptop hanya dibutuhkan untuk **upload**. Setelah itu ESP32 cukup diberi listrik **5V USB**: charger HP atau power bank.
-- Program **tersimpan** di ESP32. Dicabut lalu dicolok lagi → otomatis jalan, masuk WiFi, kirim data.
-- WiFi harus **2.4 GHz**. Hotspot HP: aktifkan opsi "2.4 GHz"/"kompatibilitas".
-- Pindah tempat dengan WiFi lain? Nama & password WiFi harus diganti di firmware lalu **upload ulang**.
+### Cek Cepat: Relay atau Sensor yang Bermasalah? 🔍
+- Firmware jalan tapi ada bagian yang aneh? Upload **program tes jadi** dulu, tidak perlu diubah:
+  - `P11_1_TesRelay.ino`: relay harus **klik** tiap 2 detik, kipas ikut berputar–berhenti.
+  - `P11_2_TesDHT22.ino`: Serial menampilkan suhu & kelembapan tiap 2 detik.
+- Tes lolos → rakitan beres. Upload lagi firmware proyek.
 
-### Slide 9 — Troubleshooting Berlapis 🧅
-Cek dari lapisan paling bawah, **jangan loncat**:
+> Catatan tutor: hanya untuk kelompok yang bermasalah. Tes relay lolos tapi kipas diam saat firmware jalan = wajar, karena dashboard sudah di-set **Manual + OFF** (kontrol kipas dibahas P12).
 
-| Lapisan | Bukti beres | Kalau gagal, cek |
-|---|---|---|
-| 1. Daya | LED power ESP32 menyala | Kabel USB, charger |
-| 2. Program | Serial Monitor menampilkan tulisan | Upload ulang, baud 115200 |
-| 3. WiFi | `Terhubung! IP ...` | SSID/password, 2.4 GHz, jarak router |
-| 4. Sensor | `Suhu: ...` | Kabel DHT22 (D4, 3V3, GND) |
-| 5. Server | `kode respons: 200` | Tabel kode respons |
-| 6. Dashboard | Angka berubah di `index.html` | Buka `index.html` dari folder kelompok sendiri, refresh |
-
-### Slide 10 — Peta Proyek Akhir 🗺️
+### Perjalanan Data: Sensor sampai Dashboard 🔄
 ```
-[P9]  Pinout, DHT22, relay, active-LOW (tanpa coding)        ✅
-[P10] Rakit DHT22 + relay + kipas, upload program tes jadi    ✅
-[P11] Upload firmware proyek, data suhu tampil di dashboard   ← HARI INI
-[P12] Kontrol kipas dari dashboard: manual & mode otomatis
-[P13] Rapikan rakitan + kustom dashboard + showcase
+[DHT22] → [ESP32] ──WiFi──► [Server InspiraLabs] ◄── [Dashboard kelompok]
+           tiap ±4 detik lapor:                       ambil data terbaru,
+           Device ID + suhu + kelembapan              tampilkan di layar
 ```
-> Catatan tutor: Ingatkan: simpan folder kelompok baik-baik (jangan sampai tertukar dengan kelompok lain). Folder yang sama dipakai di P12 dan diserahkan ke tutor di P13.
+- ESP32 dan dashboard **tidak bicara langsung**. Keduanya lewat **server**.
+- **Device ID** (mis. `sma-04`) = "alamat rumah" data kelompokmu di server.
+- Persis seperti ojol: HP driver lapor posisi ke server, aplikasi kamu mengambilnya dari server.
+
+### Dashboard Kelompok Online 🌐
+- Buka `index.html` di folder kelompok, atau dari HP: **`sma-0X.inspiralabs.id`** (X = nomor Device ID).
+- Kartu suhu otomatis berwarna: **Dingin** di bawah 22°C, **Normal** sampai 29°C, **Panas** di atasnya. Di atas 32°C muncul **banner peringatan**.
+- Titik **Online** = dashboard tersambung ke server (bukan tanda ESP32 hidup).
+- Tombol **Kontrol Fan** sudah ada, tapi butuh **PIN kelompok**. Bocoran P12: kipasnya bakal kalian kendalikan dari HP!
+
+### Peta Petualangan IoT 🗺️
+```
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama                     ✅
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok   ← HARI INI
+[P12] Kontrol kipas dari dashboard: manual & otomatis
+[P13] Kustom dashboard + website online + Demo Day
+```
+> Catatan tutor: rakitan jangan dibongkar, dikumpulkan ke tutor dalam kotak. Folder kelompok yang sama dipakai lagi di P12 dan P13.
 
 ---
 
-## Forum Diskusi Live Coding
+## Tanya Jawab (+2 keaktifan)
 
-Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab.
+Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab; setiap siswa yang bertanya/menjawab mendapat **+2**.
 
-- **Topik 1 — Upload Firmware Proyek:** Kenapa Device ID sudah diisi tutor, dan apa jadinya kalau dua kelompok memakai Device ID yang sama?
-- **Topik 2 — Membaca Serial Monitor:** Serial menulis `Terhubung!` tapi lalu `kode respons: -1`. Lapisan mana yang sudah beres, lapisan mana yang bermasalah?
-- **Topik 3 — Alat Mandiri:** Kalau alat dibawa ke rumah, apa saja yang harus diubah supaya tetap online?
+- **Pemantik:** Di aplikasi ojol, kamu bisa lihat motor driver bergerak di peta. Siapa yang terus-terusan "lapor", dan lapornya ke mana?
+- **Topik 1 — Rakit Lengkap:** Kalau ESP32 tiba-tiba mati, kipasnya ikut mati atau tetap berputar? Kenapa kita sengaja pasang kipas di NO?
+- **Topik 2 — Upload Firmware Proyek:** Serial Monitor cuma menulis titik-titik terus, tidak pernah muncul "Terhubung!". Sebutkan 2 kemungkinan penyebabnya.
+- **Topik 3 — Dashboard Online:** Dashboard menulis "Online", tapi angka suhu tidak berubah sama sekali walau sensor digenggam lama. Bagian mana yang mungkin bermasalah?
 
-Setiap challenge bernilai **+10** poin (leaderboard).
+Challenge: 🟢 Easy **+5**, 🟡 Medium **+10**, 🔴 Hard **+15** (leaderboard).
 
 ---
 
 ## Challenge
 
-### 🟢 Easy — "Online!"
+### 🟢 Easy — "Online!" (+5)
 1. Isi `WIFI_SSID` dan `WIFI_PASSWORD`, upload firmware proyek.
 2. Buktikan di Serial Monitor: `Terhubung!` dan `kode respons: 200`.
-3. Buka `index.html` kelompok: angka suhu & kelembapan muncul. Screenshot Serial + dashboard berdampingan.
+3. Buka `index.html` kelompok: angka suhu & kelembapan muncul.
+4. Tunjukkan ke tutor (atau screenshot Serial + dashboard berdampingan).
 
-### 🟡 Medium — "Uji Sensor Hidup" 🌡️
-1. **Genggam** sensor 20 detik. Catat: berapa detik sampai angka suhu di dashboard mulai naik?
-2. **Tiup** pelan sensor. Mana yang lebih cepat berubah: suhu atau kelembapan?
-3. **Cabut USB**, lepas kabel kuning (out DHT22), colok USB lagi. Apa yang tertulis di Serial? Apa yang terjadi pada angka di dashboard? Cabut USB, pasang kembali kabelnya, buktikan data normal lagi.
+### 🟡 Medium — "Uji Sensor Hidup" (+10) 🌡️
+1. **Genggam** sensor DHT22 selama 20 detik. Catat: berapa detik sampai angka suhu di dashboard mulai naik?
+2. **Tiup** pelan sensornya. Mana yang berubah lebih cepat: suhu atau kelembapan?
+3. Jawab: kenapa angka di dashboard tidak langsung berubah saat sensor digenggam?
+4. Tunjukkan catatanmu ke tutor.
 
-### 🔴 Hard — "Lepas dari Laptop" 🔋
-1. Cabut ESP32 dari laptop, colok ke **power bank/charger HP**. Buktikan dashboard tetap berubah saat sensor digenggam (buka dashboard di laptop/HP).
-2. **Cabut USB**, pindahkan kabel kuning DHT22 dari **D4** ke **D27**. Ubah **satu angka** `#define DHT_PIN 4` → `27`, upload, buktikan data tetap masuk. Kembalikan ke D4 dan angka 4 setelah selesai.
-3. Jawab: kenapa langkah 2 butuh laptop lagi, padahal langkah 1 tidak?
+### 🔴 Hard — "Lepas dari Laptop" (+15) 🔋
+1. Cabut ESP32 dari laptop, colok ke **power bank** atau charger HP 5V.
+2. Buka **`sma-0X.inspiralabs.id`** di **HP** kalian.
+3. Genggam sensor: buktikan angka di HP tetap naik.
+4. Jawab: kenapa alat tetap jalan padahal laptop sudah dicabut? Kalau alat ini dibawa ke rumah, apa yang harus diubah supaya tetap online?
 
 ---
 
 ## Pembuka Materi: Cover & Pertanyaan Pemantik
 
-- **Tagline cover:** Firmware jadi, rakitan siap: saatnya data suhu kelas tampil online.
-- **Pertanyaan pemantik:** Saat membuka website lalu muncul tulisan "404 Not Found", sebenarnya siapa yang sedang berbicara dengan siapa?
-- **Konteks:** Setiap kali browser atau alat meminta sesuatu, server selalu menjawab dengan sebuah angka. Hari ini alat kita ikut "mengobrol" dengan server.
-- Tampung 2–3 tebakan siswa, jawabannya dibahas di Topik 2 (slide *Tips Engineer: Kode Respons Server*).
+- **Tagline cover:** Sensor, relay, dan kipas dirakit hari ini. Datanya online hari ini juga.
+- **Pertanyaan pemantik:** Di aplikasi ojol, kamu bisa lihat motor driver bergerak di peta. Siapa yang terus-terusan "lapor", dan lapornya ke mana?
+- **Konteks:** Alat yang kita rakit hari ini bekerja dengan cara yang sama persis.
+- Tampung 2–3 tebakan siswa (+2 per penebak), jawabannya dibahas di Topik 3 (slide *Perjalanan Data*).
 
 ---
 
 ## Konten Reels (khusus tim InspiraLabs, tidak ditampilkan di slide)
 
-**Template hook #7 (Curiosity & Secrets — Rasa Penasaran)**
+**Template hook #12 (Actionable Lists — Daftar & Solusi)**
 
-# "Rahasia engineer IoT yang nggak pernah dibocorin: baca angka ini dulu sebelum panik." 🔢
+# "3 hal yang bikin alat IoT pertamamu langsung online, bukan titik-titik selamanya." 📶
 
 Isi slide:
-- 🧭 Kode respons = **GPS debugging**. Satu angka langsung menunjuk **di mana** masalahnya:
-  - **2xx** → beres. **4xx** → salah di request. **5xx** → salah server. **Negatif** → koneksi tidak sampai.
-- 🧅 Troubleshooting **berlapis**: daya → program → WiFi → sensor → server → dashboard. Jangan loncat.
-- 📟 Serial Monitor = "kotak hitam" alatmu. Selalu buka saat ada masalah.
-- 📶 ESP32 cuma bisa WiFi **2.4 GHz**. WiFi 5 GHz = titik-titik selamanya.
+- 🔌 **Kabel USB data**, bukan kabel charger. Kabel charger cuma bawa listrik: ESP32 nyala, tapi laptop nggak bisa ngobrol sama dia.
+- 📶 **WiFi 2,4 GHz**. ESP32 nggak kenal WiFi 5 GHz, dan nggak bisa login di WiFi yang minta halaman login.
+- 🔢 **Baca angkanya**: `200` = data sampai server. `-1` = WiFi ada tapi internet nggak jalan.
+- Bonus: cek kabel sebelum colok USB. Teman jadi "pengecek", kamu yang merakit.
 
-🎙️ **Kalimat hook (pembuka rekaman):** "Rahasia engineer IoT yang nggak pernah dibocorin: baca angka ini dulu sebelum panik."
+🎙️ **Kalimat hook (pembuka rekaman):** "3 hal yang bikin alat IoT pertamamu langsung online, bukan titik-titik selamanya."
 
 📌 **Teks di layar:**
-- Kode respons = GPS debugging 🧭
-- 4xx = cek request-mu
-- 5xx = server · negatif = nggak nyampe
-- Cek berlapis, jangan loncat 🧅
-- ESP32 = WiFi 2.4 GHz saja 📶
+- Kabel DATA, bukan kabel charger 🔌
+- WiFi 2,4 GHz, tanpa halaman login 📶
+- 200 = sampai · -1 = internet mati 🔢
+- Cek kabel dulu, baru colok USB ✅
 
-🎬 **Penutup:** "Simpan tabel ini. Kamu bakal butuh tiap kali bikin alat yang online. Follow buat part selanjutnya!"
+🎬 **Penutup:** "Simpan video ini sebelum bikin alat IoT pertamamu. Follow buat part selanjutnya!"
 
 > Catatan tutor: Narasi lengkap saat rekam:
-> - [0–4 detik] "Rahasia engineer IoT yang nggak pernah dibocorin: baca angka ini dulu sebelum panik."
-> - [4–12 detik] "Setiap kali alatmu kirim data ke server, server jawab pakai angka. Angka ini kayak GPS: langsung nunjuk di mana masalahnya."
-> - [12–22 detik] "Dua ratusan: beres. Empat ratusan: request-nya yang salah. 401 kunci API-mu salah, 404 alamatnya salah ketik."
-> - [22–30 detik] "Lima ratusan: salah server, bukan kamu. Dan kalau angkanya negatif, request-mu bahkan nggak sampai: cek internetnya."
-> - [30–42 detik] "Trik kedua: cek berlapis. Daya, program, WiFi, sensor, server, baru dashboard. Jangan langsung bongkar kabel kalau ternyata cuma salah password WiFi."
-> - [42–52 detik] "Bonus: ESP32 cuma bisa WiFi 2.4 giga. Hotspot 5 giga? Dia bakal muter titik-titik selamanya."
-> - [52–60 detik] "Simpan tabel ini. Kamu bakal butuh tiap kali bikin alat yang online. Follow buat part selanjutnya!"
+> - [0–4 detik] "3 hal yang bikin alat IoT pertamamu langsung online, bukan titik-titik selamanya."
+> - [4–16 detik] "Satu: kabel USB. Banyak kabel cuma buat ngecas. ESP32-nya nyala, tapi laptop nggak bisa kirim program. Pakai kabel data."
+> - [16–30 detik] "Dua: WiFi. ESP32 cuma kenal WiFi 2,4 giga. WiFi 5 giga atau WiFi yang minta login di browser? Dia bakal muter titik-titik selamanya."
+> - [30–44 detik] "Tiga: baca angka di Serial Monitor. Dua ratus artinya data sudah sampai server. Minus satu artinya WiFi-nya ada, tapi internetnya nggak jalan."
+> - [44–54 detik] "Bonus: sebelum colok USB, minta teman ngecek kabelmu satu per satu. Satu kabel nyasar bisa bikin alat nggak mau di-upload."
+> - [54–60 detik] "Simpan video ini sebelum bikin alat IoT pertamamu. Follow buat part selanjutnya!"
 
 ### 🎥 Script Reels Lengkap (untuk rekaman konten)
 
 | Info | Isi |
 |---|---|
-| Template hook | #7 — Curiosity & Secrets (Rasa Penasaran) |
-| Judul | Rahasia engineer IoT: baca angka ini dulu sebelum panik |
+| Template hook | #12 — Actionable Lists (Daftar & Solusi) |
+| Judul | 3 hal yang bikin alat IoT pertamamu langsung online |
 | Durasi | ±60 detik |
-| Pembicara | Tutor (screen record Serial Monitor + rakitan) |
+| Pembicara | Tutor (rakitan di meja + screen record Serial Monitor & dashboard) |
 
 #### Script
 
 | Detik | Visual / B-roll | Narasi | Teks di layar |
 |---|---|---|---|
-| 0–4 | Serial Monitor: `kode respons: 401`, siswa garuk kepala | "Rahasia engineer IoT yang nggak pernah dibocorin: baca angka ini dulu sebelum panik." | Jangan panik, baca ANGKANYA 🔢 |
-| 4–12 | Tulisan besar 2xx / 4xx / 5xx / negatif | "Setiap kali alatmu kirim data ke server, server jawab pakai angka. Angka ini kayak GPS: langsung nunjuk di mana masalahnya." | Kode respons = GPS debugging 🧭 |
-| 12–22 | 200 hijau, 401 & 404 kuning | "Dua ratusan: beres. Empat ratusan: request-nya yang salah. 401 kunci API-mu salah, 404 alamatnya salah ketik." | 4xx = cek request-mu |
-| 22–30 | 500 merah, −1 abu-abu | "Lima ratusan: salah server, bukan kamu. Dan kalau angkanya negatif, request-mu bahkan nggak sampai: cek internetnya." | 5xx = server · negatif = nggak nyampe |
-| 30–42 | Animasi 6 lapisan bertumpuk | "Trik kedua: cek berlapis. Daya, program, WiFi, sensor, server, baru dashboard. Jangan langsung bongkar kabel kalau ternyata cuma salah password WiFi." | Cek berlapis, jangan loncat 🧅 |
-| 42–52 | Serial: `Menghubungkan ke WiFi.........` tanpa henti | "Bonus: ESP32 cuma bisa WiFi 2.4 giga. Hotspot 5 giga? Dia bakal muter titik-titik selamanya." | ESP32 = WiFi 2.4 GHz saja 📶 |
-| 52–60 | Tutor ke kamera, dashboard angka berubah | "Simpan tabel ini. Kamu bakal butuh tiap kali bikin alat yang online. Follow buat part selanjutnya!" | Save tabelnya 💾 Follow 👉 |
+| 0–4 | Serial Monitor: `Menghubungkan ke WiFi..........` tanpa henti | "3 hal yang bikin alat IoT pertamamu langsung online, bukan titik-titik selamanya." | 3 hal biar langsung ONLINE 📶 |
+| 4–16 | Dua kabel USB berdampingan, satu diberi label "DATA" | "Satu: kabel USB. Banyak kabel cuma buat ngecas. ESP32-nya nyala, tapi laptop nggak bisa kirim program. Pakai kabel data." | Kabel DATA, bukan kabel charger 🔌 |
+| 16–30 | Pengaturan hotspot HP, pilih 2,4 GHz | "Dua: WiFi. ESP32 cuma kenal WiFi 2,4 giga. WiFi 5 giga atau WiFi yang minta login di browser? Dia bakal muter titik-titik selamanya." | WiFi 2,4 GHz, tanpa login 📶 |
+| 30–44 | Serial: `kode respons: 200`, lalu angka dashboard berubah | "Tiga: baca angka di Serial Monitor. Dua ratus artinya data sudah sampai server. Minus satu artinya WiFi-nya ada, tapi internetnya nggak jalan." | 200 = sampai · -1 = internet mati 🔢 |
+| 44–54 | Dua siswa: satu merakit, satu menunjuk tabel kabel | "Bonus: sebelum colok USB, minta teman ngecek kabelmu satu per satu. Satu kabel nyasar bisa bikin alat nggak mau di-upload." | Cek kabel dulu ✅ |
+| 54–60 | Tutor ke kamera, sensor digenggam, angka di HP naik | "Simpan video ini sebelum bikin alat IoT pertamamu. Follow buat part selanjutnya!" | Save dulu 💾 Follow 👉 |
 
 #### Caption
 
-Alat IoT kamu gagal kirim data? Baca kode respons-nya dulu 🔢
+Alat IoT pertamamu nggak mau online? Cek 3 hal ini dulu 📶
 
-✅ 2xx → beres
-🔑 401 → API key salah
-🔍 404 → URL salah
-🔥 5xx → masalah server
-📡 negatif → request nggak nyampe (cek internet)
-📶 Bonus: ESP32 cuma bisa WiFi 2.4 GHz
+🔌 Kabel USB DATA, bukan kabel charger
+📶 WiFi 2,4 GHz, tanpa halaman login
+🔢 Baca kode di Serial Monitor: 200 = sampai, -1 = internet mati
+✅ Bonus: minta teman cek kabelmu sebelum colok USB
 
-#InspiraLabs #IoT #ESP32 #Debugging #EkskulCoding #Elektronika #SmartHome
+#InspiraLabs #IoT #ESP32 #ArduinoIDE #EkskulCoding #Elektronika #SmartHome
 
 #### Yang sengaja tidak dibocorkan
-- Isi firmware dan alamat server proyek.
-- Dashboard kelompok dan alur kontrol kipas.
+- Isi firmware, alamat server, dan kunci API proyek.
+- Dashboard kelompok dan cara mengendalikan kipas (P12).
 
 ---
 
@@ -656,14 +728,14 @@ Alat IoT kamu gagal kirim data? Baca kode respons-nya dulu 🔢
 **1. Di firmware proyek dari tutor, baris yang WAJIB kalian isi sendiri adalah…**
 A. `SERVER_URL` dan `API_KEY` B. `DEVICE_ID` C. `WIFI_SSID` dan `WIFI_PASSWORD` D. Isi fungsi `loop()`
 
-**2. Serial Monitor terus menampilkan `Menghubungkan ke WiFi.........` tanpa berhenti. Penyebab paling mungkin adalah…**
-A. Kabel DHT22 longgar B. Nama/password WiFi salah atau WiFi-nya 5 GHz C. Kipas terpasang di NC D. API key salah
+**2. Menurut Peta Rakitan, kabel "out" sensor DHT22 dicolok ke pin…**
+A. D12 B. D13 C. D14 D. VIN
 
-**3. Serial menampilkan `Kirim data -> kode respons: 200`. Artinya…**
-A. Suhu ruangan 200 derajat B. Server menerima data, dashboard seharusnya ikut berubah C. WiFi terputus D. Sensor gagal dibaca
+**3. Serial Monitor terus menampilkan `Menghubungkan ke WiFi.........` tanpa berhenti. Penyebab paling mungkin adalah…**
+A. Kabel DHT22 longgar B. Nama/password WiFi salah ketik atau WiFi-nya 5 GHz C. Kipas terpasang terbalik D. Dashboard belum dibuka
 
-**4. WiFi sudah `Terhubung!`, tapi Serial terus menulis `Gagal baca sensor DHT22`. Yang paling perlu dicek adalah…**
-A. Password WiFi B. Kabel DHT22: out ke D4, + ke 3V3, − ke GND C. File `api.js` D. Kabel kipas di terminal NO
+**4. Serial menampilkan `Kirim data -> kode respons: 200`. Artinya…**
+A. Suhu ruangan 200 derajat B. Server menerima data, dashboard kelompok seharusnya ikut berubah C. WiFi terputus D. Sensor gagal dibaca
 
 **5. Setelah firmware ter-upload, ESP32 dicabut dari laptop lalu dicolok ke power bank. Apa yang terjadi?**
 A. Program hilang, harus upload ulang B. ESP32 hanya bisa jalan kalau tersambung laptop C. Program tetap tersimpan: ESP32 menyala, masuk WiFi, dan kirim data lagi D. Data hanya tampil di Serial Monitor
@@ -672,32 +744,38 @@ A. Program hilang, harus upload ulang B. ESP32 hanya bisa jalan kalau tersambung
 
 ## KHUSUS TUTOR (jangan ditampilkan)
 
+### Kunci Tanya Jawab
+- **Pemantik:** HP driver yang terus lapor posisi ke **server** aplikasi; aplikasi kita mengambil posisi itu dari server. Alat kita: ESP32 lapor suhu ke server tiap ±4 detik, dashboard mengambilnya dari server.
+- **Topik 1:** kipas **ikut mati**. NO = normalnya terbuka; tanpa perintah dari ESP32 saklar terbuka, kipas tidak dapat listrik.
+- **Topik 2:** nama/password WiFi salah ketik (huruf besar/kecil, spasi), WiFi 5 GHz, WiFi minta login lewat browser, atau terlalu jauh dari router.
+- **Topik 3:** "Online" hanya berarti dashboard bisa menghubungi server. ESP32 tidak mengirim data baru (WiFi putus / `Gagal baca sensor`), atau dashboard yang dibuka milik Device ID lain.
+
 ### Kunci Challenge
 
 **Easy:** bukti = Serial `kode respons: 200` + dashboard kelompok menampilkan angka.
 
 **Medium:**
-1. Dashboard mulai berubah ±4–10 detik (firmware kirim tiap 4 detik + dashboard mengambil data berkala; suhu DHT22 sendiri naik pelan).
-2. **Kelembapan** berubah jauh lebih cepat saat ditiup (uap napas).
-3. Serial: `Gagal baca sensor DHT22, coba lagi 4 detik lagi...` berulang. Dashboard **berhenti berubah** (tetap menampilkan angka terakhir, karena ESP32 tidak mengirim data baru). Bahas: dashboard "Online" berarti **server** bisa dihubungi, belum tentu sensornya sehat.
+1. Dashboard mulai berubah **±4–10 detik** setelah digenggam (firmware kirim tiap 4 detik + dashboard mengambil data berkala; suhu DHT22 sendiri naik pelan).
+2. **Kelembapan** berubah jauh lebih cepat saat ditiup (uap air dari napas).
+3. Ada dua jeda: sensor butuh waktu ikut hangat, dan ESP32 hanya lapor tiap ±4 detik. Jawaban yang menyebut salah satunya dianggap benar.
 
 **Hard:**
-1. Dashboard tetap berubah → alat sudah **mandiri**.
-2. Data tetap masuk dari D27.
-3. Program tersimpan di flash ESP32 dan jalan sendiri saat diberi listrik. Tapi **mengubah** program (angka pin) berarti membuat program baru → harus di-upload lewat laptop.
+1. Angka di HP tetap naik → alat sudah **mandiri**.
+2. Program tersimpan di memori ESP32 dan jalan sendiri begitu diberi listrik; laptop hanya dipakai untuk upload.
+3. Dibawa ke rumah: ganti `WIFI_SSID` & `WIFI_PASSWORD` ke WiFi rumah (2,4 GHz), lalu **upload ulang** lewat laptop.
 
 ### Catatan tutor
-- Kalau ada kelompok mendapat **401/404**: hampir pasti bagian `JANGAN UBAH` tersentuh. Ganti file `.ino` dengan salinan dari zip asli, isi WiFi lagi.
-- Kalau ada dua kelompok yang angka dashboard-nya "saling menimpa": cek zip tertukar (Device ID sama).
-- Relay & kipas belum dibahas hari ini, tapi relay **sudah mengikuti server**: status awal tiap Device ID di server = mode **Otomatis, ambang 30°C**. Jadi kalau kelas di atas 30°C (atau sensor digenggam di Medium), kipas **boleh menyala sendiri**: itu normal, bukan rusak. Supaya tidak membingungkan, set tiap dashboard ke **Manual + OFF** (pakai PIN) sebelum kelas, atau jelaskan singkat "ini bocoran P12".
-- Kipas menyala terus padahal suhu < 30°C / dashboard menunjukkan kipas OFF → kemungkinan modul relay **active-HIGH** → dibahas di P12 (ubah satu kata `RELAY_ACTIVE_LOW`).
+- Kelompok mendapat **401**: hampir pasti bagian `JANGAN UBAH` tersentuh. Ganti file `.ino` dengan salinan dari zip asli, isi WiFi lagi.
+- Angka dua kelompok "saling menimpa": zip tertukar (Device ID sama).
+- Kipas menyala sendiri: dashboard masih mode **Otomatis** (status awal server, ambang 30°C) → set ke Manual + OFF pakai PIN. Kipas menyala terus walau dashboard OFF → kemungkinan relay active-HIGH, dibahas di P12 (`RELAY_ACTIVE_LOW`).
 
 ### Kunci Post-Test
 1. C 2. B 3. B 4. B 5. C
 
 ### Pembahasan singkat
 - No. 1: Device ID sudah diisi tutor; `SERVER_URL` & `API_KEY` = bagian JANGAN UBAH.
-- No. 2: ESP32 hanya mendukung WiFi 2.4 GHz, dan SSID/password peka huruf besar-kecil.
-- No. 4: lapisan WiFi beres, lapisan sensor yang gagal (troubleshooting berlapis).
+- No. 2: D13 = `DHT_PIN 13`. D12 sengaja dikosongkan karena bikin upload gagal; D14 untuk relay.
+- No. 3: ESP32 hanya mendukung WiFi 2,4 GHz, dan SSID/password peka huruf besar-kecil.
+- No. 5: program tersimpan di memori ESP32, cukup diberi listrik 5V.
 
 ---------- SELESAI ISI MATERI AJAR ----------

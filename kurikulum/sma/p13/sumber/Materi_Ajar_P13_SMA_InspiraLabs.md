@@ -1,80 +1,78 @@
-# SMA — Pertemuan 13: Rapikan, Kustom, Serahkan: Showcase Smart Room Monitor
+# SMA — Pertemuan 13: Dashboard Punya Kita + Demo Day
 
 | Info | Isi |
 |---|---|
 | Tanggal | Sabtu, 14 November 2026 |
 | Durasi | 70 menit |
-| Target silabus | Siswa mampu menyelesaikan, merapikan, dan mempresentasikan proyek akhir IoT |
-| Penilaian | Presentasi proyek akhir (rubrik showcase) + folder kelompok lolos checklist serah terima |
-| Kaitan dengan proyek akhir | Rakitan dirapikan jadi alat yang siap dipamerkan. Di folder kelompok (mis. `sma-04`): kartu **Profil Kelompok** (`.kartu-profil` di `index.html`: nama kelompok, anggota, `foto-kelompok.jpg`) dan warna tema di `:root` paling atas `style.css`. Folder lalu **diserahkan ke tutor** dan tayang di `https://<device-id>.inspiralabs.id`. |
+| Target silabus | Siswa mampu mengkustom dashboard proyek akhir (tampilan & aturan), menayangkannya online, dan mempresentasikan proyek akhir IoT |
+| Penilaian | Keaktifan Tanya Jawab & Demo Day (+2), Challenge (Easy +5, Medium +10, Hard +15), Demo Day (rubrik di Khusus Tutor), Post-test 5 soal (Google Form). **Tidak ada PR.** |
+| Kaitan dengan proyek akhir | Alat dari P12 (DHT22 di D13, relay di D14, kipas di NO, firmware `sma_room_monitor`) tidak diubah. Yang diutak-atik hari ini hanya **folder website kelompok** (mis. `sma-04`): warna di `:root` paling atas `style.css`, kartu **PROFIL KELOMPOK** + `foto-kelompok.jpg`, aturan `AMBANG_BATAS_SUHU_TINGGI` + teks peringatan, dan panel tips di kotak kosong `bagianEdukasi` (`index.html`). Folder lalu di-zip, diserahkan ke tutor, dan tayang di `https://<device-id>.inspiralabs.id`. |
 
 ## Alat & bahan (per kelompok)
 
-- Rakitan lengkap yang sudah lolos P12 (kontrol manual & otomatis jalan)
-- Kabel jumper pendek, cable tie / selotip, label/spidol, kotak kecil/kardus untuk casing (opsional), gunting/cutter (dipakai dengan pengawasan)
-- Laptop dengan **folder kelompok** (dari zip tutor) + **foto kelompok**
-- Power bank / charger HP 5V, WiFi kelas 2.4 GHz + hotspot cadangan
-- Proyektor untuk showcase
+- Alat proyek akhir dari P12 (ESP32 + DHT22 + relay + kipas, firmware terpasang) + kabel USB / power bank
+- Laptop dengan **folder kelompok** dari zip P11 (`sma-0X`) + **VS Code** (cadangan: Notepad / TextEdit) + Chrome
+- HP untuk foto kelompok dan membuka website saat Demo Day
+- WiFi kelas **2.4 GHz** (sama seperti P11–P12), proyektor, timer
 
 ## Persiapan tutor sebelum kelas
 
 Detail lengkap: `kurikulum/sma/p13/Panduan_Pengajar_P13_SMA.md`.
 
-1. Siapkan alat tutor yang berjalan sebagai demo & cadangan.
-2. Siapkan tempat pengumpulan folder (flashdisk/Drive), daftar `sma-01`…`sma-06`, dan PIN kelompok (`docs/HANDOUT_SISWA.md`).
-3. Setelah kelas: cek & deploy tiap folder dengan `py tools/kelompok.py deploy <id> <zip|folder>` (pakai `--dry-run` dulu).
-4. Print rubrik showcase (Khusus Tutor).
+1. Cek backend online (`https://api-ekskulcoding.inspiralabs.id/health`) dan semua alat kelompok masih mengirim data.
+2. Siapkan salinan `dist/paket/sma-0X.zip` (`py tools/kelompok.py paket`) untuk kelompok yang folder P11-nya hilang.
+3. Siapkan tempat pengumpulan zip (flashdisk / folder Drive) + daftar centang `sma-01` … `sma-06`.
+4. Laptop tutor siap deploy selama kelas: `py tools/kelompok.py deploy sma-0X <zip> --dry-run`, lalu tanpa `--dry-run`, commit, push (lihat `deploy/README.md`).
+5. Folder **Kode** P13 berisi `C3_P13_Hard_PanelTips/panel_tips.txt` (snippet Challenge Hard).
 
 ## Alur 70 menit
 
 | Menit | Kegiatan | Keterangan |
 |---|---|---|
-| 0–3 | Pembuka | Foto rakitan P10 vs alat jadi tutor: "mana yang siap dipamerkan?" |
-| 3–7 | Pembuka materi | Cover + pertanyaan pemantik |
-| 7–11 | Materi | Prinsip merapikan rakitan + posisi sensor, forum |
-| 11–22 | 🟢 Challenge Easy | Rakitan Rapi |
-| 22–25 | Materi | Kustom dashboard: profil, warna, foto, forum |
-| 25–33 | 🟡 Challenge Medium | Dashboard Kelompok |
-| 33–36 | Materi | Aturan serah terima folder + checklist demo, forum |
-| 36–42 | 🔴 Challenge Hard | Siap Tayang |
-| 42–58 | Showcase | 6 penampil × ±2,5 menit (pakai timer) |
-| 58–61 | Refleksi | Refleksi semester |
-| 61–70 | Post-test | 5 soal pilihan ganda (Google Form) |
+| 0–5 | Pembuka | Cover, pemantik, agenda, cara dapat poin |
+| 5–12 | Materi | Isi folder website, warna `:root`, profil & foto, Tanya Jawab |
+| 12–17 | 🟢 Challenge Easy | Ganti Baju Dashboard |
+| 17–21 | Materi | Otak dashboard: aturan "kalau…", Tanya Jawab |
+| 21–28 | 🟡 Challenge Medium | Aturan Kita Sendiri |
+| 28–31 | Materi | Kotak kosong = panggung bonus, Tanya Jawab |
+| 31–39 | 🔴 Challenge Hard | Panel Tips Pintar (tutor mulai deploy zip yang masuk) |
+| 39–42 | Materi | Serahkan website, website kelompok online |
+| 42–58 | Demo Day | 6 penampil × ±2,5 menit |
+| 58–62 | Refleksi | Tanya Jawab + Peta Petualangan IoT |
+| 62–70 | Post-test & penutup | 5 soal pilihan ganda (Google Form) + foto bersama |
 
-**Peran.** Berdua: satu **merapikan rakitan**, satu **mengkustom dashboard** (Easy & Medium bisa paralel), lalu sama-sama menyiapkan showcase; keduanya wajib bicara saat showcase. Sendiri: kerjakan Easy dulu, Medium boleh selesai di rumah sebelum folder dikirim (batas waktu dari tutor).
+**Peran.** Berdua: satu memegang **laptop** (edit `index.html`/`style.css`), satu menyiapkan **foto & alat** (cek alat online, latihan demo), tukar di Topik 2; keduanya bicara saat Demo Day. Sendiri: kerjakan Easy dulu, Medium & Hard sejauh waktu cukup. Yang belum selesai **tidak dibawa pulang**: zip dikumpulkan apa adanya.
 
-Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Dari Prototipe ke Alat Siap Pamer → Prinsip Merapikan Rakitan → Posisi Sensor & Casing → 💬 Forum Diskusi → 🟢 Easy → Kustom Dashboard Kelompok → Foto Kelompok & Bonus → 💬 Forum Diskusi → 🟡 Medium → Aturan Serah Terima Folder → Website Kelompok Tayang Online → Checklist Sebelum Demo Alat IoT → 💬 Forum Diskusi → 🔴 Hard → Format Showcase → Refleksi Semester → Post-test (Linktree) → Penutup.
+Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Cara Dapat Poin → Isi Folder Website-mu → Ganti Warna di Satu Tempat → Profil & Foto Kelompok → 💬 Tanya Jawab → 🟢 Easy → Otak Dashboard: Aturan "Kalau…" → 💬 Tanya Jawab → 🟡 Medium → Kotak Kosong = Panggung Bonus → 💬 Tanya Jawab → 🔴 Hard → Serahkan Website-mu → Website Kelompok Online → Demo Day: Format 2 Menit → 💬 Tanya Jawab → Peta Petualangan IoT → Post-test (Linktree) → Penutup.
 
 ---
 
 ## Slide
 
-### Slide 1 — Dari Prototipe ke Alat Siap Pamer 🧩
-- P10–P12: rakitan **jalan**: data naik ke dashboard, perintah kipas turun dari dashboard. ✅
-- Tapi kabel panjang semrawut = mudah **lepas** saat dibawa, sulit dicek, dan terlihat seperti eksperimen.
-- Hari ini 3 hal: **rapikan rakitan**, **kustom dashboard**, **serahkan folder** ke tutor, lalu **showcase**.
-
-### Slide 2 — Prinsip Merapikan Rakitan 🧹
-1. **Cabut USB** dulu. Rapikan satu kabel per waktu, lalu tes lagi.
-2. **Kabel pendek**: ganti jumper panjang dengan yang pas. Kabel berlebih → digulung dan diikat, bukan dibiarkan menjuntai.
-3. **Warna konsisten**: merah = daya, hitam = GND, kuning = data sensor, biru = relay IN, oranye = jalur kipas.
-4. **Terminal relay terkunci**: sekrup kencang, tidak ada serabut kabel keluar. Tarik pelan: tidak lepas.
-5. **Label**: tempel label kecil "DHT22 → D4", "RELAY → D18", nama kelompok & Device ID (mis. `sma-04`).
-6. Setelah rapi: **tes ulang** kontrol manual & otomatis dari dashboard.
-
-### Slide 3 — Posisi Sensor & Casing 📦
-- **DHT22 di luar casing** atau di dekat lubang ventilasi, **jauh** dari ESP32 & regulator. ESP32 ikut hangat → sensor yang terlalu dekat membaca suhu **lebih tinggi** dari ruangan.
-- **Kipas** menghadap keluar, baling-baling tidak tersentuh kabel.
-- **USB** mudah dicolok dari luar casing (untuk power bank & upload ulang).
-- **Lampu relay** sebaiknya terlihat (indikator kipas aktif).
-- Keselamatan tetap sama: **hanya kipas DC 5V**, tidak ada kabel PLN. Bagian logam terminal tidak terbuka keluar casing.
-
-### Slide 4 — Kustom Dashboard Kelompok 🎨
-| Yang diubah | Di mana | Contoh |
+### Slide 1 — Isi Folder Website-mu 📁
+| File | Boleh diubah? | Isinya |
 |---|---|---|
-| Nama kelompok & anggota | `index.html`, bagian **PROFIL KELOMPOK** (`.kartu-profil`) | `<h2>Tim Angin Sejuk</h2>` |
-| Warna tema | `style.css`, bagian `:root` paling atas | `--warna-primer: #7A1F2B;` |
-| Foto kelompok | File `foto-kelompok.jpg` di folder yang sama dengan `index.html` | Foto bersama alat |
+| `index.html` | ✅ Ya | Isi halaman: teks, profil, aturan |
+| `style.css` | ✅ Ya | "Baju" dashboard: warna, ukuran |
+| `api.js` | ❌ Jangan | Kabel ke server, sudah diurus tutor (Device ID terisi) |
+| `foto-kelompok.jpg` | ✅ Ya | Foto kalian (±500 KB) |
+- Buka folder kelompok di **VS Code**. Lihat hasil: **double-click `index.html`** → Chrome. Angka yang tampil tetap angka asli dari alat kalian.
+- Siklus kerja: **Edit → Save → Refresh**.
+
+### Slide 2 — Ganti Warna di Satu Tempat 🎨
+```css
+/* potongan — style.css, paling atas */
+:root {
+  --warna-primer: #ff8a3d;     /* aksen utama */
+  --warna-sekunder: #3ddc97;   /* aksen kedua */
+  --warna-bg: #f4f7fb;         /* latar halaman */
+}
+```
+- **Hex color** = `#` + 6 huruf/angka. Cari "color picker" di Google, salin kodenya.
+- `--warna-primer` itu **variabel**: ditulis sekali, dipakai di banyak tempat. Ganti di sini → seluruh dashboard ikut.
+- Masih ada variabel warna lain di `:root` (status suhu, fan). Boleh dicoba, nama variabelnya jangan diubah.
+
+### Slide 3 — Profil & Foto Kelompok 📸
 ```html
 <!-- potongan — index.html, BAGIAN: PROFIL KELOMPOK -->
 <div class="kartu-profil">
@@ -85,198 +83,190 @@ Urutan di PPT: Linktree & QR → Cover → Pertanyaan Pemantik → Agenda → Da
   </div>
 </div>
 ```
-- Ganti **teks**-nya saja. Nama `class` dan `id` jangan diubah: dipakai tampilan & program.
-- Simpan, lalu **refresh** browser untuk melihat hasilnya.
+- Ganti **teks**-nya saja. `class` dan `id` dipakai tampilan & program, jangan diubah.
+- Foto: nama **persis** `foto-kelompok.jpg` di folder yang sama dengan `index.html`. Foto HP asli (3–8 MB) dikecilkan dulu.
+- Foto tidak muncul? `onerror="this.remove()"` menyembunyikan gambar yang gagal dimuat. Cek nama & lokasi file.
 
-### Slide 5 — Foto Kelompok & Bonus 📸
-- Nama file **persis** `foto-kelompok.jpg` (huruf kecil, tanda minus, `.jpg`). Bukan `Foto Kelompok.JPG`, bukan `.png`/`.jpeg`.
-- Ukuran wajar: lebar ±1000–1200 px, **di bawah ±500 KB**. Foto HP asli (5–10 MB) → kecilkan dulu (fitur *resize*/kirim lewat chat lalu simpan).
-- Foto tidak muncul? `onerror` membuat gambar disembunyikan. Cek **nama file** dan **lokasinya**.
-- **Bonus (opsional):** isi kotak kosong **grafik riwayat**, **mode gelap**, atau **panel edukasi** DHT22. Library hanya lewat **CDN** (`<script src="https://...">`), tanpa npm.
+### Slide 4 — Otak Dashboard: Aturan "Kalau…" 🧠
+```js
+// potongan — index.html, bagian <script>
+var AMBANG_BATAS_SUHU_TINGGI = 32;   // di atas ini, banner peringatan muncul
 
-### Slide 6 — Aturan Serah Terima Folder 📋
+if (suhuSaatIni > AMBANG_BATAS_SUHU_TINGGI) {
+  teks.textContent = "⚠️ Suhu terlalu tinggi (" + suhuSaatIni.toFixed(1) + "°C)! Pastikan ventilasi ruangan baik.";
+}
+```
+- `if` = **"kalau"**. Kalau kondisinya benar, perintah di dalam `{ }` dijalankan.
+- Kartu suhu juga memakai aturan: **< 22** Dingin, **≤ 29** Normal, di atasnya Panas. Kelembapan: **< 40** Kering, **≤ 70** Normal, di atasnya Lembap.
+- Yang boleh diubah: **angka** dan **teks di dalam tanda kutip**. Tanda `+` dan `suhuSaatIni.toFixed(1)` (angka suhu dengan 1 desimal) biarkan.
+
+### Slide 5 — Kotak Kosong = Panggung Bonus 🎁
+- Dashboard punya kotak kosong `<div class="kartu-kosong" id="bagianEdukasi">` berisi komentar `TULIS KODEMU DI SINI`.
+- Hari ini kotak itu diisi **panel tips** yang berubah sendiri sesuai suhu (kode jadi di `C3_P13_Hard_PanelTips/panel_tips.txt`, lihat Challenge Hard).
+- `setInterval(…, 2000)` = "jalankan ini tiap 2 detik". `else if` = "kalau tidak, kalau…". Aturan dicek dari atas; yang pertama benar langsung dipakai.
+
+### Slide 6 — Serahkan Website-mu 📦
 | Aturan | Kenapa |
 |---|---|
-| `index.html` tetap jadi halaman utama | Server membuka `index.html` saat alamat website dikunjungi |
-| Semua file (foto, CSS, ikon) **di dalam folder** | Alamat seperti `C:\Users\...` hanya ada di laptopmu |
-| **Tanpa npm**, library hanya via **CDN** | Server hanya menyajikan file, tidak menjalankan `npm install` |
-| `api.js` **tidak diubah** | Penghubung ke server; Device ID sudah diisi tutor |
-| Ukuran folder **≤ ±5 MB**, tanpa `firmware/.pio` | Folder `.pio` (hasil build) bisa ratusan MB |
-| Foto bernama `foto-kelompok.jpg` | Sudah dipanggil oleh `index.html` |
-- Serahkan **seluruh folder kelompok** (mis. `sma-04`, boleh di-zip jadi `sma-04.zip`) ke tutor.
+| Halaman utama tetap `index.html` | Server membuka `index.html` saat alamat website dikunjungi |
+| Semua file (foto, CSS) **di dalam folder** | Alamat `C:\Users\...` hanya ada di laptopmu |
+| `api.js` **tidak diubah**, tanpa npm | Saat deploy `api.js` selalu diganti versi tutor; server tidak menjalankan `npm install` (library hanya lewat link `https://` CDN) |
+| Ukuran folder **≤ 5 MB** | Zip > 10 MB ditolak saat deploy |
+| Zip bernama Device ID: `sma-04.zip` | Supaya tidak tertukar antar-kelompok |
+- Folder `firmware/` boleh ikut di zip; saat deploy otomatis dibuang.
 
-### Slide 7 — Website Kelompok Tayang Online 🌐
-- Tutor memeriksa folder lalu menayangkannya di **`https://<device-id>.inspiralabs.id`**, contoh `https://sma-04.inspiralabs.id`.
-- Siapa pun bisa membuka dan **melihat** suhu & kelembapan kelas kalian secara real-time.
-- **Mengubah kipas** dari website publik tetap butuh **PIN kelompok** (P12). Pengunjung tanpa PIN hanya melihat.
-- Alat harus **menyala & terhubung WiFi** supaya angkanya hidup. Alat mati → angka berhenti di data terakhir.
+### Slide 7 — Website Kelompok Online 🌐
+- Tutor memeriksa zip lalu menayangkannya di **`https://sma-0X.inspiralabs.id`**.
+- Siapa pun bisa **melihat** data alat kalian dari HP mana pun. **Menekan tombol kipas** tetap butuh **PIN kelompok** (P12).
+- Alat harus **menyala & tersambung WiFi** supaya angkanya hidup. Status "Online" di pojok dashboard = dashboard tersambung ke **server**, belum tentu alatnya menyala.
 
-### Slide 8 — Checklist Sebelum Demo Alat IoT ✅
-- **Daya**: uji pakai power bank, jangan bergantung pada laptop. Bawa kabel **data** cadangan.
-- **Jaringan**: siapkan hotspot cadangan **2.4 GHz**. Ganti WiFi = isi ulang 2 baris WiFi + upload ulang.
-- **Log**: buka Serial Monitor di layar kedua. Kalau gagal, langsung terlihat lapisan mana yang bermasalah (P11).
-- **Rencana cadangan**: rekam video demo yang berhasil sebelum tampil.
-- **Fail-safe**: kipas di terminal **NO**. Kalau ESP32 mati/restart, kipas ikut mati.
-- **Cerita**: mulai presentasi dari **masalah** ("kelas panas"), bukan dari komponen.
+### Slide 8 — Demo Day: Format 2 Menit 🎤
+1. **Kenalkan** kelompok & masalahnya ("Kelas kami panas…") — 15 detik.
+2. **Tunjukkan** website di proyektor/HP — 30 detik.
+3. **Demo live** 1 hal: genggam sensor → angka naik → kipas Otomatis menyala, atau tombol Manual dari HP — 45 detik.
+4. **Cerita** 1 hal paling seru / paling bikin pusing — 30 detik.
+- Penonton yang bertanya: **+2**.
 
-### Slide 9 — Format Showcase 🎤
-1. **Masalah**: kenapa ruangan perlu dipantau & kipas dikontrol? (1 kalimat)
-2. **Demo langsung**: genggam sensor → suhu naik di dashboard → mode **Otomatis** menyalakan kipas. Lalu kontrol **Manual** dari dashboard.
-3. **Bedah rakitan**: tunjukkan jalur kabel & alasan memilih **D4** dan **D18**, kenapa kipas di **NO**, apa itu **active-LOW**.
-4. **1 masalah terberat** dan cara kalian menemukannya (Serial Monitor? multimeter? tabel troubleshooting?).
-5. **Rencana pengembangan**: kalau ada waktu 1 bulan lagi, apa yang ditambah?
-
-> Catatan tutor: ±2,5 menit per penampil, pakai timer. Sebelum tampil, ambang diatur = suhu ruangan + 1°C supaya demo genggam cepat terlihat. Berdua: keduanya wajib bicara.
-
-### Slide 10 — Refleksi Semester ✨
-- Dari HTML statis → dashboard interaktif → **alat IoT yang kalian rakit sendiri**, tayang online dan bisa dikontrol dua arah.
-- Skill yang kalian pegang sekarang: **membaca pinout, merakit sensor & aktuator, logika active-LOW, keselamatan listrik, troubleshooting berlapis, alur client-server**. Ini fondasi profesi IoT engineer, teknisi elektronika, dan embedded engineer.
+### Slide 9 — Peta Petualangan IoT 🗺️
+```
+[P10] Kenalan ESP32 + instal Arduino IDE + kedip LED pertama                    ✅
+[P11] Rakit DHT22 + relay + kipas, upload firmware, data tampil di dashboard kelompok ✅
+[P12] Kontrol kipas dari dashboard: manual & otomatis                           ✅
+[P13] Kustom dashboard + website online + Demo Day                              ← HARI INI
+```
+- Ide lanjutan: penyiram tanaman otomatis, alarm pintu kelas, pemantau suhu kandang, lampu kamar dari HP.
 
 ---
 
-## Forum Diskusi Live Coding
+## Tanya Jawab (+2 keaktifan)
 
-Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab.
+Ditampilkan di akhir tiap topik, sebelum challenge. Minta 2–3 siswa menjawab; setiap siswa yang bertanya/menjawab mendapat **+2**. Hari ini penonton yang bertanya saat Demo Day juga mendapat **+2**.
 
-- **Topik 1 — Merapikan Rakitan:** Kenapa sensor DHT22 tidak boleh ditaruh menempel di sebelah ESP32 di dalam kotak tertutup?
-- **Topik 2 — Kustom Dashboard:** Foto kelompok tidak muncul di dashboard. Apa saja 3 kemungkinan penyebabnya?
-- **Topik 3 — Serah Terima & Demo:** Kenapa website yang jalan di laptopmu bisa rusak saat ditayangkan online kalau fotonya dipanggil dari `C:\Users\...`?
+- **Pemantik:** Dua aplikasi fiturnya sama persis. Kenapa kamu lebih suka yang satu?
+- **Topik 1 — Ganti Baju Dashboard:** Kenapa cukup ganti warna di `:root` saja, tapi seluruh dashboard ikut berubah?
+- **Topik 2 — Ubah Otak Dashboard:** Kalau batas "Panas" diubah dari 29 jadi 25, apa yang dilihat pengunjung saat ruangan 27°C? Apakah ruangannya jadi lebih panas?
+- **Topik 3 — Panel Pintar:** Suhu 35°C dan kelembapan 80%. Kalau aturan kelembapan ditaruh di paling bawah, tips mana yang muncul? Kenapa?
+- **Setelah Demo Day:** Kalau alat ini kamu kembangkan, mau dipasang di mana dan buat apa?
 
-Setiap challenge bernilai **+10** poin (leaderboard).
+Challenge: 🟢 Easy **+5**, 🟡 Medium **+10**, 🔴 Hard **+15** (leaderboard).
 
 ---
 
 ## Challenge
 
-### 🟢 Easy — "Rakitan Rapi"
-1. Rapikan rakitan memakai 6 prinsip di slide *Prinsip Merapikan Rakitan* (cabut USB dulu!).
-2. Tempel label pin dan label Device ID kelompok.
-3. Tes ulang: kontrol Manual dari dashboard + mode Otomatis dengan genggaman tangan. Dua-duanya harus tetap jalan.
-4. Foto **sebelum** (foto P10) dan **sesudah** dirapikan.
+### 🟢 Easy — "Ganti Baju Dashboard" (+5)
+1. Isi nama kelompok dan nama anggota di **PROFIL KELOMPOK** (`index.html`).
+2. Ganti **3 warna** di `:root` (`--warna-primer`, `--warna-sekunder`, `--warna-bg`) di `style.css`.
+3. (Boleh) Tambah `foto-kelompok.jpg`.
+4. Save → Refresh. Screenshot **sebelum** dan **sesudah**.
 
-### 🟡 Medium — "Dashboard Kelompok"
-1. Isi kartu **Profil Kelompok**: nama kelompok + nama anggota.
-2. Ganti minimal **2 warna** di `:root` (`style.css`) sesuai tema kelompok.
-3. Tambahkan foto bernama `foto-kelompok.jpg` (≤ ±500 KB) di folder yang sama dengan `index.html`. Refresh: foto harus tampil.
-4. **Bonus (opsional):** isi salah satu kotak kosong (grafik riwayat / mode gelap / panel edukasi). Library hanya via CDN.
+### 🟡 Medium — "Aturan Kita Sendiri" (+10)
+1. Ubah teks peringatan di dalam tanda kutip dengan gaya kalian, misal `"°C)! Gerah banget, nyalain kipas dulu, bestie."`.
+2. Buktikan banner muncul: ubah `AMBANG_BATAS_SUHU_TINGGI` jadi **di bawah suhu ruangan sekarang** → Save → Refresh.
+3. Setelah terbukti, pilih angka ambang yang masuk akal untuk kelas kalian (misal `31`), Save lagi.
+4. Screenshot banner dengan teks baru.
 
-### 🔴 Hard — "Siap Tayang"
-Periksa folder kelompok sendiri dengan checklist ini, perbaiki yang belum lolos, lalu serahkan ke tutor:
-1. Buka `index.html` dari folder kelompok: profil, foto, warna, angka suhu & tombol kipas semua tampil/jalan.
-2. Tidak ada alamat file `C:\...` atau `file://` di `index.html`/`style.css`. Library (kalau ada) hanya `https://` CDN.
-3. `api.js` sama persis dengan dari zip tutor.
-4. Ukuran folder ≤ ±5 MB (klik kanan → Properties), folder `firmware/.pio` sudah dihapus.
-5. Uji PIN: buka dashboard di **browser lain/mode incognito**, klik tombol kipas → harus diminta PIN.
+### 🔴 Hard — "Panel Tips Pintar" (+15)
+1. Buka `C3_P13_Hard_PanelTips/panel_tips.txt`, salin kode dari `<h2>` sampai `</script>`.
+2. Di `index.html`, cari `<div class="kartu-kosong" id="bagianEdukasi">`, ganti komentar `TULIS KODEMU DI SINI` dengan kode tadi. Save → Refresh: panel **Tips Ruangan** muncul.
+3. Ubah **3 teks tips** dengan gaya kalian.
+4. Tambah **1 aturan baru**: kalau `lembapSaatIni > 70` → tips soal ruangan lembap (contek pola baris `else if` yang sudah ada).
+5. Buktikan: **tiup** sensor DHT22 sampai tips kelembapanmu muncul. Rekam/screenshot.
 
 ---
 
 ## Pembuka Materi: Cover & Pertanyaan Pemantik
 
-- **Tagline cover:** Rapikan alatnya, beri identitas, lalu pamerkan ke dunia.
-- **Pertanyaan pemantik:** Kenapa demo alat IoT sering gagal tepat saat ditonton orang?
-- **Konteks:** Hari ini kita membuat alat yang bukan hanya jalan di meja sendiri, tapi juga siap dibawa, dipamerkan, dan dibuka siapa pun lewat internet.
-- Tampung 2–3 tebakan siswa, jawabannya dibahas di Topik 3 (slide *Checklist Sebelum Demo Alat IoT*).
+- **Tagline cover:** Alatnya sudah hidup. Sekarang bikin jadi milikmu, lalu pamerkan.
+- **Pertanyaan pemantik:** Dua aplikasi fiturnya sama persis. Kenapa kamu lebih suka yang satu?
+- **Konteks:** Semua dashboard kelompok di kelas ini fiturnya sama. Hari ini kita bikin dashboard kalian beda sendiri.
+- Tampung 2–3 jawaban siswa (+2 per penjawab), jawabannya dibahas di Topik 1 (slide *Isi Folder Website-mu*): yang membedakan adalah tampilan dan cara aplikasi "ngomong" ke penggunanya.
 
 ---
 
 ## Konten Reels (khusus tim InspiraLabs, tidak ditampilkan di slide)
 
-**Template hook #12 (Actionable Lists — Daftar & Solusi)**
+**Template hook #3 (Transformation — Before & After)**
 
-# "Checklist wajib sebelum demo proyek IoT di depan orang." ✅
+# "Anak SMA ini bikin alat IoT, dan sekarang websitenya online." 🌐
 
 Isi slide:
-- 🔋 **Daya**: tes pakai power bank, jangan bergantung pada laptop. Bawa kabel cadangan (kabel **data**!).
-- 📶 **Jaringan**: siapkan **hotspot cadangan 2.4 GHz** & simpan SSID-nya di firmware sebelum demo.
-- 🧹 **Rakitan rapi**: kabel pendek, terminal terkunci, sensor jauh dari panas ESP32.
-- 🎥 **Plan B**: rekam video demo yang berhasil H-1. Kalau semuanya gagal, tetap ada bukti.
-- 🧯 **Fail-safe**: beban di terminal **NO**. Kalau ESP32 hang/restart, kipas mati, bukan menyala terus.
-- 🗣️ **Cerita**: mulai dari **masalah** ("kelas panas"), bukan dari komponen.
+- 🎨 Satu baris `:root` di CSS = **ganti tema seluruh website** sekaligus.
+- 🧠 `if (suhu > 32)` = website bisa **ambil keputusan** sendiri: kapan peringatan muncul.
+- 💡 Panel tips yang **berubah sendiri** tiap 2 detik sesuai suhu ruangan.
+- 🌐 Dari laptop ke **`sma-0X.inspiralabs.id`**: bisa dibuka siapa pun, kipasnya tetap dikunci PIN.
 
-🎙️ **Kalimat hook (pembuka rekaman):** "Checklist wajib sebelum demo proyek IoT di depan orang."
+🎙️ **Kalimat hook (pembuka rekaman):** "Anak SMA ini bikin alat IoT, dan sekarang websitenya online."
 
 📌 **Teks di layar:**
-- 6 checklist anti-gagal ✅
-- 1️⃣ Daya + kabel cadangan 🔋
-- 2️⃣ Hotspot cadangan 📶
-- 3️⃣ Rakitan rapi 🧹
-- 4️⃣ Video backup 🎥
-- 5️⃣ Fail-safe: pakai NO 🧯
-- 6️⃣ Mulai dari MASALAH 🗣️
+- 1 baris CSS = ganti tema 🎨
+- if = website bisa mikir 🧠
+- Tips berubah sendiri 💡
+- Online, tapi kipas dikunci PIN 🔐
 
-🎬 **Penutup:** "Mereka siswa SMA, rakit sendiri, dan alatnya tayang online. Follow InspiraLabs!"
+🎬 **Penutup:** "Empat pertemuan, dari colok ESP32 sampai website online. Follow InspiraLabs!"
 
 > Catatan tutor: Narasi lengkap saat rekam:
-> - [0–4 detik] "Checklist wajib sebelum demo proyek IoT di depan orang."
-> - [4–8 detik] "Hukum demo: yang bisa gagal, pasti gagal pas ditonton. Jadi siapkan enam ini."
-> - [8–15 detik] "Satu, daya. Tes pakai power bank, bawa kabel cadangan. Kabel data, bukan kabel charger."
-> - [15–23 detik] "Dua, jaringan. WiFi tempat demo bisa beda. Siapkan hotspot cadangan 2.4 giga, dan simpan namanya di firmware sebelum berangkat."
-> - [23–30 detik] "Tiga, rakitan rapi. Kabel pendek, terminal dikunci, sensor jauh dari panas mikrokontroler. Kabel menjuntai itu musuh demo."
-> - [30–37 detik] "Empat, plan B. Rekam demo yang berhasil sehari sebelumnya. Seburuk-buruknya, tetap ada bukti alatmu jalan."
-> - [37–46 detik] "Lima, fail-safe. Beban di terminal NO. Kalau mikrokontrolernya mati, kipas ikut mati, bukan nyala terus. Ini standar keselamatan di industri."
-> - [46–54 detik] "Enam, cerita. Mulai dari masalah: 'kelas kami panas', bukan dari 'ini ESP32'. Orang ingat masalah yang diselesaikan, bukan komponennya."
-> - [54–60 detik] "Mereka siswa SMA, rakit sendiri, dan alatnya tayang online. Follow InspiraLabs!"
+> - [0–4 detik] "Anak SMA ini bikin alat IoT, dan sekarang websitenya online."
+> - [4–14 detik] "Rahasia pertama: satu baris di bagian root CSS. Ganti warnanya di satu tempat, seluruh website ikut berubah."
+> - [14–26 detik] "Rahasia kedua: if. Kalau suhu di atas angka tertentu, muncul peringatan. Angka dan kalimatnya mereka tentukan sendiri."
+> - [26–38 detik] "Rahasia ketiga: panel tips yang berubah sendiri tiap dua detik. Ditiup, sensornya lembap, tipsnya ganti."
+> - [38–50 detik] "Terakhir, websitenya online. Siapa pun bisa lihat suhu kelasnya, tapi tombol kipasnya dikunci PIN."
+> - [50–60 detik] "Empat pertemuan, dari colok ESP32 sampai website online. Follow InspiraLabs!"
 
 ### 🎥 Script Reels Lengkap (untuk rekaman konten)
 
 | Info | Isi |
 |---|---|
-| Template hook | #12 — Actionable Lists (Daftar & Solusi) |
-| Judul | Checklist wajib sebelum demo proyek IoT di depan orang |
+| Template hook | #3 — Transformation (Before & After) |
+| Judul | Anak SMA bikin alat IoT, websitenya online |
 | Durasi | ±60 detik |
-| Pembicara | Tutor + cuplikan showcase siswa SMA (pastikan izin) |
+| Pembicara | Tutor + cuplikan Demo Day siswa SMA (pastikan izin) |
 
 #### Script
 
 | Detik | Visual / B-roll | Narasi | Teks di layar |
 |---|---|---|---|
-| 0–4 | Momen tegang: siswa demo di depan kelas, angka dashboard tidak berubah | "Checklist wajib sebelum demo proyek IoT di depan orang." | Demo gagal di depan juri? 😰 |
-| 4–8 | Cut ke demo berhasil, kipas berputar, kelas tepuk tangan | "Hukum demo: yang bisa gagal, pasti gagal pas ditonton. Jadi siapkan enam ini." | 6 checklist anti-gagal ✅ |
-| 8–15 | Power bank dicolok ke ESP32 | "Satu, daya. Tes pakai power bank, bawa kabel cadangan. Kabel data, bukan kabel charger." | 1️⃣ Daya + kabel cadangan 🔋 |
-| 15–23 | Hotspot HP 2.4 GHz | "Dua, jaringan. WiFi tempat demo bisa beda. Siapkan hotspot cadangan 2.4 giga, dan simpan namanya di firmware sebelum berangkat." | 2️⃣ Hotspot cadangan 📶 |
-| 23–30 | Before-after rakitan: semrawut → rapi berlabel | "Tiga, rakitan rapi. Kabel pendek, terminal dikunci, sensor jauh dari panas mikrokontroler. Kabel menjuntai itu musuh demo." | 3️⃣ Rakitan rapi 🧹 |
-| 30–37 | Video demo di HP | "Empat, plan B. Rekam demo yang berhasil sehari sebelumnya. Seburuk-buruknya, tetap ada bukti alatmu jalan." | 4️⃣ Video backup 🎥 |
-| 37–46 | Close-up terminal relay NO | "Lima, fail-safe. Beban di terminal NO. Kalau mikrokontrolernya mati, kipas ikut mati, bukan nyala terus. Ini standar keselamatan di industri." | 5️⃣ Fail-safe: pakai NO 🧯 |
-| 46–54 | Siswa presentasi: "Kelas kami panas…" | "Enam, cerita. Mulai dari masalah: 'kelas kami panas', bukan dari 'ini ESP32'. Orang ingat masalah yang diselesaikan, bukan komponennya." | 6️⃣ Mulai dari MASALAH 🗣️ |
-| 54–60 | Website `sma-0X.inspiralabs.id` di HP + foto bersama alat | "Mereka siswa SMA, rakit sendiri, dan alatnya tayang online. Follow InspiraLabs!" | Follow @inspiralabs 👉 |
+| 0–4 | Split screen: dashboard polos vs dashboard warna kelompok | "Anak SMA ini bikin alat IoT, dan sekarang websitenya online." | Before → After 🌐 |
+| 4–14 | Screen record: ubah `--warna-primer`, refresh, seluruh warna berubah | "Rahasia pertama: satu baris di bagian root CSS. Ganti warnanya di satu tempat, seluruh website ikut berubah." | 1 baris CSS = ganti tema 🎨 |
+| 14–26 | Ubah `AMBANG_BATAS_SUHU_TINGGI`, banner peringatan muncul dengan kalimat kocak siswa | "Rahasia kedua: if. Kalau suhu di atas angka tertentu, muncul peringatan. Angka dan kalimatnya mereka tentukan sendiri." | if = website bisa mikir 🧠 |
+| 26–38 | Siswa meniup sensor, panel tips berganti | "Rahasia ketiga: panel tips yang berubah sendiri tiap dua detik. Ditiup, sensornya lembap, tipsnya ganti." | Tips berubah sendiri 💡 |
+| 38–50 | `sma-0X.inspiralabs.id` dibuka di HP, tombol kipas minta PIN | "Terakhir, websitenya online. Siapa pun bisa lihat suhu kelasnya, tapi tombol kipasnya dikunci PIN." | Online, kipas dikunci PIN 🔐 |
+| 50–60 | Demo Day: kipas menyala, kelas tepuk tangan | "Empat pertemuan, dari colok ESP32 sampai website online. Follow InspiraLabs!" | Follow @inspiralabs 👉 |
 
 #### Caption
 
-Demo proyek IoT gagal pas ditonton? Pakai checklist ini dulu ✅
+Dari colok ESP32 sampai website online, cuma 4 pertemuan 🌐
 
-1️⃣ Daya: power bank + kabel data cadangan
-2️⃣ Hotspot cadangan 2.4 GHz
-3️⃣ Rakitan rapi: kabel pendek, terminal terkunci
-4️⃣ Video backup H-1
-5️⃣ Fail-safe: beban di terminal NO
-6️⃣ Cerita dimulai dari masalah
+🎨 1 baris `:root` = ganti tema seluruh website
+🧠 `if` = website bisa ambil keputusan
+💡 Panel tips berubah sendiri sesuai suhu
+🔐 Online, tapi kontrol kipas dikunci PIN
 
-Save sebelum lomba / sidang / pameran berikutnya 💾
-
-#InspiraLabs #IoT #ESP32 #ProyekSiswa #TipsPresentasi #EkskulCoding #STEM #SMA
+#InspiraLabs #IoT #ESP32 #WebDev #ProyekSiswa #EkskulCoding #STEM #SMA
 
 #### Yang sengaja tidak dibocorkan
-- Isi firmware, alamat server, dan PIN kelompok.
-- Aturan serah terima & proses deploy website kelompok.
+- Isi firmware, alamat server, API key, dan PIN kelompok.
+- Proses deploy website kelompok.
 
 ---
 
 ## Post-Test (5 soal, pilihan ganda)
 
-**1. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
+**1. Untuk mengubah warna utama seluruh dashboard sekaligus, bagian yang paling tepat diubah adalah…**
+A. `api.js` B. Variabel di `:root` dalam `style.css` C. Firmware ESP32 D. Nama file `index.html`
+
+**2. File di folder kelompok yang TIDAK boleh diubah karena berisi koneksi ke server adalah…**
+A. `index.html` B. `style.css` C. `api.js` D. `foto-kelompok.jpg`
+
+**3. Di dashboard ada aturan `if (suhuSaatIni > 32) { tampilkan peringatan }`. Sensor membaca 30°C. Apa yang terjadi?**
+A. Peringatan tidak muncul B. Peringatan muncul C. Dashboard error D. Kipas mati
+
+**4. Foto sudah ada di folder kelompok, tapi tidak tampil di kartu Profil Kelompok. Nama filenya `Foto Kelompok.JPG`. Penyebab paling mungkin adalah…**
 A. Fotonya terlalu kecil B. Nama file tidak persis `foto-kelompok.jpg` yang dipanggil `index.html` C. `api.js` belum diubah D. ESP32 belum terhubung WiFi
 
-**2. File di folder kelompok yang TIDAK boleh diubah sebelum diserahkan ke tutor adalah…**
-A. `api.js` B. `style.css` C. `foto-kelompok.jpg` D. Teks nama anggota di `index.html`
-
-**3. Kelompokmu ingin menambah grafik memakai library JavaScript. Cara yang sesuai aturan serah terima adalah…**
-A. `npm install` lalu serahkan folder `node_modules` B. Memanggil library lewat CDN: `<script src="https://...">` C. Menyalin library dari `C:\Users\...` D. Mengubah `api.js`
-
-**4. Kenapa sensor DHT22 sebaiknya tidak ditaruh menempel di sebelah ESP32 di dalam kotak tertutup?**
-A. Sinyal WiFi terganggu B. Panas dari ESP32 membuat suhu terbaca lebih tinggi dari suhu ruangan C. Relay jadi active-HIGH D. Kipas berputar terbalik
-
-**5. Seorang pengunjung membuka `https://sma-04.inspiralabs.id` lalu menekan tombol kipas. Apa yang terjadi?**
-A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN kelompok; tanpa PIN yang benar, pengunjung hanya bisa melihat D. Data suhu terhapus
+**5. Batas status "Panas" di dashboard diubah dari 29 jadi 25. Suhu ruangan 27°C. Apa yang terjadi?**
+A. Suhu ruangan turun jadi 25°C B. Dashboard menampilkan status Dingin C. Kipas langsung rusak D. Dashboard menampilkan status Panas, padahal suhu ruangan tetap 27°C
 
 ---
 
@@ -284,30 +274,35 @@ A. Kipas langsung berubah tanpa syarat B. Website rusak C. Website meminta PIN k
 
 ### Kunci Challenge
 
-**Easy:** rakitan rapi + label + kontrol manual & otomatis tetap jalan. Kesalahan paling sering setelah merapikan: kabel kipas pindah ke NC, kabel IN tergeser satu lubang dari D18, terminal relay longgar. Arahkan siswa ke tabel troubleshooting P10/P12, bukan langsung membetulkan.
+**Easy:** nama kelompok/anggota terisi + 3 variabel `:root` berubah (terlihat jelas di screenshot sebelum/sesudah). Kesalahan paling sering: titik koma `;` atau kurung `}` ikut terhapus → seluruh tampilan berantakan; nama `--warna-...` ikut diganti → warna kembali default. Bandingkan dengan file asli di zip.
 
-**Medium:** foto tidak tampil biasanya karena: (1) nama file salah (`.JPG`, `.jpeg`, `.png`, spasi), (2) foto di subfolder lain, (3) ekstensi tersembunyi Windows (`foto-kelompok.jpg.jpg`). Aktifkan *View → File name extensions* di File Explorer.
+**Medium:** banner muncul dengan teks baru saat ambang di bawah suhu ruangan, lalu ambang dikembalikan ke angka masuk akal. Kalau banner tidak muncul: tanda kutip ikut terhapus (cek Console F12, ada error merah), atau lupa Save/Refresh. Teks baru harus tetap diapit tanda kutip dan disambung dengan `+`.
 
-**Hard:** semua 5 poin lolos. Poin 5: browser baru tidak menyimpan PIN, jadi harus muncul permintaan PIN.
+**Hard:** panel **Tips Ruangan** muncul, 3 teks berubah, dan aturan kelembapan bekerja saat sensor ditiup. Contoh jawaban (diletakkan **sebelum** baris `else tips = …`):
+```js
+else if (lembapSaatIni > 70) tips = "Lembap banget, buka jendela biar udara ganti.";
+```
+Kalau aturan kelembapan tidak pernah muncul: diletakkan setelah `else` terakhir (error), atau suhu sedang > 30 sehingga aturan pertama yang menang (jawaban Tanya Jawab Topik 3). Panel tetap "Menunggu data..." → `id="teksTips"` salah ketik atau tag `<script>` tidak lengkap.
 
 ### Serah terima & deploy (tutor)
-- Terima folder/zip per Device ID (`sma-01`…`sma-06`). Jalankan `py tools/kelompok.py deploy sma-04 sma-04.zip --dry-run` untuk cek, lalu tanpa `--dry-run` untuk upload.
-- Folder `firmware/` tidak ikut tayang. Pastikan `firmware/.pio` tidak ikut di zip (ukuran).
-- Kalau `api.js` berubah: ganti dengan salinan dari paket asli.
+- Terima `sma-0X.zip` per Device ID. `py tools/kelompok.py deploy sma-04 sma-04.zip --dry-run` untuk cek, lalu tanpa `--dry-run`, kemudian `git add kelompok/sma-04` → commit → push (deploy otomatis di server).
+- Saat deploy: `firmware/` dan file tersembunyi dibuang, `api.js` diganti versi tutor; zip tanpa `index.html` atau > 10 MB ditolak.
+- Deploy dikerjakan tutor selama challenge/Demo Day. Yang belum sempat di-deploy saat kelas dikerjakan tutor setelah kelas; siswa tidak perlu mengirim ulang apa pun.
 
-### Rubrik showcase (skor 1–4)
+### Rubrik Demo Day (skor 1–4, untuk apresiasi & catatan nilai)
 | Aspek | 1 | 4 |
 |---|---|---|
-| Fungsi | Data tidak tampil di dashboard | Monitoring + kontrol manual + mode otomatis jalan saat demo |
-| Kerapian & keselamatan rakitan | Kabel semrawut, terminal longgar | Kabel rapi & berlabel, sensor di posisi tepat, hanya beban DC 5V |
-| Pemahaman | Tidak bisa menjelaskan rakitan | Menjelaskan pin D4/D18, kipas di NO, active-LOW, dan alur data/perintah (jeda ±4 detik) |
-| Troubleshooting | Tidak bisa menceritakan masalah | Menceritakan masalah, cara menemukannya (Serial/multimeter), dan solusinya |
-| Presentasi & kerja sama | 1 orang bicara, tanpa demo | Semua anggota berperan (peserta individu: dinilai dari kejelasan & demo), dimulai dari masalah, demo lancar |
+| Fungsi | Data tidak tampil | Data hidup + kipas jalan (Manual atau Otomatis) saat demo |
+| Dashboard | Tampilan default | Profil, warna, aturan/teks sendiri (+ panel tips) |
+| Penjelasan | Tidak bisa menjelaskan | Menjelaskan alur alat → server → dashboard dan 1 masalah yang dihadapi |
+| Presentasi | 1 orang bicara, tanpa demo | Mulai dari masalah, demo lancar, semua anggota bicara (individu: kejelasan & demo) |
 
 ### Kunci Post-Test
-1. B 2. A 3. B 4. B 5. C
+1. B 2. C 3. A 4. B 5. D
 
 ### Pembahasan singkat
-- No. 1: `index.html` memanggil persis `foto-kelompok.jpg`; nama file di server peka huruf besar-kecil.
-- No. 3: server hanya menyajikan file statis; npm tidak dijalankan.
-- No. 5: PIN kelompok melindungi kontrol kipas di website publik.
+- No. 1: `--warna-primer` dkk. adalah variabel; ditulis sekali di `:root`, dipakai di seluruh `style.css`.
+- No. 2: `api.js` berisi alamat server & Device ID; saat deploy selalu diganti versi tutor.
+- No. 3: 30 tidak lebih besar dari 32, jadi kondisi `if` salah dan peringatan tidak muncul.
+- No. 4: `index.html` memanggil persis `foto-kelompok.jpg`; nama file di server peka huruf besar-kecil.
+- No. 5: website hanya menafsirkan angka; aturan yang ditulis menentukan label, bukan suhu ruangannya.
