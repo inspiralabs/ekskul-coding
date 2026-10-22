@@ -13,3 +13,7 @@ Thumbs.db
 .pio/
 *.ino.cpp
 dist/
+
+# Cache Python & workspace agen lokal
+__pycache__/
+.superpowers/

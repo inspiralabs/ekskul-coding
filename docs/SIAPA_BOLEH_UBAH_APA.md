@@ -10,8 +10,6 @@ mana yang tidak.
 ```
 ekskul-coding/
 ├── backend/                              <- TUTOR SAJA, tidak diajarkan
-├── firmware/
-│   └── sma_room_monitor_REFERENSI_TUTOR/ <- kunci jawaban, JANGAN dibagikan ke siswa
 ├── demo/                                  <- dashboard referensi Anda (tutor)
 ├── sma/                                   <- dashboard SMA (fitur jadi, siswa kustom tampilan)
 │   └── firmware/                         <- firmware SMA (program jadi)
@@ -19,11 +17,15 @@ ekskul-coding/
 │   └── firmware/                         <- materi IoT SMP (Anda), sketch Arduino IDE
 ├── index.html, leaderboard/, materi/,
 │   tentang/, shared/                      <- website ekskul (deploy Vercel, tetap di root)
+├── kelompok/<id>/                         <- website kelompok yang sudah di-deploy (<id>.inspiralabs.id)
 ├── kurikulum/                             <- bahan ajar per jenjang & pertemuan (tidak di-deploy)
-│   ├── smp/p09..p13/                     <- materi.md + script-reels.md (IoT)
-│   └── sma/p06..p13/                     <- p06-p08 web (HTML), p09-p13 IoT (materi.md + script-reels.md)
-├── docs/                                  <- silabus, HANDOUT_SISWA.md, file ini
-├── prompt/                                <- prompt AI penyusun kurikulum
+│   ├── panduan-instalasi/                <- Arduino IDE, board ESP32, library (Windows & Mac)
+│   ├── smp/p09..p13/                     <- IoT SMP; cara menjalankan: smp/README.md
+│   └── sma/p06..p13/                     <- p06-p08 web (HTML), p09-p13 IoT
+├── tools/                                 <- build bahan ajar, paket/deploy kelompok, server kelas lokal
+├── deploy/                                <- deploy website kelompok ke VPS
+├── docs/                                  <- silabus, HANDOUT_SISWA.md, sosialisasi pengajar, file ini
+├── prompt/                                <- template prompt Gemini (slide & materi) + RUNBOOK
 └── vercel.json                            <- routing /demo /sma /smp untuk deploy Vercel
 ```
 
@@ -40,14 +42,14 @@ Lihat `backend/README.md` untuk cara setup & menjalankan.
 
 ## 2. Firmware ESP32 (`sma/firmware/`, `smp/firmware/`)
 
-### `smp/firmware/smp_room_monitor.ino`
+### `smp/firmware/smp_room_monitor/smp_room_monitor.ino`
 **Materi:** IoT SMP (Anda ajarkan).
 **Siswa boleh ubah:** `WIFI_SSID`, `WIFI_PASSWORD`, dan `DHT_PIN` kalau kabel di pin lain.
 `DEVICE_ID` sudah diisi tutor lewat `py tools/kelompok.py paket`.
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (URL server, API key, logika kirim
 data). Tidak ada kontrol relay di file ini sama sekali.
 
-### `sma/firmware/sma_room_monitor.ino`
+### `sma/firmware/sma_room_monitor/sma_room_monitor.ino`
 **Materi:** IoT SMA (Anda ajarkan).
 **Program sudah jadi** (P9–P13 fokus perakitan). Siswa hanya mengisi WiFi, `DHT_PIN`/`RELAY_PIN`
 kalau kabel di pin lain (hindari strapping pin 0/2/5/12/15), dan `RELAY_ACTIVE_LOW` = `false` kalau
@@ -55,10 +57,6 @@ modul relaynya active-HIGH. `DEVICE_ID` sudah diisi tutor.
 
 **Siswa TIDAK boleh ubah:** Baris berlabel `JANGAN UBAH` (koneksi ke backend, loop kirim
 sensor, `fanServer.handleClient()`).
-
-### `firmware/sma_room_monitor_REFERENSI_TUTOR/`
-**JANGAN dibagikan ke siswa.** Ini kunci jawaban lengkap TANTANGAN, untuk Anda verifikasi
-sebelum kelas dan sebagai panduan diskusi setelah siswa mengerjakan TANTANGAN mereka.
 
 ## 3. Dashboard (`demo/`, `sma/`, `smp/`)
 
@@ -123,5 +121,6 @@ bisa membuat perangkat teman sekelompok lain ikut error atau data tertukar antar
 
 1. Backend online + `FAN_PINS` sudah di `.env` server (`backend/README.md`).
 2. `py tools/kelompok.py paket` → bagikan `dist/paket/<id>.zip` ke tiap kelompok, PIN SMA secara pribadi.
+   Di kelas lebih mudah lewat server kelas lokal: `py tools/server_kelas.py` (lihat `kurikulum/smp/README.md`).
 3. Flash satu ESP32 uji dengan firmware SMA untuk cek relay & alur kontrol.
 4. Akhir semester: deploy tiap kiriman siswa (`deploy/README.md`).
