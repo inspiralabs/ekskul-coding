@@ -1,8 +1,10 @@
 // ============================================================
-// P11 SMP — Program Cadangan: Cek Sensor TANPA WiFi
-// Dipakai saat troubleshooting: kalau firmware proyek macet di WiFi, upload ini
-// untuk memastikan kabel sensor benar. Kabel DHT22: + ke 3V3, out ke D4, - ke GND.
-// Butuh library "DHT sensor library" by Adafruit (lihat Panduan Instalasi Library).
+// P11 SMP — Program Jadi: Baca Sensor DHT22 + Grafik Suhu
+// TIDAK PERLU MENULIS KODE. Buka di Arduino IDE, Upload, lalu buka:
+//   - Serial Monitor (kaca pembesar, kanan atas)   -> lihat angkanya
+//   - Serial Plotter (ikon gelombang, kanan atas)  -> lihat grafiknya, lalu tiup sensornya!
+// Kabel DHT22: + ke 3V3, out ke D4, - ke GND.
+// Butuh library "DHT sensor library" by Adafruit (sudah dipasang di P10, Level 3).
 // ============================================================
 #include <DHT.h>
 
@@ -27,9 +29,9 @@ void loop() {
     return;                     // batalkan putaran ini, ulang dari awal loop
   }
 
-  Serial.print("Suhu: ");
+  // Bentuk "Nama:angka,Nama:angka" bisa dibaca Serial Monitor DAN Serial Plotter
+  Serial.print("Suhu:");
   Serial.print(suhu);
-  Serial.print(" C | Kelembapan: ");
-  Serial.print(lembap);
-  Serial.println(" %");
+  Serial.print(",Kelembapan:");
+  Serial.println(lembap);
 }

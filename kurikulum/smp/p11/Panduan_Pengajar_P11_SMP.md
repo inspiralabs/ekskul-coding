@@ -1,128 +1,154 @@
-# Panduan Pengajar — P11 SMP: Pasang Firmware Proyek & Jadi Dokter Kabel
+# Panduan Pengajar — P11 SMP: Kenalan Sensor DHT22: ESP32 Bisa Merasakan Suhu
 
 Jum'at, 30 Oktober 2026 · 70 menit · 13 Device ID (`smp-01`–`smp-05` individu, `smp-06`–`smp-09` berdua, `smp-10`–`smp-12` berempat, `smp-13` bertiga).
 Nomor slide = nomor di PPT (slide 1 = Linktree). Bahan lengkap & kunci: `sumber/Materi_Ajar_P11_SMP_InspiraLabs.md`.
 
-> Prinsip hari ini: firmware proyek dipakai **apa adanya**. Siswa hanya mengganti `ISI_DI_SINI` dengan nama & password WiFi. Angka `DHT_PIN` hanya diubah di Challenge Hard, lalu dikembalikan.
+> Prinsip hari ini: **sensor itu mainan.** Rakitannya hanya 3 kabel, programnya sudah jadi. Bagian serunya adalah **meniup dan menggenggam** sensor sambil melihat grafik melonjak di Serial Plotter. Siswa **tidak menulis kode** dan **tidak mengubah program**.
 
 ## 1. Tujuan pertemuan (yang bisa dilihat)
 
 Di akhir kelas, setiap kelompok/individu:
-1. Meng-upload firmware proyek dari folder `smp-XX` dan menunjukkan Serial Monitor dengan `Terhubung!`, angka suhu, dan `kode respons: 200`.
-2. Memasangkan 3 gejala Serial Monitor dengan penyebabnya (WiFi, kabel sensor, internet).
-3. Memakai multimeter mode bunyi untuk membedakan kabel jumper bagus dan putus.
+1. Merakit DHT22 (+ → 3V3, out → D4, − → GND) dan menunjukkan angka suhu & kelembapan di Serial Monitor.
+2. Membuka Serial Plotter dan menunjukkan garis kelembapan yang **naik saat sensor ditiup**.
+3. Bisa menjawab: "Sensor itu apa?" (indera benda pintar) dan "Kaki out ke mana?" (D4).
 
 ## 2. Persiapan
 
 ### H-1
-- [ ] `py tools/kelompok.py paket` → `dist/paket/smp-XX.zip`.
-- [ ] **Di laptop tiap kelompok:** extract `smp-XX.zip` ke Desktop, double-click `smp-XX/firmware/smp_room_monitor/smp_room_monitor.ino` → **Verify (✓)** sekali (WiFi/HTTP sudah ada di board ESP32; library DHT harus sudah dipasang). Catat laptop mana untuk Device ID mana (tempel stiker `smp-XX` di laptop).
-- [ ] Pastikan rakitan P10 (DHT22 di D4) masih utuh; bawa DHT22 & jumper cadangan.
-- [ ] **Uji WiFi kelas** dengan board cadangan: upload firmware salah satu kelompok, lihat `200`. Pastikan WiFi **2.4 GHz**. Siapkan hotspot HP cadangan (2.4 GHz, kuota cukup).
-- [ ] Buat 2–3 kabel jumper **sengaja putus** (potong kawat di dalam isolasi, luar tetap mulus) untuk demo multimeter.
-- [ ] Cek backend: `https://api-ekskulcoding.inspiralabs.id/health`.
-- [ ] Download folder Kode P11 (`P11_1_BacaDHT22`, `P11_2_TesWiFi`) ke tiap laptop untuk program cadangan.
+- [ ] Jalankan `SCRIPT_P11_SMP.gs` → folder **Kode** + Google Form post-test ada di Drive. Perbarui tombol "Post Test Pertemuan 11" di Linktree.
+- [ ] Cek catatan P10: laptop mana yang belum lulus Level 2/3? Selesaikan instalasinya sekarang.
+- [ ] Di tiap laptop: buka `P11_1_BacaDHT22.ino` → pilih **ESP32 Dev Module** → **Verify (✓)** sekali.
+- [ ] Rakit 1 DHT22 sendiri, upload, buka **Serial Plotter**, tiup sensornya. Kenali bentuk grafiknya supaya bisa menjelaskan.
+- [ ] Siapkan 2–3 DHT22, 6 jumper, dan 2–3 kabel USB data cadangan.
+- [ ] Buka `ekskulcoding.inspiralabs.id/sabotase/` di HP (untuk Challenge Hard).
 
 ### 15 menit sebelum kelas
-- [ ] Tulis di papan: **nama WiFi & password** (huruf besar-kecil persis), plus "Cabut USB sebelum memindah kabel!".
-- [ ] Multimeter: set ke **mode bunyi** (simbol gelombang suara/dioda). Tes: tempelkan kedua ujungnya → bunyi.
-- [ ] Siapkan kertas "Kartu Gejala" untuk Challenge Medium (atau cukup di slide 17).
+- [ ] Nyalakan proyektor, buka slide. Siapkan 1 rakitan DHT22 jadi di meja tutor untuk demo Serial Plotter di proyektor.
+- [ ] Tulis di papan: "Cabut USB sebelum memindah kabel!" dan "+ → 3V3 · out → D4 · − → GND".
+- [ ] Siapkan kertas/spreadsheet pencatat poin (nama siswa, +2, Easy, Medium, Hard).
 
 ### Isi kit per kelompok/individu
-Rakitan P10 (ESP32 + DHT22 di D4) · kabel USB data · laptop dengan folder `smp-XX` · kertas untuk Pencatat. Per kelas: 1 multimeter, 3–4 jumper cadangan, jumper putus untuk demo.
+ESP32 + rakitan LED P10 di breadboard · kabel USB data · DHT22 · 3 jumper (merah, kuning, hitam) + 2 cadangan · kertas & pensil untuk Pencatat.
 
 ## 3. Timeline per menit
 
 | Menit | Slide | Kegiatan | Yang tutor lakukan |
 |---|---|---|---|
-| 0–5 | 1 | Pembuka + cek Tugas 3 | 2–3 siswa tunjukkan gambar rakitannya. Nyalakan laptop |
-| 5–8 | 2–5 | Cover, pemantik, agenda, peran | Tampung tebakan pemantik. Tunjuk peran |
-| 8–14 | 6–8 | Firmware, folder, zona hijau/merah | Buka file di proyektor, tunjuk persis baris `ISI_DI_SINI` |
-| 14–28 | 9 | Praktek upload firmware | Keliling. Pengecek membandingkan nama WiFi huruf demi huruf |
-| 28–31 | 10–11 | Membaca cerita ESP32 + forum | Tunjukkan output satu kelompok di proyektor |
-| 31–36 | 12 | 🟢 Easy (wajib) | Cek catatan Pencatat, beri +10 |
-| 36–44 | 13–15 | Dokter kabel, multimeter, program cadangan | **Demo** jumper putus. **Ganti peran** |
-| 44–46 | 16 | Forum | |
-| 46–52 | 17 | 🟡 Medium | Cek jawaban kertas |
-| 52–60 | 18 | 🔴 Hard | Untuk yang sudah `200`. Yang belum: tutor bantu dokter kabel |
-| 60–62 | 19 | Peta proyek | Ingatkan bawa foto kelompok ke P12 |
-| 62–70 | 20–21 | Post-test | Sendiri-sendiri |
+| 0–5 | 1–6 | Pembuka, cover, pemantik, agenda, peran, poin | Peragakan HP dimiringkan. Tampung tebakan (+2). Tunjuk peran |
+| 5–11 | 7–8 | Sensor = indera, kenalan DHT22 | Edarkan 1 sensor. Jawab pemantik di slide 7 |
+| 11–22 | 9–10 | Rakit 3 kabel + cek 5 detik | Pengecek wajib membacakan checklist sebelum colok USB |
+| 22–30 | 11–12 | Upload & Serial Monitor, tips sensor diam | Keliling. Rayakan angka suhu pertama tiap kelompok |
+| 30–32 | 13 | Tanya Jawab | +2 per penjawab |
+| 32–36 | 14 | 🟢 Easy | Cek angka & catatan Pencatat. +5 |
+| 36–40 | 15 | Serial Plotter | **Demo di proyektor** dengan rakitan tutor. **Ganti peran** |
+| 40–48 | 16 | Tiup & genggam | Hitung "1… 2… 3… tiup!" bersama satu kelas |
+| 48–50 | 17 | Tanya Jawab | +2 per penjawab |
+| 50–55 | 18 | 🟡 Medium | Cek angka awal & puncak + grafik. +10 |
+| 55–62 | 19 | 🔴 Hard | Sabotase rakitan kelompok yang sudah lulus Easy. +15 |
+| 62–63 | 20 | Peta petualangan | "Jangan bongkar rakitan, dipakai P12" |
+| 63–70 | 21–22 | Post-test | Sendiri-sendiri. Tutup dengan teaser P12 |
 
-## 4. Kalimat kunci
+## 4. Kalimat kunci (boleh dibacakan)
 
-- **Firmware:** "Ini program resmi alat kalian. Kita tidak menulis, kita memasang. Seperti teknisi memasang aplikasi resmi ke mesin."
-- **Zona hijau/merah:** "Zona hijau itu kolom formulir: isi nama dan password WiFi. Zona merah itu kunci rumah server. Disentuh, pintunya terkunci."
-- **Device ID:** "smp-07 itu plat nomor alat kalian. Kalau dua motor plat nomornya sama, polisi bingung. Server juga."
-- **Kode 200:** "Angka 200 artinya paketnya diterima, seperti centang dua di WhatsApp."
-- **Dokter kabel:** "Dokter tidak langsung operasi. Dia tanya gejala dulu. Kita juga: baca Serial Monitor dulu, baru pegang kabel."
-- **Urutan cek:** "Listrik → kabel → pin → program. Program paling akhir, karena program yang sama sudah jalan di kelompok lain."
+- **Pembuka:** "Minggu lalu ESP32 kita bisa 'bicara' lewat lampu. Hari ini dia dapat indera: dia bisa merasakan panas dan lembap."
+- **Sensor:** "ESP32 itu otak. Sensor itu indera. Otak tanpa indera tidak tahu apa-apa tentang dunia luar."
+- **Kelembapan:** "Kelembapan itu banyaknya uap air di udara. Coba hembuskan napas ke kaca: berembun kan? Napas kita lembap."
+- **Sebelum merakit:** "Tangan siapa yang pegang kabel? Perakit. Siapa yang bilang boleh colok USB? Pengecek, setelah checklist selesai."
+- **Serial Plotter:** "Angka yang tadi lewat cepat di Serial Monitor, sekarang jadi garis. Seperti layar detak jantung di rumah sakit."
+- **Saat grafik melonjak:** "Lihat gunungnya! Napas kalian baru saja tercatat oleh sensor."
 
-## 5. Mengelola kelas 12–15 tahun
+## 5. Gaya mengajar: belajar sambil bermain
 
-- **Menunggu upload itu membosankan.** Saat compile/Upload berjalan, beri tugas kecil: Pencatat menyiapkan tabel "sebelum/sesudah tiup" untuk Easy; Perakit menekan ulang semua kabel.
-- **Peran berputar** (slide 5): Operator Topik 1 ≠ Operator Topik 2 (ganti di menit 36). Pencatat menulis angka, bukan hanya menonton.
-- **Peserta individu:** pegang semua peran. Pasangkan dengan individu sebelah sebagai "teman cek" untuk membandingkan nama WiFi dan membaca checklist.
-- **WiFi macet di banyak kelompok sekaligus** → hentikan kelas 1 menit dengan sinyal diam, pindahkan semua ke hotspot cadangan bersama-sama (tulis nama hotspot di papan), daripada membantu satu per satu.
-- **Gamifikasi:** papan "Klub 200": tulis Device ID di papan begitu kelompok itu mendapat `200` pertama.
+- **Grafik = pusat perhatian.** Tampilkan Serial Plotter tutor di proyektor sepanjang Topik 2. Ajak satu kelas meniup bersamaan, lalu bandingkan "gunung" tiap kelompok.
+- **Lomba kecil yang aman:** "Gunung Tertinggi" (Medium) boleh diumumkan pemenangnya, tapi semua kelompok yang menyelesaikan langkahnya tetap dapat +10.
+- **Jangan ceramah lebih dari 5–6 menit.** Slide 7–8 cukup ±6 menit, langsung rakit.
+- **Peran berputar:** Operator Topik 1 ≠ Operator Topik 2 (ganti di menit 36). Di Topik 2 siapa saja boleh meniup sensor.
+- **Peserta individu:** pegang semua peran; pasangkan dua individu sebagai "teman cek" untuk membacakan checklist.
+- **Kesalahan = misi tambahan.** `Gagal baca sensor!` itu petunjuk, bukan kegagalan: "Serial Monitor sedang memberi tahu kita: periksa kabel!"
+- **Sinyal diam:** tutor angkat tangan → semua angkat tangan & lepas kabel/mouse, sebelum instruksi baru.
 
-## 6. Titik cek pemahaman
+## 6. Sistem poin & cara mencatat
 
-- Setelah slide 8: "Tunjuk dengan jari di layar kalian: baris mana yang boleh diubah?" (`WIFI_SSID`, `WIFI_PASSWORD`).
-- Setelah slide 10: **jempol**: "Jempol atas kalau sudah lihat 200." Catat yang belum.
-- Setelah slide 13: tutor membacakan gejala, kelas menjawab serentak: "Titik-titik tidak berhenti?" (WiFi) · "Gagal baca sensor?" (kabel) · "Minus satu?" (internet).
-- Setelah slide 14: "Multimeter diam, artinya?" (kabel putus).
+| Kegiatan | Poin | Untuk siapa |
+|---|---|---|
+| Bertanya / menjawab (pemantik, Tanya Jawab, contoh sensor di HP) | **+2** | Siswa yang bicara (benar atau salah, yang penting berani) |
+| 🟢 Easy | **+5** | Setiap anggota kelompok |
+| 🟡 Medium | **+10** | Setiap anggota kelompok |
+| 🔴 Hard | **+15** | Setiap anggota kelompok |
 
-## 7. Kesalahan yang sering terjadi & cara membantu
+- Catat +2 dengan turus saat itu juga. Gilir yang menjawab: utamakan yang belum pernah dapat.
+- Rekap ke gradebook setelah kelas. **Tidak ada PR.**
+
+## 7. Titik cek pemahaman
+
+- Setelah slide 8: "Kaki DHT22 ada berapa? Sebutkan!" (+, out, −).
+- Setelah slide 9: "Kaki out ke mana?" (semua menjawab bersama: D4). "+ ke mana?" (3V3).
+- Setelah slide 11: **jempol**: "Jempol atas kalau angka suhu sudah muncul." Yang jempol bawah → datangi duluan.
+- Setelah slide 16: "Ditiup, garis mana yang naik duluan?" (kelembapan).
+
+## 8. Kesalahan yang sering terjadi & cara membantu
+
+Bantu dengan **pertanyaan**, bukan langsung memperbaiki. Biarkan Perakit yang memegang kabel.
 
 | Kesalahan | Pertanyaan pancingan |
 |---|---|
-| Nama WiFi beda huruf besar/kecil atau ada spasi | "Bandingkan huruf demi huruf dengan papan. Pengecek, bacakan pelan-pelan." |
-| Tanda kutip `"` ikut terhapus (error merah saat compile) | "Lihat baris yang kamu ketik. Bentuknya sama dengan baris di atasnya? Ada yang hilang?" |
-| Lupa Save sebelum Upload | "Di judul tab file ada titik bulat? Artinya apa?" |
-| Arduino IDE bertanya *"needs to be inside a sketch folder"* | "Nama folder dan nama file `.ino` harus sama. Kamu membuka dari folder mana?" → buka dari `firmware/smp_room_monitor/` |
-| Mengubah `DEVICE_ID` | "Device ID itu plat nomor. Boleh diganti?" → kembalikan sesuai nama folder |
-| Langsung menyalahkan program | "Program yang sama jalan di kelompok sebelah? Berarti yang beda apa?" |
-| `Gagal baca sensor` | "Serial Monitor bilang masalahnya di mana? Kabel mana yang ke sensor?" |
+| Lupa cabut USB saat memindah kabel | "Apa yang ada di papan tulis? Sudah dilakukan?" |
+| DHT22 dipasang sesuai urutan modul lain | "Tulisan di modul kalian urutannya apa? Baca dari kiri." |
+| Kabel out di D2/D15 (pin sebelah D4) | "Baca tulisan kecil di sebelah pinnya. Apa tulisannya?" |
+| `Gagal baca sensor` | "Kabel kuning sekarang di pin apa? Program menunggu di pin berapa?" |
+| Membuka file P10 bukan P11 | "Nama file yang kamu buka apa? Angkanya P berapa?" |
+| Serial Plotter kosong | "Baud di pojok kanan berapa? Harus sama dengan Serial Monitor." |
+| Meniup terlalu dekat sampai sensor berembun | "Kalau sensornya basah, angkanya bisa dipercaya?" → keringkan, tunggu 1 menit |
 
-## 8. Troubleshooting cepat
+## 9. Troubleshooting cepat
 
 | Gejala | Penyebab paling mungkin | Tindakan |
 |---|---|---|
-| Titik-titik `......` tidak berhenti | Nama/password salah, WiFi 5 GHz, sinyal lemah | Cek huruf; pindah ke hotspot 2.4 GHz; dekatkan ke router |
-| `Gagal baca sensor DHT22…` | Out bukan di D4, longgar, + − tertukar | Cabut USB, checklist P10 |
-| Suhu kadang muncul, kadang gagal | Kabel goyang / jumper hampir putus | Ganti jumper, tes multimeter mode bunyi |
-| `kode respons: -1` | WiFi tanpa internet | Cek kuota hotspot, coba WiFi lain |
-| `kode respons: 401` | Zona merah (`API_KEY`) berubah | Extract ulang zip asli, isi WiFi lagi, upload |
+| `Gagal baca sensor! Cek kabel.` terus | Out bukan di D4, longgar, + − tertukar | Cabut USB, cek dengan checklist slide 10 |
+| Sensor terasa hangat/panas | + dan − tertukar | **Cabut USB segera**, tukar kabelnya, tunggu dingin |
+| Kadang terbaca, kadang gagal | Kabel setengah masuk / jumper hampir putus | Tekan kabel sampai mentok, ganti jumper |
 | Serial Monitor kosong | Pesan awal terlewat | Tekan **EN** di board |
-| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | Pilih **115200 baud** di Serial Monitor |
-| Error merah saat compile setelah mengisi WiFi | Tanda kutip/titik koma terhapus | Bandingkan dengan baris di atasnya, atau extract ulang zip |
-| Ada baris `{...}` setelah kode respons | Balasan server | Normal, abaikan |
-| Masih bingung WiFi atau sensor? | — | Upload `P11_2_TesWiFi.ino` (WiFi saja) atau `P11_1_BacaDHT22.ino` (sensor saja), lalu upload lagi firmware proyek |
+| Tulisan acak `⸮⸮⸮` | Baud beda | Pilih **115200 baud** |
+| `DHT.h: No such file or directory` | Library DHT belum terpasang | Library Manager → DHT sensor library by Adafruit → INSTALL ALL |
+| Serial Plotter kosong / garis aneh | Baud beda / jendela lama | Pilih 115200, tutup lalu buka lagi Serial Plotter |
+| Angka tidak berubah saat ditiup | Normal, sensor lambat | Tiup lebih lama (5 detik), tunggu 2–4 detik |
+| Port tidak muncul / `Failed to connect` | Kabel charger / mode upload | Kabel data bertanda; tahan BOOT saat `Connecting....` |
 
-## 9. Keselamatan
+## Cara main Kartu Sabotase (Challenge Hard "Detektif Sensor")
+Halaman: `ekskulcoding.inspiralabs.id/sabotase/` (juga ada di halaman utama ekskul, kartu "Kartu Sabotase"). Di SMP **tutor** yang menyabotase, bukan siswa.
 
-- Tegangan kit rendah (USB), aman disentuh. Multimeter di mode bunyi dipakai pada kabel yang **tidak tersambung** ke board (USB dicabut).
-- Mode DC volt hanya didemokan tutor pada 3V3–GND board, bukan ke stopkontak. **Jangan pernah** mengukur stopkontak di depan siswa.
-- Cabut USB sebelum memindah kabel, termasuk di Challenge Hard (D4 → D27 → D4).
-- Sensor hangat = + − tertukar → cabut segera.
+1. **Saat kelompok lain mengerjakan Medium:** buka halaman di HP → pilih **SMP** → **Ambil Kartu**. Keluar 3 kartu aman (1 untuk kabel out, 1 untuk kabel −, 1 untuk kabel +).
+2. Minta pemilik rakitan menunggu di luar meja. **Cabut USB**, pasang ketiga sabotase, lalu tekan **Tutup kartu**.
+3. **Siswa jadi detektif:** colok USB, lihat Serial Monitor menulis `Gagal baca sensor!`, cari 3 kabel yang salah, tulis *kabel mana → seharusnya ke mana*, perbaiki sampai angka suhu muncul. **Program tidak boleh diubah.**
+4. **Cocokkan:** **catat 3 kartu tadi** (foto layar/kertas) sebelum menutupnya, karena Ambil Kartu berikutnya memberi kartu lain. Gejala tiap kartu ada di bagian "Untuk tutor: semua kartu & gejalanya".
+5. **Nilai:** +15 kalau 3 kesalahan ditulis benar dan angka suhu muncul lagi.
 
-## 10. Diferensiasi
+**Jangan pernah menukar kabel + dan −** DHT22 (sensor bisa panas). Kartu di halaman sudah dipilih yang aman.
 
-- **Siswa cepat:** Challenge Hard; bonus Medium (cabut kabel out, lihat gejalanya); atau minta mereka menjadi "dokter jaga" yang membantu kelompok lain hanya dengan pertanyaan. Tantangan ekstra: "Hitung berapa kali data terkirim dalam 1 menit." (±15 kali, tiap 4 detik).
-- **Siswa kesulitan:** fokus satu target saja: `200`. Tutor duduk di samping dan membimbing langkah demi langkah ("Buka folder firmware, double-click smp_room_monitor.ino. Sekarang cari tulisan ISI_DI_SINI."). Medium cukup dikerjakan lisan bersama tutor.
+## 10. Keselamatan
 
-## 11. Penilaian
+- Semua tegangan di kit ini rendah (3,3V–5V dari USB): **aman disentuh**. Tidak ada listrik PLN di meja.
+- Aturan nomor satu: **cabut USB sebelum memindah kabel**.
+- + dan − DHT22 tertukar → sensor panas. Ajarkan: "Kalau terasa hangat, cabut dulu, tanya kemudian."
+- Meniup boleh, membasahi sensor tidak. Minuman jauh dari meja rakitan.
+- Jangan taruh board di atas benda logam (gunting, penggaris besi, kaleng).
 
-- **Challenge:** +10 per challenge (leaderboard). Easy wajib.
-  - Easy lulus = angka sebelum/sesudah ditiup tercatat + kode `200` tercatat.
-  - Medium lulus = 1C, 2A, 3B.
-  - Hard lulus = bisa menjelaskan kenapa `DHT_PIN` harus sama dengan pin kabel, **dan** sudah kembali ke D4 / angka 4 / upload ulang.
-- **Penilaian praktek pertemuan ini:** Serial Monitor menampilkan suhu + `200` dari rakitan sendiri.
-- **Post-test:** 5 soal, individu. Kunci: 1B 2B 3B 4A 5B.
-- **Tugas 3** (dari P10): tandai yang sudah mengumpulkan.
+## 11. Diferensiasi
 
-## 12. Penutup & PR
+- **Siswa cepat:** Challenge Medium & Hard; lalu bonus: "Bisakah kalian membuat garis **suhu** naik 2 °C tanpa meniup?" (genggam lebih lama). Atau jadi "asisten tutor" yang membantu kelompok lain **dengan pertanyaan**.
+- **Siswa kesulitan:** pasang satu kabel per instruksi ("Merah dulu ke 3V3. Sudah? Sekarang kuning ke D4."). Boleh melihat rakitan kelompok yang sudah berhasil. Target minimum: angka suhu muncul + ikut meniup sensor sambil melihat grafik.
 
-- Firmware sudah tersimpan di ESP32. "Minggu depan cukup colok ke power bank."
-- PR: bawa **foto kelompok** (atau foto diri untuk individu) di HP untuk dashboard P12. Charge power bank kalau punya.
-- Setelah kelas: catat Device ID yang belum `200` (lihat papan "Klub 200") → selesaikan di 10 menit pertama P12. Pastikan semua kabel out kembali ke **D4**.
+## 12. Penilaian
+
+- **Keaktifan:** +2 per tanya/jawab.
+- **Challenge** (leaderboard, per anggota kelompok):
+  - 🟢 Easy +5 = angka suhu & kelembapan muncul + dicatat Pencatat.
+  - 🟡 Medium +10 = angka awal & puncak kelembapan tercatat + grafik gunung ditunjukkan.
+  - 🔴 Hard +15 = 3 kesalahan sabotase ditulis benar + angka suhu muncul lagi tanpa mengubah program.
+- **Post-test:** 5 soal, individu (Google Form otomatis menilai). Kunci: 1B 2C 3D 4A 5B.
+- **Tidak ada PR / tugas rumah.**
+
+## 13. Penutup
+
+- "Rakitan DHT22 jangan dibongkar. Minggu depan suhu dari meja kalian terbang ke internet dan muncul di website kalian sendiri!"
+- Setelah kelas (tutor): catat kelompok yang belum berhasil membaca sensor → datangi duluan di awal P12. Rekap poin ke gradebook.

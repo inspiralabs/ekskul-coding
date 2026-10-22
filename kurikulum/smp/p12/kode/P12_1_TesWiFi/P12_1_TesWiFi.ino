@@ -1,5 +1,5 @@
 // ============================================================
-// P11 SMP — Program Cadangan: Tes WiFi Saja
+// P12 SMP — Program Cadangan: Tes WiFi Saja
 // Buka di Arduino IDE. Isi nama & password WiFi (harus 2.4 GHz).
 // Dipakai saat troubleshooting: kalau titik-titik tidak berhenti di firmware proyek,
 // tes WiFi pakai program kecil ini dulu. Setelah tersambung, upload lagi firmware proyek.

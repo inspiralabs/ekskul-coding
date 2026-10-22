@@ -3,6 +3,7 @@
 // TIDAK PERLU MENULIS KODE. Buka file ini di Arduino IDE, lalu klik Upload (panah ->).
 // Rakitan: D2 -> resistor 220 ohm -> kaki PANJANG LED, kaki pendek LED -> GND.
 // Kalau berhasil: LED di breadboard DAN lampu biru di board ESP32 berkedip tiap 1 detik.
+// Challenge Medium: ubah angka di delay(...)   Challenge Hard: ubah angka LED_PIN.
 // ============================================================
 
 #define LED_PIN 2   // LED dicolok ke pin D2 (sama dengan lampu biru bawaan board)

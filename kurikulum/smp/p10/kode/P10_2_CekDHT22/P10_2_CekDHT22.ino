@@ -1,7 +1,7 @@
 // ============================================================
-// P10 SMP — Program Jadi 2: Cek Rakitan DHT22
-// TIDAK PERLU MENULIS KODE. Buka di Arduino IDE, Upload, buka Serial Monitor.
-// Kabel DHT22: + ke 3V3, out ke D4, - ke GND. Muncul angka suhu = rakitan benar.
+// P10 SMP — Program Jadi 2: Cek Library DHT (Level 3 instalasi)
+// TIDAK PERLU MENULIS KODE. Di P10 cukup klik Verify (✓): "Done compiling" = library DHT siap.
+// Sensornya baru dirakit di P11 (+ ke 3V3, out ke D4, - ke GND).
 // Butuh library "DHT sensor library" by Adafruit (lihat Panduan Instalasi Library).
 // ============================================================
 #include <DHT.h>

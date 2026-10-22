@@ -1,6 +1,6 @@
 # POST TEST — Pertemuan 13 — SMP
 
-Sumber: SMP — Pertemuan 13: Rapikan Alat & Showcase Proyek Akhir
+Sumber: SMP — Pertemuan 13: Sempurnakan Alat & Showcase Proyek Akhir
 
 > Untuk tutor: buat Google Form → Settings → **Make this a quiz**. Tiap soal = Multiple choice, 1 poin, isi kunci sesuai baris **Jawaban**. Aktifkan "Shuffle option order" kalau mau.
 

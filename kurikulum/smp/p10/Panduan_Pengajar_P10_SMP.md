@@ -1,146 +1,158 @@
-# Panduan Pengajar — P10 SMP: Upload Program Jadi & Rakit Sensor DHT22
+# Panduan Pengajar — P10 SMP: Pasang Arduino IDE & Kedipkan LED Pertamamu
 
 Jum'at, 23 Oktober 2026 · 70 menit · 13 Device ID (`smp-01`–`smp-05` individu, `smp-06`–`smp-09` berdua, `smp-10`–`smp-12` berempat, `smp-13` bertiga).
-Nomor slide di panduan ini = nomor di PPT (slide 1 = Linktree). Bahan lengkap & kunci: `sumber/Materi_Ajar_P10_SMP_InspiraLabs.md`.
+Nomor slide di panduan ini = nomor di PPT (slide 1 = Linktree). Bahan lengkap & kunci: `sumber/Materi_Ajar_P10_SMP_InspiraLabs.md`. Langkah instalasi detail: `kurikulum/panduan-instalasi/` (Panduan 1–3).
 
-> Prinsip hari ini: siswa **tidak menulis kode**. Mereka menyalin program jadi, menekan Upload, dan merakit. Satu-satunya perubahan kode adalah **satu angka** di Challenge Medium.
+> Prinsip hari ini: **belajar sambil bermain.** Instalasi dibuat seperti game 3 level + BOS. Waktu menunggu unduhan diisi game Tebak Komponen. Siswa **tidak menulis kode**: mereka memasang aplikasi, menekan Upload, dan paling banyak mengganti angka di challenge. Target utamanya bukan "paham semua", tapi **penasaran dan ingin lanjut**.
 
 ## 1. Tujuan pertemuan (yang bisa dilihat)
 
 Di akhir kelas, setiap kelompok/individu:
-1. Meng-upload `P10_1_Blink.ino` sendiri dan menunjukkan LED breadboard berkedip **bareng** lampu biru board.
-2. Merakit DHT22 (+ → 3V3, out → D4, − → GND) dan menunjukkan angka suhu di Serial Monitor yang **naik saat ditiup/digenggam**.
-3. Bisa menjawab: "Kalau lampu biru kedip tapi LED diam, salahnya di mana?" (jawaban: rakitan).
+1. Punya laptop yang lulus 3 level: Arduino IDE terbuka, **ESP32 Dev Module** ada di daftar board, library DHT *installed*.
+2. Meng-upload `P10_1_Blink.ino` sendiri dan menunjukkan LED breadboard berkedip **bareng** lampu biru board.
+3. Bisa menjawab: "Arduino IDE itu gunanya apa?" (menerjemahkan & mengirim program ke ESP32).
 
 ## 2. Persiapan
 
 ### H-1
-- [ ] Jalankan `SCRIPT_P10_SMP.gs` → folder **Kode** ada di Drive, link di Linktree.
-- [ ] Di **setiap laptop**: pasang **Arduino IDE 2**, board **esp32 by Espressif Systems**, library **DHT sensor library** (3 Panduan Instalasi di `kurikulum/panduan-instalasi/`, versi Windows & Mac). Buka `P10_1_Blink.ino` → pilih **ESP32 Dev Module** → **Verify (✓)** sekali. Unduhan board ±2 GB (ruang kosong ±9 GB) + compile pertama 2–5 menit: jangan sampai terjadi di kelas.
-- [ ] **Upload tes** Blink ke satu board cadangan → pastikan driver CP210x/CH340 terpasang di tiap laptop (port muncul).
-- [ ] Siapkan 2–3 **kabel USB data cadangan**. Tandai kabel data dengan selotip warna supaya tidak tertukar dengan kabel charger.
-- [ ] Siapkan rakitan "rusak" untuk Challenge Hard (3 kesalahan **aman**: out di D5, out di baris breadboard yang beda, kabel − setengah masuk/jumper putus). **Jangan** menukar + dan −. Bisa juga ambil acak dari `ekskulcoding.inspiralabs.id/sabotase/` (lihat *Cara main Kartu Sabotase*).
-- [ ] Charge power bank (dipakai mulai P12, tapi bagus untuk demo "program tetap tersimpan").
+- [ ] Jalankan `SCRIPT_P10_SMP.gs` → folder **Kode** + Google Form post-test ada di Drive. Pasang link folder Kode & tombol "Post Test Pertemuan 10" di Linktree.
+- [ ] Unduh installer **Arduino IDE 2.3.10** dari arduino.cc: Windows (`.exe`), Mac Apple Silicon (`arm64.dmg`), Mac Intel (`64bit.dmg`). Salin ke 2–3 flashdisk.
+- [ ] Siapkan **2–3 laptop cadangan** yang sudah lulus semua level + sudah pernah upload Blink. Ini penyelamat kalau unduhan board ESP32 di kelas lambat.
+- [ ] Tes kecepatan WiFi kelas. Lambat (unduh 100 MB > 3 menit)? Putuskan dari sekarang: semua kelompok memilih board ESP32 versi **2.0.17** (±0,8 GB) di Level 2.
+- [ ] Tanyakan ke sekolah: laptop sekolah butuh password Administrator untuk instal? Kalau ya, siapkan orang yang memegang password atau pakai opsi **Only for me**.
+- [ ] Cek driver USB di laptop cadangan (port ESP32 muncul). Siapkan 2–3 **kabel USB data cadangan**, tandai dengan selotip warna supaya tidak tertukar dengan kabel charger.
+- [ ] Siapkan "meja Tebak Komponen": ESP32, breadboard, LED, resistor, kabel jumper, DHT22, kabel USB data + kabel charger, power bank.
+- [ ] (Opsional, cara cepat) Kalau banyak laptop Windows dan internet buruk: setelah Arduino IDE terpasang di laptop siswa, salin folder `C:\Users\<nama>\AppData\Local\Arduino15` dari laptop cadangan ke laptop siswa (Mac: `~/Library/Arduino15`, sesama Mac). Board ESP32 langsung terpasang tanpa unduh. **Tes dulu di 1 laptop H-1.**
+- [ ] (Opsional, siswa Windows) **Server kelas lokal**: `py tools/server_kelas.py`, lalu tes dari 1 laptop siswa: buka halamannya, INSTALL board dari alamat lokal, upload Blink (langkah lengkap di `kurikulum/smp/README.md`, bagian "Server kelas lokal").
 
 ### 15 menit sebelum kelas
-- [ ] Nyalakan proyektor, buka slide.
-- [ ] Bagikan kit per meja (lihat daftar di bawah) dan hitung isinya.
-- [ ] Siapkan multimeter: mode DC volt 20V.
-- [ ] Tulis di papan: "Cabut USB sebelum memindah kabel!"
+- [ ] Nyalakan proyektor, buka slide. Buka Arduino IDE di laptop tutor untuk demo.
+- [ ] Tulis di papan:
+  - Alamat board: `https://espressif.github.io/arduino-esp32/package_esp32_index.json`
+  - Tabel **Level 1 · Level 2 · Level 3 · BOS** dengan kolom per Device ID (untuk dicentang)
+  - "Cabut USB sebelum memindah kabel!"
+- [ ] Siapkan kertas/spreadsheet pencatat poin (kolom: nama siswa, +2, Easy, Medium, Hard).
 
 ### Isi kit per kelompok/individu
-ESP32 + kabel USB data · breadboard dengan rakitan LED P9 (LED + resistor **220Ω**) · DHT22 · 3 jumper (merah, kuning, hitam) + 2 cadangan · kertas & pensil untuk Pencatat.
+Laptop · ESP32 + kabel USB data · breadboard dengan rakitan LED P9 (LED + resistor **220Ω**) · kertas & pensil untuk Pencatat.
 
 ## 3. Timeline per menit
 
 | Menit | Slide | Kegiatan | Yang tutor lakukan |
 |---|---|---|---|
-| 0–5 | 1 | Pembuka | Bagikan kit, minta siswa menyalakan laptop & membuka Arduino IDE |
-| 5–8 | 2–5 | Cover, pemantik, agenda, peran | Tampung 2–3 tebakan pemantik. Tunjuk peran per kelompok |
-| 8–14 | 6–8 | Misteri D2, upload, 4 langkah | Tunjukkan tombol Upload (→) kiri atas & ikon Serial Monitor (kaca pembesar) kanan atas |
-| 14–28 | 9 | Praktek Upload Blink | Keliling. Kelompok berhasil → tepuk tangan kecil |
-| 28–31 | 10–11 | Tips upload gagal + forum | Bahas jawaban pemantik (kabel data vs charger) |
-| 31–36 | 12 | 🟢 Easy (wajib) | Cek tiap kelompok, beri +10 |
-| 36–41 | 13 | 🟡 Medium | Lewati kalau sudah molor. Pastikan kembali ke D2 & angka 2 |
-| 41–45 | 14–16 | DHT22, cara rakit, cek 5 detik | **Ganti peran** di sini |
-| 45–55 | 17 | Praktek rakit & cek sensor | Pengecek wajib membacakan checklist sebelum colok USB |
-| 55–57 | 18 | Forum | |
-| 57–62 | 19 | 🔴 Hard | Untuk yang sudah berhasil. Yang belum: selesaikan rakitan |
-| 62–63 | 20–21 | Peta + Tugas 3 | Ingatkan: jangan bongkar rakitan, foto dulu kalau terpaksa |
-| 63–70 | 22–23 | Post-test | Sendiri-sendiri, HP/laptop. Tutup dengan info P11 |
+| 0–4 | 1–6 | Pembuka, cover, pemantik, agenda, peran, poin | Minta laptop dinyalakan dulu (booting lama). Tampung tebakan pemantik (+2 per penebak). Tunjuk peran |
+| 4–10 | 7–9 | IoT di sekitar kita, kenalan tim, Arduino IDE = penerjemah | Angkat komponen satu per satu. Jawab pemantik di slide 9 |
+| 10–20 | 10–11 | **Level 1** pasang Arduino IDE | Edarkan flashdisk. Keliling: tombol Yes/Install/Finish. Centang Level 1 di papan |
+| 20–24 | 12 | **Level 2** mulai unduh board ESP32 | Demo di proyektor: Preferences → tempel alamat → Boards Manager → INSTALL |
+| 24–34 | 13–14 | Game Tebak Komponen + Tur Arduino IDE | Main sambil unduhan berjalan. +2 tiap jawaban benar |
+| 34–42 | 15–17 | **Level 3** library DHT + Verify, Tanya Jawab, 🟢 Easy | Verify pertama 2–5 menit: isi dengan Tanya Jawab. Cek 3 bukti Easy (+5) |
+| 42–54 | 18–20 | Misteri D2, **BOS** upload Blink, tips upload gagal | **Ganti peran.** Level 2 belum selesai? Kelompok itu pakai laptop cadangan |
+| 54–56 | 21 | Tanya Jawab | +2 per penjawab |
+| 56–62 | 22–23 | 🟡 Medium + 🔴 Hard | Medium dulu. Hard untuk yang cepat. Pastikan Hard dikembalikan ke D2 |
+| 62–63 | 24 | Peta petualangan | Teaser P11 |
+| 63–70 | 25–26 | Post-test | Sendiri-sendiri, HP/laptop. Tutup dengan info P11 |
 
 ## 4. Kalimat kunci (boleh dibacakan)
 
-- **Pembuka:** "Minggu lalu LED kita nyala dari 3V3, tapi mati di D2. Hari ini kita kasih ESP32 'aplikasi' pertamanya, dan dia yang menyalakan lampunya."
-- **Listrik vs program:** "Tanpa coding itu artinya tanpa program, bukan tanpa listrik. ESP32 selalu butuh kabel USB, dari laptop atau power bank."
-- **Upload:** "Upload itu seperti memasang aplikasi ke HP. Laptop tokonya, kabel USB jalannya."
-- **Serial Monitor:** "Ini kotak chat ESP32. Dia akan bilang 'LED nyala', 'LED mati'."
-- **Sebelum merakit:** "Tangan siapa yang pegang kabel? Perakit. Siapa yang bilang boleh colok USB? Pengecek, setelah checklist selesai."
-- **Saat berhasil:** "Lampu biru dan LED kedip bareng? Itu bukti programmu jalan. Kalian baru saja memprogram mikrokontroler!"
+- **Pembuka:** "Hari ini kita main game 3 level. Hadiahnya: ESP32 kalian menjalankan program pertamanya."
+- **IoT:** "IoT itu benda biasa yang dikasih otak kecil dan internet. Lampu parkir mall, smartwatch, CCTV. Sebentar lagi kalian bikin sendiri."
+- **Penerjemah:** "ESP32 cuma ngerti 0 dan 1. Arduino IDE itu penerjemahnya. Verify = terjemahkan dan periksa. Upload = terjemahkan dan kirim."
+- **Kamus board:** "Arduino IDE dari pabriknya cuma kenal papan buatan Arduino. ESP32 buatan perusahaan lain, jadi kita pasang kamusnya dulu."
+- **Sambil menunggu:** "Unduhannya besar, kayak download game. Sambil nunggu, kita main tebak-tebakan."
+- **Saat berhasil:** "Lampu biru dan LED kedip bareng? Selamat, kalian baru saja memprogram mikrokontroler!"
 
-## 5. Mengelola kelas 12–15 tahun
+## 5. Gaya mengajar: belajar sambil bermain
 
-- **Perhatian pendek (±10 menit):** jangan bicara lebih dari 5–6 menit tanpa praktek. Timeline sudah dipecah: materi singkat → langsung praktek.
-- **Sinyal diam:** sepakati satu sinyal (mis. tutor angkat tangan → semua angkat tangan & lepas kabel/mouse). Pakai sebelum memberi instruksi baru.
-- **Peran berputar** (slide 5): Perakit, Pengecek, Operator, Pencatat. Ganti di menit 41. Kelompok berdua: tiap orang 2 peran. Kelompok berempat: awasi supaya tidak ada yang hanya menonton; beri tugas ke yang menganggur ("kamu Pengecek, bacakan checklist ke Perakit").
-- **Peserta individu** (`smp-01`–`smp-05`): mereka pegang semua peran. Pasangkan dua individu yang duduk berdekatan sebagai **"teman cek"**: saling membacakan checklist sebelum colok USB. Alat & nilai tetap milik masing-masing.
-- **Anak yang memonopoli laptop:** "Operator sekarang si A. Kamu jadi Pengecek dulu, nanti gantian di Topik 2."
-- **Quick win** tiap ±10 menit: LED kedip pertama, Easy lulus, angka suhu pertama, tiup sensor. Rayakan dengan menyebut nama kelompok keras-keras.
+- **Rayakan setiap level.** Centang besar di papan + sebut nama kelompok keras-keras. Anak SMP sangat termotivasi oleh "progress bar" yang terlihat.
+- **Jangan ceramah lebih dari 5–6 menit** tanpa kegiatan. Slide 7–9 cukup ±6 menit, lalu langsung tangan di laptop.
+- **Waktu menunggu = waktu main.** Saat unduhan berjalan, jangan biarkan siswa menatap progress bar: jalankan Tebak Komponen dan Tur Arduino IDE.
+- **Kesalahan itu bagian dari game.** Kalau upload gagal, katakan: "Bagus, kita dapat misi tambahan. Baca tulisan merahnya, cocokkan dengan slide Tips Engineer."
+- **Sinyal diam:** sepakati satu sinyal (tutor angkat tangan → semua angkat tangan & lepas mouse) sebelum memberi instruksi baru.
+- **Peran berputar:** Operator Topik 1 ≠ Operator Topik 2 (ganti di menit 42). Kelompok berempat: beri tugas ke yang menganggur ("kamu Pengecek, bacakan langkah Level 2 keras-keras").
+- **Peserta individu** (`smp-01`–`smp-05`): pegang semua peran. Pasangkan dua individu sebagai **"teman cek"** yang saling membacakan langkah.
+- **Kelompok yang selesai duluan** jadi "asisten instalasi": membantu kelompok lain **dengan menunjuk dan bertanya**, bukan mengambil alih mouse.
 
-## 6. Titik cek pemahaman
+## 6. Sistem poin & cara mencatat
 
-- Setelah slide 8: "Sebutkan 4 langkah upload, mulai dari kelompok paling belakang." (salin → upload → serial monitor → lihat alat)
-- Setelah slide 10: **jempol**: "Jempol atas kalau lampu biru dan LED kalian kedip bareng." Yang jempol bawah → datangi duluan.
-- Setelah slide 16: "Kaki out ke mana?" (semua menjawab bersama: D4). "+ ke mana?" (3V3).
+| Kegiatan | Poin | Untuk siapa |
+|---|---|---|
+| Bertanya / menjawab Tanya Jawab, pemantik, Tebak Komponen, Tur Arduino IDE | **+2** | Siswa yang bicara (benar atau salah, yang penting berani; Tebak Komponen & Tur: yang benar) |
+| 🟢 Easy | **+5** | Setiap anggota kelompok |
+| 🟡 Medium | **+10** | Setiap anggota kelompok |
+| 🔴 Hard | **+15** | Setiap anggota kelompok |
+
+- Catat +2 dengan turus di kertas absen saat itu juga (jangan menunda sampai akhir kelas). Pencatat kelompok boleh membantu mencatat poin kelompoknya.
+- Gilir yang menjawab: "Yang sudah dapat dua kali, gantian dulu ya." Tujuannya semua anak berani bicara minimal sekali.
+- Rekap ke gradebook setelah kelas supaya leaderboard ter-update.
+- **Tidak ada PR.** Instalasi yang belum selesai diselesaikan tutor, bukan dibawa pulang siswa.
+
+## 7. Titik cek pemahaman
+
+- Setelah slide 9: "Verify atau Upload yang mengirim program ke ESP32?" (Upload).
+- Setelah slide 10: "Level 2 itu pasang apa?" (board ESP32 / kamus ESP32).
+- Setelah slide 19: **jempol**: "Jempol atas kalau lampu biru dan LED kalian kedip bareng." Yang jempol bawah → datangi duluan.
 - Sebelum post-test: "Lampu biru kedip, LED diam. Salah program atau rakitan?" (rakitan).
 
-## 7. Kesalahan yang sering terjadi & cara membantu
+## 8. Kesalahan yang sering terjadi & cara membantu
 
-Bantu dengan **pertanyaan**, bukan langsung memperbaiki. Biarkan Perakit yang memegang kabel.
+Bantu dengan **pertanyaan**, bukan langsung mengambil mouse/kabel.
 
 | Kesalahan | Pertanyaan pancingan |
 |---|---|
-| Lupa cabut USB saat memindah kabel | "Apa yang ada di papan tulis? Sudah dilakukan?" |
-| LED terbalik / dua kaki LED satu baris | "Kaki panjang LED harus ke mana? Coba ikuti jalan listriknya dari D2 sampai GND." |
-| Kabel di D2 tertukar dengan pin sebelah (D15/D4) | "Baca tulisan kecil di sebelah pinnya. Apa tulisannya?" |
-| Menyalin program tidak utuh (sebagian kode hilang) | "Baris paling atas dan paling bawah programmu sama dengan file aslinya?" |
-| Membuka Serial Monitor saat upload → gagal | "Lihat pesan merahnya. Ada kata 'busy' atau 'denied'? Apa yang sedang terbuka?" |
-| DHT22 dipasang sesuai urutan modul lain | "Tulisan di modul kalian urutannya apa? Baca dari kiri." |
-| `Gagal baca sensor` | "Kabel kuning sekarang di pin apa? Program menunggu di pin berapa?" |
+| Mac: salah pilih file `.dmg` (Apple Silicon vs Intel), aplikasi tidak mau dibuka | "Di About This Mac tertulis Chip Apple atau Intel? File yang kamu pakai yang mana?" |
+| Memilih "Arduino ESP32 Boards by Arduino" | "Baca tulisan kecil di bawah judulnya: by siapa?" |
+| Alamat board salah ketik / ada spasi | "Bandingkan huruf demi huruf dengan papan. Lebih aman salin-tempel." |
+| INSTALL WITHOUT DEPENDENCIES di Level 3 | "Tombol mana yang kamu klik tadi? Coba cari Adafruit Unified Sensor." |
+| Lupa memilih board/port sebelum Upload | "Kotak Select Board di atas tulisannya apa?" |
+| Lupa cabut USB saat memindah kabel | "Apa yang tertulis di papan? Sudah dilakukan?" |
+| LED terbalik / dua kaki LED satu baris | "Kaki panjang LED harus ke mana? Ikuti jalan listriknya dari D2 sampai GND." |
+| Medium: titik koma atau kurung ikut terhapus (error merah) | "Bandingkan baris yang kamu ubah dengan baris lain. Ada yang hilang?" |
 
-## 8. Troubleshooting cepat
+## 9. Troubleshooting cepat
 
 | Gejala | Penyebab paling mungkin | Tindakan |
 |---|---|---|
-| Port tidak muncul | Kabel charger / driver | Ganti kabel data bertanda. Masih tidak? Cek driver di Device Manager |
+| Installer Windows tidak mau jalan | SmartScreen | More info → Run anyway (file dari arduino.cc) |
+| Mac: "cannot be opened because the developer cannot be verified" | Gatekeeper | System Settings → Privacy & Security → Open Anyway |
+| Unduhan board ESP32 sangat lambat | WiFi kelas | Ganti ke versi **2.0.17**; atau pindah kelompok ke laptop cadangan untuk BOS |
+| *Error downloading* di tengah unduhan | Internet putus | Klik INSTALL lagi (unduhan dilanjutkan) |
+| "ESP32 Dev Module" tidak ada di daftar | Level 2 belum selesai | Cek Boards Manager: harus tertulis *installed* |
+| `DHT.h: No such file or directory` | Library DHT belum terpasang | Library Manager → DHT sensor library by Adafruit → INSTALL ALL |
+| `Adafruit_Sensor.h: No such file` | Dependency tidak ikut | Library Manager → Adafruit Unified Sensor → INSTALL |
+| Verify pertama 2–5 menit | Compile pertama ESP32 | Normal. Isi dengan Tanya Jawab |
+| Port tidak muncul | Kabel charger / driver | Ganti kabel data bertanda. Masih tidak? Driver CP210x/CH340 (Panduan 2 bagian E) |
 | `Failed to connect to ESP32` | Board belum masuk mode upload | Tahan **BOOT** saat `Connecting....`, lepas saat persen muncul |
-| `Access denied` / port sibuk | Serial Monitor masih terbuka | Tutup tab Serial Monitor (tanda ×), upload lagi |
-| Tulisan acak `⸮⸮⸮` | Kecepatan berbeda | Pilih **115200 baud** di pojok kanan Serial Monitor |
-| Serial Monitor kosong | Pesan awal terlewat | Tekan tombol **EN** di board |
-| Compile lama (2–5 menit) | Compile pertama di laptop itu | Biarkan jalan; kelompok itu ikut lihat layar kelompok sebelah dulu |
-| `DHT.h: No such file or directory` | Library DHT belum dipasang | Library Manager → `DHT sensor library` → INSTALL ALL |
-| Upload gagal terus walau BOOT ditahan | Kecepatan upload terlalu tinggi untuk kabel/board | **Tools → Upload Speed → 115200** |
+| Upload gagal terus walau BOOT ditahan | Kecepatan upload | **Tools → Upload Speed → 115200** |
+| `Access denied` / port sibuk | Serial Monitor masih terbuka | Tutup Serial Monitor, upload lagi |
+| Tulisan acak `⸮⸮⸮` | Baud beda | Pilih **115200 baud** di Serial Monitor |
 | Lampu biru kedip, LED diam | Rakitan LED | LED terbalik / satu baris / kabel bukan di D2 |
-| `Gagal baca sensor! Cek kabel.` | Kabel out / longgar / + − tertukar | Cabut USB, cek dengan checklist slide 16 |
-| Sensor terasa hangat/panas | + dan − tertukar | **Cabut USB segera**, tukar kabelnya, tunggu dingin |
-| Angka tidak berubah saat ditiup | Normal, sensor lambat | Tiup lebih lama (5 detik), tunggu 2–4 detik |
+| Halaman server kelas tidak terbuka dari laptop siswa | Profil WiFi masih Public / WiFi memblokir antar-perangkat | Ubah profil WiFi laptop pengajar jadi Private, izinkan Python di Firewall; atau router sendiri yang tetap tersambung internet |
+| Boards Manager tetap mengunduh lama padahal pakai server kelas | Alamat Espressif masih ada di Preferences | Hapus, sisakan alamat lokal saja |
 
-## Cara main Kartu Sabotase (Challenge Hard "Detektif Sensor")
-Halaman: `ekskulcoding.inspiralabs.id/sabotase/` (juga ada di halaman utama ekskul, kartu "🎴 Kartu Sabotase"). Di SMP **tutor** yang menyabotase, bukan siswa.
+## 10. Keselamatan
 
-1. **Sebelum kelas atau saat siswa mengerjakan Medium:** buka halaman di HP → pilih **SMP** → **🎴 Ambil Kartu**. Keluar 3 kartu aman (1 untuk kabel out, 1 untuk kabel −, 1 untuk kabel +).
-2. **Pasang ketiganya** pada satu rakitan DHT22 dengan **USB dicabut**, lalu tekan **🙈 Tutup kartu**. Rakitan ini diberikan ke kelompok yang sudah menyelesaikan Easy/Medium.
-3. **Siswa jadi detektif:** colok USB, lihat Serial Monitor menulis `Gagal baca sensor!`, cari 3 kabel yang salah, tulis *kabel mana → seharusnya ke mana*, perbaiki sampai angka suhu muncul. **Program tidak boleh diubah.**
-4. **Cocokkan:** **catat 3 kartu tadi** (foto layar/kertas) sebelum menutupnya, karena Ambil Kartu berikutnya memberi kartu lain. Gejala tiap kartu ada di bagian "Untuk tutor: semua kartu & gejalanya" di halaman.
-5. **Nilai:** +10 kalau 3 kesalahan ditulis benar dan angka suhu muncul.
-
-**Jangan pernah menukar kabel + dan −** DHT22 (sensor bisa panas). Kartu di halaman sudah dipilih yang aman.
-
-## 9. Keselamatan
-
-- Semua tegangan di kit ini rendah (3,3V–5V dari USB): **aman disentuh**. Tidak ada listrik PLN di meja.
+- Tegangan kit rendah (3,3V–5V dari USB): **aman disentuh**. Tidak ada listrik PLN di meja.
 - Aturan nomor satu: **cabut USB sebelum memindah kabel**.
-- + dan − DHT22 tertukar → sensor panas. Ajarkan: "Kalau terasa hangat, cabut dulu, tanya kemudian."
 - Jangan taruh board di atas benda logam (gunting, penggaris besi, kaleng): bisa korsleting.
-- Minuman jauh dari meja rakitan.
+- Unduh aplikasi hanya dari **arduino.cc** atau flashdisk tutor. Ajarkan: "Jangan instal dari link pendek yang tidak jelas."
+- Minuman jauh dari meja laptop dan rakitan.
 
-## 10. Diferensiasi
+## 11. Diferensiasi
 
-- **Siswa cepat:** Challenge Medium dan Hard; lalu tantangan bonus: "Tanpa melihat slide, jelaskan ke kelompok sebelah kenapa lampu biru ikut kedip." atau jadi "asisten tutor" yang membantu kelompok lain **dengan pertanyaan**, bukan mengambil alih.
-- **Siswa kesulitan:** pecah jadi langkah satu per satu. Tunjuk satu kabel: "Pasang yang merah dulu. Sudah? Sekarang kuning." Boleh melihat rakitan kelompok yang sudah berhasil. Target minimum: Blink jalan + angka suhu muncul; Medium/Hard boleh dilewati.
+- **Siswa cepat:** Challenge Medium & Hard; lalu jadi "asisten instalasi" untuk kelompok lain (hanya menunjuk & bertanya). Bonus: "Coba buat LED kedip dengan pola detak jantung: cepat-cepat-lambat. Angka mana yang harus diubah?"
+- **Siswa kesulitan:** pecah jadi satu langkah per instruksi ("Klik File. Sudah? Sekarang Preferences."). Target minimum: Arduino IDE terpasang + LED berkedip (boleh di laptop cadangan). Medium/Hard boleh dilewati.
 
-## 11. Penilaian
+## 12. Penilaian
 
-- **Challenge:** +10 per challenge yang lulus (per kelompok/individu) di leaderboard. Easy wajib; Medium & Hard opsional.
-  - Easy lulus = LED kedip bareng lampu biru tanpa melihat slide.
-  - Medium lulus = LED kedip di D18, bisa menjelaskan kenapa lampu biru diam, **sudah dikembalikan** ke D2/angka 2.
-  - Hard lulus = 3 kesalahan ditulis benar + angka suhu muncul tanpa mengubah program.
-- **Post-test:** 5 soal, individu (Google Form otomatis menilai). Kunci: 1B 2A 3C 4C 5B.
-- **Tugas 3:** gambar rakitan, dikumpulkan di P11.
+- **Keaktifan:** +2 per tanya/jawab (pemantik, Tanya Jawab, Tebak Komponen, Tur Arduino IDE).
+- **Challenge** (leaderboard, per anggota kelompok):
+  - 🟢 Easy +5 = 3 bukti: ESP32 Dev Module ada, library DHT *installed*, `Done compiling`.
+  - 🟡 Medium +10 = LED kedip cepat (`delay(100)`) **dan** lambat (`delay(3000)`) ditunjukkan ke tutor.
+  - 🔴 Hard +15 = LED kedip di D18, bisa menjelaskan kenapa lampu biru diam, **sudah dikembalikan** ke D2/angka 2.
+- **Post-test:** 5 soal, individu (Google Form otomatis menilai). Kunci: 1B 2A 3C 4D 5B.
+- **Tidak ada PR / tugas rumah.**
 
-## 12. Penutup & PR
+## 13. Penutup
 
-- "Rakitan jangan dibongkar. Kalau harus, **foto dulu**."
-- PR: **Tugas 3** — gambar rakitan (LED di D2 + DHT22) dengan tangan, beri warna kabel & nama pin, foto, kumpulkan di P11.
-- Teaser P11: "Minggu depan alat kalian mengirim suhu ke internet. Kalian jadi dokter kabel."
-- Setelah kelas: catat kelompok yang belum berhasil (Blink atau sensor) → datangi duluan di awal P11.
+- "Rakitan LED jangan dibongkar. Minggu depan ESP32 kita dapat 'indera' pertamanya: sensor suhu, plus grafik yang bisa kalian tiup!"
+- Setelah kelas (tutor): selesaikan instalasi laptop yang belum lulus Level 2/3 (catat dari tabel di papan), supaya P11 bisa langsung praktek. Rekap poin ke gradebook.
