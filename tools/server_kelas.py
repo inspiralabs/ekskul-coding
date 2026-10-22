@@ -65,6 +65,40 @@ def ip_lan():
     return [ip for ip in ips if not ip.startswith("127.")]
 
 
+def nama_kelompok():
+    """{device_id: [nama anggota]} dari tools/kelompok.json (kosong kalau tidak ada)."""
+    try:
+        data = json.loads((ROOT / "tools" / "kelompok.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return {k["id"]: [n.strip() for n in k["nama"].replace("&", ",").split(",") if n.strip()] for k in data}
+
+
+def kartu_proyek(paket_dir):
+    """Kartu unduhan proyek, dikelompokkan per jenjang (SMP dulu), lengkap dengan nama anggota."""
+    e = htmllib.escape
+    nama = nama_kelompok()
+    per_jenjang = {}
+    for n in daftar(paket_dir):
+        if n.endswith(".zip"):
+            per_jenjang.setdefault(n[:3].upper(), []).append(n)
+    html = ""
+    for jenjang in sorted(per_jenjang, key=lambda j: (j != "SMP", j)):
+        kartu = ""
+        for n in per_jenjang[jenjang]:
+            dev, anggota = n[:-4], nama.get(n[:-4], [])
+            mb = (Path(paket_dir) / n).stat().st_size / 1e3
+            label = "individu" if len(anggota) == 1 else f"{len(anggota)} orang" if anggota else ""
+            daftar_nama = "".join(f"<li>{e(a)}</li>" for a in anggota)
+            cari = e(" ".join([dev] + anggota).lower())
+            kartu += f"""<a class="kartu" href="/proyek/{e(n)}" data-cari="{cari}">
+<div class="kartu-atas"><span class="id">{e(dev)}</span><span class="jumlah">{label}</span></div>
+<ul class="anggota">{daftar_nama}</ul>
+<div class="kartu-bawah"><span>⬇ Unduh zip</span><span>{mb:.0f} KB</span></div></a>"""
+        html += f'<h3 class="jenjang">{e(jenjang)}<span>{len(per_jenjang[jenjang])} paket</span></h3><div class="grid">{kartu}</div>'
+    return html
+
+
 def halaman(base, index_ada, kelas_dir, paket_dir):
     e = htmllib.escape
     unduhan = "".join(
@@ -78,8 +112,7 @@ def halaman(base, index_ada, kelas_dir, paket_dir):
 <li>Pilih <b>esp32 by Espressif Systems</b> → <b>INSTALL</b>. Unduhannya dari laptop pengajar.</li></ol>"""
     else:
         board = "<p>Maaf, board ESP32 belum terpasang di laptop pengajar.</p>"
-    proyek = "".join(f'<a class="proyek" href="/proyek/{e(n)}">{e(n[:-4])}</a>'
-                     for n in daftar(paket_dir) if n.endswith(".zip")) or "<p>Belum ada folder proyek.</p>"
+    proyek = kartu_proyek(paket_dir) or "<p>Belum ada folder proyek.</p>"
     return f"""<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Server Kelas</title>
@@ -88,12 +121,44 @@ body{{font-family:system-ui,sans-serif;max-width:760px;margin:0 auto;padding:16p
 h1{{color:#7a1f2b;margin-bottom:4px}} .alamat{{font-size:2rem;font-weight:800;color:#7a1f2b}}
 section{{background:#fff;border-radius:12px;padding:16px;margin:16px 0;box-shadow:0 1px 4px #0002}}
 h2{{margin-top:0}} .kode{{font-family:monospace;background:#2b2320;color:#e8d9b5;padding:12px;border-radius:8px;word-break:break-all;user-select:all}}
-.proyek{{display:inline-block;margin:4px;padding:8px 12px;border-radius:8px;background:#e8d9b5;color:#5a1620;text-decoration:none;font-weight:700}}
+.cari{{width:100%;box-sizing:border-box;padding:10px 14px;font-size:1rem;border:1.5px solid #e2d6c2;border-radius:10px;background:#faf8f5;margin:4px 0 8px}}
+.cari:focus{{outline:none;border-color:#c9a24b;background:#fff}}
+.jenjang{{display:flex;align-items:baseline;gap:8px;margin:20px 0 10px;color:#7a1f2b;font-size:1rem;letter-spacing:.06em}}
+.jenjang span{{font-size:.8rem;font-weight:600;color:#6b5f58;letter-spacing:0}}
+.grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}}
+.kartu{{display:flex;flex-direction:column;border:1.5px solid #ece3d3;border-radius:12px;padding:12px 14px;color:inherit;text-decoration:none;background:#fff;transition:border-color .15s,box-shadow .15s,transform .15s}}
+.kartu:hover,.kartu:focus-visible{{border-color:#c9a24b;box-shadow:0 4px 14px #7a1f2b1f;transform:translateY(-2px);outline:none}}
+.kartu-atas{{display:flex;justify-content:space-between;align-items:center;gap:8px}}
+.id{{font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:1.1rem;color:#7a1f2b}}
+.jumlah{{font-size:.75rem;font-weight:700;color:#5a1620;background:#e8d9b5;border-radius:99px;padding:2px 8px;white-space:nowrap}}
+.anggota{{list-style:none;padding:0;margin:8px 0 12px;font-size:.88rem;line-height:1.45;flex:1}}
+.kartu-bawah{{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;color:#7a1f2b;border-top:1px dashed #e2d6c2;padding-top:8px}}
+.kartu-bawah span:last-child{{color:#6b5f58;font-weight:600}}
+.kosong{{color:#6b5f58;font-style:italic}}
+[hidden]{{display:none!important}}
 </style></head><body>
 <h1>Server Kelas Ekskul Coding</h1><div class="alamat">{e(base)}</div>
 <section><h2>1. Unduhan (installer Arduino IDE)</h2><ul>{unduhan}</ul></section>
 <section><h2>2. Board ESP32</h2>{board}</section>
-<section><h2>3. Folder proyek kelompok</h2><p>Klik milikmu → buka file zip-nya → <b>Extract All</b>.</p>{proyek}</section>
+<section><h2>3. Folder proyek kelompok</h2>
+<p>Cari namamu, klik kartunya, lalu buka file zip-nya → <b>Extract All</b>.</p>
+<input class="cari" id="cari" type="search" placeholder="Ketik namamu atau smp-07…" aria-label="Cari nama atau Device ID">
+<p class="kosong" id="kosong" hidden>Nama tidak ditemukan. Tanya pengajar Device ID kelompokmu.</p>
+{proyek}</section>
+<script>
+document.getElementById("cari").addEventListener("input", function () {{
+  var q = this.value.trim().toLowerCase(), ada = 0;
+  document.querySelectorAll(".grid").forEach(function (g) {{
+    var n = 0;
+    g.querySelectorAll(".kartu").forEach(function (k) {{
+      var cocok = k.dataset.cari.indexOf(q) !== -1;
+      k.hidden = !cocok; n += cocok;
+    }});
+    g.hidden = g.previousElementSibling.hidden = !n; ada += n;
+  }});
+  document.getElementById("kosong").hidden = ada > 0;
+}});
+</script>
 </body></html>"""
 
 
@@ -235,6 +300,9 @@ def cek():
         assert html.startswith("<!doctype html>")
         assert "arduino-ide_2.3.10_Windows_64bit.exe" in html and "smp-07" in html
         assert "/board/package_esp32_index.json" in html
+        # kartu proyek: dikelompokkan per jenjang + nama anggota dari tools/kelompok.json
+        assert "Rafif Ahnaf Rabbani" in html and "M. Qassim" in html
+        assert html.index(">SMP<") < html.index('href="/proyek/smp-07.zip"')
 
         # nama aneh / traversal -> 404
         for p in ["/board/..%5Cpackage_esp32_index.json", "/unduh/../../x", "/board/tidak-ada.zip",
