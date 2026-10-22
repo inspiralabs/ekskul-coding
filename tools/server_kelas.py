@@ -99,19 +99,35 @@ def kartu_proyek(paket_dir):
     return html
 
 
+URL_ESP32 = "https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+URL_ESP8266 = "https://arduino.esp8266.com/stable/package_esp8266com_index.json"
+
+
+def kotak_salin(teks):
+    e = htmllib.escape
+    return (f'<div class="baris-salin"><input class="kode" readonly value="{e(teks)}" aria-label="Alamat">'
+            f'<button type="button" class="salin" data-teks="{e(teks)}">Salin</button></div>')
+
+
 def halaman(base, index_ada, kelas_dir, paket_dir):
     e = htmllib.escape
     unduhan = "".join(
         f'<li><a href="/unduh/{e(n)}">{e(n)}</a> <small>{(Path(kelas_dir) / n).stat().st_size / 1e6:.0f} MB</small></li>'
         for n in daftar(kelas_dir)) or "<li>Belum ada file. Pengajar: taruh installer di <code>dist/kelas/</code>.</li>"
     if index_ada:
-        board = f"""<div class="kode">{e(base)}/board/{INDEX}</div>
+        board = f"""<h3 class="sub">Cara cepat: dari laptop pengajar</h3>
+{kotak_salin(f"{base}/board/{INDEX}")}
 <ol><li>Arduino IDE → <b>File → Preferences</b>.</li>
 <li>Di <b>Additional boards manager URLs</b>: <b>hapus alamat lama</b>, tempel alamat di atas → <b>OK</b>.</li>
 <li>Buka <b>Boards Manager</b> (ikon papan di kiri), ketik <code>esp32</code>.</li>
-<li>Pilih <b>esp32 by Espressif Systems</b> → <b>INSTALL</b>. Unduhannya dari laptop pengajar.</li></ol>"""
+<li>Pilih <b>esp32 by Espressif Systems</b> → <b>INSTALL</b>. Unduhannya dari laptop pengajar.</li></ol>
+<h3 class="sub">Kalau cara cepat gagal: unduh dari internet</h3>"""
     else:
-        board = "<p>Maaf, board ESP32 belum terpasang di laptop pengajar.</p>"
+        board = '<p>Maaf, board ESP32 belum terpasang di laptop pengajar. Pakai alamat internet di bawah.</p>'
+    board += f"""<p class="ket">Ganti isi <b>Additional boards manager URLs</b> dengan alamat ini, lalu INSTALL seperti biasa (unduhan ±2 GB, lebih lama).</p>
+<div class="label">ESP32 (dipakai di kelas)</div>{kotak_salin(URL_ESP32)}
+<div class="label">ESP8266 (opsional)</div>{kotak_salin(URL_ESP8266)}
+<button type="button" class="salin salin-dua" data-teks="{e(URL_ESP32)},{e(URL_ESP8266)}">Salin keduanya sekaligus</button>"""
     proyek = kartu_proyek(paket_dir) or "<p>Belum ada folder proyek.</p>"
     return f"""<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -120,7 +136,14 @@ def halaman(base, index_ada, kelas_dir, paket_dir):
 body{{font-family:system-ui,sans-serif;max-width:760px;margin:0 auto;padding:16px;background:#faf8f5;color:#2b2320}}
 h1{{color:#7a1f2b;margin-bottom:4px}} .alamat{{font-size:2rem;font-weight:800;color:#7a1f2b}}
 section{{background:#fff;border-radius:12px;padding:16px;margin:16px 0;box-shadow:0 1px 4px #0002}}
-h2{{margin-top:0}} .kode{{font-family:monospace;background:#2b2320;color:#e8d9b5;padding:12px;border-radius:8px;word-break:break-all;user-select:all}}
+h2{{margin-top:0}} .sub{{font-size:1rem;color:#5a1620;margin:18px 0 8px}}
+.ket{{color:#6b5f58;font-size:.92rem}} .label{{font-size:.8rem;font-weight:700;color:#6b5f58;margin:10px 0 4px}}
+.baris-salin{{display:flex;gap:8px}}
+.kode{{flex:1;min-width:0;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;background:#2b2320;color:#e8d9b5;padding:10px 12px;border:0;border-radius:8px}}
+.salin{{flex:none;font:inherit;font-weight:700;font-size:.9rem;padding:8px 16px;border:0;border-radius:8px;background:#7a1f2b;color:#fff;cursor:pointer;min-width:84px}}
+.salin:hover{{background:#5a1620}}
+.salin-dua{{margin-top:12px;background:#e8d9b5;color:#5a1620}} .salin-dua:hover{{background:#c9a24b;color:#2b2320}}
+.salin.ok{{background:#2e7d4f;color:#fff}}
 .cari{{width:100%;box-sizing:border-box;padding:10px 14px;font-size:1rem;border:1.5px solid #e2d6c2;border-radius:10px;background:#faf8f5;margin:4px 0 8px}}
 .cari:focus{{outline:none;border-color:#c9a24b;background:#fff}}
 .jenjang{{display:flex;align-items:baseline;gap:8px;margin:20px 0 10px;color:#7a1f2b;font-size:1rem;letter-spacing:.06em}}
@@ -146,6 +169,21 @@ h2{{margin-top:0}} .kode{{font-family:monospace;background:#2b2320;color:#e8d9b5
 <p class="kosong" id="kosong" hidden>Nama tidak ditemukan. Tanya pengajar Device ID kelompokmu.</p>
 {proyek}</section>
 <script>
+// http://<IP> bukan "secure context", jadi navigator.clipboard tidak tersedia: pakai execCommand sebagai cadangan
+document.querySelectorAll(".salin").forEach(function (b) {{
+  b.addEventListener("click", function () {{
+    var t = document.createElement("textarea"), asli = b.textContent;
+    t.value = b.dataset.teks; t.style.position = "fixed"; t.style.opacity = "0";
+    document.body.appendChild(t); t.select();
+    var ok = false;
+    try {{ ok = document.execCommand("copy"); }} catch (e) {{}}
+    if (!ok && navigator.clipboard) {{ navigator.clipboard.writeText(b.dataset.teks); ok = true; }}
+    document.body.removeChild(t);
+    b.textContent = ok ? "Tersalin ✓" : "Pilih & Ctrl+C"; b.classList.toggle("ok", ok);
+    setTimeout(function () {{ b.textContent = asli; b.classList.remove("ok"); }}, 1800);
+  }});
+}});
+document.querySelectorAll("input.kode").forEach(function (i) {{ i.addEventListener("focus", function () {{ i.select(); }}); }});
 document.getElementById("cari").addEventListener("input", function () {{
   var q = this.value.trim().toLowerCase(), ada = 0;
   document.querySelectorAll(".grid").forEach(function (g) {{
@@ -301,6 +339,12 @@ def cek():
         assert "arduino-ide_2.3.10_Windows_64bit.exe" in html and "smp-07" in html
         assert "/board/package_esp32_index.json" in html
         # kartu proyek: dikelompokkan per jenjang + nama anggota dari tools/kelompok.json
+        # cadangan: alamat board resmi (internet), masing-masing bisa disalin + salin keduanya
+        esp32 = "https://espressif.github.io/arduino-esp32/package_esp32_index.json"
+        esp8266 = "https://arduino.esp8266.com/stable/package_esp8266com_index.json"
+        assert esp32 in html and esp8266 in html
+        assert html.count('class="salin') >= 4  # lokal, esp32, esp8266, keduanya
+        assert f"{esp32},{esp8266}" in html
         assert "Rafif Ahnaf Rabbani" in html and "M. Qassim" in html
         assert html.index(">SMP<") < html.index('href="/proyek/smp-07.zip"')
 
@@ -330,6 +374,7 @@ def cek():
         port2 = jalan(srv2)
         st, isi = minta(port2, "/")
         assert st == 200 and "board ESP32 belum terpasang" in isi.decode()
+        assert "https://espressif.github.io/arduino-esp32/package_esp32_index.json" in isi.decode()
         assert minta(port2, "/board/package_esp32_index.json")[0] == 404
 
         # port sudah dipakai server lain -> OSError (Windows mengizinkan bind ganda kalau reuse aktif)
