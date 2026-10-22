@@ -45,7 +45,7 @@ Aman dijalankan ulang: file kode & Panduan Pengajar diperbarui, folder & form ti
 Checklist Slides:
 - [ ] Slide 1 Linktree + QR, slide 2 Cover (judul + tagline), slide 3 Pertanyaan Pemantik
 - [ ] Emoji minim (tidak ada emoji tambahan dari Gemini)
-- [ ] Agenda → per topik: materi → Forum Diskusi → Challenge (TOPIK X DARI N, badge EASY/MEDIUM/HARD, +10)
+- [ ] Agenda → per topik: materi → Forum Diskusi / Tanya Jawab → Challenge (TOPIK X DARI N, badge EASY/MEDIUM/HARD, badge poin sesuai judul)
 - [ ] Evaluasi Mandiri (post-test via Linktree) → Terima kasih
 - [ ] Diagram wiring cocok dengan bagian `wiring` di prompt (pin, warna kabel, kaki LED). Salah → minta perbaikan / pakai screenshot wokwi.com
 - [ ] Speaker notes terisi, tidak ada teks "🗣️ SPEAKER NOTES" di slide
