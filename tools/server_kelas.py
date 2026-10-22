@@ -106,7 +106,8 @@ def buat_server(port, arduino15, kelas_dir, paket_dir):
             path = self.path.split("?", 1)[0]
             try:
                 if path == "/":
-                    ada = (Path(arduino15) / INDEX).is_file()
+                    idx = index_lokal(arduino15, base)  # siap = ada minimal 1 versi board di cache
+                    ada = bool(idx) and any(pkg["platforms"] for pkg in idx.get("packages", []))
                     return self.kirim(halaman(base, ada, kelas_dir, paket_dir).encode(), "text/html; charset=utf-8")
                 if path == f"/board/{INDEX}":
                     idx = index_lokal(arduino15, base)
@@ -139,9 +140,11 @@ def buat_server(port, arduino15, kelas_dir, paket_dir):
             if self.path != "/" and not self.path.startswith("/favicon"):
                 print(f"  {self.client_address[0]:15} {unquote(self.path)}")
 
-    srv = ThreadingHTTPServer(("0.0.0.0", port), Handler)
-    srv.daemon_threads = True
-    return srv
+    class Server(ThreadingHTTPServer):
+        allow_reuse_address = False  # di Windows, reuse membuat 2 server bisa memakai port yang sama diam-diam
+        daemon_threads = True
+
+    return Server(("0.0.0.0", port), Handler)
 
 
 def main(port):
@@ -260,7 +263,24 @@ def cek():
         st, isi = minta(port2, "/")
         assert st == 200 and "board ESP32 belum terpasang" in isi.decode()
         assert minta(port2, "/board/package_esp32_index.json")[0] == 404
+
+        # port sudah dipakai server lain -> OSError (Windows mengizinkan bind ganda kalau reuse aktif)
+        try:
+            buat_server(port2, tmp / "kosong", tmp / "tidak-ada", pak).server_close()
+            raise AssertionError("port ganda tidak terdeteksi")
+        except OSError:
+            pass
         srv2.shutdown()
+
+        # index ada tapi cache kosong (URL Espressif ditambah, board belum di-INSTALL) -> jangan tampilkan langkah
+        a15b = tmp / "A15b"
+        a15b.mkdir()
+        (a15b / "package_esp32_index.json").write_text(json.dumps(index), encoding="utf-8")
+        srv3 = buat_server(0, a15b, kelas, pak)
+        port3 = jalan(srv3)
+        isi = minta(port3, "/")[1].decode()
+        assert "board ESP32 belum terpasang" in isi and "Boards Manager" not in isi
+        srv3.shutdown()
     print("cek OK")
 
 
