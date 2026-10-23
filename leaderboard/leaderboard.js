@@ -1,23 +1,24 @@
 // ============================================================
 // JANGAN UBAH FILE INI — ini "kabel" ke data gradebook Google Sheets.
 // ============================================================
-// Satu baris yang PERLU diubah manual: GRADEBOOK_URL di bawah, kalau
-// tutor membuat spreadsheet gradebook baru. Cara dapatkan URL:
-// Google Sheets -> File -> Share -> Publish to web -> pilih tab
-// gradebook -> format CSV -> salin link.
+// Sumber: spreadsheet penilaian InspiraLabs (file .xlsx di Google Drive, satu per jenjang),
+// tab "Gradebook SMA" (nama tab di file SMP juga "...SMA"). Dibaca langsung lewat endpoint
+// gviz setiap halaman dibuka, jadi leaderboard ikut berubah begitu file diisi tutor.
+// Hanya tab Gradebook yang diambil (parameter sheet=); tab Master Data (No. HP, orang tua)
+// tidak pernah dibaca.
 //
-// GRADEBOOK_HEADER_ROW = 3 karena sheet gradebook tutor punya baris
-// judul + baris catatan rumus + satu baris kosong (yang di CSV tetap
-// berupa deretan koma, jadi TIDAK dibuang oleh parser) sebelum baris
-// header asli (ID Siswa, Nama Lengkap, dst). Kalau tutor mengubah
-// struktur sheet (tambah/kurang baris di atas header), angka ini yang
-// perlu disesuaikan.
+// Kalau tutor memakai file baru: ganti ID file di GRADEBOOK_URL (bagian /d/<ID>/).
+// range=A4:T200 mulai dari baris header asli (ID Siswa, Nama Lengkap, dst), jadi
+// GRADEBOOK_HEADER_ROW = 0. Kalau baris di atas header bertambah/berkurang, ubah A4.
 
-const GRADEBOOK_HEADER_ROW = 3;
+const GRADEBOOK_HEADER_ROW = 0;
+
+const gradebook = (id) =>
+  `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=Gradebook%20SMA&range=A4:T200&headers=1`;
 
 const GRADEBOOK_URL = {
-  sma: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-iiOjf3kuAFVaaCg1rOENELJVBjrjTNO2uuiqC1q1mWPNRsSIMEMG04fY6Vi9ZQ/pub?gid=412408676&single=true&output=csv',
-  smp: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkLb2YTqOH1gwn0sYziedXfCNbWD1TdHceKGTWgzEfTYTl9g-En_X8LdLOLAP1Rw/pub?gid=563350833&single=true&output=csv',
+  sma: gradebook('170i4eQA744WocxupwJA-ZHEX_3esMmUK'),
+  smp: gradebook('1GTRpJ2i8Vp0P4K0KmptnWR8nVgJMnwlJ'),
 };
 
 function rankRows(rows) {
