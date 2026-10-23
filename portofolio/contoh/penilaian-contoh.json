@@ -1,0 +1,113 @@
+{
+ "_catatan": "Data FIKTIF untuk halaman contoh (py tools/portofolio.py contoh). Bentuknya sama dengan hasil baca_penilaian().",
+ "kelompok": {
+  "SMP-000": "smp-00",
+  "SMP-998": "smp-00",
+  "SMP-999": "smp-00"
+ },
+ "siswa": {
+  "SMP-000": {
+   "id": "SMP-000",
+   "nama": "Fulan bin Fulan",
+   "panggilan": "Fulan",
+   "pindah": false,
+   "pertemuan": {
+    "1": {
+     "challenge": [],
+     "tanya_jawab": 1
+    },
+    "2": {
+     "challenge": [],
+     "tanya_jawab": 0
+    },
+    "3": {
+     "challenge": [],
+     "tanya_jawab": 1
+    },
+    "4": {
+     "challenge": [],
+     "tanya_jawab": 0
+    },
+    "5": {
+     "challenge": [],
+     "tanya_jawab": 1
+    },
+    "6": {
+     "challenge": [],
+     "tanya_jawab": 0
+    },
+    "7": {
+     "challenge": [],
+     "tanya_jawab": 1
+    },
+    "8": {
+     "challenge": [],
+     "tanya_jawab": 0
+    },
+    "9": {
+     "challenge": [
+      "easy",
+      "medium"
+     ],
+     "tanya_jawab": 1
+    },
+    "10": {
+     "challenge": [
+      "easy",
+      "medium",
+      "hard"
+     ],
+     "tanya_jawab": 2
+    },
+    "11": {
+     "challenge": [
+      "easy",
+      "medium"
+     ],
+     "tanya_jawab": 1
+    },
+    "12": {
+     "challenge": [
+      "easy",
+      "medium",
+      "hard"
+     ],
+     "tanya_jawab": 1
+    },
+    "13": {
+     "challenge": [
+      "easy",
+      "medium"
+     ],
+     "tanya_jawab": 1
+    }
+   },
+   "poin": null,
+   "ranking": 3,
+   "proyek": "Kotak Sejuk",
+   "kekuatan": "Fulan paling teliti saat merakit. Di P11 dia menemukan kabel data DHT22 yang tertukar, lalu membantu kelompok sebelah memperbaiki punyanya."
+  },
+  "SMP-998": {
+   "id": "SMP-998",
+   "nama": "Anggota Kedua",
+   "panggilan": "",
+   "pindah": false,
+   "pertemuan": {},
+   "poin": null,
+   "ranking": null,
+   "proyek": "",
+   "kekuatan": ""
+  },
+  "SMP-999": {
+   "id": "SMP-999",
+   "nama": "Anggota Ketiga",
+   "panggilan": "",
+   "pindah": false,
+   "pertemuan": {},
+   "poin": null,
+   "ranking": null,
+   "proyek": "",
+   "kekuatan": ""
+  }
+ }
+}

@@ -9,14 +9,14 @@ Prototipe sudah ada di branch `feat/portofolio-siswa` (folder `portofolio/`, gen
 
 1. **Beres-beres privasi sebelum ada foto.** Repo `inspiralabs/ekskul-coding` saat ini publik. Foto anak yang
    di-commit ke sana akan tersimpan di riwayat git selamanya, walaupun nanti dihapus. Jadikan repo private, atau simpan
-   data portofolio di luar repo ini (lihat bagian Privasi). Ditambah: formulir izin orang tua, halaman `noindex`
-   (tidak muncul di Google), dan foto wajib dibersihkan dari data lokasi GPS.
+   data portofolio di luar repo ini (lihat bagian Privasi). Ditambah: halaman `noindex` (tidak muncul di Google), dan
+   foto wajib dibersihkan dari data lokasi GPS.
 2. **Satu halaman dan satu sertifikat per siswa, bukan per kelompok.** Device ID itu kelompok (2 sampai 4 anak di
    smp-06 sampai smp-13, sma-04 sampai sma-06). Alamatnya: `https://smp-07.inspiralabs.id/siswa/rafif/`.
    Dashboard kelompok tetap di `https://smp-07.inspiralabs.id/`.
-3. **Isi dari data, bukan dari HTML.** Tutor tidak pernah mengedit HTML. Tiap siswa punya satu `siswa.json` dan satu
-   folder `foto/`. Materi P1 sampai P13 ditulis sekali di `portofolio/kurikulum.json` dan dipakai semua siswa. Poin
-   dan catatan tutor bisa ditarik dari gradebook Google Sheets yang sudah ada.
+3. **Isi langsung dari spreadsheet penilaian.** Tutor tidak mengedit HTML maupun JSON. Nama, lencana per pertemuan,
+   poin, judul proyek, dan catatan pelatih dibaca dari spreadsheet penilaian InspiraLabs yang sudah diisi selama
+   semester; foto dari satu folder per siswa. Materi P1 sampai P13 ditulis sekali di `portofolio/kurikulum.json`.
 4. **Perjalanan berisi bukti pribadi, bukan salinan silabus.** Tiap pertemuan menampilkan materi (sama untuk semua)
    plus satu kalimat hasil anak itu sendiri, dan challenge yang dia lulus dengan nama aslinya ("Klub 200",
    "Detektif Sensor", "Uji Goyang"). Nama-nama challenge itu yang membuat halaman terasa milik dia.
@@ -67,33 +67,47 @@ Urutan di prototipe (`portofolio/templat/index.html`), dirancang untuk HP dulu:
 
 Sengaja tidak ada: kehadiran (absen publik tidak perlu), nilai akhir, predikat, nilai post-test, kontak, nama kelas.
 
-## Alur kerja tutor
+## Alur kerja tutor: data dari spreadsheet penilaian
+
+Semua data siswa diambil langsung dari spreadsheet penilaian InspiraLabs yang sudah dipakai tutor (satu file SMP, satu
+SMA). **Tidak ada data yang diketik ulang**: lencana bertambah sendiri setiap kali tutor mencatat poin di Log Poin Sesi.
 
 ```powershell
-py tools/portofolio.py kerangka          # sekali: buat portofolio/siswa/<id>/<slug>/siswa.json untuk 37 siswa
-# isi siswa.json, taruh foto di portofolio/siswa/<id>/<slug>/foto/
-py tools/portofolio.py bangun --gradebook "<URL CSV gradebook SMP>"   # cek semua, lalu tulis dist/portofolio/
+# 1. Google Drive -> buka spreadsheet penilaian -> File -> Download -> Microsoft Excel (.xlsx), untuk SMP dan SMA
+# 2. bangun semua halaman (foto opsional)
+py tools/portofolio.py bangun penilaian-smp.xlsx penilaian-sma.xlsx --foto <folder-foto>
 py -m http.server 8091 -d dist/portofolio   # lihat: http://localhost:8091/smp-07/siswa/rafif/
-py tools/portofolio.py cek               # self-check generator
 ```
 
-- `kerangka` mengisi nama, urutan, anggota kelompok, dan 13 pertemuan kosong dari `tools/kelompok.json`. File yang
-  sudah ada tidak ditimpa. `izin_foto` mulai dari `false`.
-- Yang diisi tutor per siswa: `id_siswa` (ID di gradebook, mis. `SMP-005`), `peran`, `nama_kelompok`, challenge yang
-  lulus per pertemuan (`["easy", "medium"]`), jumlah tanya jawab, hasil satu kalimat (boleh kosong), daftar foto,
-  judul alat dan 3 kalimat P13, `izin_foto`, `tampil_nama_lengkap`. Contoh lengkap: `portofolio/contoh/smp-00/fulan/siswa.json`.
-- `bangun` menolak semuanya kalau ada satu kesalahan (ID tidak dikenal, level salah atau dobel, tanya jawab bukan angka
-  0-20, foto hilang, foto > 500 KB, foto bukan JPEG asli, foto masih ber-EXIF/XMP, nama file foto aneh, `id_siswa` tidak
-  ada di gradebook), dengan pesan per siswa. Tidak ada portofolio setengah jadi yang ikut terbit.
-- `bangun` selalu membangun ulang dari nol: folder `<id>/siswa/` di hasil dibersihkan dulu, jadi siswa yang datanya
-  dihapus ikut hilang dari hasil.
-- Dengan `--gradebook`, total poin diambil dari kolom "Total Poin Keseluruhan" (sumber resmi, sama dengan leaderboard).
-- Perkiraan kerja: 5 sampai 10 menit per siswa kalau poin per pertemuan disalin dari Log Poin Sesi, sekitar 4 sampai 6 jam
-  untuk 37 siswa, bisa dibagi antar tutor. Ini perkiraan, belum diukur.
+| Bagian halaman | Sheet | Kolom |
+|---|---|---|
+| Nama lengkap, panggilan | Master Data Siswa | Nama Lengkap, Nickname (siswa berstatus "Pindah" dilewati) |
+| Lencana per pertemuan | Log Poin Sesi | Pertemuan Ke-, Challenge Easy / Medium / Hard (terisi = lencana) |
+| Aktif tanya jawab | Log Poin Sesi | Keaktifan Umum (2 poin = 1 kali) |
+| Total poin, 3 besar | Gradebook | Total Poin Keseluruhan, Ranking |
+| Judul proyek | Catatan Tutor | Proyek / Karya |
+| Catatan pelatih | Catatan Tutor | Kekuatan (timpa draft), kalau kosong Draft Kekuatan (otomatis) |
+| Topik & tanggal pertemuan | `portofolio/kurikulum.json` | |
 
-Langkah berikut yang paling menghemat waktu: tab **Log Poin Sesi** di spreadsheet gradebook belum di-publish (yang
-publik hanya tab "Gradebook SMP"). Kalau tab itu di-publish sebagai CSV, generator bisa mengisi challenge per pertemuan
-otomatis, dan tutor tinggal menulis hasil, 3 kalimat, dan foto. Perlu melihat kolomnya dulu.
+Kolom lain **tidak pernah dibaca**: No. HP siswa dan orang tua, nama orang tua, NIS, presensi, nilai post-test,
+nilai akhir, predikat, "Perlu Ditingkatkan", saran untuk orang tua, catatan per sesi. Self-check memastikannya.
+
+**Siswa ke kelompok.** ID Siswa (`SMP-022`) itu per orang, Device ID (`smp-07`) per kelompok/website. Pasangannya ada di
+`tools/kelompok.json`, kolom `id_siswa` (urutan sama dengan urutan nama). Sudah diisi untuk ke-37 siswa dengan
+mencocokkan nama di spreadsheet. Kalau anggota kelompok berubah, cukup ubah baris itu.
+
+**Foto.** Satu folder per siswa, dinamai ID Siswa: `<folder-foto>/SMP-022/`. Isinya `.jpg` yang sudah dikecilkan lewat
+`portofolio/kecilkan-foto.html`. Nama file jadi keterangan: `p11-merakit-sensor.jpg` tampil sebagai "P11 · Merakit
+sensor"; tanpa awalan `pNN` juga boleh (`suasana-kelas.jpg`). File yang namanya diawali `proyek` jadi foto proyek
+akhir. Foto boleh foto alat, rangkaian, atau suasana kelas. Tempat menyimpan folder foto (Drive, server, dll.) belum
+diputuskan.
+
+- `bangun` menolak semuanya kalau ada satu masalah (ID di `kelompok.json` tidak ada di spreadsheet, foto > 500 KB, foto
+  bukan JPEG asli, foto masih ber-EXIF/XMP, nama file foto aneh), dengan pesan per siswa. Hasil lama tetap utuh.
+- `bangun` selalu membangun ulang dari nol: folder `<id>/siswa/` di hasil dibersihkan dulu, jadi siswa yang keluar
+  ikut hilang dari hasil.
+- Halaman contoh fiktif: `py tools/portofolio.py contoh` (data `portofolio/contoh/penilaian-contoh.json`).
+- Waktu kerja tutor: mengunduh 2 file + menaruh foto. Poin dan lencana sudah tercatat selama semester.
 
 ## Foto dan privasi
 
@@ -107,19 +121,12 @@ anak dan nama sekolah (`tools/kelompok.json`, `docs/HANDOUT_SISWA.md`). Untuk fo
 Sampai keputusan ini diambil, `.gitignore` di branch ini mengabaikan `portofolio/siswa/` supaya data asli tidak
 ter-commit tidak sengaja.
 
-**Izin orang tua.** Satu lembar (kertas atau Google Form) per anak, isinya:
-- nama lengkap boleh tampil (ya/tidak, kalau tidak: pakai nama panggilan saja),
-- foto kegiatan boleh tampil (ya/tidak), wajah boleh terlihat (ya/tidak),
-- halaman online sampai tanggal tertentu (usul: 30 Juni 2027), lalu diarsipkan,
-- orang tua bisa minta halaman dihapus kapan saja lewat tutor.
-
-Tanpa formulir kembali, `izin_foto` dan `tampil_nama_lengkap` tetap `false`: halaman terbit dengan nama panggilan,
-tanpa foto. Nama teman sekelompok di halaman anak lain juga mengikuti izin teman itu masing-masing. Hapus atas
-permintaan: hapus folder siswa, `bangun`, unggah ulang ke server (lihat di bawah). Kalau data itu pernah masuk git,
-riwayat git tetap menyimpannya, karena itu data portofolio sejak awal tidak di-commit.
+**Nama dan foto.** Keputusan pemilik: nama lengkap ditampilkan, foto ditampilkan (foto bisa berupa alat, rangkaian,
+atau suasana kelas, tidak harus wajah siswa). Hapus atas permintaan orang tua: keluarkan ID siswa dari
+`tools/kelompok.json` (atau hapus foldernya), `bangun`, unggah ulang ke server. Data portofolio tidak di-commit, jadi
+tidak tertinggal di riwayat git.
 
 **Aturan foto.**
-- Foto anak tanpa wajah jadi pilihan bawaan: tangan merakit, alat, layar dashboard, foto dari belakang.
 - Tidak ada data kontak, alamat rumah, seragam dengan nama, atau papan nama sekolah yang jelas di foto.
 - Semua foto lewat `portofolio/kecilkan-foto.html` dulu. Alat ini jalan di browser tutor (foto tidak di-upload ke
   mana pun), mengecilkan ke 1600 px dan di bawah 500 KB, membetulkan arah foto, dan membuang EXIF termasuk lokasi GPS.
@@ -130,7 +137,7 @@ riwayat git tetap menyimpannya, karena itu data portofolio sejak awal tidak di-c
 **Tidak terindeks.** Halaman memakai `<meta name="robots" content="noindex, nofollow">`; di server ditambah header
 `X-Robots-Tag` (lihat di bawah). Halaman bisa dibuka siapa pun yang punya link, tapi tidak muncul di Google.
 `noindex` tidak membuat halaman rahasia: alamatnya mudah ditebak (`smp-07.inspiralabs.id/siswa/<nama-depan>/`).
-Karena itu yang tampil hanya yang sudah diizinkan orang tua, dan nama lengkap bawaannya tidak tampil.
+Jangan menaruh data kontak atau alamat di foto maupun nama file.
 
 ## Sertifikat
 
@@ -187,19 +194,19 @@ kartu Profil Kelompok, bisa dijadikan challenge kecil di P13 atau ditambahkan tu
 Hari ini 23 Oktober 2026. P13 SMP 13 November, P13 SMA 14 November.
 
 **Sebelum P13 (sekarang sampai 12 November)**
-- Putuskan repo private atau data terpisah, dan siapa penanda tangan sertifikat.
-- Bagikan formulir izin orang tua minggu ini, kumpulkan sebelum P13.
-- Tutor mulai memotret per pertemuan (P10 sampai P13 tersisa), tanpa wajah sebagai bawaan. Peran Fotografer di P13 sudah ada.
-- Publish tab Log Poin Sesi sebagai CSV supaya challenge per pertemuan bisa diisi otomatis.
+- Putuskan tempat menyimpan foto dan siapa penanda tangan sertifikat.
+- Tutor memotret per pertemuan (P10 sampai P13 tersisa): alat, rangkaian, suasana kelas. Peran Fotografer di P13 sudah ada.
+- Catat poin challenge di Log Poin Sesi seperti biasa: itulah sumber lencana.
+- Isi kolom "Proyek / Karya" dan "Kekuatan" di sheet Catatan Tutor.
 - Koreksi `portofolio/kurikulum.json` untuk P1 sampai P8 (diringkas dari silabus, isi kelas mungkin berbeda).
-- Jalankan `kerangka`, isi P1 sampai P12 yang sudah lewat.
 
 **Di P13**
-- Pencatat menulis 3 Kalimat Sakti kelompok di kertas atau Google Form, tutor memotret alat di rumah kardus.
+- Tutor memotret alat di rumah kardus (nama file diawali `proyek`, mis. `proyek-akhir.jpg`).
 - Pastikan alat menyala saat showcase supaya kiriman terakhir yang terekam adalah data hari showcase.
 
 **Setelah P13 (target terbit 27 November)**
-- Isi P13, catatan pelatih, foto; `bangun`; cek di laptop; terapkan perubahan nginx dan compose; push.
+- Unduh xlsx penilaian SMP & SMA, `bangun --foto <folder>`, cek di laptop, terapkan perubahan nginx dan compose,
+  unggah hasil ke server.
 - Cetak sertifikat untuk dibagikan, dan kirim link portofolio ke orang tua lewat grup kelas.
 
 **Nanti (semester 2 atau kalau ada waktu)**
@@ -214,37 +221,33 @@ Hari ini 23 Oktober 2026. P13 SMP 13 November, P13 SMA 14 November.
 |---|---|
 | `portofolio/templat/index.html`, `sertifikat.html`, `portofolio.css`, `portofolio.js` | Templat, sama untuk semua siswa, membaca `data.json`. HTML/CSS/JS biasa, tanpa build. |
 | `portofolio/kurikulum.json` | P1 sampai P13 SMP dan SMA: tanggal, judul, yang dipelajari, nama challenge P9 sampai P13. |
-| `portofolio/contoh/smp-00/fulan/` | Satu siswa SMP karangan ("Fulan bin Fulan", Device ID `smp-00` yang tidak ada) dengan ilustrasi SVG, bukan foto. Halaman menampilkan pita "Halaman contoh". |
+| `portofolio/contoh/` | Data fiktif ("Fulan bin Fulan", Device ID `smp-00`) dengan ilustrasi SVG. Halaman menampilkan pita "Halaman contoh". |
 | `portofolio/kecilkan-foto.html` | Alat tutor untuk mengecilkan foto dan membuang EXIF, jalan di browser. |
-| `tools/portofolio.py` | `kerangka`, `bangun`, `cek` (Python standar, self-check dengan `assert`). |
+| `tools/portofolio.py` | `bangun` (dari xlsx penilaian), `contoh`, `cek` (Python standar, self-check dengan `assert`). |
+| `tools/kelompok.json` | Kolom baru `id_siswa` per kelompok. |
 
-Cara melihat:
-
-```powershell
-py tools/portofolio.py bangun portofolio/contoh
-py -m http.server 8091 -d dist/portofolio
-# buka http://localhost:8091/smp-00/siswa/fulan/ dan .../sertifikat.html
-```
+Sudah diuji dengan spreadsheet penilaian asli SMP dan SMA (22 Okt 2026): 37 halaman, 118 lencana dari Log Poin Sesi,
+tidak ada nomor HP yang ikut. Hasil uji tidak disimpan di repo.
 
 `portofolio/` ditambahkan ke `.vercelignore` supaya templat tidak ikut terbit di situs ekskul.
 
 ## Risiko
 
-- **Waktu tutor.** 37 halaman setelah P13 bersamaan dengan akhir semester. Kalau Log Poin Sesi tidak bisa diekspor,
-  jalankan versi minimum: poin dari gradebook, 3 kalimat, 1 sampai 2 foto, tanpa hasil per pertemuan.
-- **Formulir izin tidak kembali.** Halaman tetap terbit tanpa foto; tidak menunggu semua formulir.
+- **Log Poin Sesi tidak lengkap.** Lencana hanya muncul untuk pertemuan yang dicatat. Catat poin di kelas seperti biasa.
+- **Nama sheet berubah.** Generator mencari sheet dari awal namanya ("Master Data", "Log Poin Sesi", "Gradebook",
+  "Catatan Tutor") dan kolom dari judulnya, jadi menambah kolom aman, tapi mengganti judul kolom di atas tidak.
 - **P1 sampai P8 tanpa nama challenge.** Kalau challenge di P1 sampai P8 tercatat di Log Poin Sesi, nama lencananya
   generik ("Challenge P6") sampai namanya ditambahkan ke `kurikulum.json`.
 - **Backend atau Supabase mati.** Kartu alat menampilkan pesan gagal muat, sisa halaman tetap tampil karena statis.
 - **CDN QR atau Google Fonts diblokir di jaringan sekolah.** Sertifikat tetap tercetak dengan alamat teks dan font sistem.
 
-## Pertanyaan untuk pemilik
+## Pertanyaan yang masih terbuka
 
-1. Repo dijadikan private, atau data portofolio dipisah dari repo ini?
-2. Siapa yang menandatangani sertifikat: pelatih saja (Unggul Sulaiman, S.Kom, dari silabus), atau juga kepala sekolah atau
-   pimpinan InspiraLabs? Perlu logo sekolah?
-3. Nama lengkap boleh tampil di halaman publik, atau nama panggilan saja dengan nama lengkap hanya di sertifikat cetak?
-4. Peringkat 3 besar ditampilkan, atau tidak sama sekali?
-5. Berapa lama halaman online (usul: sampai 30 Juni 2027)?
-6. Format nomor sertifikat `EKC-2026-SMP-07-02` sudah cocok, atau ada format resmi InspiraLabs?
-7. Siapa yang mengisi data per siswa, dan apakah tab Log Poin Sesi boleh di-publish sebagai CSV?
+1. Di mana folder foto disimpan (Google Drive, server, atau lainnya)? Generator cukup diberi folder lokal.
+2. Siapa yang menandatangani sertifikat: pelatih saja (Unggul Sulaiman, S.Kom), atau juga kepala sekolah atau pimpinan
+   InspiraLabs? Perlu logo sekolah?
+3. Peringkat 3 besar ditampilkan, atau tidak sama sekali?
+4. Berapa lama halaman online (usul: sampai 30 Juni 2027)?
+5. Format nomor sertifikat `EKC-2026-SMP-07-02` sudah cocok, atau ada format resmi InspiraLabs?
+6. Link spreadsheet penilaian saat ini bisa dibuka siapa saja yang punya link, padahal berisi No. HP siswa dan orang
+   tua. Disarankan diubah ke "Restricted"; generator tidak butuh link publik.

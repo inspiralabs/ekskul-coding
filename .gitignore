@@ -18,7 +18,8 @@ dist/
 __pycache__/
 .superpowers/
 
-# Data & foto asli siswa untuk portofolio. Repo ini PUBLIK: jangan commit sebelum repo private
-# (lihat docs/PORTOFOLIO_SISWA.md, bagian Privasi).
-portofolio/siswa/
+# Data asli siswa untuk portofolio (repo ini PUBLIK, lihat docs/PORTOFOLIO_SISWA.md):
+# xlsx penilaian berisi No. HP & data orang tua, folder foto, dan hasil bangun tidak pernah di-commit.
+penilaian-*.xlsx
+portofolio/foto/
 portofolio-terbit/

@@ -1,78 +1,147 @@
-"""Portofolio siswa: <id>.inspiralabs.id/siswa/<slug>/ (usulan lengkap: docs/PORTOFOLIO_SISWA.md).
+"""Portofolio siswa: <device-id>.inspiralabs.id/siswa/<slug>/ (usulan lengkap: docs/PORTOFOLIO_SISWA.md).
 
-  py tools/portofolio.py kerangka                    -> portofolio/siswa/<id>/<slug>/siswa.json untuk semua siswa
-                                                        di tools/kelompok.json (file yang sudah ada tidak ditimpa)
-  py tools/portofolio.py bangun [sumber] [keluar] [--gradebook <csv|url>]
-                                                     -> keluar/<id>/siswa/<slug>/ (index.html, sertifikat.html, data.json, foto/)
-                                                        default: sumber=portofolio/siswa, keluar=dist/portofolio
-  py tools/portofolio.py cek                         -> self-check
+Data diambil langsung dari spreadsheet penilaian InspiraLabs (Google Drive -> File -> Download -> .xlsx),
+satu file per jenjang. Tidak ada data yang diketik ulang.
 
-Contoh: py tools/portofolio.py bangun portofolio/contoh
-        py -m http.server 8091 -d dist/portofolio  ->  http://localhost:8091/smp-00/siswa/fulan/
-Foto dari HP: kecilkan dulu dengan portofolio/kecilkan-foto.html (buang lokasi GPS & EXIF, maks 1600 px).
+  py tools/portofolio.py bangun penilaian-smp.xlsx penilaian-sma.xlsx [--foto <folder>] [--keluar <folder>]
+      -> <keluar>/<device-id>/siswa/<slug>/ (index.html, sertifikat.html, data.json, foto/)
+         default --keluar dist/portofolio. Foto: <folder>/<ID Siswa>/*.jpg (lihat FOTO di bawah).
+  py tools/portofolio.py contoh   -> bangun halaman contoh fiktif (smp-00) ke dist/portofolio
+  py tools/portofolio.py cek      -> self-check
+
+Yang dibaca dari spreadsheet (kolom lain, mis. No. HP, nama orang tua, NIS, nilai akhir, tidak pernah dibaca):
+  Master Data Siswa  : ID Siswa, Nama Lengkap, Nickname, Status Aktif ("Pindah" dilewati)
+  Log Poin Sesi      : Pertemuan Ke-, ID Siswa, Keaktifan Umum, Challenge Easy/Medium/Hard (terisi = lencana)
+  Gradebook          : ID Siswa, Total Poin Keseluruhan, Ranking (hanya 3 besar yang tampil)
+  Catatan Tutor      : ID Siswa, Proyek / Karya, Kekuatan (timpa draft) / Draft Kekuatan (otomatis)
+Siswa <-> kelompok (Device ID): tools/kelompok.json, kolom "id_siswa".
+
+FOTO: <folder>/<ID Siswa>/ berisi .jpg (sudah dikecilkan lewat portofolio/kecilkan-foto.html).
+  Nama file = keterangan: "p11-merakit-sensor.jpg" -> P11, "Merakit sensor". File berawalan "proyek" jadi foto proyek akhir.
 """
-import csv, io, json, re, shutil, sys, tempfile, urllib.request
+import json, re, shutil, sys, tempfile, zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 P = ROOT / "portofolio"
 KURIKULUM = json.loads((P / "kurikulum.json").read_text(encoding="utf-8"))
-KELOMPOK = {k["id"]: k["nama"] for k in json.loads((ROOT / "tools/kelompok.json").read_text(encoding="utf-8"))}
 POIN = {"easy": 5, "medium": 10, "hard": 15}
 POIN_TANYA_JAWAB = 2
 TEMPLAT = ["index.html", "sertifikat.html", "portofolio.css", "portofolio.js"]
-FOTO_EXT = {".jpg", ".jpeg"}  # foto siswa asli: JPEG saja (bisa dicek bersih dari EXIF & XMP); SVG hanya untuk contoh
+FOTO_EXT = {".jpg", ".jpeg"}  # foto asli: JPEG saja (bisa dicek bersih dari EXIF & XMP); SVG hanya untuk contoh
 NAMA_FOTO = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$")
-MAKS_TANYA_JAWAB = 20
 BATAS_FOTO_KB = 500
-GRADEBOOK_HEADER_ROW = 3  # sama dengan leaderboard/leaderboard.js
+NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+      "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships"}
 
 
-def pecah_anggota(nama):
-    return [n.strip() for n in re.split(r"[,&]", nama) if n.strip()]
+def kelompok_siswa():
+    """{ID Siswa: device_id} dari tools/kelompok.json."""
+    out = {}
+    for k in json.loads((ROOT / "tools/kelompok.json").read_text(encoding="utf-8")):
+        for sid in k.get("id_siswa", []):
+            out[sid] = k["id"]
+    return out
 
 
-def buat_slug(nama, terpakai):
-    kata = [k for k in re.sub(r"[^a-z ]", " ", nama.lower()).split() if k not in ("m", "muhammad", "mohammad")]
-    slug = kata[0]
-    if slug in terpakai:
-        slug = "-".join(kata[:2])
-    terpakai.add(slug)
-    return slug
+# ---------------------------------------------------------------- baca spreadsheet
 
-
-def kerangka(tujuan=P / "siswa"):
-    dibuat = 0
-    for device_id, nama in KELOMPOK.items():
-        anggota, terpakai = pecah_anggota(nama), set()
-        for i, orang in enumerate(anggota, 1):
-            slug = buat_slug(orang, terpakai)
-            f = Path(tujuan) / device_id / slug / "siswa.json"
-            if f.exists():
+def baca_xlsx(path):
+    """{nama sheet: [baris {judul kolom: teks}]}; judul kolom = baris yang sel pertamanya "ID Siswa" / "Jenjang"."""
+    z = zipfile.ZipFile(path)
+    ss = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        ss = ["".join(t.text or "" for t in si.iter(f"{{{NS['m']}}}t"))
+              for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall("m:si", NS)]
+    rels = {r.get("Id"): r.get("Target") for r in ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))}
+    hasil = {}
+    for sh in ET.fromstring(z.read("xl/workbook.xml")).find("m:sheets", NS):
+        target = rels[sh.get(f"{{{NS['r']}}}id")].lstrip("/")
+        root = ET.fromstring(z.read(target if target.startswith("xl/") else "xl/" + target))
+        kepala, baris = None, []
+        for r in root.find("m:sheetData", NS):
+            sel = {}
+            for c in r:
+                v, t = c.find("m:v", NS), c.get("t")
+                if t == "s" and v is not None:
+                    x = ss[int(v.text)]
+                elif t == "inlineStr":
+                    x = "".join(e.text or "" for e in c.iter(f"{{{NS['m']}}}t"))
+                else:
+                    x = v.text if v is not None else ""
+                if x:
+                    sel[re.match(r"[A-Z]+", c.get("r")).group()] = x.strip()
+            if kepala is None:
+                if sel.get("A") in ("ID Siswa", "Jenjang", "Pertemuan"):
+                    kepala = sel
                 continue
-            f.parent.mkdir(parents=True, exist_ok=True)
-            isi = {
-                "id_siswa": "", "urut": i, "nama": orang, "panggilan": slug.split("-")[0].title(),
-                "peran": "", "nama_kelompok": "", "anggota": anggota,
-                "izin_foto": False,  # baru true setelah formulir izin orang tua kembali
-                "tampil_nama_lengkap": False,  # false: halaman online memakai nama panggilan
-                "pertemuan": {str(p): {"challenge": [], "tanya_jawab": 0, "hasil": ""} for p in range(1, 14)},
-                "foto": [], "proyek_akhir": {"judul": "", "foto": "", "keterangan_foto": "", "tiga_kalimat": []},
-                "catatan_tutor": "", "peringkat": None,
-            }
-            f.write_text(json.dumps(isi, ensure_ascii=False, indent=2), encoding="utf-8")
-            dibuat += 1
-    print(f"{dibuat} kerangka dibuat di {tujuan}")
+            baris.append({kepala[k]: v for k, v in sel.items() if k in kepala})
+        hasil[sh.get("name")] = baris
+    return hasil
 
+
+def _sheet(wb, awalan):
+    for nama, baris in wb.items():
+        if nama.lower().startswith(awalan.lower()):
+            return baris
+    raise ValueError(f'sheet "{awalan}..." tidak ditemukan')
+
+
+def _angka(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def baca_penilaian(path):
+    """Spreadsheet penilaian -> {ID Siswa: {...}} hanya dengan kolom yang dibutuhkan halaman publik."""
+    wb = baca_xlsx(path)
+    siswa = {}
+    for r in _sheet(wb, "Master Data"):
+        sid = r.get("ID Siswa", "")
+        if not sid or not r.get("Nama Lengkap"):
+            continue
+        nick = r.get("Nickname", "")
+        siswa[sid] = {"id": sid, "nama": r["Nama Lengkap"], "panggilan": "" if nick in ("", "-") else nick,
+                      "pindah": r.get("Status Aktif", "").lower() == "pindah",
+                      "pertemuan": {}, "poin": None, "ranking": None, "proyek": "", "kekuatan": ""}
+    for r in _sheet(wb, "Log Poin Sesi"):
+        s = siswa.get(r.get("ID Siswa", ""))
+        m = re.match(r"P(\d+)$", r.get("Pertemuan Ke-", "").strip(), re.I)
+        if not s or not m:
+            continue
+        p = s["pertemuan"].setdefault(int(m.group(1)), {"challenge": [], "tanya_jawab": 0})
+        for lv in POIN:
+            if _angka(r.get(f"Challenge {lv.title()}")) > 0 and lv not in p["challenge"]:
+                p["challenge"].append(lv)
+        p["tanya_jawab"] += round(_angka(r.get("Keaktifan Umum")) / POIN_TANYA_JAWAB)
+    for r in _sheet(wb, "Gradebook"):
+        s = siswa.get(r.get("ID Siswa", ""))
+        if s:
+            s["poin"] = int(_angka(r.get("Total Poin Keseluruhan")))
+            s["ranking"] = int(_angka(r.get("Ranking"))) or None
+    for r in _sheet(wb, "Catatan Tutor"):
+        s = siswa.get(r.get("ID Siswa", ""))
+        if s:
+            s["proyek"] = r.get("Proyek / Karya", "")
+            # hanya "Kekuatan" (positif) yang tampil; "Perlu Ditingkatkan" & saran orang tua tetap internal
+            k = r.get("Kekuatan (timpa draft)") or r.get("Draft Kekuatan (otomatis)", "")
+            s["kekuatan"] = "" if k.startswith("=") else k
+    return siswa
+
+
+# ---------------------------------------------------------------- foto
 
 def masalah_foto(path, contoh=False):
-    """Foto harus ada, <= BATAS_FOTO_KB, dan benar-benar JPEG tanpa EXIF maupun XMP (bisa berisi lokasi GPS).
-    SVG hanya boleh untuk data contoh: SVG bisa berisi script yang ikut jalan di domain siswa."""
-    if not path.is_file():
-        return f"{path.name}: tidak ditemukan"
+    """Foto harus <= BATAS_FOTO_KB dan benar-benar JPEG tanpa EXIF maupun XMP (bisa berisi lokasi GPS).
+    SVG hanya untuk data contoh: SVG bisa berisi script yang ikut jalan di domain siswa."""
     ext = path.suffix.lower()
     if ext == ".svg" and contoh:
         return None
+    if not NAMA_FOTO.match(path.name):
+        return f"{path.name}: nama file hanya boleh huruf, angka, titik, minus, garis bawah"
     if ext not in FOTO_EXT:
         return f"{path.name}: hanya .jpg yang diterima (lewatkan kecilkan-foto.html)"
     if path.stat().st_size > BATAS_FOTO_KB * 1024:
@@ -90,286 +159,261 @@ def masalah_foto(path, contoh=False):
     return None
 
 
-def periksa(s, device_id, folder):
-    m = []
-    contoh = s.get("contoh") is True
-    if contoh and device_id not in ("smp-00", "sma-00"):
-        m.append('"contoh": true hanya untuk data contoh smp-00/sma-00')
-    if device_id[:3] not in ("smp", "sma"):
-        m.append(f"ID {device_id} harus diawali smp- atau sma-")
-    elif not contoh and device_id not in KELOMPOK:
-        m.append(f"ID {device_id} tidak ada di tools/kelompok.json")
-    if not isinstance(s.get("nama"), str) or not s.get("nama").strip():
-        m.append("nama kosong")
-    for k in ("izin_foto", "tampil_nama_lengkap"):
-        if k in s and not isinstance(s[k], bool):
-            m.append(f"{k} harus true/false")
-    if not isinstance(s.get("izin_foto"), bool):
-        m.append("izin_foto harus true/false")
-    pertemuan = s.get("pertemuan", {})
-    if not isinstance(pertemuan, dict):
-        m.append("pertemuan harus berupa objek {nomor: isi}")
-        pertemuan = {}
-    for p, isi in pertemuan.items():
-        if not p.isdigit() or not 1 <= int(p) <= 13:
-            m.append(f"pertemuan {p} tidak dikenal")
-        if not isinstance(isi, dict):
-            m.append(f"P{p}: isi harus objek")
+def daftar_foto(folder):
+    """[(Path, {"file", "p", "keterangan"})] dari nama file: p11-merakit-sensor.jpg -> P11 "Merakit sensor"."""
+    if not folder or not Path(folder).is_dir():
+        return []
+    out = []
+    for f in sorted(Path(folder).iterdir()):
+        if not f.is_file() or f.name.startswith("."):
             continue
-        ch = isi.get("challenge", [])
-        if not isinstance(ch, list):
-            m.append(f"P{p}: challenge harus daftar")
-            ch = []
-        m += [f"P{p}: level {lv} bukan easy/medium/hard" for lv in ch if lv not in POIN]
-        if len(ch) != len(set(ch)):
-            m.append(f"P{p}: tiap level challenge hanya sekali per pertemuan")
-        tj = isi.get("tanya_jawab", 0)
-        if not isinstance(tj, int) or isinstance(tj, bool) or not 0 <= tj <= MAKS_TANYA_JAWAB:
-            m.append(f"P{p}: tanya_jawab harus angka 0-{MAKS_TANYA_JAWAB}")
-        if not isinstance(isi.get("hasil", ""), str):
-            m.append(f"P{p}: hasil harus teks")
-    proyek = s.get("proyek_akhir", {})
-    kalimat = proyek.get("tiga_kalimat", []) if isinstance(proyek, dict) else None
-    if not isinstance(kalimat, list) or not all(isinstance(k, str) for k in kalimat):
-        m.append("tiga_kalimat harus daftar teks")
-    elif len(kalimat) > 3:
-        m.append("tiga_kalimat lebih dari 3")
-    if not isinstance(s.get("catatan_tutor", ""), str):
-        m.append("catatan_tutor harus teks")
-    if s.get("izin_foto") is True:
-        foto = s.get("foto", [])
-        if not isinstance(foto, list) or not all(isinstance(f, dict) and isinstance(f.get("file"), str) for f in foto):
-            m.append('foto harus daftar {"file": "nama.jpg", ...}')
-            foto = []
-        nama_foto = [f["file"] for f in foto] + [proyek.get("foto") if isinstance(proyek, dict) else None]
-        for f in nama_foto:
-            if not f:
-                continue
-            if not isinstance(f, str) or not NAMA_FOTO.match(f) or ".." in f:
-                m.append(f"nama foto tidak sah: {f!r} (huruf, angka, titik, minus, garis bawah saja)")
-                continue
-            x = masalah_foto(folder / "foto" / f, contoh)
-            if x:
-                m.append(x)
-    return m
+        m = re.match(r"(?:p(\d+)[-_ ]?)?(.*)$", f.stem, re.I)
+        teks = re.sub(r"[-_]+", " ", m.group(2)).strip()
+        out.append((f, {"file": f.name, "p": int(m.group(1)) if m.group(1) else None,
+                        "keterangan": teks[:1].upper() + teks[1:]}))
+    return out
 
 
-def susun(s, device_id, slug, gb=None, tampil=None):
-    """siswa.json (+ baris gradebook) + kurikulum -> data.json yang dibaca templat.
-    tampil = {nama lengkap teman: nama yang boleh tampil} dari siswa.json teman sekelompok."""
+# ---------------------------------------------------------------- susun & bangun
+
+def buat_slug(nama, terpakai):
+    kata = [k for k in re.sub(r"[^a-z ]", " ", nama.lower()).split() if k not in ("m", "muhammad", "mohammad", "muhamad")]
+    kata = kata or ["siswa"]
+    slug = kata[0]
+    i = 1
+    while slug in terpakai:
+        i += 1
+        slug = "-".join(kata[:i]) if i <= len(kata) else f"{kata[0]}-{i}"
+    terpakai.add(slug)
+    return slug
+
+
+def susun(s, device_id, slug, anggota, urut, foto, contoh=False):
+    """Data satu siswa (dari baca_penilaian) + kurikulum -> data.json yang dibaca templat."""
     jenjang = device_id[:3]
     kur = KURIKULUM[jenjang]
     pertemuan = []
     for k in kur["pertemuan"]:
-        isi = s.get("pertemuan", {}).get(str(k["p"]), {})
+        isi = s["pertemuan"].get(k["p"], {})
         nama_ch = k.get("challenge", {})
         pertemuan.append({
-            "p": k["p"], "tanggal": k["tanggal"], "judul": k["judul"], "dipelajari": k["dipelajari"],
-            "hasil": isi.get("hasil", ""), "tanya_jawab": isi.get("tanya_jawab", 0),
-            "challenge": [{"level": lv, "nama": nama_ch.get(lv, f"Challenge P{k['p']}"), "poin": POIN[lv]}
-                          for lv in isi.get("challenge", [])],
+            "p": k["p"], "tanggal": k["tanggal"], "judul": k["judul"], "dipelajari": k["dipelajari"], "hasil": "",
+            "tanya_jawab": isi.get("tanya_jawab", 0),
+            "challenge": [{"level": lv, "nama": nama_ch.get(lv, f"Challenge {lv.title()} P{k['p']}"), "poin": POIN[lv]}
+                          for lv in ("easy", "medium", "hard") if lv in isi.get("challenge", [])],
         })
-    poin = sum(c["poin"] for p in pertemuan for c in p["challenge"]) + POIN_TANYA_JAWAB * sum(p["tanya_jawab"] for p in pertemuan)
-    # catatan tutor HANYA dari siswa.json (ditulis khusus untuk publik);
-    # "Catatan Kualitatif Tutor" di gradebook itu catatan internal, tidak pernah ikut tampil
-    catatan = s.get("catatan_tutor", "")
-    if gb:  # gradebook = sumber resmi poin
-        try:
-            poin = int(float(gb.get("Total Poin Keseluruhan", "")))
-        except ValueError:
-            pass
-    izin = s.get("izin_foto") is True
-    proyek = dict(s.get("proyek_akhir", {}))
-    if not izin:
-        proyek["foto"] = ""
-    peringkat = s.get("peringkat")
-    panggilan = s.get("panggilan") or s["nama"].split()[0]
-    nama_tampil = s["nama"] if s.get("tampil_nama_lengkap") is True else panggilan
-    tampil = tampil or {}
-    if s.get("contoh"):
-        anggota = [a for a in s.get("anggota", []) if a != s["nama"]]
-    else:  # teman sekelompok: nama sesuai izin mereka sendiri; tanpa data izin -> nama depan saja
-        anggota = [tampil.get(a) or a.split()[0] for a in s.get("anggota", []) if a != s["nama"]]
+    hitung = sum(c["poin"] for p in pertemuan for c in p["challenge"]) + POIN_TANYA_JAWAB * sum(p["tanya_jawab"] for p in pertemuan)
+    panggilan = s["panggilan"] or next((k for k in s["nama"].split() if k.lower().strip(".") not in ("m", "muhammad")), s["nama"])
+    proyek_foto = next((x for x in foto if x["file"].lower().startswith("proyek")), None)
+    rank = s.get("ranking")
     return {
-        "contoh": bool(s.get("contoh")),
+        "contoh": contoh,
         "jenjang": jenjang, "jenjang_label": kur["label"], "semester": KURIKULUM["semester"],
         "sekolah": KURIKULUM["sekolah"], "pelatih": KURIKULUM["pelatih"], "api_base": KURIKULUM["api_base"],
         "device_id": device_id, "slug": slug,
         "url": f"https://{device_id}.inspiralabs.id/siswa/{slug}/",
         "dashboard_url": f"https://{device_id}.inspiralabs.id/",
-        "nama": nama_tampil, "panggilan": panggilan,
+        "nama": s["nama"], "panggilan": panggilan,
         "ringkasan": kur["ringkasan"].replace("{panggilan}", panggilan), "proyek_umum": kur["proyek"],
-        "peran": s.get("peran", ""), "nama_kelompok": s.get("nama_kelompok", ""),
-        "anggota": anggota,
-        "pertemuan": pertemuan, "poin": poin,
+        "peran": "", "nama_kelompok": "", "anggota": anggota,
+        "pertemuan": pertemuan,
+        "poin": s["poin"] if s.get("poin") is not None else hitung,
         "lencana": sum(len(p["challenge"]) for p in pertemuan),
-        "foto": s.get("foto", []) if izin else [],
-        "proyek_akhir": proyek,
-        "catatan_tutor": catatan,
-        "peringkat": peringkat if isinstance(peringkat, int) and 1 <= peringkat <= 3 else None,  # hanya 3 besar yang tampil
-        "sertifikat": {
-            "nomor": f"EKC-2026-{device_id.upper()}-{int(s.get('urut', 1)):02d}",
-            "tanggal": kur["pertemuan"][-1]["tanggal"],
-        },
+        "foto": [x for x in foto if x is not proyek_foto],
+        "proyek_akhir": {"judul": s.get("proyek", ""), "foto": proyek_foto["file"] if proyek_foto else "",
+                         "keterangan_foto": proyek_foto["keterangan"] if proyek_foto else "", "tiga_kalimat": []},
+        "catatan_tutor": s.get("kekuatan", ""),
+        "peringkat": rank if rank and 1 <= rank <= 3 and (s.get("poin") or 0) > 0 else None,  # hanya 3 besar
+        "sertifikat": {"nomor": f"EKC-2026-{device_id.upper()}-{urut:02d}", "tanggal": kur["pertemuan"][-1]["tanggal"]},
     }
 
 
-def baca_gradebook(sumber):
-    teks = urllib.request.urlopen(sumber).read().decode("utf-8") if sumber.startswith("http") else Path(sumber).read_text(encoding="utf-8")
-    baris = list(csv.reader(io.StringIO(teks)))
-    header = baris[GRADEBOOK_HEADER_ROW]
-    return {r[0].strip(): dict(zip(header, r)) for r in baris[GRADEBOOK_HEADER_ROW + 1:] if r and r[0].strip()}
-
-
-def bangun(sumber=P / "siswa", keluar=ROOT / "dist/portofolio", gradebook=None):
-    """Return dict masalah per siswa. Kalau ada masalah, tidak ada yang ditulis ke keluar."""
-    gb = baca_gradebook(gradebook) if gradebook else {}
-    semua, masalah = [], {}
-    for f in sorted(Path(sumber).glob("*/*/siswa.json")):
-        folder, slug, device_id = f.parent, f.parent.name, f.parent.parent.name
-        try:
-            s = json.loads(f.read_text(encoding="utf-8"))
-        except ValueError as err:
-            masalah[f"{device_id}/{slug}"] = [f"siswa.json bukan JSON yang sah: {err}"]
-            continue
-        m = periksa(s, device_id, folder) if isinstance(s, dict) else ["siswa.json harus berupa objek"]
-        if gradebook and not m and s.get("id_siswa", "") not in gb:
-            m.append(f"id_siswa {s.get('id_siswa')!r} tidak ada di gradebook")
-        if m:
-            masalah[f"{device_id}/{slug}"] = m
-        else:
-            semua.append((folder, device_id, slug, s))
+def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto_root=None, peta=None, contoh=False):
+    """penilaian = {ID Siswa: data} dari baca_penilaian (semua jenjang digabung). Return dict masalah;
+    kalau ada masalah, tidak ada yang ditulis."""
+    peta = kelompok_siswa() if peta is None else peta
+    masalah, rencana = {}, []
+    per_kelompok = {}
+    for sid, dev in peta.items():
+        per_kelompok.setdefault(dev, []).append(sid)
+    for dev, ids in sorted(per_kelompok.items()):
+        terpakai = set()
+        for urut, sid in enumerate(ids, 1):
+            s = penilaian.get(sid)
+            if not s:
+                masalah[sid] = [f"ID Siswa {sid} (kelompok {dev}) tidak ada di Master Data spreadsheet"]
+                continue
+            if s["pindah"]:
+                continue
+            if sid[:3].lower() != dev[:3]:
+                masalah[sid] = [f"{sid} bukan jenjang {dev[:3].upper()}"]
+                continue
+            foto = daftar_foto(Path(foto_root) / sid if foto_root else None)
+            m = [x for f, _ in foto for x in [masalah_foto(f, contoh)] if x]
+            if m:
+                masalah[sid] = m
+                continue
+            anggota = [penilaian[t]["nama"] for t in ids if t != sid and t in penilaian and not penilaian[t]["pindah"]]
+            data = susun(s, dev, buat_slug(s["nama"], terpakai), anggota, urut, [x for _, x in foto], contoh)
+            rencana.append((data, foto))
     if masalah:
         return masalah
-    tampil = {(dev, s["nama"]): (s["nama"] if s.get("tampil_nama_lengkap") is True
-                                 else s.get("panggilan") or s["nama"].split()[0]) for _, dev, _, s in semua}
-    hasil = [(folder, susun(s, dev, slug, gb.get(s.get("id_siswa", "")),
-                            {n: t for (d, n), t in tampil.items() if d == dev})) for folder, dev, slug, s in semua]
-    # bangun ulang dari nol: siswa yang dihapus dari sumber ikut hilang (hanya folder <id>/siswa/ yang dibersihkan)
+    # bangun ulang dari nol: siswa yang keluar/dihapus ikut hilang (hanya folder <id>/siswa/ yang dibersihkan)
     for lama in Path(keluar).glob("*/siswa"):
         shutil.rmtree(lama)
-    for folder, data in hasil:
+    for data, foto in rencana:
         out = Path(keluar) / data["device_id"] / "siswa" / data["slug"]
-        shutil.rmtree(out, ignore_errors=True)
         (out / "foto").mkdir(parents=True)
         for t in TEMPLAT:
             shutil.copy(P / "templat" / t, out / t)
         (out / "data.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-        for nama in [x["file"] for x in data["foto"]] + [data["proyek_akhir"].get("foto")]:
-            if nama:
-                shutil.copy(folder / "foto" / nama, out / "foto" / nama)
-    print(f"{len(hasil)} portofolio dibangun di {keluar}")
+        for f, _ in foto:
+            shutil.copy(f, out / "foto" / f.name)
+    print(f"{len(rencana)} portofolio dibangun di {keluar}")
     return {}
 
 
+def bangun_contoh(keluar=ROOT / "dist/portofolio"):
+    data = json.loads((P / "contoh/penilaian-contoh.json").read_text(encoding="utf-8"))
+    penilaian = {sid: {**s, "pertemuan": {int(p): v for p, v in s["pertemuan"].items()}} for sid, s in data["siswa"].items()}
+    return bangun(penilaian, keluar, P / "contoh/foto", data["kelompok"], contoh=True)
+
+
+# ---------------------------------------------------------------- self-check
+
+def _xlsx_uji(sheets):
+    """Tulis xlsx kecil (teks inline) untuk self-check: {nama sheet: [baris list]}."""
+    import io
+    def kol(i):
+        s = ""
+        i += 1
+        while i:
+            i, r = divmod(i - 1, 26)
+            s = chr(65 + r) + s
+        return s
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        z.writestr("xl/workbook.xml", '<workbook xmlns="%s" xmlns:r="%s"><sheets>%s</sheets></workbook>' % (
+            NS["m"], NS["r"], "".join(f'<sheet name="{n}" sheetId="{i+1}" r:id="r{i}"/>' for i, n in enumerate(sheets))))
+        z.writestr("xl/_rels/workbook.xml.rels", '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">%s</Relationships>' % (
+            "".join(f'<Relationship Id="r{i}" Type="x" Target="worksheets/s{i}.xml"/>' for i in range(len(sheets)))))
+        from xml.sax.saxutils import escape
+        for i, rows in enumerate(sheets.values()):
+            xml = "".join(f'<row r="{r+1}">' + "".join(
+                f'<c r="{kol(c)}{r+1}" t="inlineStr"><is><t>{escape(str(v))}</t></is></c>' for c, v in enumerate(row) if v != "")
+                + "</row>" for r, row in enumerate(rows))
+            z.writestr(f"xl/worksheets/s{i}.xml", f'<worksheet xmlns="{NS["m"]}"><sheetData>{xml}</sheetData></worksheet>')
+    return buf.getvalue()
+
+
 def cek():
-    """Self-check: kerangka, slug, poin, izin foto, tolak foto EXIF/besar, gradebook."""
-    assert pecah_anggota("A, B & C") == ["A", "B", "C"]
-    t = set()
-    assert [buat_slug(n, t) for n in ["M. Zaidan Altamis", "Zaidan Riqki Alfarizi", "M Dzaki"]] == ["zaidan", "zaidan-riqki", "dzaki"]
+    kepala = [["JUDUL"], ["catatan"], []]
+    wb = {
+        "Master Data Siswa SMA": kepala + [
+            ["ID Siswa", "Nama Lengkap", "Nickname", "Kelas", "JK", "NIS", "No. HP/WA Siswa", "Nama Orang Tua/Wali",
+             "No. HP/WA Orang Tua", "Tgl Bergabung", "Status Aktif"],
+            ["SMP-022", "Rafif Ahnaf Rabbani", "Rafif", "8A", "L", "123", "0811111", "Bapak Rahasia", "0822222", "", "Aktif"],
+            ["SMP-017", "Muhammad Qassim", "-", "8A", "L", "124", "-", "", "", "", ""],
+            ["SMP-099", "Sudah Pindah", "", "8B", "L", "", "", "", "", "", "Pindah"]],
+        "Log Poin Sesi": kepala + [
+            ["Jenjang", "Pertemuan Ke-", "Tanggal", "ID Siswa", "Nama Siswa", "Keaktifan Umum", "Challenge Easy",
+             "Challenge Medium", "Challenge Hard", "Post - Test ", "Inisiatif Eksplorasi", "Poin Diperoleh", "Nama Pencatat", "Catatan"],
+            ["SMP", "P10", "", "SMP-022", "Rafif", "4", "5", "10", "", "8", "", "", "Tutor", "rahasia internal"],
+            ["SMP", "P11", "", "SMP-022", "Rafif", "", "5", "", "15", "", "", "", "Tutor", ""],
+            ["SMP", "P11", "", "SMP-017", "Qassim", "2", "", "", "", "", "", "", "Tutor", ""]],
+        "Gradebook SMA": kepala + [
+            ["ID Siswa", "Nama Lengkap", "Kelas", "Total Poin Keseluruhan", "Ranking", "Catatan Kualitatif Tutor"],
+            ["SMP-022", "Rafif Ahnaf Rabbani", "8A", "39", "2", "internal gradebook"],
+            ["SMP-017", "Muhammad Qassim", "8A", "2", "9", ""]],
+        "Catatan Tutor": kepala + [
+            ["ID Siswa", "Nama Lengkap", "Proyek / Karya", "Kekuatan (timpa draft)", "Perlu Ditingkatkan (timpa draft)",
+             "Saran untuk Orang Tua / Santri", "Draft Kekuatan (otomatis)", "Draft Perlu Ditingkatkan (otomatis)"],
+            ["SMP-022", "Rafif", "Pemantau Suhu Kelas", "", "Kurang fokus", "Latihan di rumah", "Menonjol pada praktik.", "x"],
+            ["SMP-017", "Qassim", "", "Teliti merakit.", "", "", "Draft lain", ""]],
+    }
     with tempfile.TemporaryDirectory() as d:
         d = Path(d)
-        kerangka(d / "siswa")
-        assert len(list((d / "siswa").glob("*/*/siswa.json"))) == sum(len(pecah_anggota(n)) for n in KELOMPOK.values())
-        assert json.loads((d / "siswa/smp-12/zaidan-altamis/siswa.json").read_text(encoding="utf-8"))["izin_foto"] is False
+        (d / "smp.xlsx").write_bytes(_xlsx_uji(wb))
+        pen = baca_penilaian(d / "smp.xlsx")
+        r = pen["SMP-022"]
+        assert r["nama"] == "Rafif Ahnaf Rabbani" and r["panggilan"] == "Rafif"
+        assert r["pertemuan"][10] == {"challenge": ["easy", "medium"], "tanya_jawab": 2}
+        assert r["pertemuan"][11] == {"challenge": ["easy", "hard"], "tanya_jawab": 0}
+        assert r["poin"] == 39 and r["ranking"] == 2
+        assert r["proyek"] == "Pemantau Suhu Kelas" and r["kekuatan"] == "Menonjol pada praktik."  # kosong -> draft
+        assert pen["SMP-017"]["kekuatan"] == "Teliti merakit." and pen["SMP-017"]["panggilan"] == ""
+        assert pen["SMP-099"]["pindah"]
 
-        src = d / "contoh"
-        shutil.copytree(P / "contoh", src)
-        assert bangun(src, d / "out") == {}
-        data = json.loads((d / "out/smp-00/siswa/fulan/data.json").read_text(encoding="utf-8"))
-        assert data["poin"] == 125 and data["lencana"] == 12, (data["poin"], data["lencana"])
-        assert data["pertemuan"][11]["challenge"][0]["nama"] == "Klub 200"
-        assert data["anggota"] == ["Anggota Kedua", "Anggota Ketiga"]
-        assert data["sertifikat"]["nomor"] == "EKC-2026-SMP-00-01"
-        assert (d / "out/smp-00/siswa/fulan/foto/proyek-akhir.svg").exists()
+        # foto: nama file jadi keterangan, file "proyek..." jadi foto proyek, foto tidak sah ditolak
+        foto = d / "foto"
+        (foto / "SMP-022").mkdir(parents=True)
+        jpg = b"\xff\xd8\xff\xdb\x00\x04\x00\x00\xff\xd9"
+        (foto / "SMP-022/p11-merakit-sensor.jpg").write_bytes(jpg)
+        (foto / "SMP-022/proyek-akhir.jpg").write_bytes(jpg)
+        (foto / "SMP-022/suasana_kelas.jpg").write_bytes(jpg)
 
-        siswa = src / "smp-00/fulan/siswa.json"
-        s = json.loads(siswa.read_text(encoding="utf-8"))
-        assert susun({**s, "peringkat": 7}, "smp-00", "fulan")["peringkat"] is None
-        gb = susun(s, "smp-00", "fulan", {"Total Poin Keseluruhan": "130", "Catatan Kualitatif Tutor": "x"})
-        assert gb["poin"] == 130 and gb["catatan_tutor"] == s["catatan_tutor"]
+        peta = {"SMP-022": "smp-07", "SMP-017": "smp-07", "SMP-099": "smp-07"}
+        out = d / "out"
+        assert bangun(pen, out, foto, peta) == {}
+        data = json.loads((out / "smp-07/siswa/rafif/data.json").read_text(encoding="utf-8"))
+        teks = json.dumps(data, ensure_ascii=False)
+        assert data["nama"] == "Rafif Ahnaf Rabbani" and data["anggota"] == ["Muhammad Qassim"]
+        assert data["poin"] == 39 and data["lencana"] == 4 and data["peringkat"] == 2
+        p10 = data["pertemuan"][9]
+        assert [c["nama"] for c in p10["challenge"]] == ["Laptop Siap Tempur", "Lampu Disko"] and p10["tanya_jawab"] == 2
+        assert data["proyek_akhir"]["judul"] == "Pemantau Suhu Kelas" and data["proyek_akhir"]["foto"] == "proyek-akhir.jpg"
+        assert {(f["p"], f["keterangan"]) for f in data["foto"]} == {(11, "Merakit sensor"), (None, "Suasana kelas")}
+        assert data["catatan_tutor"] == "Menonjol pada praktik."
+        for rahasia in ["0811111", "0822222", "Bapak Rahasia", "123", "Kurang fokus", "Latihan di rumah",
+                        "rahasia internal", "internal gradebook"]:
+            assert rahasia not in teks, rahasia
+        q = json.loads((out / "smp-07/siswa/qassim/data.json").read_text(encoding="utf-8"))
+        assert q["panggilan"] == "Qassim" and q["peringkat"] is None and q["foto"] == []
+        assert not (out / "smp-07/siswa/sudah").exists()  # status Pindah tidak dibangun
+        assert (out / "smp-07/siswa/rafif/foto/p11-merakit-sensor.jpg").exists()
 
-        s["izin_foto"] = False
-        siswa.write_text(json.dumps(s), encoding="utf-8")
-        assert bangun(src, d / "out2") == {}
-        data = json.loads((d / "out2/smp-00/siswa/fulan/data.json").read_text(encoding="utf-8"))
-        assert data["foto"] == [] and data["proyek_akhir"]["foto"] == ""
-        assert not any((d / "out2/smp-00/siswa/fulan/foto").iterdir())
+        # foto bermasalah -> semua ditolak, hasil lama tetap utuh
+        (foto / "SMP-022/hp.png").write_bytes(b"\x89PNG")
+        (foto / "SMP-022/gps.jpg").write_bytes(b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00MM\x00\x2a\x00\x00\x00\x08\xff\xd9")
+        m = bangun(pen, out, foto, peta)["SMP-022"]
+        assert any(".jpg" in x for x in m) and any("EXIF" in x for x in m), m
+        assert (out / "smp-07/siswa/rafif/data.json").exists()
+        (foto / "SMP-022/hp.png").unlink()
+        (foto / "SMP-022/gps.jpg").unlink()
 
-        s["izin_foto"] = True
-        s["foto"] = [{"file": "hp.jpg", "p": 9, "keterangan": ""}, {"file": "besar.jpg", "p": 9, "keterangan": ""}]
-        siswa.write_text(json.dumps(s), encoding="utf-8")
-        (src / "smp-00/fulan/foto/hp.jpg").write_bytes(b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00MM\x00\x2a\x00\x00\x00\x08\xff\xd9")
-        (src / "smp-00/fulan/foto/besar.jpg").write_bytes(b"\xff\xd8" + b"\x00" * (BATAS_FOTO_KB * 1024 + 1))
-        m = bangun(src, d / "out3")["smp-00/fulan"]
-        assert any("EXIF" in x for x in m) and any("kecilkan dulu" in x for x in m), m
-        assert not (d / "out3").exists()
+        # ID di kelompok.json yang tidak ada di spreadsheet -> ditolak dengan pesan
+        assert "SMP-404" in bangun(pen, out, foto, {**peta, "SMP-404": "smp-07"})
 
-        (d / "gb.csv").write_text("judul\ncatatan\n\nID Siswa,Nama Lengkap,Total Poin Keseluruhan\nSMP-000,Fulan,99\n", encoding="utf-8")
-        assert baca_gradebook(str(d / "gb.csv"))["SMP-000"]["Total Poin Keseluruhan"] == "99"
+        # siswa yang dikeluarkan dari kelompok ikut hilang dari hasil
+        assert bangun(pen, out, foto, {"SMP-022": "smp-07"}) == {}
+        assert not (out / "smp-07/siswa/qassim").exists() and (out / "smp-07/siswa/rafif").exists()
 
-        # --- temuan review ---
-        s = json.loads((P / "contoh/smp-00/fulan/siswa.json").read_text(encoding="utf-8"))
+        assert buat_slug("M. Zaidan Altamis", t := set()) == "zaidan" and buat_slug("Zaidan Riqki", t) == "zaidan-riqki"
 
-        # catatan tutor dari gradebook (internal) TIDAK pernah ikut ke halaman publik
-        assert susun({**s, "catatan_tutor": ""}, "smp-00", "fulan", {"Catatan Kualitatif Tutor": "kurang aktif"})["catatan_tutor"] == ""
+        assert bangun_contoh(d / "contoh") == {}
+        assert (d / "contoh/smp-00/siswa/fulan/index.html").exists()
 
-        # nama lengkap hanya tampil kalau orang tua mengizinkan; default nama panggilan
-        tanpa = susun({**s, "tampil_nama_lengkap": False}, "smp-00", "fulan")
-        assert tanpa["nama"] == s["panggilan"] and s["nama"] not in json.dumps(tanpa)
-        assert susun({**s, "tampil_nama_lengkap": True}, "smp-00", "fulan")["nama"] == s["nama"]
-        teman = susun({**s, "contoh": False, "tampil_nama_lengkap": True}, "smp-00", "fulan", tampil={"Anggota Kedua": "Kedua"})
-        assert teman["anggota"] == ["Kedua", "Anggota"]  # teman tanpa data izin -> nama depan saja
-
-        # isian siswa.json yang salah ditolak dengan pesan, bukan crash
-        def ditolak(ubah):
-            return periksa({**s, **ubah}, "smp-00", src / "smp-00/fulan")
-        assert ditolak({"pertemuan": {"9": {"challenge": [], "tanya_jawab": "2"}}})
-        assert ditolak({"pertemuan": {"9": {"challenge": [], "tanya_jawab": -1}}})
-        assert ditolak({"pertemuan": {"9": {"challenge": ["hard"] * 4, "tanya_jawab": 0}}})
-        assert ditolak({"proyek_akhir": {**s["proyek_akhir"], "tiga_kalimat": "abc"}})
-        assert ditolak({"izin_foto": True, "foto": [{"p": 9}]})
-        assert ditolak({"izin_foto": True, "foto": [{"file": "../../x.jpg", "p": 9}]})
-        assert periksa({**s, "contoh": True}, "smp-07", src / "smp-00/fulan")  # contoh hanya untuk smp-00/sma-00
-        assert not periksa(s, "smp-00", src / "smp-00/fulan")
-
-        # foto siswa asli: hanya JPEG asli (cek isi file), tanpa EXIF maupun XMP; SVG hanya untuk contoh
-        foto = d / "f"
-        foto.mkdir()
-        (foto / "ok.jpg").write_bytes(b"\xff\xd8\xff\xdb\x00\x04\x00\x00\xff\xd9")
-        (foto / "xmp.jpg").write_bytes(b"\xff\xd8\xff\xe1\x00\x30http://ns.adobe.com/xap/1.0/\x00<x:xmpmeta GPS/>\xff\xd9")
-        (foto / "nyamar.png").write_bytes(b"\xff\xd8\xff\xdb\x00\x04\x00\x00\xff\xd9")
-        (foto / "palsu.jpg").write_bytes(b"\x89PNG\r\n\x1a\n")
-        (foto / "x.svg").write_text("<svg><script>alert(1)</script></svg>", encoding="utf-8")
-        assert masalah_foto(foto / "ok.jpg") is None
-        assert masalah_foto(foto / "xmp.jpg") and masalah_foto(foto / "nyamar.png") and masalah_foto(foto / "palsu.jpg")
-        assert masalah_foto(foto / "x.svg") and masalah_foto(foto / "x.svg", contoh=True) is None
-
-        # siswa yang dihapus dari sumber ikut hilang dari hasil bangun
-        src2 = d / "src2"
-        shutil.copytree(P / "contoh", src2)
-        shutil.copytree(src2 / "smp-00/fulan", src2 / "smp-00/budi")
-        assert bangun(src2, d / "out4") == {} and (d / "out4/smp-00/siswa/budi/index.html").exists()
-        shutil.rmtree(src2 / "smp-00/budi")
-        (d / "out4/catatan-pengajar.txt").write_text("jangan dihapus", encoding="utf-8")
-        assert bangun(src2, d / "out4") == {}
-        assert not (d / "out4/smp-00/siswa/budi").exists() and (d / "out4/smp-00/siswa/fulan/index.html").exists()
-        assert (d / "out4/catatan-pengajar.txt").exists()  # hanya folder <id>/siswa/ yang dibersihkan
+    # setiap ID di tools/kelompok.json unik dan sesuai jenjang kelompoknya
+    peta = kelompok_siswa()
+    assert peta and all(sid[:3].lower() == dev[:3] for sid, dev in peta.items())
     print("cek OK")
 
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    if a[:1] == ["kerangka"]:
-        kerangka()
-    elif a[:1] == ["bangun"]:
-        gbi = a.index("--gradebook") if "--gradebook" in a else None
-        gradebook = a[gbi + 1] if gbi is not None else None
-        pos = [x for i, x in enumerate(a[1:], 1) if gbi is None or i not in (gbi, gbi + 1)]
-        masalah = bangun(*[Path(x) for x in pos[:2]], gradebook=gradebook)
+    if a[:1] == ["bangun"] and len(a) > 1:
+        foto = a[a.index("--foto") + 1] if "--foto" in a else None
+        keluar = a[a.index("--keluar") + 1] if "--keluar" in a else ROOT / "dist/portofolio"
+        berkas = [x for i, x in enumerate(a[1:], 1) if not x.startswith("--") and a[i - 1] not in ("--foto", "--keluar")]
+        penilaian = {}
+        for b in berkas:
+            penilaian.update(baca_penilaian(b))
+        masalah = bangun(penilaian, keluar, foto)
         if masalah:
             sys.exit("DITOLAK, tidak ada yang dibangun:\n" + "\n".join(f"  {k}: {'; '.join(v)}" for k, v in masalah.items()))
-    elif a[:1] == ["cek"]:
+    elif a == ["contoh"]:
+        bangun_contoh()
+    elif a == ["cek"]:
         cek()
     else:
         sys.exit(__doc__)
