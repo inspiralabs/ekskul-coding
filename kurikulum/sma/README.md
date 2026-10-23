@@ -99,8 +99,6 @@ D12 (di antara D13 dan D14) **dikosongkan** (strapping pin, bikin upload gagal).
   driver CP210x & CH340, 3 PDF Panduan Instalasi.
 - [ ] Hindari unduhan board ±2 GB di kelas (pilih salah satu, **uji di 1 laptop H-1**):
   - salin folder `Arduino15` dari laptop yang sudah lulus 3 level (sesama OS; library DHT tetap via Level 3), atau
-  - server kelas lokal untuk siswa Windows: `py tools/server_kelas.py` (cara pakai & batasan: `kurikulum/smp/README.md`
-    bagian *Server kelas lokal*), atau
   - semua memilih board **esp32 2.0.17** (±0,8 GB); semua kode P10–P13 jalan di versi ini.
 - [ ] Data laptop siswa: OS, 64-bit?, sisa disk ≥ 9 GB, password admin/Mac. 1–2 laptop cadangan yang sudah lulus 3 level.
 - [ ] Tiap ESP32: stiker Device ID, upload `P10_1_KedipPertama` → LED biru (GPIO 2) harus kedip.
@@ -191,3 +189,6 @@ tools/kelompok.json                daftar Device ID & nama anggota
 kelompok/sma-0X/                   website yang online di sma-0X.inspiralabs.id
 backend/server.js                  API: data sensor, kontrol kipas, PIN (FAN_PINS)
 ```
+
+Post-test, paket proyek & tautan dashboard di kelas: server kelas `py tools/server_kelas.py --tes sma-10`
+(cara pakai: `kurikulum/smp/README.md`, bagian *Server kelas*).

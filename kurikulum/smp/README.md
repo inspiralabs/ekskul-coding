@@ -49,9 +49,7 @@ post-test 5 soal (Google Form), **tanpa PR**.
   Post-test P13 tidak berubah.
 - [ ] Hapus file lama `P11/SMP/Kode/P11_2_TesWiFi` di Drive (sudah dipindah ke P12 sebagai `P12_1_TesWiFi`).
 - [ ] Siapkan gradebook poin (kolom per siswa: +2, Easy, Medium, Hard, post-test). Leaderboard membaca gradebook ini.
-- [ ] Installer **Arduino IDE 2.3.10** (Windows `.exe`, Mac Apple Silicon &amp; Intel `.dmg`): untuk siswa Windows bagikan lewat
-
-  **server kelas lokal** (bagian 4, setelah P10); flashdisk 2–3 buah tetap disiapkan sebagai cadangan dan untuk siswa Mac.
+- [ ] Installer **Arduino IDE 2.3.10** (Windows `.exe`, Mac Apple Silicon & Intel `.dmg`) di 2–3 flashdisk.
 - [ ] Belanja/pinjam: power bank untuk 13 alat (dipakai P12–P13), 13 kardus kecil (P13), kabel USB **data** cadangan.
 
 ---
@@ -90,49 +88,39 @@ post-test 5 soal (Google Form), **tanpa PR**.
 - **Rencana B:** unduhan board belum selesai di menit 40 → kelompok itu upload Blink di laptop cadangan.
 Sisa instalasi diselesaikan **tutor setelah kelas** (bukan PR siswa), sebelum P11.
 
-### Server kelas lokal (opsional, siswa Windows)
+### Server kelas: post-test, paket proyek & dashboard (dipakai tiap pertemuan)
 
-Laptop pengajar membagikan installer Arduino IDE, **board ESP32**, dan zip proyek lewat WiFi kelas, jadi bagian
-yang besar (±2 GB per laptop) tidak lewat internet. Internet tetap dibutuhkan untuk beberapa unduhan kecil (lihat Batasan).
-Board diambil dari Arduino IDE laptop pengajar sendiri (`%LOCALAPPDATA%\Arduino15`, versi yang sudah terpasang, mis. 3.3.12).
+Laptop pengajar menjalankan satu halaman web untuk kelas, lewat WiFi kelas:
+**post-test** (nilai langsung jadi file Excel), **paket proyek** per kelompok (zip), dan tautan **dashboard** `smp-XX.inspiralabs.id`.
 
-**H-1**
-
-- [ ] Laptop pengajar sudah terpasang board **esp32 3.3.12** (Panduan Instalasi 2).
-- [ ] Taruh `arduino-ide_2.3.10_Windows_64bit.exe` (dan file lain yang mau dibagikan) di `dist/kelas/`.
-- [ ] Coba dari **1 laptop Windows lain** di WiFi kelas: buka halaman server, INSTALL board dari alamat lokal,
-
-  pastikan **ESP32 Dev Module** muncul dan Blink bisa di-upload. Jangan dipakai di kelas sebelum tes ini lulus.
+**H-1 (sekali)**
+- [ ] Coba dari 1 laptop/HP lain di WiFi kelas: jalankan `py tools/server_kelas.py --tes smp-09`, kirim satu jawaban sampai
+  halaman "Terima kasih", cek `/guru` → Unduh .xlsx. Lalu **hapus data coba** `dist/posttest/smp-09.*` supaya tidak
+  tercampur nilai asli. (Pakai post-test yang sudah lewat, jangan yang akan dipakai di kelas.)
 
 **Di kelas**
-
 ```
-py tools/server_kelas.py            # atau --port 8080 kalau port 8000 dipakai
-py tools/server_kelas.py cek        # self-check (opsional)
+py tools/server_kelas.py --tes smp-10     # buka post-test P10 SMP sejak awal (atau buka nanti dari halaman pengajar)
+py tools/server_kelas.py                  # tanpa post-test terbuka; --port 8080 kalau port 8000 dipakai
+py tools/server_kelas.py cek              # self-check (opsional)
 ```
-
-- WiFi sekolah biasanya dianggap **Public** oleh Windows 11. Ubah dulu: *Settings → Network &amp; internet → Wi-Fi →
-(nama WiFi) → Network profile type → **Private***. Lalu saat jendela **Windows Firewall** muncul → centang
-*Private networks* → **Allow**. Kalau profil dibiarkan Public, siswa tidak bisa membuka halamannya.
-- Sambungkan laptop pengajar ke router/access point dengan **kabel LAN** kalau bisa (lebih dari 2× lebih cepat).
-- Proyeksikan alamat bertanda `<- utama (WiFi)`, mis. `http://192.168.1.10:8000`. Halaman itu berisi 3 bagian:
-installer, alamat board ESP32, dan folder proyek `smp-01`…`sma-06` (zip dibangun ulang otomatis saat server start).
-- Siswa: *File → Preferences → Additional boards manager URLs* → **hapus alamat Espressif, isi hanya alamat lokal** →
-Boards Manager → `esp32` → INSTALL. Mulai di awal kelas, lalu isi waktu menunggu dengan game Tebak Komponen.
-- Setelah kelas boleh dikembalikan ke alamat Espressif. Kalau server pengajar mati, Arduino IDE menampilkan error unduh
-index saat dibuka, tapi board yang sudah terpasang tetap jalan.
-
-**Batasan**
-
-- Hanya **Windows 64-bit**. Siswa Mac pakai flashdisk/internet seperti biasa.
-- **Tetap butuh internet** (kecil): tool `dfu-util` (wajib untuk board esp32 3.3.12; kalau gagal, INSTALL board gagal),
-index utama Arduino, alat bawaan Arduino IDE saat pertama dibuka, dan library DHT.
-- Kecepatan = WiFi kelas dibagi semua laptop: 13 × ±2 GB ≈ 26 GB. Lewat WiFi 50–100 Mbps itu ±35–70 menit untuk
-satu kelas penuh, jadi mulai di awal kelas, gilir per 4–5 laptop, atau pakai kabel LAN di laptop pengajar.
-Versi 2.0.17 tidak tersedia di server ini (hanya versi di cache).
-- Banyak WiFi sekolah memblokir antar-laptop. Kalau halaman tidak bisa dibuka dari laptop siswa, pakai router sendiri
-yang **tetap tersambung internet** (mis. lewat tethering HP), karena unduhan kecil di atas tetap butuh internet.
-Hotspot bawaan Windows maksimal 8 perangkat.
+- **Jangan klik di dalam jendela konsol** server saat kelas berjalan (Windows bisa "membekukan" tulisannya; kalau
+  terlanjur, tekan **Esc**). Halaman siswa tetap jalan, hanya log di konsol yang tertahan.
+- WiFi sekolah biasanya dianggap **Public** oleh Windows 11. Ubah dulu: *Settings → Network & internet → Wi-Fi →
+  (nama WiFi) → Network profile type → **Private***. Lalu saat jendela **Windows Firewall** muncul → centang
+  *Private networks* → **Allow**. Kalau profil dibiarkan Public, siswa tidak bisa membuka halamannya.
+- Proyeksikan alamat bertanda `<- utama (WiFi)`, mis. `http://192.168.1.10:8000`. Siswa membukanya di laptop/HP.
+- **Halaman pengajar** `http://127.0.0.1:8000/guru` (hanya bisa dibuka dari laptop pengajar):
+  - **Buka** post-test saat menit post-test tiba, **Tutup** setelah semua selesai.
+  - Lihat jumlah jawaban yang masuk, lalu **Unduh .xlsx**.
+- Siswa mengisi nama, kelas, kelompok, dan menjawab 5 soal. Setelah kirim, siswa hanya melihat "Terima kasih"
+  (nilai tidak ditampilkan). Isian yang belum lengkap ditolak dengan pesan yang jelas, jawaban lain tetap terisi.
+- Nilai tersimpan otomatis di `dist/posttest/smp-10.jsonl` + `smp-10.xlsx` (kolom: Waktu, Nama, Kelas, Kelompok,
+  Soal 1–5, Benar, Nilai 0–100). Upload xlsx ke Google Drive → buka dengan Google Sheets → salin ke gradebook.
+  Kalau `smp-10.xlsx` sedang dibuka di Excel, jawaban tetap tersimpan di `.jsonl`; unduh ulang dari halaman pengajar.
+- Siswa menekan refresh di halaman "Terima kasih" tidak mengirim ulang. Kalau siswa sengaja mengerjakan dua kali, kedua baris tercatat dengan waktunya; pakai yang terakhir.
+- Pilihan post-test: `smp-09` … `smp-13`, `sma-09` … `sma-13` (soal dari `pNN/sumber/POST_TEST_*.md`).
+  Google Form di Linktree tetap ada sebagai cadangan kalau server/WiFi bermasalah.
 
 ### P11 — Kenalan Sensor DHT22
 

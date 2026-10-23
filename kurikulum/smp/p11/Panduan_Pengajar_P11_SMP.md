@@ -145,7 +145,7 @@ Halaman: `ekskulcoding.inspiralabs.id/sabotase/` (juga ada di halaman utama eksk
   - 🟢 Easy +5 = angka suhu & kelembapan muncul + dicatat Pencatat.
   - 🟡 Medium +10 = angka awal & puncak kelembapan tercatat + grafik gunung ditunjukkan.
   - 🔴 Hard +15 = 3 kesalahan sabotase ditulis benar + angka suhu muncul lagi tanpa mengubah program.
-- **Post-test:** 5 soal, individu (Google Form otomatis menilai). Kunci: 1B 2C 3D 4A 5B.
+- **Post-test:** 5 soal, individu, lewat **server kelas** (`--tes smp-11`, nilai otomatis jadi `dist/posttest/smp-11.xlsx`; Google Form di Linktree sebagai cadangan). Kunci: 1B 2C 3D 4A 5B.
 - **Tidak ada PR / tugas rumah.**
 
 ## 13. Penutup
