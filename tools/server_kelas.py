@@ -478,7 +478,33 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
     return Server(("0.0.0.0", port), Handler)
 
 
+def masalah_folder_repo(root, folder_windows=None):
+    """Pesan untuk tutor kalau repo ada di folder yang tidak boleh ditulis (mis. C:\\Windows\\System32,
+    tempat PowerShell "Run as administrator" dimulai); None kalau aman."""
+    import os
+    folder_windows = folder_windows or os.environ.get("SystemRoot", r"C:\Windows")
+    saran = (f"\nFolder repo sekarang: {root}\n"
+             "Pindahkan repo ke folder Documents, lalu jalankan lagi dari sana:\n"
+             "  1. Buka PowerShell biasa (bukan 'Run as administrator')\n"
+             "  2. cd $HOME\\Documents\n"
+             "  3. git clone https://github.com/inspiralabs/ekskul-coding.git   (atau extract ZIP ke Documents)\n"
+             "  4. cd ekskul-coding ; py tools/server_kelas.py --tes smp-10")
+    if str(root).lower().startswith(str(folder_windows).lower().rstrip("\\") + "\\"):
+        return "Repo tersimpan di folder sistem Windows, yang tidak boleh ditulis." + saran
+    try:
+        (Path(root) / "dist").mkdir(exist_ok=True)
+        uji = Path(root) / "dist" / ".uji-tulis"
+        uji.write_text("ok")
+        uji.unlink()
+    except OSError:
+        return "Folder repo tidak bisa ditulis (nilai post-test tidak akan bisa disimpan)." + saran
+    return None
+
+
 def main(port, buka):
+    masalah = masalah_folder_repo(ROOT)
+    if masalah:
+        sys.exit(masalah)
     import kelompok
     kelompok.paket()
     tes = posttest.daftar_tes()
@@ -650,6 +676,12 @@ def cek():
         except OSError:
             pass
         srv2.shutdown()
+
+    # repo di folder sistem Windows (PowerShell "Run as administrator" mulai di System32) -> pesan jelas
+    m = masalah_folder_repo(Path(r"C:\Windows\System32\ekskul-coding"), r"C:\Windows")
+    assert m and "Documents" in m and "System32" in m, m
+    with tempfile.TemporaryDirectory() as d:
+        assert masalah_folder_repo(Path(d), r"C:\Windows") is None
 
     assert boleh_guru_dari("127.0.0.1", []) and boleh_guru_dari("192.168.1.229", ["192.168.1.229"])
     assert not boleh_guru_dari("192.168.1.178", ["192.168.1.229"])

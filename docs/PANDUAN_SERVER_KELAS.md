@@ -24,10 +24,18 @@ WiFi kelas untuk:
   Harus muncul `Python 3.x`. Tidak perlu memasang pustaka lain untuk server kelas.
 
 ### 2. Ambil repo
+Simpan repo di folder **Documents**. **Jangan** di `C:\Windows\System32`: itu folder sistem yang tidak boleh ditulis,
+dan server tidak bisa menyimpan nilai post-test di sana. Folder itu jadi tempat awal kalau PowerShell dibuka dengan
+*Run as administrator*, jadi **buka PowerShell biasa** (tidak perlu administrator).
+
 Pilih salah satu:
 - **Tanpa Git (paling mudah):** buka https://github.com/inspiralabs/ekskul-coding → tombol hijau **Code** →
   **Download ZIP** → klik kanan zip → **Extract All**, misalnya ke `Documents\ekskul-coding`.
-- **Dengan Git:** `git clone https://github.com/inspiralabs/ekskul-coding.git`
+- **Dengan Git:** buka PowerShell biasa, lalu:
+  ```
+  cd $HOME\Documents
+  git clone https://github.com/inspiralabs/ekskul-coding.git
+  ```
 
 Kalau materi diperbarui, unduh ZIP lagi (atau `git pull`). Folder `dist/` berisi nilai post-test: **jangan ikut
 terhapus** saat mengganti folder repo, salin dulu ke tempat lain.
@@ -124,6 +132,7 @@ Server bisa dijalankan ulang kapan saja; nilai lama tidak hilang (jawaban baru d
 
 | Gejala | Penyebab paling mungkin | Coba ini |
 |---|---|---|
+| `Repo tersimpan di folder sistem Windows` / `Access is denied ... System32` | Repo ada di `C:\Windows\System32` (PowerShell dibuka sebagai administrator) | Pindahkan repo ke Documents (bagian A langkah 2), buka PowerShell biasa |
 | `py` tidak dikenal | Python belum terpasang / tidak masuk PATH | Pasang ulang Python, centang "Add python.exe to PATH". Coba `python` sebagai ganti `py` |
 | `Port 8000 dipakai` | Server lain masih jalan | Tutup terminal server lama, atau jalankan dengan `--port 8080` |
 | Halaman tidak terbuka dari HP/laptop siswa | Profil WiFi masih *Public* / firewall | Ubah ke *Private* (bagian B langkah 2), izinkan Python di Windows Firewall |

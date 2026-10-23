@@ -20,8 +20,8 @@
 // Isi 2 baris di bawah (JANGAN commit ke repo: folder materi berisi Responses post-test yang rahasia).
 // ============================================================
 
-const FOLDER_MATERI = "https://drive.google.com/drive/folders/1UUQRRmEzJh1lv-ejCoAIMG8bzs91MCCy?usp=sharing";
-const LINK_SLIDE_P1 = "https://docs.google.com/presentation/d/1FadnL5qyzup4ko4ddniYbowdkFIKlnkXy5Za-MZBdBk/edit?usp=sharing";  // dipakai untuk menemukan sheet Materi yang benar
+const FOLDER_MATERI = "TEMPEL_LINK_FOLDER_2_MATERI_DI_SINI";
+const LINK_SLIDE_P1 = "TEMPEL_LINK_SLIDE_P1_DI_SINI";  // dipakai untuk menemukan sheet Materi yang benar
 
 const KOLOM = ["No Pertemuan", "Tanggal", "Judul Materi", "Link Drive", "Link Post-Test", "Link Kritik & Saran", "Target", "Status"];
 
