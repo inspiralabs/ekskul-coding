@@ -7,62 +7,60 @@
 <link rel="icon" href="/icon.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared/site.css">
 <style>
-  *{box-sizing:border-box}
-  body{
-    margin:0;min-height:100vh;font-family:'Nunito',sans-serif;
-    background:radial-gradient(circle at 15% 15%,#fff1de 0%,transparent 45%),
-               radial-gradient(circle at 85% 85%,#e4fbf3 0%,transparent 45%),
-               linear-gradient(135deg,#eef5ff 0%,#f4fff9 100%);
-    padding:32px 20px;
-  }
-  .kontainer{max-width:640px;margin:0 auto}
-  h1{font:800 clamp(26px,5vw,34px)/1.15 'Baloo 2',sans-serif;margin:0 0 6px;color:#FF9F43}
-  .subjudul{color:#6b7785;font:600 14px/1.5 'Nunito',sans-serif;margin:0 0 20px}
-  a.kembali{display:inline-block;margin-bottom:16px;color:#2ED9A6;font:700 13px 'Nunito',sans-serif;text-decoration:none}
-
-  .kelas-label{
-    display:inline-block;padding:6px 14px;border-radius:999px;margin-bottom:20px;
-    background:linear-gradient(135deg,#FF9F43,#2ED9A6);color:#fff;font:700 13px 'Nunito',sans-serif;
-  }
-
-  .materi-card{background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(15,30,30,.07);border:1px solid rgba(15,30,30,.04);overflow:hidden;margin-bottom:14px}
-  .materi-toggle{width:100%;border:none;background:none;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:16px 18px}
+  .pilih-kelas{margin-bottom:18px}
+  .materi-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px}
+  .materi-toggle{width:100%;min-height:64px;border:none;background:none;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:var(--r)}
   .materi-head{flex:1;display:flex;flex-direction:column;gap:2px}
-  .materi-head strong{font:800 15px 'Baloo 2',sans-serif;color:#1f2937}
-  .materi-tanggal{font:600 12px 'Nunito',sans-serif;color:#6b7785}
-  .panah{color:#c2cbd3;font-size:18px;transition:transform .25s ease}
-  .materi-toggle[aria-expanded="true"] .panah{transform:rotate(90deg);color:#2ED9A6}
-
-  .materi-body{display:none;flex-direction:column;gap:10px;padding:0 18px 18px}
+  .materi-head strong{font:800 18px/1.25 'Baloo 2',sans-serif;color:var(--ink)}
+  .materi-tanggal{font-size:13px;font-weight:700;color:var(--muted)}
+  .panah{color:var(--muted);font-size:20px;transition:transform .2s ease}
+  .materi-toggle[aria-expanded="true"] .panah{transform:rotate(90deg);color:var(--ink)}
+  .materi-body{display:none;flex-wrap:wrap;gap:10px;padding:0 16px 16px}
   .materi-body.open{display:flex}
-
-  .drive-btn, .form-btn{
-    display:inline-block;padding:10px 16px;border-radius:12px;
-    color:#fff;text-decoration:none;font:700 13px 'Nunito',sans-serif;width:fit-content;
-  }
-  .drive-btn{background:linear-gradient(135deg,#FF9F43,#2ED9A6)}
-  .form-btn{background:linear-gradient(135deg,#4d9de0,#3ddc97)}
-
-  .status-msg{text-align:center;color:#6b7785;font:600 14px 'Nunito',sans-serif;padding:20px 0}
-  .status-error{color:#FF6B6B}
-  .retry-btn{
-    display:block;margin:0 auto;padding:8px 20px;border-radius:999px;border:none;
-    background:linear-gradient(135deg,#FF9F43,#2ED9A6);color:#fff;font:700 13px 'Nunito',sans-serif;cursor:pointer;
-  }
+  .drive-btn,.form-btn{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:var(--r-sm);
+    color:var(--ink);text-decoration:none;font:800 15px 'Nunito',sans-serif}
+  .drive-btn{background:var(--orange)}
+  .form-btn{background:var(--mint)}
+  .drive-btn:hover,.form-btn:hover{filter:brightness(1.05)}
+  #materi-container .status-msg{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
 </style>
 </head>
 <body>
-<div class="kontainer">
-  <a class="kembali" href="/">&larr; Kembali</a>
-  <h1>Materi &#128218;</h1>
-  <p class="subjudul">Materi, post-test, dan kritik &amp; saran tiap pertemuan.</p>
+<header class="situs-header"><div class="wadah">
+  <a class="merek" href="/"><img src="/logo.jpeg" alt="" width="34" height="34">Ekskul Coding</a>
+  <nav class="nav" aria-label="Menu utama">
+    <a href="/materi/" aria-current="page">Materi</a><a href="/leaderboard/">Leaderboard</a><a href="/#kelompok">Kelompok</a><a href="/tentang/">Tentang</a>
+  </nav>
+</div></header>
 
-  <span class="kelas-label" id="kelas-label"></span>
+<main class="wadah wadah-sempit">
+  <div class="judul-halaman">
+    <h1>Materi <span id="kelas-label"></span></h1>
+    <p>Slide, post-test, dan kritik &amp; saran tiap pertemuan. Ketuk judul pertemuan untuk membuka tautannya. Materi baru muncul setelah tutor mengunggahnya.</p>
+  </div>
 
-  <div id="materi-container"></div>
-</div>
+  <nav class="pilih-kelas" aria-label="Pilih jenjang">
+    <a href="?kelas=smp" data-kelas="smp">SMP</a>
+    <a href="?kelas=sma" data-kelas="sma">SMA</a>
+  </nav>
 
+  <div id="materi-container" aria-live="polite"></div>
+</main>
+
+<footer class="situs-footer"><div class="wadah">
+  <span>InspiraLabs × Sekolah Qur'an Asy Syahid</span>
+  <a href="/tentang/">Tentang ekskul ini</a>
+</div></footer>
+
+<script>
+  // Tandai jenjang aktif; aturannya sama dengan materi.js (selain "smp" berarti SMA).
+  (function () {
+    var kelas = new URLSearchParams(location.search).get('kelas') === 'smp' ? 'smp' : 'sma';
+    document.querySelector('.pilih-kelas [data-kelas="' + kelas + '"]').setAttribute('aria-current', 'page');
+  })();
+</script>
 <script src="/shared/csv.js"></script>
 <script src="materi.js"></script>
 </body>

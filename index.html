@@ -4,233 +4,283 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ekskul Coding Asy Syahid</title>
+<meta name="description" content="Ekskul Coding SMP & SMA Sekolah Qur'an Asy Syahid bersama InspiraLabs: materi, leaderboard, perjalanan semester, dan website IoT tiap kelompok.">
 <link rel="icon" href="/icon.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared/site.css">
 <style>
-  *{box-sizing:border-box}
-  body{
-    margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-    font-family:'Nunito',sans-serif;padding:32px 20px;
-    background:radial-gradient(circle at 15% 15%,#fff1de 0%,transparent 45%),
-               radial-gradient(circle at 85% 85%,#e4fbf3 0%,transparent 45%),
-               linear-gradient(135deg,#eef5ff 0%,#f4fff9 100%);
-    overflow-x:hidden;
+  section{padding:40px 0 8px}
+  section h2{font-size:clamp(26px,5vw,34px);font-weight:800}
+  .lead{color:var(--muted);font-weight:600;margin:6px 0 20px;max-width:60ch}
+
+  /* Pembuka */
+  .pembuka{display:grid;gap:22px;padding:30px 0 6px}
+  .sapa{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0 0 4px;padding:0;border:0;background:none;
+        font:700 16px 'Nunito',sans-serif;color:var(--muted);cursor:pointer}
+  .sapa b{color:var(--ink)}
+  .sapa u{font-size:13px;text-underline-offset:3px}
+  .pembuka h1{font-size:clamp(34px,8vw,58px);font-weight:800;letter-spacing:-.01em}
+  .pembuka h1 mark{background:linear-gradient(transparent 62%,var(--orange) 62%);color:inherit;padding:0 .08em}
+  .pembuka p.intro{font-size:clamp(16px,2.4vw,18px);color:var(--muted);font-weight:600;margin:12px 0 18px;max-width:52ch}
+  .aksi{display:flex;flex-wrap:wrap;gap:10px}
+  .fakta{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:6px 18px;margin:0;align-self:start}
+  .fakta div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .fakta div:last-child{border-bottom:0}
+  .fakta dt{color:var(--muted);font-weight:700}
+  .fakta dd{margin:0;font-weight:800;text-align:right}
+  @media (min-width:860px){.pembuka{grid-template-columns:1.5fr 1fr;align-items:center;padding-top:56px}}
+
+  /* Jenjang */
+  .jenjang-grid{display:grid;gap:14px}
+  @media (min-width:700px){.jenjang-grid{grid-template-columns:1fr 1fr}}
+  .jenjang{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 10px}
+  .jenjang-kepala{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .jenjang h3{font-size:30px;font-weight:800}
+  .jenjang-kepala span{color:var(--muted);font-weight:700;font-size:14px}
+  .jenjang ul{list-style:none;margin:0;padding:0}
+  .jenjang li a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:6px 4px;border-top:1px solid var(--line);
+                text-decoration:none;color:var(--ink);font-weight:700}
+  .jenjang li a:hover{color:var(--teal-ink)}
+  .jenjang li a small{color:var(--muted);font-weight:600;font-size:13px}
+  .jenjang li a[target="_blank"]::after{content:"↗";color:var(--muted)}
+
+  /* Perjalanan semester */
+  .perjalanan-atas{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .perjalanan-atas .lead{margin-bottom:0}
+  .legenda{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 18px;padding:0;list-style:none;font-size:14px;font-weight:700;color:var(--muted)}
+  .legenda li{display:flex;align-items:center;gap:6px}
+  .legenda i{width:14px;height:14px;border-radius:4px;border:1px solid rgba(31,41,55,.25)}
+  /* Garis kiri = "kabel" yang menyambung tiap pertemuan, tiap titik = pertemuan. */
+  .jalur{list-style:none;margin:0;padding:0 0 0 4px;position:relative;display:grid;gap:0}
+  .jalur li{position:relative;display:grid;grid-template-columns:52px 1fr;gap:14px;padding:0 0 18px}
+  .jalur li::before{content:"";position:absolute;left:25px;top:44px;bottom:0;width:3px;background:var(--line)}
+  .jalur li:last-child::before{display:none}
+  .jalur .p{width:52px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font:800 18px 'Baloo 2',sans-serif;border:2px solid var(--ink)}
+  .jalur h3{font:800 18px/1.25 'Baloo 2',sans-serif;margin-top:2px}
+  .jalur p{margin:2px 0 0;color:var(--muted);font-weight:600;font-size:15px}
+  .jalur li.puncak .p{background:var(--ink)!important;color:#fff}
+  .f-kenalan .p{background:var(--kenalan)}
+  .f-logika .p{background:var(--logika)}
+  .f-web .p{background:var(--web)}
+  .f-iot .p{background:var(--iot)}
+  @media (min-width:860px){
+    /* kolom koran, bukan grid 7 baris: tiap kolom mengatur tinggi sendiri, jarak antarlangkah rata */
+    .jalur{display:block;columns:2;column-gap:40px}
+    .jalur li{break-inside:avoid}
+    .jalur li:nth-child(7){break-after:column}
+    .jalur li:nth-child(7)::before{display:none}
+    .jalur[hidden]{display:none}
   }
-  .blob{position:fixed;border-radius:50%;filter:blur(2px);opacity:.55;animation:mengambang 7s ease-in-out infinite;pointer-events:none}
-  .blob:nth-child(1){width:70px;height:70px;top:8%;left:8%;background:#ffd8a8;animation-delay:0s}
-  .blob:nth-child(2){width:40px;height:40px;top:70%;left:12%;background:#a8f0d8;animation-delay:1.5s}
-  .blob:nth-child(3){width:55px;height:55px;top:15%;right:10%;background:#c7d8ff;animation-delay:.8s}
-  .blob:nth-child(4){width:34px;height:34px;bottom:10%;right:14%;background:#ffc7dd;animation-delay:2.2s}
-  @keyframes mengambang{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(12deg)}}
+  .catatan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:6px 0 0;font-weight:600}
+  .catatan b{color:var(--orange-ink)}
 
-  .kontainer{max-width:520px;width:100%;position:relative;z-index:1}
-  .lencana{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 14px;font:700 12px 'Nunito',sans-serif;color:#2ED9A6;box-shadow:0 2px 10px rgba(15,30,30,.08);margin-bottom:16px;border:none;cursor:pointer;font-family:inherit}
-  .lencana:hover{background:#f2f8f7}
-  .titik{width:8px;height:8px;border-radius:50%;background:#2ED9A6;animation:denyut 1.6s ease-out infinite}
-  @keyframes denyut{0%{box-shadow:0 0 0 0 rgba(46,217,166,.5)}70%{box-shadow:0 0 0 8px rgba(46,217,166,0)}100%{box-shadow:0 0 0 0 rgba(46,217,166,0)}}
+  /* Website kelompok */
+  .kelompok-sub{font:800 20px 'Baloo 2',sans-serif;margin:22px 0 10px}
+  .kelompok-grid{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .kelompok{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;row-gap:2px;align-content:start;height:100%;
+            padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink)}
+  .kelompok:hover{border-color:var(--ink)}
+  .kelompok-id{grid-row:1 / 3;align-self:start;padding:4px 8px;border-radius:8px;background:var(--iot);font:800 14px 'Baloo 2',sans-serif;white-space:nowrap}
+  .kelompok-sma .kelompok-id{background:var(--kenalan)}
+  .kelompok-nama{font-weight:700;font-size:15px;line-height:1.35}
+  .kelompok-url{color:var(--teal-ink);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:2px}
 
-  h1{font:800 clamp(28px,5vw,38px)/1.15 'Baloo 2',sans-serif;margin:0 0 6px;color:#FF9F43}
-  .subjudul{color:#6b7785;font:600 15px/1.5 'Nunito',sans-serif;margin:0 0 28px}
-
-  .grid{display:grid;gap:14px}
-  .akordeon{background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(15,30,30,.07);
-            border:1px solid rgba(15,30,30,.04);overflow:hidden}
-  .akordeon-demo>a.kartu{box-shadow:none;border:none;border-radius:0}
-  .kartu{display:flex;align-items:center;gap:16px;background:#fff;border-radius:20px;padding:18px 20px;
-         text-decoration:none;color:#1f2937;transition:background .2s ease}
-  a.kartu{box-shadow:0 4px 20px rgba(15,30,30,.07);border:1px solid rgba(15,30,30,.04)}
-  a.kartu:hover{background:#fafcff}
-  .ikon{width:48px;height:48px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
-  .ikon img{width:100%;height:100%;object-fit:cover}
-  .ikon-demo{background:linear-gradient(135deg,#FF9F43,#2ED9A6)}
-  .ikon-sma{background:linear-gradient(135deg,#4d9de0,#3ddc97)}
-  .ikon-smp{background:linear-gradient(135deg,#a367e0,#4d9de0)}
-  .teks strong{display:block;font:800 17px 'Baloo 2',sans-serif;margin-bottom:2px}
-  .teks span{font:600 13px 'Nunito',sans-serif;color:#6b7785}
-  .panah{margin-left:auto;color:#c2cbd3;font-size:20px;transition:transform .25s ease}
-
-  .akordeon-toggle{width:100%;border:none;background:none;cursor:pointer;font-family:inherit;text-align:left}
-  .akordeon-toggle:hover .kartu{background:#fafcff}
-  .akordeon-toggle .panah{transition:transform .25s ease,color .25s ease}
-  .akordeon-toggle[aria-expanded="true"] .panah{transform:rotate(90deg);color:#2ED9A6}
-
-  .akordeon-isi{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
-  .akordeon-isi>div{overflow:hidden}
-  .akordeon-toggle[aria-expanded="true"]+.akordeon-isi{grid-template-rows:1fr}
-  .pilihan{display:flex;flex-direction:column;padding:4px 12px 12px}
-  .pilihan a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
-             text-decoration:none;color:#1f2937;font:700 13px 'Nunito',sans-serif;transition:background .2s ease}
-  .pilihan a:hover{background:#f2f8f7}
-  .pilihan a span.emoji{font-size:15px}
-  .label-jenjang{margin:10px 12px 2px;font:800 11px 'Nunito',sans-serif;letter-spacing:.08em;color:#93A6AF}
-
-  footer{text-align:center;margin-top:28px;font:700 12px 'Nunito',sans-serif;color:#93A6AF}
-  footer a{color:#93A6AF;text-decoration:underline}
-  footer a:hover{color:#2ED9A6}
+  /* Alat kelas */
+  .alat{display:grid;gap:12px}
+  @media (min-width:700px){.alat{grid-template-columns:1fr 1fr}}
+  .alat a{display:block;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink)}
+  .alat a:hover{border-color:var(--ink)}
+  .alat strong{display:block;font:800 20px 'Baloo 2',sans-serif}
+  .alat span{color:var(--muted);font-weight:600;font-size:15px}
 </style>
 </head>
 <body>
-<div class="blob"></div><div class="blob"></div><div class="blob"></div><div class="blob"></div>
+<header class="situs-header"><div class="wadah">
+  <a class="merek" href="/"><img src="/logo.jpeg" alt="" width="34" height="34">Ekskul Coding</a>
+  <nav class="nav" aria-label="Menu utama">
+    <a href="/materi/">Materi</a><a href="/leaderboard/">Leaderboard</a><a href="/#kelompok">Kelompok</a><a href="/tentang/">Tentang</a>
+  </nav>
+</div></header>
 
-<div class="kontainer">
-  <button class="lencana" id="salam-siswa" type="button"><span class="titik"></span><span id="salam-teks">Hai, Siswa</span></button>
-  <h1>Ekstrakurikuler Coding</h1>
-  <p class="subjudul">Dashboard ini menampilkan leaderboard, materi, template starter, dan website kelompok untuk siswa SMA &amp; SMP Sekolah Quran Asy Syahid.</p>
-
-  <div class="grid">
-    <div class="akordeon">
-      <button class="akordeon-toggle" aria-expanded="false" onclick="
-        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')!=='true');
-      ">
-        <div class="kartu">
-          <div class="ikon ikon-sma">🎓</div>
-          <div class="teks"><strong>SMA</strong><span>Template starter, Materi & Post-Test</span></div>
-          <span class="panah">→</span>
-        </div>
-      </button>
-      <div class="akordeon-isi"><div>
-        <div class="pilihan">
-          <a href="/sma/"><span class="emoji">🖥️</span> Lihat website</a>
-          <a href="/materi/?kelas=sma"><span class="emoji">📚</span> Materi &amp; Post-Test</a>
-          <a href="https://drive.google.com/file/d/14tHnrs4urDLxjvf9sHT63yIkOpbmEuG4/view?usp=drive_link" target="_blank"><span class="emoji">⬇️</span> Unduh template &amp; firmware</a>
-        </div>
-      </div></div>
+<main class="wadah">
+  <div class="pembuka">
+    <div>
+      <button class="sapa" id="salam-siswa" type="button"><span id="salam-teks">Hai, <b>Siswa</b>!</span> <u>ubah nama</u></button>
+      <h1>Dari nol sampai alat IoT <mark>yang kamu rakit sendiri</mark></h1>
+      <p class="intro">Ekskul Coding Sekolah Qur'an Asy Syahid bersama InspiraLabs. Satu semester kita belajar logika, bikin halaman web, lalu merakit ESP32 dengan sensor suhu yang datanya tampil di website kelompokmu.</p>
+      <div class="aksi">
+        <a class="tombol" href="#jenjang">Pilih kelasku</a>
+        <a class="tombol tombol-garis" href="#perjalanan">Lihat perjalanan semester</a>
+      </div>
     </div>
-
-    <div class="akordeon">
-      <button class="akordeon-toggle" aria-expanded="false" onclick="
-        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')!=='true');
-      ">
-        <div class="kartu">
-          <div class="ikon ikon-smp">📘</div>
-          <div class="teks"><strong>SMP</strong><span>Template starter, Materi & Post-Test</span></div>
-          <span class="panah">→</span>
-        </div>
-      </button>
-      <div class="akordeon-isi"><div>
-        <div class="pilihan">
-          <a href="/smp/"><span class="emoji">🖥️</span> Lihat website</a>
-          <a href="/materi/?kelas=smp"><span class="emoji">📚</span> Materi &amp; Post-Test</a>
-          <a href="https://drive.google.com/file/d/12j2b3eK8423zYa8F-1uTewoOYeNC0yrh/view?usp=drive_link" target="_blank"><span class="emoji">⬇️</span> Unduh template &amp; firmware</a>
-        </div>
-      </div></div>
-    </div>
-
-    <div class="akordeon">
-      <button class="akordeon-toggle" aria-expanded="false" onclick="
-        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')!=='true');
-      ">
-        <div class="kartu">
-          <div class="ikon ikon-demo">🏆</div>
-          <div class="teks"><strong>Leaderboard</strong><span>Ranking siswa SMA &amp; SMP</span></div>
-          <span class="panah">→</span>
-        </div>
-      </button>
-      <div class="akordeon-isi"><div>
-        <div class="pilihan">
-          <a href="/leaderboard/?kelas=sma"><span class="emoji">🎓</span> Leaderboard SMA</a>
-          <a href="/leaderboard/?kelas=smp"><span class="emoji">📘</span> Leaderboard SMP</a>
-        </div>
-      </div></div>
-    </div>
-
-    <div class="akordeon">
-      <button class="akordeon-toggle" aria-expanded="false" onclick="
-        this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')!=='true');
-      ">
-        <div class="kartu">
-          <div class="ikon ikon-demo">🌐</div>
-          <div class="teks"><strong>Website Kelompok IoT</strong><span>Dashboard Smart Room Monitor buatan siswa</span></div>
-          <span class="panah">→</span>
-        </div>
-      </button>
-      <div class="akordeon-isi"><div>
-        <div class="pilihan">
-          <p class="label-jenjang">SMP</p>
-          <a href="https://smp-01.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-01 · Athalla Daffa Habibullah</a>
-          <a href="https://smp-02.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-02 · Sultan Raziq Salasa</a>
-          <a href="https://smp-03.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-03 · M. Abizan Syahdan</a>
-          <a href="https://smp-04.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-04 · M. Ghaizan Amsar S</a>
-          <a href="https://smp-05.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-05 · Bima Saguna Shiddiq</a>
-          <a href="https://smp-06.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-06 · Akmal Nafis &amp; M. Adlan Al Fadyl</a>
-          <a href="https://smp-07.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-07 · Rafif Ahnaf Rabbani &amp; M. Qassim</a>
-          <a href="https://smp-08.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-08 · Abdul Hasiib &amp; Zhaffir Arkana Kurniaputra</a>
-          <a href="https://smp-09.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-09 · Zahidan Akmal Wafa &amp; M. Alfatih</a>
-          <a href="https://smp-10.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-10 · Bintang Habibi Satriawan, Muzaffar Rakhsan Abqary, Yahya Zakiy Elmoursy, Mozhaffar Adam Kanz</a>
-          <a href="https://smp-11.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-11 · Tubagus Razan, Dzahwan Raditya Arraka, Essa Rizqi Wijaya, M. Fathir Abqary Arief</a>
-          <a href="https://smp-12.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-12 · M. Faiq Ghaisan Sutisna, M. Tsabbit Al Hanif, Zaidan Riqki Alfarizi, M. Zaidan Altamis</a>
-          <a href="https://smp-13.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMP-13 · Muzhaffar Pratama Nur Ikhwan, Bariq Taufiqurrahman, M. Naufal Khairy</a>
-          <p class="label-jenjang">SMA</p>
-          <a href="https://sma-01.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-01 · Nabil Abdillah</a>
-          <a href="https://sma-02.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-02 · M Lyu Marioka</a>
-          <a href="https://sma-03.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-03 · M Syafiy</a>
-          <a href="https://sma-04.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-04 · Qowiyyyl Luthfi Pradana &amp; M Kenzo Bagas</a>
-          <a href="https://sma-05.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-05 · Husna Mahira Taqiyya &amp; Aliya Nasifa Putri Kencoro</a>
-          <a href="https://sma-06.inspiralabs.id" target="_blank"><span class="emoji">🌐</span> SMA-06 · M Dzaki &amp; M Fakhri</a>
-        </div>
-      </div></div>
-    </div>
-
-    <div class="akordeon akordeon-demo">
-      <a class="kartu" href="/sabotase/">
-        <div class="ikon ikon-sma">🎴</div>
-        <div class="teks"><strong>Kartu Sabotase</strong><span>Challenge Hard P10 SMA / P11 SMP: Detektif Kabel</span></div>
-        <span class="panah">→</span>
-      </a>
-    </div>
-
-    <div class="akordeon akordeon-demo">
-      <a class="kartu" href="/demo/">
-        <div class="ikon ikon-demo">✨</div>
-        <div class="teks"><strong>Demo</strong><span>Dashboard lengkap — referensi desain penuh fitur</span></div>
-        <span class="panah">→</span>
-      </a>
-    </div>
-
-    <!-- <div class="akordeon">
-      <a class="kartu" href="https://inspiralabs.id/ekskul-asysyahid" target="_blank">
-        <div class="ikon ikon-demo">📝</div>
-        <div class="teks"><strong>Survey</strong><span>Isi survey ekskul Coding Asy Syahid</span></div>
-        <span class="panah">→</span>
-      </a>
-    </div> -->
-
-    <div class="akordeon akordeon-demo">
-      <a class="kartu" href="/tentang/">
-        <div class="ikon"><img src="/logo.jpeg" alt="Logo InspiraLabs"></div>
-        <div class="teks"><strong>Tentang InspiraLabs</strong><span>Kenalan sama kita yuk</span></div>
-        <span class="panah">→</span>
-      </a>
-    </div>
+    <dl class="fakta">
+      <div><dt>SMP</dt><dd>Jum'at</dd></div>
+      <div><dt>SMA</dt><dd>Sabtu</dd></div>
+      <div><dt>Satu semester</dt><dd>13 pertemuan</dd></div>
+      <div><dt>Proyek akhir</dt><dd>Smart Room Monitor</dd></div>
+      <div><dt>Pelatih</dt><dd>Unggul Sulaiman, S.Kom</dd></div>
+    </dl>
   </div>
 
-  <footer>InspiraLabs x Sekolah Quran Asy Syahid</footer>
-</div>
+  <section id="jenjang" aria-labelledby="judul-jenjang">
+    <h2 id="judul-jenjang">Pilih kelasmu</h2>
+    <p class="lead">Materi, post-test, dan nilai dipisah per jenjang.</p>
+    <div class="jenjang-grid">
+      <div class="jenjang">
+        <div class="jenjang-kepala"><h3>SMP</h3><span>Tiap Jum'at</span></div>
+        <ul>
+          <li><a href="/materi/?kelas=smp">Materi &amp; Post-Test</a></li>
+          <li><a href="/leaderboard/?kelas=smp">Leaderboard SMP</a></li>
+          <li><a href="/smp/">Contoh dashboard SMP <small>template</small></a></li>
+          <li><a href="https://drive.google.com/file/d/12j2b3eK8423zYa8F-1uTewoOYeNC0yrh/view?usp=drive_link" target="_blank" rel="noopener">Unduh template &amp; firmware</a></li>
+        </ul>
+      </div>
+      <div class="jenjang">
+        <div class="jenjang-kepala"><h3>SMA</h3><span>Tiap Sabtu</span></div>
+        <ul>
+          <li><a href="/materi/?kelas=sma">Materi &amp; Post-Test</a></li>
+          <li><a href="/leaderboard/?kelas=sma">Leaderboard SMA</a></li>
+          <li><a href="/sma/">Contoh dashboard SMA <small>template</small></a></li>
+          <li><a href="https://drive.google.com/file/d/14tHnrs4urDLxjvf9sHT63yIkOpbmEuG4/view?usp=drive_link" target="_blank" rel="noopener">Unduh template &amp; firmware</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="perjalanan" aria-labelledby="judul-perjalanan">
+    <div class="perjalanan-atas">
+      <div>
+        <h2 id="judul-perjalanan">Perjalanan satu semester</h2>
+        <p class="lead">13 pertemuan, dari kenalan sampai pamer alat buatan sendiri.</p>
+      </div>
+      <div class="pilih-kelas" role="group" aria-label="Pilih jenjang">
+        <button type="button" data-jalur="smp" aria-pressed="true">SMP</button>
+        <button type="button" data-jalur="sma" aria-pressed="false">SMA</button>
+      </div>
+    </div>
+    <ul class="legenda" aria-label="Warna tahap">
+      <li><i style="background:var(--kenalan)"></i>Kenalan</li>
+      <li><i style="background:var(--logika)"></i>Logika</li>
+      <li><i style="background:var(--web)"></i>Web</li>
+      <li><i style="background:var(--iot)"></i>IoT &amp; rakit alat</li>
+    </ul>
+
+    <ol class="jalur" id="jalur-smp" aria-label="Pertemuan SMP">
+      <li class="f-kenalan"><span class="p">P1</span><div><h3>Kenalan ekskul &amp; IoT</h3><p>Lihat contoh Smart Dustbin, Smart Locker, dan Smart Room Monitor.</p></div></li>
+      <li class="f-kenalan"><span class="p">P2</span><div><h3>Siapkan alat coding</h3><p>Pasang tools, lalu lihat demo alat Smart Room Monitor.</p></div></li>
+      <li class="f-logika"><span class="p">P3</span><div><h3>Logika blok: urutan &amp; variabel</h3><p>Menyusun program pakai block coding.</p></div></li>
+      <li class="f-logika"><span class="p">P4</span><div><h3>Logika blok: kondisi</h3><p>Program yang bisa memilih dengan if.</p></div></li>
+      <li class="f-web"><span class="p">P5</span><div><h3>Halaman HTML pertama</h3><p>Tag, heading, dan paragraf.</p></div></li>
+      <li class="f-web"><span class="p">P6</span><div><h3>HTML lanjutan</h3><p>List, gambar, dan link.</p></div></li>
+      <li class="f-web"><span class="p">P7</span><div><h3>CSS dasar</h3><p>Warna, teks, dan jarak.</p></div></li>
+      <li class="f-web"><span class="p">P8</span><div><h3>Selesaikan profil diri</h3><p>Review HTML + CSS, waktu mengejar yang tertinggal.</p></div></li>
+      <li class="f-iot"><span class="p">P9</span><div><h3>Kenal ESP32 &amp; breadboard</h3><p>Rakit rangkaian LED, belum pakai coding.</p></div></li>
+      <li class="f-iot"><span class="p">P10</span><div><h3>Arduino IDE &amp; Blink</h3><p>Pasang IDE, board ESP32, library DHT, lalu upload Blink.</p></div></li>
+      <li class="f-iot"><span class="p">P11</span><div><h3>Sensor suhu DHT22</h3><p>Rakit 3 kabel, baca suhu di Serial Monitor &amp; Plotter. Ada Kartu Sabotase.</p></div></li>
+      <li class="f-iot"><span class="p">P12</span><div><h3>Data tampil di dashboard</h3><p>ESP32 kirim data lewat WiFi, lalu kustom nama, judul, dan warna dashboard.</p></div></li>
+      <li class="f-iot puncak"><span class="p">P13</span><div><h3>Showcase</h3><p>Foto kelompok, rumah alat dari kardus, dan pamerkan hasilnya.</p></div></li>
+    </ol>
+
+    <ol class="jalur" id="jalur-sma" aria-label="Pertemuan SMA" hidden>
+      <li class="f-kenalan"><span class="p">P1</span><div><h3>Kenalan ekskul &amp; IoT</h3><p>Lihat contoh Smart Dustbin, Smart Locker, dan Smart Room Monitor.</p></div></li>
+      <li class="f-kenalan"><span class="p">P2</span><div><h3>Siapkan alat coding</h3><p>Pasang tools, lalu lihat demo alat monitoring dan kontrol kipas.</p></div></li>
+      <li class="f-logika"><span class="p">P3</span><div><h3>Variabel &amp; tipe data</h3><p>Dasar pemrograman berbasis teks, input dan output.</p></div></li>
+      <li class="f-logika"><span class="p">P4</span><div><h3>Percabangan if-else</h3><p>Studi kasus ringan, latihan berulang.</p></div></li>
+      <li class="f-logika"><span class="p">P5</span><div><h3>Perulangan for &amp; while</h3><p>Gabungan perulangan dan percabangan.</p></div></li>
+      <li class="f-web"><span class="p">P6</span><div><h3>Struktur halaman HTML</h3><p>Halaman, form, dan tabel sederhana.</p></div></li>
+      <li class="f-web"><span class="p">P7</span><div><h3>CSS &amp; layout</h3><p>Styling, box model, dan flexbox.</p></div></li>
+      <li class="f-web"><span class="p">P8</span><div><h3>JavaScript dasar</h3><p>DOM dan event, plus waktu mengejar yang tertinggal.</p></div></li>
+      <li class="f-iot"><span class="p">P9</span><div><h3>Kenal komponen</h3><p>Pinout ESP32, DHT22, relay, dan active-LOW, belum pakai coding.</p></div></li>
+      <li class="f-iot"><span class="p">P10</span><div><h3>Arduino IDE &amp; kedip LED</h3><p>Pasang IDE, upload Kedip LED, challenge pesan Morse.</p></div></li>
+      <li class="f-iot"><span class="p">P11</span><div><h3>Rakit alat proyek</h3><p>DHT22 + relay + kipas, datanya tampil di dashboard kelompok.</p></div></li>
+      <li class="f-iot"><span class="p">P12</span><div><h3>Kontrol kipas dari web</h3><p>Manual pakai PIN, otomatis pakai slider ambang suhu.</p></div></li>
+      <li class="f-iot puncak"><span class="p">P13</span><div><h3>Demo Day</h3><p>Kustom dashboard, website online, lalu presentasi.</p></div></li>
+    </ol>
+
+    <p class="catatan">Di P10 sampai P13 tiap pertemuan ada 3 challenge: <b>Easy +5</b>, <b>Medium +10</b>, <b>Hard +15</b>, aktif tanya jawab dapat +2, dan tidak ada PR.</p>
+  </section>
+
+  <section id="kelompok" aria-labelledby="judul-kelompok">
+    <h2 id="judul-kelompok">Website kelompok IoT</h2>
+    <p class="lead">Tiap kelompok punya dashboard Smart Room Monitor di alamatnya sendiri. Kalau belum bisa dibuka, berarti kelompok itu belum online.</p>
+
+    <h3 class="kelompok-sub">SMP</h3>
+    <ul class="kelompok-grid">
+        <li><a class="kelompok" href="https://smp-01.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-01</span><span class="kelompok-nama">Athalla Daffa Habibullah</span><span class="kelompok-url">smp-01.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-02.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-02</span><span class="kelompok-nama">Sultan Raziq Salasa</span><span class="kelompok-url">smp-02.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-03.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-03</span><span class="kelompok-nama">M. Abizan Syahdan</span><span class="kelompok-url">smp-03.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-04.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-04</span><span class="kelompok-nama">M. Ghaizan Amsar S</span><span class="kelompok-url">smp-04.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-05.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-05</span><span class="kelompok-nama">Bima Saguna Shiddiq</span><span class="kelompok-url">smp-05.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-06.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-06</span><span class="kelompok-nama">Akmal Nafis &amp; M. Adlan Al Fadyl</span><span class="kelompok-url">smp-06.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-07.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-07</span><span class="kelompok-nama">Rafif Ahnaf Rabbani &amp; M. Qassim</span><span class="kelompok-url">smp-07.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-08.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-08</span><span class="kelompok-nama">Abdul Hasiib &amp; Zhaffir Arkana Kurniaputra</span><span class="kelompok-url">smp-08.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-09.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-09</span><span class="kelompok-nama">Zahidan Akmal Wafa &amp; M. Alfatih</span><span class="kelompok-url">smp-09.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-10.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-10</span><span class="kelompok-nama">Bintang Habibi Satriawan, Muzaffar Rakhsan Abqary, Yahya Zakiy Elmoursy, Mozhaffar Adam Kanz</span><span class="kelompok-url">smp-10.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-11.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-11</span><span class="kelompok-nama">Tubagus Razan, Dzahwan Raditya Arraka, Essa Rizqi Wijaya, M. Fathir Abqary Arief</span><span class="kelompok-url">smp-11.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-12.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-12</span><span class="kelompok-nama">M. Faiq Ghaisan Sutisna, M. Tsabbit Al Hanif, Zaidan Riqki Alfarizi, M. Zaidan Altamis</span><span class="kelompok-url">smp-12.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://smp-13.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMP-13</span><span class="kelompok-nama">Muzhaffar Pratama Nur Ikhwan, Bariq Taufiqurrahman, M. Naufal Khairy</span><span class="kelompok-url">smp-13.inspiralabs.id</span></a></li>
+    </ul>
+
+    <h3 class="kelompok-sub">SMA</h3>
+    <ul class="kelompok-grid kelompok-sma">
+        <li><a class="kelompok" href="https://sma-01.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-01</span><span class="kelompok-nama">Nabil Abdillah</span><span class="kelompok-url">sma-01.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://sma-02.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-02</span><span class="kelompok-nama">M Lyu Marioka</span><span class="kelompok-url">sma-02.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://sma-03.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-03</span><span class="kelompok-nama">M Syafiy</span><span class="kelompok-url">sma-03.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://sma-04.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-04</span><span class="kelompok-nama">Qowiyyyl Luthfi Pradana &amp; M Kenzo Bagas</span><span class="kelompok-url">sma-04.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://sma-05.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-05</span><span class="kelompok-nama">Husna Mahira Taqiyya &amp; Aliya Nasifa Putri Kencoro</span><span class="kelompok-url">sma-05.inspiralabs.id</span></a></li>
+        <li><a class="kelompok" href="https://sma-06.inspiralabs.id" target="_blank" rel="noopener"><span class="kelompok-id">SMA-06</span><span class="kelompok-nama">M Dzaki &amp; M Fakhri</span><span class="kelompok-url">sma-06.inspiralabs.id</span></a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="judul-alat">
+    <h2 id="judul-alat">Alat di kelas</h2>
+    <p class="lead">Dipakai bareng tutor saat pertemuan.</p>
+    <div class="alat">
+      <a href="/sabotase/"><strong>Kartu Sabotase</strong><span>Challenge Hard P11 SMP: tutor merusak rakitan dengan aman, lalu kalian jadi detektif kabel.</span></a>
+      <a href="/demo/"><strong>Demo dashboard lengkap</strong><span>Contoh Smart Room Monitor dengan semua fitur, buat inspirasi kustom dashboard kelompokmu.</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="situs-footer"><div class="wadah">
+  <span>InspiraLabs × Sekolah Qur'an Asy Syahid</span>
+  <a href="/tentang/">Tentang ekskul ini</a>
+</div></footer>
 
 <script>
+  // Sapaan nama: disimpan di perangkat ini saja (localStorage), tidak dikirim ke mana pun.
   var NAMA_KEY = 'ekskul-nama-siswa';
+  var salam = document.getElementById('salam-teks');
 
   function tampilkanNama(nama) {
-    document.getElementById('salam-teks').textContent = nama ? 'Hai, ' + nama : 'Hai, Siswa';
+    salam.textContent = 'Hai, ';
+    var b = document.createElement('b');
+    b.textContent = nama || 'Siswa';
+    salam.appendChild(b);
+    salam.appendChild(document.createTextNode('!'));
   }
 
-  function mintaNama() {
+  document.getElementById('salam-siswa').addEventListener('click', function () {
     var nama = prompt('Siapa namamu?', localStorage.getItem(NAMA_KEY) || '');
     if (nama === null) return;
     nama = nama.trim();
-    if (nama) {
-      localStorage.setItem(NAMA_KEY, nama);
-    } else {
-      localStorage.removeItem(NAMA_KEY);
-    }
+    if (nama) localStorage.setItem(NAMA_KEY, nama); else localStorage.removeItem(NAMA_KEY);
     tampilkanNama(nama);
-  }
+  });
+  tampilkanNama(localStorage.getItem(NAMA_KEY));
 
-  var namaTersimpan = localStorage.getItem(NAMA_KEY);
-  tampilkanNama(namaTersimpan);
-  document.getElementById('salam-siswa').addEventListener('click', mintaNama);
-  if (!namaTersimpan) mintaNama();
+  // Tab SMP/SMA untuk perjalanan semester.
+  var tombolJalur = document.querySelectorAll('[data-jalur]');
+  tombolJalur.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tombolJalur.forEach(function (b) {
+        var aktif = b === btn;
+        b.setAttribute('aria-pressed', aktif);
+        document.getElementById('jalur-' + b.dataset.jalur).hidden = !aktif;
+      });
+    });
+  });
 </script>
 </body>
 </html>
