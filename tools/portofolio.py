@@ -6,6 +6,8 @@ satu file per jenjang. Tidak ada data yang diketik ulang.
   py tools/portofolio.py bangun penilaian-smp.xlsx penilaian-sma.xlsx [--foto <zip|folder> ...] [--keluar <folder>]
       -> <keluar>/<device-id>/siswa/<slug>/ (index.html, sertifikat.html, data.json, foto/)
          default --keluar dist/portofolio. --foto boleh diulang (lihat FOTO di bawah). Butuh: py -m pip install pillow
+  py tools/portofolio.py skrip-folder <link folder Drive> [penilaian-smp.xlsx penilaian-sma.xlsx]
+      -> portofolio/BUAT_FOLDER_FOTO.gs (Apps Script: buat subfolder "ID Nama" per siswa, nama dari spreadsheet)
   py tools/portofolio.py contoh   -> bangun halaman contoh fiktif (smp-00) ke dist/portofolio
   py tools/portofolio.py cek      -> self-check
 
@@ -162,7 +164,7 @@ def masalah_foto(path, contoh=False):
 
 
 GAMBAR = {".jpg", ".jpeg", ".png", ".webp"}
-ID_SISWA = re.compile(r"^(SMP|SMA)-\d{3}$", re.I)
+ID_SISWA = re.compile(r"^((?:SMP|SMA)-\d{3})(?=$|[\s_])", re.I)  # "SMP-022" atau "SMP-022 Nama Siswa"
 MAKS_SISI = 1600
 
 
@@ -171,7 +173,7 @@ def kumpulkan_foto(sumber):
     {ID Siswa: [(nama file asli, isi bytes)]}. ID diambil dari nama folder di path, mis. "Foto/SMP-022/x.jpg"."""
     hasil = {}
     def tambah(bagian, baca):
-        sid = next((x.upper() for x in bagian[:-1] if ID_SISWA.match(x)), None)
+        sid = next((m.group(1).upper() for x in bagian[:-1] for m in [ID_SISWA.match(x)] if m), None)
         nama = bagian[-1]
         ext = Path(nama).suffix.lower()
         if sid and not nama.startswith(".") and ext in GAMBAR | {".heic", ".heif", ".svg"}:
@@ -277,7 +279,8 @@ def susun(s, device_id, slug, anggota, urut, foto, contoh=False):
                          "keterangan_foto": proyek_foto["keterangan"] if proyek_foto else "", "tiga_kalimat": []},
         "catatan_tutor": s.get("kekuatan", ""),
         "peringkat": rank if rank and 1 <= rank <= 3 and (s.get("poin") or 0) > 0 else None,  # hanya 3 besar
-        "sertifikat": {"nomor": f"EKC-2026-{device_id.upper()}-{urut:02d}", "tanggal": kur["pertemuan"][-1]["tanggal"]},
+        # nomor: Ekskul Coding - tahun - semester - ID Siswa (tetap walau siswa pindah kelompok)
+        "sertifikat": {"nomor": f"EKC-2026-S1-{s['id']}", "tanggal": kur["pertemuan"][-1]["tanggal"]},
     }
 
 
@@ -336,6 +339,38 @@ def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto=None, peta=None, con
             (out / "foto" / info["file"]).write_bytes(isi)
     print(f"{len(rencana)} portofolio dibangun di {keluar}")
     return {}
+
+
+def skrip_folder_drive(folder_url, penilaian=None):
+    """Apps Script (sekali Run) yang membuat satu subfolder "ID Nama" per siswa di folder foto Google Drive.
+    Nama dari spreadsheet penilaian kalau diberikan, kalau tidak dari tools/kelompok.json."""
+    fid = (re.search(r"folders/([\w-]+)", folder_url) or re.match(r"([\w-]+)$", folder_url)).group(1)
+    nama = []
+    for k in json.loads((ROOT / "tools/kelompok.json").read_text(encoding="utf-8")):
+        orang = [n.strip() for n in re.split(r"[,&]", k["nama"]) if n.strip()]
+        nama += [f"{sid} {(penilaian or {}).get(sid, {}).get('nama') or o}" for sid, o in zip(k.get("id_siswa", []), orang)]
+    daftar = ",\n".join(f"  {json.dumps(n, ensure_ascii=False)}" for n in sorted(nama))
+    return f"""// BUAT FOLDER FOTO PORTOFOLIO — sekali Run di https://script.google.com
+// Membuat satu subfolder per siswa di folder foto Drive. Aman dijalankan ulang (folder yang sudah ada dilewati).
+// Dibuat otomatis: py tools/portofolio.py skrip-folder <link folder>  (sumber: tools/kelompok.json)
+const FOLDER_FOTO = "{fid}";
+const SISWA = [
+{daftar}
+];
+
+function jalankan() {{
+  const induk = DriveApp.getFolderById(FOLDER_FOTO);
+  let dibuat = 0;
+  SISWA.forEach(function (nama) {{
+    const id = nama.split(" ")[0];
+    const ada = induk.searchFolders('title contains "' + id + '"');
+    if (ada.hasNext()) return;
+    induk.createFolder(nama);
+    dibuat++;
+  }});
+  Logger.log("%s folder baru, %s siswa total -> %s", dibuat, SISWA.length, induk.getUrl());
+}}
+"""
 
 
 def bangun_contoh(keluar=ROOT / "dist/portofolio"):
@@ -430,9 +465,9 @@ def cek():
         assert len(mentah) > BATAS_FOTO_KB * 1024 and b"Exif" in mentah[:200]
         zp = d / "drive-download.zip"
         with zipfile.ZipFile(zp, "w") as z:
-            z.writestr("Foto Portofolio/SMP-022/P11 Merakit Sensor.JPG", mentah)
-            z.writestr("Foto Portofolio/SMP-022/proyek akhir.jpeg", foto_hp(1200, 900, gps=False))
-            z.writestr("Foto Portofolio/SMP-022/desktop.ini", b"x")  # file sampah Drive/Windows dilewati
+            z.writestr("Foto Portofolio Ekskul/SMP-022 Rafif Ahnaf Rabbani/P11 Merakit Sensor.JPG", mentah)
+            z.writestr("Foto Portofolio Ekskul/SMP-022 Rafif Ahnaf Rabbani/proyek akhir.jpeg", foto_hp(1200, 900, gps=False))
+            z.writestr("Foto Portofolio Ekskul/SMP-022 Rafif Ahnaf Rabbani/desktop.ini", b"x")  # file sampah Drive/Windows dilewati
         lokal = d / "drive-sinkron"  # Google Drive for Desktop: folder biasa
         (lokal / "SMP-022").mkdir(parents=True)
         (lokal / "SMP-022/suasana_kelas.png").write_bytes(foto_hp(800, 600, gps=False, fmt="PNG"))
@@ -450,6 +485,8 @@ def cek():
         assert sorted((f["file"], f["p"], f["keterangan"]) for f in data["foto"]) == [
             ("p11-merakit-sensor.jpg", 11, "Merakit Sensor"), ("suasana-kelas.jpg", None, "Suasana kelas")], data["foto"]
         assert data["catatan_tutor"] == "Menonjol pada praktik."
+        assert data["sertifikat"]["nomor"] == "EKC-2026-S1-SMP-022"  # per ID Siswa, tetap walau pindah kelompok
+        assert not kumpulkan_foto([lokal]).get("SMP-0221")  # "SMP-0221 x" bukan folder SMP-022
         for rahasia in ["0811111", "0822222", "Bapak Rahasia", "123", "Kurang fokus", "Latihan di rumah",
                         "rahasia internal", "internal gradebook"]:
             assert rahasia not in teks, rahasia
@@ -482,6 +519,13 @@ def cek():
 
         assert buat_slug("M. Zaidan Altamis", t := set()) == "zaidan" and buat_slug("Zaidan Riqki", t) == "zaidan-riqki"
 
+        # Apps Script pembuat subfolder foto di Google Drive: satu folder per siswa "ID Nama"
+        gs = skrip_folder_drive("https://drive.google.com/drive/folders/ABC123xyz?usp=sharing")
+        assert 'const FOLDER_FOTO = "ABC123xyz"' in gs and '"SMP-022 Rafif Ahnaf Rabbani"' in gs
+        assert gs.count('"SMP-') + gs.count('"SMA-') == len(kelompok_siswa()) == 37
+        gs = skrip_folder_drive("ABC123xyz", {"SMP-022": {"nama": "Nama Dari Spreadsheet"}})
+        assert '"SMP-022 Nama Dari Spreadsheet"' in gs and 'const FOLDER_FOTO = "ABC123xyz"' in gs
+
         assert bangun_contoh(d / "contoh") == {}
         assert (d / "contoh/smp-00/siswa/fulan/index.html").exists()
 
@@ -503,6 +547,13 @@ if __name__ == "__main__":
         masalah = bangun(penilaian, keluar, foto)
         if masalah:
             sys.exit("DITOLAK, tidak ada yang dibangun:\n" + "\n".join(f"  {k}: {'; '.join(v)}" for k, v in masalah.items()))
+    elif a[:1] == ["skrip-folder"] and len(a) >= 2:
+        penilaian = {}
+        for b in a[2:]:
+            penilaian.update(baca_penilaian(b))
+        f = P / "BUAT_FOLDER_FOTO.gs"
+        f.write_text(skrip_folder_drive(a[1], penilaian), encoding="utf-8")
+        print(f"ditulis: {f}  -> salin ke script.google.com, Run fungsi jalankan")
     elif a == ["contoh"]:
         bangun_contoh()
     elif a == ["cek"]:

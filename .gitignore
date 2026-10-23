@@ -22,4 +22,5 @@ __pycache__/
 # xlsx penilaian berisi No. HP & data orang tua, folder foto, dan hasil bangun tidak pernah di-commit.
 penilaian-*.xlsx
 portofolio/foto/
+portofolio/BUAT_FOLDER_FOTO.gs
 portofolio-terbit/

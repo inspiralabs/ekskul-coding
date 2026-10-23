@@ -96,8 +96,11 @@ nilai akhir, predikat, "Perlu Ditingkatkan", saran untuk orang tua, catatan per 
 `tools/kelompok.json`, kolom `id_siswa` (urutan sama dengan urutan nama). Sudah diisi untuk ke-37 siswa dengan
 mencocokkan nama di spreadsheet. Kalau anggota kelompok berubah, cukup ubah baris itu.
 
-**Foto di Google Drive.** Satu folder bersama, misalnya **"Foto Portofolio Ekskul"**, dengan satu subfolder per siswa
-yang dinamai ID Siswa: `Foto Portofolio Ekskul/SMP-022/`, `.../SMA-002/`. Tutor upload **foto mentah langsung dari HP**
+**Foto di Google Drive.** Satu folder bersama (sudah dibuat pemilik), dengan satu subfolder per siswa bernama
+"ID Nama", mis. `SMP-022 Rafif Ahnaf Rabbani/`. Subfolder dibuat sekali lewat Apps Script:
+`py tools/portofolio.py skrip-folder <link folder> penilaian-smp.xlsx penilaian-sma.xlsx` menulis
+`portofolio/BUAT_FOLDER_FOTO.gs` (tidak di-commit karena berisi ID folder) → salin ke script.google.com → Run
+`jalankan`. Aman dijalankan ulang. Isinya foto kegiatan **selama ekskul**, dari pertemuan mana saja, bukan hanya P13. Tutor upload **foto mentah langsung dari HP**
 (aplikasi Google Drive → folder siswa → Upload), tidak perlu dikecilkan dulu. Foto boleh foto alat, rangkaian, atau
 suasana kelas.
 
@@ -155,7 +158,8 @@ Jangan menaruh data kontak atau alamat di foto maupun nama file.
   tepat 1 halaman A4 lanskap.
 - Isi: penerbit (InspiraLabs dan sekolah), nama, kalimat penyelesaian (jenjang, semester, 13 pertemuan, nama proyek),
   poin dan lencana, tanggal P13, garis tanda tangan pelatih, nomor, QR, dan alamat halaman sebagai teks.
-- Nomor: `EKC-2026-SMP-07-02` (tahun, Device ID, urutan anggota). Unik dan bisa dibaca manusia.
+- Nomor: `EKC-2026-S1-SMP-022` (Ekskul Coding, tahun, semester, ID Siswa). Unik per siswa dan tetap sama walau siswa
+  pindah kelompok. Penanda tangan: Unggul Sulaiman, S.Kom (pelatih).
 - QR dibuat di browser oleh `qrcode-generator` dari CDN jsDelivr. Kalau CDN gagal dimuat, QR disembunyikan dan alamat
   tetap tercetak sebagai teks.
 - Cetak: tutor buka halaman, klik "Cetak atau simpan PDF", pilih A4, lanskap, margin "Tidak ada", centang
@@ -248,12 +252,11 @@ tidak ada nomor HP yang ikut. Hasil uji tidak disimpan di repo.
 - **Backend atau Supabase mati.** Kartu alat menampilkan pesan gagal muat, sisa halaman tetap tampil karena statis.
 - **CDN QR atau Google Fonts diblokir di jaringan sekolah.** Sertifikat tetap tercetak dengan alamat teks dan font sistem.
 
-## Pertanyaan yang masih terbuka
+## Keputusan pemilik (23 Okt 2026)
 
-1. Siapa yang menandatangani sertifikat: pelatih saja (Unggul Sulaiman, S.Kom), atau juga kepala sekolah atau pimpinan
-   InspiraLabs? Perlu logo sekolah?
-2. Peringkat 3 besar ditampilkan, atau tidak sama sekali?
-3. Berapa lama halaman online (usul: sampai 30 Juni 2027)?
-4. Format nomor sertifikat `EKC-2026-SMP-07-02` sudah cocok, atau ada format resmi InspiraLabs?
-5. Link spreadsheet penilaian saat ini bisa dibuka siapa saja yang punya link, padahal berisi No. HP siswa dan orang
-   tua. Disarankan diubah ke "Restricted"; generator tidak butuh link publik.
+- Nama lengkap dari spreadsheet dan foto ditampilkan (foto bisa alat, rangkaian, suasana kelas).
+- Foto disimpan di Google Drive, satu subfolder per siswa.
+- Penanda tangan sertifikat: Unggul Sulaiman, S.Kom. Nomor: `EKC-2026-S1-<ID Siswa>`.
+- Peringkat hanya tampil untuk 3 besar (kolom Ranking di Gradebook); peringkat 4 ke bawah tidak ditampilkan.
+- Halaman online tanpa batas waktu; dihapus kalau orang tua meminta.
+- Akses link spreadsheet penilaian tidak diubah.
