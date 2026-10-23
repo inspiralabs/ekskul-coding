@@ -65,8 +65,12 @@
   .f-web .p{background:var(--web)}
   .f-iot .p{background:var(--iot)}
   @media (min-width:860px){
-    .jalur{grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(7,auto);column-gap:40px}
+    /* kolom koran, bukan grid 7 baris: tiap kolom mengatur tinggi sendiri, jarak antarlangkah rata */
+    .jalur{display:block;columns:2;column-gap:40px}
+    .jalur li{break-inside:avoid}
+    .jalur li:nth-child(7){break-after:column}
     .jalur li:nth-child(7)::before{display:none}
+    .jalur[hidden]{display:none}
   }
   .catatan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:6px 0 0;font-weight:600}
   .catatan b{color:var(--orange-ink)}
@@ -103,7 +107,7 @@
   <div class="pembuka">
     <div>
       <button class="sapa" id="salam-siswa" type="button"><span id="salam-teks">Hai, <b>Siswa</b>!</span> <u>ubah nama</u></button>
-      <h1>Dari nol sampai alat IoT <mark>buatanmu sendiri</mark></h1>
+      <h1>Dari nol sampai alat IoT <mark>yang kamu rakit sendiri</mark></h1>
       <p class="intro">Ekskul Coding Sekolah Qur'an Asy Syahid bersama InspiraLabs. Satu semester kita belajar logika, bikin halaman web, lalu merakit ESP32 dengan sensor suhu yang datanya tampil di website kelompokmu.</p>
       <div class="aksi">
         <a class="tombol" href="#jenjang">Pilih kelasku</a>
@@ -188,13 +192,13 @@
       <li class="f-web"><span class="p">P7</span><div><h3>CSS &amp; layout</h3><p>Styling, box model, dan flexbox.</p></div></li>
       <li class="f-web"><span class="p">P8</span><div><h3>JavaScript dasar</h3><p>DOM dan event, plus waktu mengejar yang tertinggal.</p></div></li>
       <li class="f-iot"><span class="p">P9</span><div><h3>Kenal komponen</h3><p>Pinout ESP32, DHT22, relay, dan active-LOW, belum pakai coding.</p></div></li>
-      <li class="f-iot"><span class="p">P10</span><div><h3>Arduino IDE &amp; kedip LED</h3><p>Pasang IDE, upload Kedip LED, challenge Morse. Ada Kartu Sabotase.</p></div></li>
+      <li class="f-iot"><span class="p">P10</span><div><h3>Arduino IDE &amp; kedip LED</h3><p>Pasang IDE, upload Kedip LED, challenge pesan Morse.</p></div></li>
       <li class="f-iot"><span class="p">P11</span><div><h3>Rakit alat proyek</h3><p>DHT22 + relay + kipas, datanya tampil di dashboard kelompok.</p></div></li>
       <li class="f-iot"><span class="p">P12</span><div><h3>Kontrol kipas dari web</h3><p>Manual pakai PIN, otomatis pakai slider ambang suhu.</p></div></li>
       <li class="f-iot puncak"><span class="p">P13</span><div><h3>Demo Day</h3><p>Kustom dashboard, website online, lalu presentasi.</p></div></li>
     </ol>
 
-    <p class="catatan">Mulai P10 tiap pertemuan ada 3 challenge: <b>Easy +5</b>, <b>Medium +10</b>, <b>Hard +15</b>. Aktif tanya jawab dapat +2. Tidak ada PR.</p>
+    <p class="catatan">Di P10 sampai P13 tiap pertemuan ada 3 challenge: <b>Easy +5</b>, <b>Medium +10</b>, <b>Hard +15</b>, aktif tanya jawab dapat +2, dan tidak ada PR.</p>
   </section>
 
   <section id="kelompok" aria-labelledby="judul-kelompok">
@@ -233,7 +237,7 @@
     <h2 id="judul-alat">Alat di kelas</h2>
     <p class="lead">Dipakai bareng tutor saat pertemuan.</p>
     <div class="alat">
-      <a href="/sabotase/"><strong>Kartu Sabotase</strong><span>Challenge Hard P10 SMA dan P11 SMP: rusak rakitan teman dengan aman, lalu mereka jadi detektif kabel.</span></a>
+      <a href="/sabotase/"><strong>Kartu Sabotase</strong><span>Challenge Hard P11 SMP: tutor merusak rakitan dengan aman, lalu kalian jadi detektif kabel.</span></a>
       <a href="/demo/"><strong>Demo dashboard lengkap</strong><span>Contoh Smart Room Monitor dengan semua fitur, buat inspirasi kustom dashboard kelompokmu.</span></a>
     </div>
   </section>

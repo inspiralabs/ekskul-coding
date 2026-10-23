@@ -39,6 +39,8 @@ body>main{flex:1 0 auto;width:100%}
 .nav{display:flex;gap:2px;overflow-x:auto;margin:0 -8px;scrollbar-width:none}
 .nav a{display:flex;align-items:center;min-height:44px;padding:0 10px;border-radius:var(--r-sm);text-decoration:none;color:var(--muted);font-weight:700;font-size:15px;white-space:nowrap}
 .nav a:hover{color:var(--ink);background:var(--bg)}
+/* menu bisa digeser (overflow), jadi garis fokus digambar di dalam supaya tidak terpotong */
+.nav a:focus-visible{outline-offset:-3px}
 .nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -3px 0 var(--orange)}
 @media (max-width:520px){
   .nav{width:calc(100% + 16px)}
@@ -47,7 +49,7 @@ body>main{flex:1 0 auto;width:100%}
 /* Footer */
 .situs-footer{margin-top:56px;border-top:1px solid var(--line);background:var(--card);color:var(--muted);font-size:14px}
 .situs-footer .wadah{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;padding-top:18px;padding-bottom:22px}
-.situs-footer a{color:var(--muted);font-weight:700}
+.situs-footer a{color:var(--muted);font-weight:700;display:inline-block;padding:11px 0}
 .situs-footer a:hover{color:var(--ink)}
 
 /* Judul halaman */
