@@ -26,6 +26,7 @@ ajar per pertemuan, proyek IoT Smart Room Monitor (ESP32 + DHT22), dan alat bant
 | `py tools/kelompok.py deploy <id> <zip>` | Terbitkan website kelompok ke `<id>.inspiralabs.id` (lihat `deploy/README.md`) |
 | `py tools/build_bahan_ajar.py smp 10` | Bangun prompt slide (Gemini) & Apps Script post-test dari `kurikulum/` |
 | `py tools/portofolio.py bangun …` | Halaman portofolio & sertifikat per siswa dari spreadsheet penilaian |
+| `tools/SINKRON_MATERI.gs` (Apps Script) | Isi halaman **Materi** website dari folder Drive "2. Materi": hanya Google Slides & Google Form, Responses tidak ikut |
 
 Setiap alat punya self-check: `py tools/<nama>.py cek`. Di Mac, ganti `py` dengan `python3`.
 
