@@ -94,7 +94,7 @@ def cek():
     with zipfile.ZipFile(ROOT / "dist/paket/sma-04.zip") as z:
         assert 'MY_DEVICE_ID = "sma-04"' in z.read("sma-04/api.js").decode()
         assert '"sma-04"' in z.read("sma-04/firmware/sma_room_monitor/sma_room_monitor.ino").decode()
-        assert "Qowiyyyl" in z.read("sma-04/index.html").decode()
+        assert "Qowiyyul" in z.read("sma-04/index.html").decode()
         assert not any(".pio" in n for n in z.namelist())
     with tempfile.TemporaryDirectory() as d:
         z = zipfile.ZipFile(ROOT / "dist/paket/smp-07.zip")
