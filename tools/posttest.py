@@ -15,8 +15,9 @@ from datetime import datetime
 from xml.sax.saxutils import escape
 
 HURUF = "ABCD"
+POIN_PER_BENAR = 2  # kolom "Post - Test" di Log Poin Sesi: 5 soal x 2 = maks 10
 # karakter yang tidak sah di XML (mis. \x0b dari Shift+Enter di Word) + pemisah baris Unicode
-ILEGAL_XML = re.compile("[\x00-\x08\x0b\x0c\x0e-\x1f￾￿  \x85]")
+ILEGAL_XML = re.compile("[\x00-\x08\x0b\x0c\x0e-\x1f￾￿\x85]")
 
 
 def daftar_tes(root=ROOT):
@@ -76,8 +77,10 @@ def baca(folder, tes_id):
 
 
 def rekap_xlsx(tes, rows):
-    kepala = ["Waktu", "Nama", "Kelas", "Kelompok"] + [f"Soal {i + 1}" for i in range(len(tes["soal"]))] + ["Benar", "Nilai"]
-    isi = [[r["waktu"], r["nama"], r["kelas"], r["kelompok"], *r["jawaban"], r["benar"], r["nilai"]] for r in rows]
+    # "Poin Log Poin Sesi" = format kolom "Post - Test" di spreadsheet penilaian (2 poin per jawaban benar)
+    kepala = (["Waktu", "Nama", "Kelas", "Kelompok"] + [f"Soal {i + 1}" for i in range(len(tes["soal"]))]
+              + ["Benar", "Nilai", "Poin Log Poin Sesi"])
+    isi = [[r["waktu"], r["nama"], r["kelas"], r["kelompok"], *r["jawaban"], r["benar"], r["nilai"], POIN_PER_BENAR * r["benar"]] for r in rows]
     return xlsx_bytes(f"P{tes['n']} {tes['jenjang']}", [kepala] + isi)
 
 
@@ -192,9 +195,11 @@ def cek():
         xlsx = folder / "smp-10.xlsx"
         assert xlsx.is_file()
         sel = baca_xlsx(xlsx.read_bytes())
-        assert sel[0][:4] == ["Waktu", "Nama", "Kelas", "Kelompok"] and sel[0][-2:] == ["Benar", "Nilai"]
-        assert sel[1][1:4] == ["Siswa Uji", "8A", "smp-07"] and sel[1][-2:] == [4, 80]
-        assert sel[2][1] == 'Siswa <Dua> & "Tiga"' and sel[2][-1] == 20
+        # kolom terakhir siap ditempel ke kolom "Post - Test" di Log Poin Sesi (2 poin per jawaban benar)
+        assert sel[0][:4] == ["Waktu", "Nama", "Kelas", "Kelompok"]
+        assert sel[0][-3:] == ["Benar", "Nilai", "Poin Log Poin Sesi"]
+        assert sel[1][1:4] == ["Siswa Uji", "8A", "smp-07"] and sel[1][-3:] == [4, 80, 8]
+        assert sel[2][1] == 'Siswa <Dua> & "Tiga"' and sel[2][-2:] == [20, 2]
         with zipfile.ZipFile(xlsx) as z:  # bagian wajib file Excel
             assert {"[Content_Types].xml", "_rels/.rels", "xl/workbook.xml",
                     "xl/_rels/workbook.xml.rels", "xl/worksheets/sheet1.xml"} <= set(z.namelist())
@@ -209,10 +214,10 @@ def cek():
         assert baca(folder, "sma-10") == []
 
         # karakter aneh di nama (U+2028 dari salin-tempel, Shift+Enter Word = \x0b) tidak merusak jsonl/xlsx
-        simpan(folder, t, {"nama": "Ali Baba\x0bC", "kelas": "8\x07A", "kelompok": "smp-03"}, [1, 0, 2, 3, 1])
+        simpan(folder, t, {"nama": "AliBaba\x0bC", "kelas": "8\x07A", "kelompok": "smp-03"}, [1, 0, 2, 3, 1])
         simpan(folder, t, {"nama": "Sesudahnya", "kelas": "8A", "kelompok": "smp-04"}, [1, 0, 2, 3, 1])
         rows = baca(folder, "smp-10")
-        assert [x["nama"] for x in rows[-2:]] == ["Ali Baba\x0bC", "Sesudahnya"]
+        assert [x["nama"] for x in rows[-2:]] == ["AliBaba\x0bC", "Sesudahnya"]
         sel = baca_xlsx((folder / "smp-10.xlsx").read_bytes())
         assert sel[-2][1:3] == ["AliBabaC", "8A"] and sel[-1][1] == "Sesudahnya"
 

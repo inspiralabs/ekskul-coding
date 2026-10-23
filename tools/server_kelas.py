@@ -469,6 +469,12 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
         allow_reuse_address = False  # di Windows, reuse membuat 2 server bisa memakai port yang sama diam-diam
         daemon_threads = True
 
+        def handle_error(self, request, client_address):
+            # siswa menutup halaman/membatalkan unduhan: hal biasa, jangan cetak traceback ke konsol pengajar
+            if isinstance(sys.exc_info()[1], PUTUS):
+                return
+            super().handle_error(request, client_address)
+
     return Server(("0.0.0.0", port), Handler)
 
 
@@ -597,6 +603,17 @@ def cek():
         assert st == 200 and "&lt;b&gt;Budi&lt;/b&gt;" in isi.decode() and "<b>Budi</b>" not in isi.decode()
         st, isi = get("/tes/smp-10/terima-kasih?nama=%3Cscript%3Ex%3C/script%3E")
         assert "<script>x" not in isi.decode()
+
+        # koneksi yang diputus siswa (unduhan dibatalkan, isian ditolak) tidak mencetak traceback di konsol pengajar
+        import contextlib, io
+        for err in (ConnectionAbortedError(10053, "diputus"), ConnectionResetError(), BrokenPipeError()):
+            buf = io.StringIO()
+            with contextlib.redirect_stderr(buf):
+                try:
+                    raise err
+                except OSError:
+                    srv.handle_error(None, ("192.168.1.50", 50000))
+            assert buf.getvalue() == "", buf.getvalue()
 
         # 15 siswa mengirim bersamaan -> semua tersimpan
         ts = [threading.Thread(target=minta, args=(port, "/tes/smp-10", dict(benar10, nama=f"Paralel {i}")))
