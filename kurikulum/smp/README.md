@@ -116,7 +116,8 @@ py tools/server_kelas.py cek              # self-check (opsional)
 - Siswa mengisi nama, kelas, kelompok, dan menjawab 5 soal. Setelah kirim, siswa hanya melihat "Terima kasih"
   (nilai tidak ditampilkan). Isian yang belum lengkap ditolak dengan pesan yang jelas, jawaban lain tetap terisi.
 - Nilai tersimpan otomatis di `dist/posttest/smp-10.jsonl` + `smp-10.xlsx` (kolom: Waktu, Nama, Kelas, Kelompok,
-  Soal 1–5, Benar, Nilai 0–100). Upload xlsx ke Google Drive → buka dengan Google Sheets → salin ke gradebook.
+  Soal 1–5, Benar, Nilai 0–100, Poin Log Poin Sesi). Salin kolom **Poin Log Poin Sesi** ke kolom *Post - Test* di
+  Log Poin Sesi. Panduan lengkap untuk tutor baru: `docs/PANDUAN_SERVER_KELAS.md`.
   Kalau `smp-10.xlsx` sedang dibuka di Excel, jawaban tetap tersimpan di `.jsonl`; unduh ulang dari halaman pengajar.
 - Siswa menekan refresh di halaman "Terima kasih" tidak mengirim ulang. Kalau siswa sengaja mengerjakan dua kali, kedua baris tercatat dengan waktunya; pakai yang terakhir.
 - Pilihan post-test: `smp-09` … `smp-13`, `sma-09` … `sma-13` (soal dari `pNN/sumber/POST_TEST_*.md`).
