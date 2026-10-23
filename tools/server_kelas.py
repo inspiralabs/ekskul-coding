@@ -12,7 +12,7 @@ import html as htmllib, json, re, shutil, socket, sys, tempfile, threading
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, unquote
+from urllib.parse import parse_qs, unquote, urlencode
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
@@ -258,7 +258,7 @@ def halaman_tes(t, kelompok, nilai_lama=None, galat=()):
 def halaman_selesai(t, nama):
     centang = ('<svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="40" fill="#22684a"/>'
                '<path d="M24 43l12 12 24-26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-    isi = f"""<main class="bungkus selesai">{centang}<h1>Terima kasih, {e(nama)}!</h1>
+    isi = f"""<main class="bungkus selesai">{centang}<h1>Terima kasih{", " + e(nama) if nama else ""}!</h1>
 <p>Jawabanmu untuk post-test P{t['n']} {t['jenjang']} sudah tersimpan. Kamu boleh menutup halaman ini.</p>
 <a class="tombol kedua" href="/">Kembali ke beranda</a></main>"""
     return dokumen("Terima kasih", isi)
@@ -343,8 +343,8 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
     tes = posttest.daftar_tes() if tes is None else tes
     buka = {b for b in buka if b in tes}
     kunci = threading.Lock()
-    ip_laptop = ip_lan()
-    boleh_guru = boleh_guru or (lambda ip: boleh_guru_dari(ip, ip_laptop))
+    # IP laptop dicek ulang tiap permintaan: kalau WiFi berganti di tengah kelas, /guru tetap bisa dibuka
+    boleh_guru = boleh_guru or (lambda ip: boleh_guru_dari(ip, ip_lan()))
     semua_kelompok = sorted(nama_kelompok()) or sorted(n[:-4] for n in daftar(paket_dir) if n.endswith(".zip"))
 
     class Handler(BaseHTTPRequestHandler):
@@ -357,6 +357,12 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
                     return self.html(halaman_beranda(tes, buka, paket_dir))
                 if path.startswith("/proyek/"):
                     return self.berkas(Path(paket_dir), path[len("/proyek/"):])
+                if path.startswith("/tes/") and path.endswith("/terima-kasih"):
+                    t = tes.get(path[len("/tes/"):-len("/terima-kasih")])
+                    if t:
+                        q = parse_qs(self.path.split("?", 1)[1] if "?" in self.path else "")
+                        nama = KONTROL.sub("", (q.get("nama") or [""])[0])[:80]
+                        return self.html(halaman_selesai(t, nama))
                 if path.startswith("/tes/"):
                     t = tes.get(path[len("/tes/"):])
                     if not t:
@@ -403,7 +409,11 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
                     with kunci:
                         posttest.simpan(hasil_dir, t, identitas, jawaban)
                     catat(f"  post-test {t['id']}: {identitas['nama']} ({identitas['kelompok']})")
-                    return self.html(halaman_selesai(t, identitas["nama"]))
+                    # POST-redirect-GET: refresh di halaman terima kasih tidak mengirim jawaban dua kali
+                    self.send_response(303)
+                    self.send_header("Location", f"/tes/{t['id']}/terima-kasih?" + urlencode({"nama": identitas["nama"]}))
+                    self.send_header("Content-Length", "0")
+                    return self.end_headers()
                 if path in ("/guru/buka", "/guru/tutup"):
                     if not boleh_guru(self.client_address[0]):
                         return self.html(halaman_info("Khusus pengajar", "Halaman ini hanya bisa dibuka dari laptop pengajar."), 403)
@@ -546,10 +556,24 @@ def cek():
         assert 'value="sma-04"' not in html
         assert get("/tes/sma-10")[0] == 403  # belum dibuka pengajar
 
-        # kirim jawaban benar -> terima kasih, nilai TIDAK ditampilkan, tersimpan
-        st, isi = minta(port, "/tes/smp-10", benar10)
+        def kirim_ikuti(data):
+            """POST jawaban; harus dialihkan (303) ke halaman terima kasih supaya refresh tidak mengirim ulang."""
+            c = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            c.request("POST", "/tes/smp-10", urllib.parse.urlencode(data),
+                      {"Content-Type": "application/x-www-form-urlencoded"})
+            r = c.getresponse()
+            r.read()
+            lokasi = r.getheader("Location") or ""
+            assert r.status == 303 and lokasi.startswith("/tes/smp-10/terima-kasih"), (r.status, lokasi)
+            return get(lokasi)
+
+        # kirim jawaban benar -> dialihkan ke terima kasih, nilai TIDAK ditampilkan, tersimpan
+        st, isi = kirim_ikuti(benar10)
         html = isi.decode()
         assert st == 200 and "Terima kasih" in html and "Siswa Uji" in html
+        assert len(posttest.baca(hasil, "smp-10")) == 1  # membuka halaman terima kasih tidak menyimpan apa pun
+        st, isi = get("/tes/smp-10/terima-kasih")  # tanpa nama pun tetap tampil rapi
+        assert st == 200 and "Terima kasih!" in isi.decode()
         terlihat = html.split("</style>", 1)[1]
         assert "nilai" not in terlihat.lower() and "100" not in terlihat
         r = posttest.baca(hasil, "smp-10")[-1]
@@ -569,8 +593,10 @@ def cek():
         assert len(posttest.baca(hasil, "smp-10")) == 1
 
         # nama berisi HTML ditampilkan aman
-        st, isi = minta(port, "/tes/smp-10", dict(benar10, nama="<b>Budi</b>"))
+        st, isi = kirim_ikuti(dict(benar10, nama="<b>Budi</b>"))
         assert st == 200 and "&lt;b&gt;Budi&lt;/b&gt;" in isi.decode() and "<b>Budi</b>" not in isi.decode()
+        st, isi = get("/tes/smp-10/terima-kasih?nama=%3Cscript%3Ex%3C/script%3E")
+        assert "<script>x" not in isi.decode()
 
         # 15 siswa mengirim bersamaan -> semua tersimpan
         ts = [threading.Thread(target=minta, args=(port, "/tes/smp-10", dict(benar10, nama=f"Paralel {i}")))
