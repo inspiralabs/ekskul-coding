@@ -23,7 +23,7 @@ Di akhir kelas, setiap kelompok/individu:
 - [ ] Cek driver USB di laptop cadangan (port ESP32 muncul). Siapkan 2–3 **kabel USB data cadangan**, tandai dengan selotip warna supaya tidak tertukar dengan kabel charger.
 - [ ] Siapkan "meja Tebak Komponen": ESP32, breadboard, LED, resistor, kabel jumper, DHT22, kabel USB data + kabel charger, power bank.
 - [ ] (Opsional, cara cepat) Kalau banyak laptop Windows dan internet buruk: setelah Arduino IDE terpasang di laptop siswa, salin folder `C:\Users\<nama>\AppData\Local\Arduino15` dari laptop cadangan ke laptop siswa (Mac: `~/Library/Arduino15`, sesama Mac). Board ESP32 langsung terpasang tanpa unduh. **Tes dulu di 1 laptop H-1.**
-- [ ] **Server kelas** untuk post-test: `py tools/server_kelas.py --tes smp-10`, coba kirim 1 jawaban dari HP/laptop lain (langkah lengkap: `kurikulum/smp/README.md`, bagian "Server kelas").
+- [ ] **Server kelas** untuk post-test: coba dulu dengan `py tools/server_kelas.py --tes smp-09`, kirim 1 jawaban dari HP/laptop lain, lalu hapus `dist/posttest/smp-09.*`. Di kelas jalankan `--tes smp-10` (langkah lengkap: `kurikulum/smp/README.md`, bagian "Server kelas").
 
 ### 15 menit sebelum kelas
 - [ ] Nyalakan proyektor, buka slide. Buka Arduino IDE di laptop tutor untuk demo.

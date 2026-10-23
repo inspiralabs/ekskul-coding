@@ -20,6 +20,7 @@ import posttest  # noqa: E402
 
 PUTUS = (ConnectionResetError, BrokenPipeError, ConnectionAbortedError)
 MAKS_BODY = 64 * 1024
+KONTROL = re.compile(r"[\x00-\x1f\x7f\u2028\u2029\x85]")  # karakter tak terlihat dari salin-tempel
 e = htmllib.escape
 
 
@@ -118,7 +119,7 @@ pre.kode{background:var(--teks);color:#f3e8cf;padding:12px;border-radius:10px;ov
 .opsi input{position:absolute;opacity:0;width:1px;height:1px}
 .huruf{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--maroon);color:var(--maroon);font-weight:800;font-size:.9rem}
 .opsi:has(input:checked){border-color:var(--maroon);background:#fbf3f4}
-.opsi:has(input:checked) .huruf{background:var(--maroon);color:#fff}
+.opsi:has(input:checked) .huruf,.opsi input:checked+.huruf{background:var(--maroon);color:#fff}
 .galat{background:#fdecea;border:2px solid var(--merah);color:#5c1410;border-radius:var(--r);padding:14px 18px;margin-bottom:14px}
 .galat ul{margin:6px 0 0;padding-left:20px}
 .blok.salah{border-color:var(--merah)}
@@ -298,6 +299,8 @@ def periksa_jawaban(t, form, kelompok_sah):
     ambil = lambda k: (form.get(k) or [""])[0].strip()
     galat = []
     nama, kelas, kel = ambil("nama"), ambil("kelas"), ambil("kelompok")
+    if KONTROL.search(nama) or KONTROL.search(kelas):
+        galat.append("Nama atau kelas berisi karakter yang tidak dikenali. Ketik ulang tanpa menyalin-tempel.")
     if not nama:
         galat.append("Nama lengkap belum diisi.")
     elif len(nama) > 80:
@@ -317,6 +320,23 @@ def periksa_jawaban(t, form, kelompok_sah):
         else:
             jawaban.append(posttest.HURUF.index(h))
     return {"nama": nama, "kelas": kelas, "kelompok": kel}, jawaban, galat
+
+
+_log = __import__("queue").Queue()
+
+
+def _cetak_log():
+    while True:
+        print(_log.get(), flush=True)
+
+
+def catat(pesan):
+    """Log ke konsol lewat thread sendiri: kalau pengajar mengklik jendela konsol (QuickEdit Windows),
+    print() membeku, tapi siswa tetap langsung mendapat halaman "Terima kasih"."""
+    if not getattr(catat, "jalan", False):
+        catat.jalan = True
+        threading.Thread(target=_cetak_log, daemon=True).start()
+    _log.put(KONTROL.sub("", pesan))
 
 
 def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
@@ -382,7 +402,7 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
                         return self.html(halaman_tes(t, kel, lama, galat), 400)
                     with kunci:
                         posttest.simpan(hasil_dir, t, identitas, jawaban)
-                    print(f"  post-test {t['id']}: {identitas['nama']} ({identitas['kelompok']})")
+                    catat(f"  post-test {t['id']}: {identitas['nama']} ({identitas['kelompok']})")
                     return self.html(halaman_selesai(t, identitas["nama"]))
                 if path in ("/guru/buka", "/guru/tutup"):
                     if not boleh_guru(self.client_address[0]):
@@ -390,7 +410,7 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
                     tid = (form.get("tes") or [""])[0]
                     if tid in tes:
                         (buka.add if path.endswith("buka") else buka.discard)(tid)
-                        print(f"  post-test {tid} {'DIBUKA' if tid in buka else 'ditutup'}")
+                        catat(f"  post-test {tid} {'DIBUKA' if tid in buka else 'ditutup'}")
                     self.send_response(303)
                     self.send_header("Location", "/guru")
                     self.send_header("Content-Length", "0")
@@ -521,6 +541,8 @@ def cek():
         html = isi.decode()
         assert st == 200 and html.count('type="radio"') == 20
         assert 'name="nama"' in html and 'name="kelas"' in html and 'value="smp-07"' in html
+        # pilihan tetap terlihat di browser lama tanpa :has() (Firefox ESR 115, WebView lama)
+        assert ".opsi input:checked+.huruf" in html
         assert 'value="sma-04"' not in html
         assert get("/tes/sma-10")[0] == 403  # belum dibuka pengajar
 
@@ -539,7 +561,8 @@ def cek():
         st, isi = minta(port, "/tes/smp-10", kurang)
         assert st == 400 and "Soal 3 belum dijawab" in isi.decode() and 'value="Siswa Uji"' in isi.decode()
         for salah in [dict(benar10, nama="  "), dict(benar10, kelompok="sma-04"), dict(benar10, s1="E"),
-                      dict(benar10, nama="x" * 81)]:
+                      dict(benar10, nama="x" * 81), dict(benar10, nama="Ali\x0bBaba"),
+                      dict(benar10, nama="\x1b[2Jpalsu"), dict(benar10, kelas="8\x07A")]:
             assert minta(port, "/tes/smp-10", salah)[0] == 400
         assert minta(port, "/tes/sma-10", benar10)[0] == 403
         assert minta(port, "/tes/smp-10", b"nama=" + b"x" * 70000)[0] == 413

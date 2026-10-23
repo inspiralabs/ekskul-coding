@@ -94,7 +94,9 @@ Laptop pengajar menjalankan satu halaman web untuk kelas, lewat WiFi kelas:
 **post-test** (nilai langsung jadi file Excel), **paket proyek** per kelompok (zip), dan tautan **dashboard** `smp-XX.inspiralabs.id`.
 
 **H-1 (sekali)**
-- [ ] Coba dari 1 laptop/HP lain di WiFi kelas: halaman server terbuka, satu post-test bisa dikirim sampai halaman "Terima kasih".
+- [ ] Coba dari 1 laptop/HP lain di WiFi kelas: jalankan `py tools/server_kelas.py --tes smp-09`, kirim satu jawaban sampai
+  halaman "Terima kasih", cek `/guru` → Unduh .xlsx. Lalu **hapus data coba** `dist/posttest/smp-09.*` supaya tidak
+  tercampur nilai asli. (Pakai post-test yang sudah lewat, jangan yang akan dipakai di kelas.)
 
 **Di kelas**
 ```
@@ -102,6 +104,8 @@ py tools/server_kelas.py --tes smp-10     # buka post-test P10 SMP sejak awal (a
 py tools/server_kelas.py                  # tanpa post-test terbuka; --port 8080 kalau port 8000 dipakai
 py tools/server_kelas.py cek              # self-check (opsional)
 ```
+- **Jangan klik di dalam jendela konsol** server saat kelas berjalan (Windows bisa "membekukan" tulisannya; kalau
+  terlanjur, tekan **Esc**). Halaman siswa tetap jalan, hanya log di konsol yang tertahan.
 - WiFi sekolah biasanya dianggap **Public** oleh Windows 11. Ubah dulu: *Settings → Network & internet → Wi-Fi →
   (nama WiFi) → Network profile type → **Private***. Lalu saat jendela **Windows Firewall** muncul → centang
   *Private networks* → **Allow**. Kalau profil dibiarkan Public, siswa tidak bisa membuka halamannya.
