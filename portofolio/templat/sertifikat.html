@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sertifikat Ekskul Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portofolio.css">
+<!-- Pembuat QR (gratis, tanpa server). Kalau gagal dimuat, alamat portofolio tetap tercetak sebagai teks. -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+</head>
+<body data-halaman="sertifikat" class="hal-sertifikat">
+<p class="pita-contoh" id="pitaContoh" hidden>Sertifikat contoh. Nama dan isinya karangan, bukan siswa sungguhan.</p>
+
+<div class="alat-cetak">
+  <a href="./">Kembali ke portofolio</a>
+  <button type="button" class="tombol" onclick="window.print()">Cetak atau simpan PDF</button>
+  <p>Di jendela cetak pilih kertas A4, orientasi lanskap, margin "Tidak ada", dan centang "Grafik latar".</p>
+</div>
+
+<p class="status" id="status" role="status">Memuat sertifikat...</p>
+
+<main class="sertifikat" id="konten" hidden>
+  <div class="sert-bingkai">
+    <p class="sert-penerbit">InspiraLabs <span aria-hidden="true">×</span> <span id="sertSekolah"></span></p>
+    <h1>Sertifikat</h1>
+    <p class="sert-kecil">diberikan kepada</p>
+    <p class="sert-nama" id="sertNama"></p>
+    <p class="sert-isi" id="sertIsi"></p>
+    <p class="sert-angka" id="sertAngka"></p>
+
+    <div class="sert-bawah">
+      <div class="sert-verif">
+        <div class="sert-qr" id="sertQr" aria-hidden="true"></div>
+        <div>
+          <p class="sert-kecil">Nomor <strong id="sertNomor"></strong></p>
+          <p class="sert-kecil">Cek keaslian: <span id="sertUrl"></span></p>
+        </div>
+      </div>
+      <div class="sert-ttd">
+        <p class="sert-kecil" id="sertTanggal"></p>
+        <div class="sert-garis"></div>
+        <p class="sert-penanda" id="sertPelatih"></p>
+        <p class="sert-kecil">Pelatih Ekskul Coding</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="portofolio.js"></script>
+</body>
+</html>

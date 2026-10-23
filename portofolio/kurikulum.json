@@ -1,0 +1,57 @@
+{
+  "_catatan": "Isi per pertemuan untuk portofolio. P1-P8 diringkas dari silabus (docs/SILABUS...pdf), P9-P13 dari kurikulum/<jenjang>/pNN/sumber/Materi_Ajar_*.md. Kalau isi kelas berbeda dari silabus, ubah di sini; semua portofolio ikut berubah saat dibangun ulang.",
+  "semester": "Semester 1, TP 2026/2027",
+  "sekolah": "Sekolah Qur'an Asy Syahid",
+  "pelatih": "Unggul Sulaiman, S.Kom",
+  "api_base": "https://api-ekskulcoding.inspiralabs.id",
+  "smp": {
+    "label": "SMP",
+    "proyek": "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya tampil di internet",
+    "ringkasan": "{panggilan} merakit alat pemantau suhu sendiri, mulai dari LED pertama sampai angka suhunya tampil di internet.",
+    "pertemuan": [
+      {"p": 1, "tanggal": "2026-07-31", "judul": "Kenalan dengan IoT", "dipelajari": "Melihat contoh alat IoT (Smart Dustbin, Smart Locker, Smart Room Monitor) dan menyusun harapan untuk satu semester."},
+      {"p": 2, "tanggal": "2026-08-21", "judul": "Menyiapkan alat kerja", "dipelajari": "Memasang perangkat yang dipakai selama ekskul, lalu melihat demo alat pemantau suhu ESP32 bersama dashboard-nya."},
+      {"p": 3, "tanggal": "2026-08-28", "judul": "Logika: urutan dan variabel", "dipelajari": "Menyusun program blok langkah demi langkah dan menyimpan nilai di dalam variabel."},
+      {"p": 4, "tanggal": "2026-09-04", "judul": "Logika: kondisi", "dipelajari": "Membuat program yang memilih jalannya sendiri dengan blok jika-maka."},
+      {"p": 5, "tanggal": "2026-09-11", "judul": "Halaman HTML pertama", "dipelajari": "Menulis halaman web pertama dengan tag, judul, dan paragraf."},
+      {"p": 6, "tanggal": "2026-09-25", "judul": "HTML lanjutan", "dipelajari": "Menambahkan daftar, gambar, dan tautan ke halaman."},
+      {"p": 7, "tanggal": "2026-10-02", "judul": "CSS dasar", "dipelajari": "Mengatur warna, ukuran huruf, dan jarak supaya halaman enak dibaca."},
+      {"p": 8, "tanggal": "2026-10-09", "judul": "Halaman profil diri", "dipelajari": "Menyelesaikan halaman profil diri dengan HTML dan CSS, sambil mencari bug bersama."},
+      {"p": 9, "tanggal": "2026-10-16", "judul": "ESP32 dan rangkaian LED pertama", "dipelajari": "Mengenal ESP32, breadboard, LED, dan resistor, lalu merakit rangkaian LED tanpa coding.",
+       "challenge": {"easy": "Nyalakan Lagi", "medium": "Detektif Rangkaian", "hard": "Dua Lampu Sekaligus"}},
+      {"p": 10, "tanggal": "2026-10-23", "judul": "Arduino IDE dan LED berkedip", "dipelajari": "Memasang Arduino IDE, board ESP32, dan library DHT, lalu meng-upload program Blink pertama.",
+       "challenge": {"easy": "Laptop Siap Tempur", "medium": "Lampu Disko", "hard": "Pindah Lampu"}},
+      {"p": 11, "tanggal": "2026-10-30", "judul": "Sensor DHT22", "dipelajari": "Merakit sensor DHT22 dengan 3 kabel, membaca suhu di Serial Monitor, dan melihat grafiknya di Serial Plotter.",
+       "challenge": {"easy": "Halo Sensor!", "medium": "Gunung Tertinggi", "hard": "Detektif Sensor"}},
+      {"p": 12, "tanggal": "2026-11-06", "judul": "Suhu terkirim ke internet", "dipelajari": "Menyambungkan ESP32 ke WiFi sampai server menjawab kode 200, lalu mengubah tampilan dashboard kelompok.",
+       "challenge": {"easy": "Klub 200", "medium": "Data Pertamaku Online", "hard": "Dashboard Punya Kami"}},
+      {"p": 13, "tanggal": "2026-11-13", "judul": "Showcase proyek akhir", "dipelajari": "Memasukkan alat ke rumah kardus, memasang foto kelompok di dashboard, dan mempresentasikan proyek di depan kelas.",
+       "challenge": {"easy": "Siap Tampil", "medium": "Latihan 3 Kalimat", "hard": "Uji Goyang"}}
+    ]
+  },
+  "sma": {
+    "label": "SMA",
+    "proyek": "alat pemantau suhu berbasis ESP32 yang menyalakan kipas otomatis dan bisa dikendalikan dari dashboard",
+    "ringkasan": "{panggilan} merakit alat pemantau suhu yang bisa menyalakan kipas sendiri, dan kipasnya bisa dikendalikan dari dashboard di HP.",
+    "pertemuan": [
+      {"p": 1, "tanggal": "2026-08-01", "judul": "Kenalan dengan IoT", "dipelajari": "Melihat contoh alat IoT dan web tingkat lanjut, lalu menyusun harapan untuk satu semester."},
+      {"p": 2, "tanggal": "2026-08-15", "judul": "Menyiapkan alat kerja", "dipelajari": "Memasang perangkat kerja dan melihat demo alat dua arah: sensor DHT22 yang bisa menyalakan kipas lewat relay."},
+      {"p": 3, "tanggal": "2026-08-22", "judul": "Variabel dan input-output", "dipelajari": "Memakai variabel, tipe data, serta input dan output dalam program teks."},
+      {"p": 4, "tanggal": "2026-08-29", "judul": "Percabangan", "dipelajari": "Membuat keputusan di program dengan if-else lewat studi kasus."},
+      {"p": 5, "tanggal": "2026-09-05", "judul": "Perulangan", "dipelajari": "Mengulang perintah dengan for dan while, digabung dengan percabangan."},
+      {"p": 6, "tanggal": "2026-09-12", "judul": "HTML: form dan tabel", "dipelajari": "Menyusun struktur halaman web lengkap dengan form dan tabel riwayat."},
+      {"p": 7, "tanggal": "2026-09-26", "judul": "CSS: box model dan layout", "dipelajari": "Mengatur jarak dengan box model, membuat layout dengan flexbox, dan menyesuaikan tampilan untuk layar HP."},
+      {"p": 8, "tanggal": "2026-10-03", "judul": "JavaScript dasar", "dipelajari": "Mengubah isi halaman lewat DOM dan menanggapi klik dengan event listener."},
+      {"p": 9, "tanggal": "2026-10-10", "judul": "Anatomi sistem IoT", "dipelajari": "Mengenal pin ESP32, sensor DHT22, dan relay active-LOW, lalu merakit input dan output tanpa coding.",
+       "challenge": {"easy": "Rakit Input & Output Dasar", "medium": "Temukan Sendiri Active-LOW", "hard": "Arsitek Proyek"}},
+      {"p": 10, "tanggal": "2026-10-17", "judul": "Arduino IDE dan LED berkedip", "dipelajari": "Memasang Arduino IDE, board ESP32, dan library, lalu memprogram LED berkedip sampai bisa mengirim kode Morse.",
+       "challenge": {"easy": "Kedip Gaya Kamu", "medium": "Tiru Lampu Asli", "hard": "Pesan Rahasia Morse"}},
+      {"p": 11, "tanggal": "2026-10-31", "judul": "Rakit dan online", "dipelajari": "Merakit DHT22, relay, dan kipas, meng-upload firmware proyek, dan melihat datanya muncul di dashboard kelompok.",
+       "challenge": {"easy": "Online!", "medium": "Uji Sensor Hidup", "hard": "Lepas dari Laptop"}},
+      {"p": 12, "tanggal": "2026-11-07", "judul": "Kontrol kipas dari dashboard", "dipelajari": "Menyalakan kipas dari dashboard secara manual dengan PIN dan otomatis dengan slider ambang suhu.",
+       "challenge": {"easy": "Saklar dari HP", "medium": "Kipas Otomatis", "hard": "Kipas Lebih Gesit"}},
+      {"p": 13, "tanggal": "2026-11-14", "judul": "Dashboard punya kita dan Demo Day", "dipelajari": "Mengubah warna, aturan, dan panel tips dashboard, memasang website online, lalu mendemokan alat di Demo Day.",
+       "challenge": {"easy": "Ganti Baju Dashboard", "medium": "Aturan Kita Sendiri", "hard": "Panel Tips Pintar"}}
+    ]
+  }
+}
