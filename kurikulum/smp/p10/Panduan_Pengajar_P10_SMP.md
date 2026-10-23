@@ -23,7 +23,7 @@ Di akhir kelas, setiap kelompok/individu:
 - [ ] Cek driver USB di laptop cadangan (port ESP32 muncul). Siapkan 2–3 **kabel USB data cadangan**, tandai dengan selotip warna supaya tidak tertukar dengan kabel charger.
 - [ ] Siapkan "meja Tebak Komponen": ESP32, breadboard, LED, resistor, kabel jumper, DHT22, kabel USB data + kabel charger, power bank.
 - [ ] (Opsional, cara cepat) Kalau banyak laptop Windows dan internet buruk: setelah Arduino IDE terpasang di laptop siswa, salin folder `C:\Users\<nama>\AppData\Local\Arduino15` dari laptop cadangan ke laptop siswa (Mac: `~/Library/Arduino15`, sesama Mac). Board ESP32 langsung terpasang tanpa unduh. **Tes dulu di 1 laptop H-1.**
-- [ ] (Opsional, siswa Windows) **Server kelas lokal**: `py tools/server_kelas.py`, lalu tes dari 1 laptop siswa: buka halamannya, INSTALL board dari alamat lokal, upload Blink (langkah lengkap di `kurikulum/smp/README.md`, bagian "Server kelas lokal").
+- [ ] **Server kelas** untuk post-test: `py tools/server_kelas.py --tes smp-10`, coba kirim 1 jawaban dari HP/laptop lain (langkah lengkap: `kurikulum/smp/README.md`, bagian "Server kelas").
 
 ### 15 menit sebelum kelas
 - [ ] Nyalakan proyektor, buka slide. Buka Arduino IDE di laptop tutor untuk demo.
@@ -127,7 +127,6 @@ Bantu dengan **pertanyaan**, bukan langsung mengambil mouse/kabel.
 | Tulisan acak `⸮⸮⸮` | Baud beda | Pilih **115200 baud** di Serial Monitor |
 | Lampu biru kedip, LED diam | Rakitan LED | LED terbalik / satu baris / kabel bukan di D2 |
 | Halaman server kelas tidak terbuka dari laptop siswa | Profil WiFi masih Public / WiFi memblokir antar-perangkat | Ubah profil WiFi laptop pengajar jadi Private, izinkan Python di Firewall; atau router sendiri yang tetap tersambung internet |
-| Boards Manager tetap mengunduh lama padahal pakai server kelas | Alamat Espressif masih ada di Preferences | Hapus, sisakan alamat lokal saja |
 
 ## 10. Keselamatan
 
@@ -149,7 +148,7 @@ Bantu dengan **pertanyaan**, bukan langsung mengambil mouse/kabel.
   - 🟢 Easy +5 = 3 bukti: ESP32 Dev Module ada, library DHT *installed*, `Done compiling`.
   - 🟡 Medium +10 = LED kedip cepat (`delay(100)`) **dan** lambat (`delay(3000)`) ditunjukkan ke tutor.
   - 🔴 Hard +15 = LED kedip di D18, bisa menjelaskan kenapa lampu biru diam, **sudah dikembalikan** ke D2/angka 2.
-- **Post-test:** 5 soal, individu (Google Form otomatis menilai). Kunci: 1B 2A 3C 4D 5B.
+- **Post-test:** 5 soal, individu, lewat **server kelas** (`--tes smp-10`, nilai otomatis jadi `dist/posttest/smp-10.xlsx`; Google Form di Linktree sebagai cadangan). Kunci: 1B 2A 3C 4D 5B.
 - **Tidak ada PR / tugas rumah.**
 
 ## 13. Penutup

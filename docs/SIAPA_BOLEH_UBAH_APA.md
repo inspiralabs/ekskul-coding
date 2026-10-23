@@ -22,7 +22,7 @@ ekskul-coding/
 │   ├── panduan-instalasi/                <- Arduino IDE, board ESP32, library (Windows & Mac)
 │   ├── smp/p09..p13/                     <- IoT SMP; cara menjalankan: smp/README.md
 │   └── sma/p06..p13/                     <- p06-p08 web (HTML), p09-p13 IoT
-├── tools/                                 <- build bahan ajar, paket/deploy kelompok, server kelas lokal
+├── tools/                                 <- build bahan ajar, paket/deploy kelompok, server kelas (post-test & paket)
 ├── deploy/                                <- deploy website kelompok ke VPS
 ├── docs/                                  <- silabus, HANDOUT_SISWA.md, sosialisasi pengajar, file ini
 ├── prompt/                                <- template prompt Gemini (slide & materi) + RUNBOOK
@@ -121,6 +121,6 @@ bisa membuat perangkat teman sekelompok lain ikut error atau data tertukar antar
 
 1. Backend online + `FAN_PINS` sudah di `.env` server (`backend/README.md`).
 2. `py tools/kelompok.py paket` → bagikan `dist/paket/<id>.zip` ke tiap kelompok, PIN SMA secara pribadi.
-   Di kelas lebih mudah lewat server kelas lokal: `py tools/server_kelas.py` (lihat `kurikulum/smp/README.md`).
+   Di kelas lebih mudah lewat server kelas: `py tools/server_kelas.py` (paket, dashboard, post-test; lihat `kurikulum/smp/README.md`).
 3. Flash satu ESP32 uji dengan firmware SMA untuk cek relay & alur kontrol.
 4. Akhir semester: deploy tiap kiriman siswa (`deploy/README.md`).
