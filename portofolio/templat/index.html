@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Halaman anak sekolah: jangan muncul di Google. Bisa dibuka siapa saja yang punya link. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Portofolio Ekskul Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portofolio.css">
+<!--
+  TEMPLAT PORTOFOLIO SISWA. Jangan edit per siswa: isi datang dari data.json,
+  dibuat oleh `py tools/portofolio.py bangun`. Ubah siswa.json, lalu bangun ulang.
+-->
+</head>
+<body data-halaman="portofolio">
+<a class="lewati" href="#isi">Langsung ke isi</a>
+<p class="pita-contoh" id="pitaContoh" hidden>Halaman contoh. Nama, foto, dan isinya karangan, bukan siswa sungguhan.</p>
+
+<main id="isi" class="halaman">
+  <p class="status" id="status" role="status">Memuat portofolio...</p>
+
+  <div id="konten" hidden>
+    <header class="sampul">
+      <div class="sampul-teks">
+        <p class="sampul-asal" id="asal"></p>
+        <h1 id="nama"></h1>
+        <p class="sampul-ringkasan" id="ringkasan"></p>
+        <dl class="fakta" id="fakta"></dl>
+      </div>
+      <figure class="sampul-foto" id="sampulFoto" hidden></figure>
+    </header>
+
+    <section class="bagian proyek" aria-labelledby="judulProyek">
+      <h2 id="judulProyek"></h2>
+      <div class="proyek-isi">
+        <div>
+          <h3>Presentasi kelompok di P13</h3>
+          <ol class="tiga-kalimat" id="tigaKalimat"></ol>
+          <p class="kelompok" id="kelompok"></p>
+        </div>
+        <aside class="alat" aria-labelledby="judulAlat">
+          <h3 id="judulAlat">Kiriman terakhir dari alat</h3>
+          <div class="alat-angka" id="alatAngka" hidden>
+            <p><span class="angka" id="alatSuhu"></span><span class="satuan">°C</span><span class="label">suhu</span></p>
+            <p><span class="angka" id="alatLembap"></span><span class="satuan">%</span><span class="label">kelembapan</span></p>
+          </div>
+          <p class="alat-waktu" id="alatStatus" role="status">Mengambil data dari alat...</p>
+          <a class="tombol tombol-garis" id="linkDashboard">Buka dashboard kelompok</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="bagian" aria-labelledby="judulPerjalanan">
+      <h2 id="judulPerjalanan">Perjalanan 13 pertemuan</h2>
+      <ol class="linimasa" id="linimasa"></ol>
+    </section>
+
+    <section class="bagian" aria-labelledby="judulLencana" id="bagianLencana">
+      <h2 id="judulLencana">Lencana challenge</h2>
+      <p class="pengantar">Satu lencana untuk tiap challenge yang lulus. Easy +5, Medium +10, Hard +15 poin.</p>
+      <ul class="lencana" id="lencana"></ul>
+    </section>
+
+    <section class="bagian" aria-labelledby="judulGaleri" id="bagianGaleri" hidden>
+      <h2 id="judulGaleri">Foto selama ekskul</h2>
+      <ul class="galeri" id="galeri"></ul>
+    </section>
+
+    <section class="bagian catatan" aria-labelledby="judulCatatan" id="bagianCatatan" hidden>
+      <h2 id="judulCatatan">Catatan dari pelatih</h2>
+      <blockquote>
+        <p id="catatan"></p>
+        <footer id="catatanOleh"></footer>
+      </blockquote>
+    </section>
+
+    <section class="bagian sertifikat-ajak" aria-labelledby="judulSertifikat">
+      <div>
+        <h2 id="judulSertifikat">Sertifikat</h2>
+        <p id="sertifikatInfo"></p>
+      </div>
+      <a class="tombol" href="sertifikat.html">Lihat dan cetak sertifikat</a>
+    </section>
+  </div>
+</main>
+
+<footer class="kaki">
+  <p>Ekskul Coding · InspiraLabs · Sekolah Qur'an Asy Syahid</p>
+  <p><a href="https://ekskulcoding.inspiralabs.id/">ekskulcoding.inspiralabs.id</a></p>
+</footer>
+
+<script src="portofolio.js"></script>
+</body>
+</html>

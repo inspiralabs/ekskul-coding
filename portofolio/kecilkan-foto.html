@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kecilkan foto portofolio</title>
+<link rel="stylesheet" href="templat/portofolio.css">
+<!--
+  Alat tutor: kecilkan foto HP sebelum masuk portofolio/siswa/<id>/<slug>/foto/.
+  Semua proses di browser ini, foto tidak dikirim ke mana pun.
+  Hasil: JPEG maks 1600 px, <= 500 KB, tanpa EXIF (lokasi GPS, merek HP, jam foto ikut terbuang),
+  arah foto sudah benar. tools/portofolio.py menolak foto yang belum lewat alat ini.
+-->
+</head>
+<body>
+<main class="halaman">
+  <h1>Kecilkan foto portofolio</h1>
+  <p>Pilih foto dari HP atau laptop. Hasilnya maks 1600 piksel, di bawah 500 KB, dan data lokasinya sudah dibuang.
+     Foto tidak di-upload ke mana pun.</p>
+  <p><label for="pilih"><strong>Pilih foto</strong></label><br>
+     <input type="file" id="pilih" accept="image/*" multiple></p>
+  <p id="info" role="status"></p>
+  <ul class="galeri" id="hasil"></ul>
+</main>
+<script>
+  var SISI = 1600, BATAS = 500 * 1024;
+
+  function jadiBlob(kanvas, mutu) {
+    return new Promise(function (ok) { kanvas.toBlob(ok, "image/jpeg", mutu); });
+  }
+
+  async function kecilkan(file) {
+    var bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    var skala = Math.min(1, SISI / Math.max(bmp.width, bmp.height));
+    var kanvas = document.createElement("canvas");
+    kanvas.width = Math.round(bmp.width * skala);
+    kanvas.height = Math.round(bmp.height * skala);
+    kanvas.getContext("2d").drawImage(bmp, 0, 0, kanvas.width, kanvas.height);
+    for (var mutu = 0.85; mutu > 0.4; mutu -= 0.1) {
+      var blob = await jadiBlob(kanvas, mutu);
+      if (blob.size <= BATAS) return blob;
+    }
+    return blob;
+  }
+
+  document.getElementById("pilih").addEventListener("change", async function (e) {
+    var hasil = document.getElementById("hasil"), info = document.getElementById("info");
+    hasil.innerHTML = "";
+    var files = Array.from(e.target.files);
+    for (var i = 0; i < files.length; i++) {
+      info.textContent = "Mengecilkan foto " + (i + 1) + " dari " + files.length + "...";
+      var f = files[i], li = document.createElement("li");
+      try {
+        var blob = await kecilkan(f);
+        var url = URL.createObjectURL(blob);
+        var nama = f.name.replace(/\.[^.]+$/, "").toLowerCase().replace(/[^a-z0-9-]+/g, "-") + ".jpg";
+        var fig = document.createElement("figure"), img = document.createElement("img"), cap = document.createElement("figcaption");
+        var a = document.createElement("a");
+        img.src = url; img.alt = nama;
+        a.href = url; a.download = nama; a.textContent = "Unduh " + nama;
+        cap.append(Math.round(f.size / 1024) + " KB jadi " + Math.round(blob.size / 1024) + " KB. ", a);
+        fig.append(img, cap); li.append(fig);
+      } catch (err) {
+        li.textContent = f.name + ": tidak bisa dibuka. Coba simpan ulang sebagai JPG dari HP.";
+      }
+      hasil.append(li);
+    }
+    info.textContent = files.length + " foto selesai. Unduh, lalu taruh di folder foto/ siswa.";
+  });
+</script>
+</body>
+</html>
