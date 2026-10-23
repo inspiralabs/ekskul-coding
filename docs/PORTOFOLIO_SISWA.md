@@ -96,11 +96,21 @@ nilai akhir, predikat, "Perlu Ditingkatkan", saran untuk orang tua, catatan per 
 `tools/kelompok.json`, kolom `id_siswa` (urutan sama dengan urutan nama). Sudah diisi untuk ke-37 siswa dengan
 mencocokkan nama di spreadsheet. Kalau anggota kelompok berubah, cukup ubah baris itu.
 
-**Foto.** Satu folder per siswa, dinamai ID Siswa: `<folder-foto>/SMP-022/`. Isinya `.jpg` yang sudah dikecilkan lewat
-`portofolio/kecilkan-foto.html`. Nama file jadi keterangan: `p11-merakit-sensor.jpg` tampil sebagai "P11 · Merakit
-sensor"; tanpa awalan `pNN` juga boleh (`suasana-kelas.jpg`). File yang namanya diawali `proyek` jadi foto proyek
-akhir. Foto boleh foto alat, rangkaian, atau suasana kelas. Tempat menyimpan folder foto (Drive, server, dll.) belum
-diputuskan.
+**Foto di Google Drive.** Satu folder bersama, misalnya **"Foto Portofolio Ekskul"**, dengan satu subfolder per siswa
+yang dinamai ID Siswa: `Foto Portofolio Ekskul/SMP-022/`, `.../SMA-002/`. Tutor upload **foto mentah langsung dari HP**
+(aplikasi Google Drive → folder siswa → Upload), tidak perlu dikecilkan dulu. Foto boleh foto alat, rangkaian, atau
+suasana kelas.
+
+- **Nama file = keterangan.** `P11 Merakit Sensor.jpg` tampil sebagai "P11 · Merakit Sensor"; tanpa awalan `P11` juga
+  boleh (`Suasana kelas.jpg`). Foto yang namanya diawali `Proyek` jadi foto proyek akhir. Ganti nama bisa langsung di
+  aplikasi Drive (titik tiga → Rename).
+- **Saat membangun:** di Drive klik kanan folder "Foto Portofolio Ekskul" → **Download** (Drive membuat file zip), lalu
+  `bangun ... --foto drive-download.zip`. Kalau Drive memecah unduhan jadi beberapa zip, tulis `--foto` untuk tiap zip.
+  Pengguna Google Drive for Desktop boleh langsung `--foto "G:\My Drive\Foto Portofolio Ekskul"`.
+- **Otomatis oleh generator** (butuh `py -m pip install pillow` sekali): dikecilkan maks 1600 px dan ≤ 500 KB,
+  diputar sesuai arah HP, EXIF termasuk lokasi GPS dibuang, nama file dirapikan. Foto HEIC (iPhone) dan file rusak
+  ditolak dengan pesan; di iPhone pilih Settings → Camera → Formats → **Most Compatible** supaya foto tersimpan JPG.
+- **Akses folder Drive:** cukup dibagikan ke akun tutor (jangan "anyone with the link"); generator tidak butuh link.
 
 - `bangun` menolak semuanya kalau ada satu masalah (ID di `kelompok.json` tidak ada di spreadsheet, foto > 500 KB, foto
   bukan JPEG asli, foto masih ber-EXIF/XMP, nama file foto aneh), dengan pesan per siswa. Hasil lama tetap utuh.
@@ -128,10 +138,8 @@ tidak tertinggal di riwayat git.
 
 **Aturan foto.**
 - Tidak ada data kontak, alamat rumah, seragam dengan nama, atau papan nama sekolah yang jelas di foto.
-- Semua foto lewat `portofolio/kecilkan-foto.html` dulu. Alat ini jalan di browser tutor (foto tidak di-upload ke
-  mana pun), mengecilkan ke 1600 px dan di bawah 500 KB, membetulkan arah foto, dan membuang EXIF termasuk lokasi GPS.
-  Generator hanya menerima `.jpg` yang isinya benar-benar JPEG, dan menolak yang masih punya EXIF atau XMP. PNG, WebP,
-  dan SVG ditolak untuk siswa asli (SVG bisa berisi script; SVG hanya dipakai di data contoh).
+- Generator selalu menulis ulang setiap foto sebagai JPEG baru tanpa metadata, jadi lokasi GPS dari HP tidak pernah ikut
+  terbit. SVG ditolak untuk siswa asli (bisa berisi script; SVG hanya dipakai di data contoh).
 - Batas 500 KB per foto. Dengan 5 sampai 8 foto per anak, satu halaman di bawah 4 MB, cukup ringan untuk kuota HP.
 
 **Tidak terindeks.** Halaman memakai `<meta name="robots" content="noindex, nofollow">`; di server ditambah header
@@ -222,7 +230,6 @@ Hari ini 23 Oktober 2026. P13 SMP 13 November, P13 SMA 14 November.
 | `portofolio/templat/index.html`, `sertifikat.html`, `portofolio.css`, `portofolio.js` | Templat, sama untuk semua siswa, membaca `data.json`. HTML/CSS/JS biasa, tanpa build. |
 | `portofolio/kurikulum.json` | P1 sampai P13 SMP dan SMA: tanggal, judul, yang dipelajari, nama challenge P9 sampai P13. |
 | `portofolio/contoh/` | Data fiktif ("Fulan bin Fulan", Device ID `smp-00`) dengan ilustrasi SVG. Halaman menampilkan pita "Halaman contoh". |
-| `portofolio/kecilkan-foto.html` | Alat tutor untuk mengecilkan foto dan membuang EXIF, jalan di browser. |
 | `tools/portofolio.py` | `bangun` (dari xlsx penilaian), `contoh`, `cek` (Python standar, self-check dengan `assert`). |
 | `tools/kelompok.json` | Kolom baru `id_siswa` per kelompok. |
 
@@ -243,11 +250,10 @@ tidak ada nomor HP yang ikut. Hasil uji tidak disimpan di repo.
 
 ## Pertanyaan yang masih terbuka
 
-1. Di mana folder foto disimpan (Google Drive, server, atau lainnya)? Generator cukup diberi folder lokal.
-2. Siapa yang menandatangani sertifikat: pelatih saja (Unggul Sulaiman, S.Kom), atau juga kepala sekolah atau pimpinan
+1. Siapa yang menandatangani sertifikat: pelatih saja (Unggul Sulaiman, S.Kom), atau juga kepala sekolah atau pimpinan
    InspiraLabs? Perlu logo sekolah?
-3. Peringkat 3 besar ditampilkan, atau tidak sama sekali?
-4. Berapa lama halaman online (usul: sampai 30 Juni 2027)?
-5. Format nomor sertifikat `EKC-2026-SMP-07-02` sudah cocok, atau ada format resmi InspiraLabs?
-6. Link spreadsheet penilaian saat ini bisa dibuka siapa saja yang punya link, padahal berisi No. HP siswa dan orang
+2. Peringkat 3 besar ditampilkan, atau tidak sama sekali?
+3. Berapa lama halaman online (usul: sampai 30 Juni 2027)?
+4. Format nomor sertifikat `EKC-2026-SMP-07-02` sudah cocok, atau ada format resmi InspiraLabs?
+5. Link spreadsheet penilaian saat ini bisa dibuka siapa saja yang punya link, padahal berisi No. HP siswa dan orang
    tua. Disarankan diubah ke "Restricted"; generator tidak butuh link publik.

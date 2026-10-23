@@ -3,9 +3,9 @@
 Data diambil langsung dari spreadsheet penilaian InspiraLabs (Google Drive -> File -> Download -> .xlsx),
 satu file per jenjang. Tidak ada data yang diketik ulang.
 
-  py tools/portofolio.py bangun penilaian-smp.xlsx penilaian-sma.xlsx [--foto <folder>] [--keluar <folder>]
+  py tools/portofolio.py bangun penilaian-smp.xlsx penilaian-sma.xlsx [--foto <zip|folder> ...] [--keluar <folder>]
       -> <keluar>/<device-id>/siswa/<slug>/ (index.html, sertifikat.html, data.json, foto/)
-         default --keluar dist/portofolio. Foto: <folder>/<ID Siswa>/*.jpg (lihat FOTO di bawah).
+         default --keluar dist/portofolio. --foto boleh diulang (lihat FOTO di bawah). Butuh: py -m pip install pillow
   py tools/portofolio.py contoh   -> bangun halaman contoh fiktif (smp-00) ke dist/portofolio
   py tools/portofolio.py cek      -> self-check
 
@@ -16,8 +16,10 @@ Yang dibaca dari spreadsheet (kolom lain, mis. No. HP, nama orang tua, NIS, nila
   Catatan Tutor      : ID Siswa, Proyek / Karya, Kekuatan (timpa draft) / Draft Kekuatan (otomatis)
 Siswa <-> kelompok (Device ID): tools/kelompok.json, kolom "id_siswa".
 
-FOTO: <folder>/<ID Siswa>/ berisi .jpg (sudah dikecilkan lewat portofolio/kecilkan-foto.html).
-  Nama file = keterangan: "p11-merakit-sensor.jpg" -> P11, "Merakit sensor". File berawalan "proyek" jadi foto proyek akhir.
+FOTO: Google Drive, satu folder per siswa bernama ID Siswa ("Foto Portofolio/SMP-022/"), isi foto mentah dari HP
+  (JPG/PNG/WebP; HEIC iPhone belum didukung). Ambil lewat Drive -> klik kanan folder -> Download (zip), atau folder
+  Google Drive for Desktop. Generator mengecilkan (maks 1600 px, <= 500 KB), memutar sesuai arah HP, membuang EXIF/GPS.
+  Nama file = keterangan: "P11 Merakit Sensor.jpg" -> P11, "Merakit Sensor". File berawalan "proyek" jadi foto proyek akhir.
 """
 import json, re, shutil, sys, tempfile, zipfile
 import xml.etree.ElementTree as ET
@@ -143,35 +145,86 @@ def masalah_foto(path, contoh=False):
     if not NAMA_FOTO.match(path.name):
         return f"{path.name}: nama file hanya boleh huruf, angka, titik, minus, garis bawah"
     if ext not in FOTO_EXT:
-        return f"{path.name}: hanya .jpg yang diterima (lewatkan kecilkan-foto.html)"
+        return f"{path.name}: hanya .jpg yang diterima"
     if path.stat().st_size > BATAS_FOTO_KB * 1024:
         return f"{path.name}: {path.stat().st_size // 1024} KB > {BATAS_FOTO_KB} KB, kecilkan dulu"
     data = path.read_bytes()
     if data[:3] != b"\xff\xd8\xff":
-        return f"{path.name}: isinya bukan JPEG (mungkin hanya diganti namanya), lewatkan kecilkan-foto.html"
+        return f"{path.name}: isinya bukan JPEG (mungkin hanya diganti namanya)"
     if b"http://ns.adobe.com/xap/1.0/" in data or b"<x:xmpmeta" in data:
-        return f"{path.name}: masih ada XMP/lokasi, lewatkan kecilkan-foto.html dulu"
+        return f"{path.name}: masih ada XMP/lokasi"
     i = 2
     while i + 4 <= len(data) and data[i] == 0xFF and data[i + 1] != 0xDA:
         if data[i + 1] == 0xE1 and data[i + 4:i + 8] == b"Exif":
-            return f"{path.name}: masih ada EXIF/lokasi, lewatkan kecilkan-foto.html dulu"
+            return f"{path.name}: masih ada EXIF/lokasi"
         i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
     return None
 
 
-def daftar_foto(folder):
-    """[(Path, {"file", "p", "keterangan"})] dari nama file: p11-merakit-sensor.jpg -> P11 "Merakit sensor"."""
-    if not folder or not Path(folder).is_dir():
-        return []
-    out = []
-    for f in sorted(Path(folder).iterdir()):
-        if not f.is_file() or f.name.startswith("."):
-            continue
-        m = re.match(r"(?:p(\d+)[-_ ]?)?(.*)$", f.stem, re.I)
-        teks = re.sub(r"[-_]+", " ", m.group(2)).strip()
-        out.append((f, {"file": f.name, "p": int(m.group(1)) if m.group(1) else None,
-                        "keterangan": teks[:1].upper() + teks[1:]}))
-    return out
+GAMBAR = {".jpg", ".jpeg", ".png", ".webp"}
+ID_SISWA = re.compile(r"^(SMP|SMA)-\d{3}$", re.I)
+MAKS_SISI = 1600
+
+
+def kumpulkan_foto(sumber):
+    """Foto dari folder (Google Drive for Desktop) dan/atau zip (Drive -> Download):
+    {ID Siswa: [(nama file asli, isi bytes)]}. ID diambil dari nama folder di path, mis. "Foto/SMP-022/x.jpg"."""
+    hasil = {}
+    def tambah(bagian, baca):
+        sid = next((x.upper() for x in bagian[:-1] if ID_SISWA.match(x)), None)
+        nama = bagian[-1]
+        ext = Path(nama).suffix.lower()
+        if sid and not nama.startswith(".") and ext in GAMBAR | {".heic", ".heif", ".svg"}:
+            hasil.setdefault(sid, []).append((nama, baca()))
+    for src in sumber or []:
+        src = Path(src)
+        if src.is_dir():
+            for f in sorted(src.rglob("*")):
+                if f.is_file():
+                    tambah(f.relative_to(src).parts, f.read_bytes)
+        elif src.suffix.lower() == ".zip":
+            with zipfile.ZipFile(src) as z:
+                for n in sorted(z.namelist()):
+                    if not n.endswith("/"):
+                        tambah(Path(n).parts, lambda n=n: z.read(n))
+        else:
+            raise ValueError(f"{src}: harus folder atau file .zip hasil unduhan Google Drive")
+    return hasil
+
+
+def olah_foto(nama, data, contoh=False):
+    """Foto mentah HP -> (nama file baru, bytes JPEG <= BATAS_FOTO_KB, lebar/tinggi <= MAKS_SISI, tanpa EXIF/GPS,
+    arah sudah benar). Gagal -> ValueError berisi pesan untuk tutor."""
+    stem, ext = Path(nama).stem, Path(nama).suffix.lower()
+    rapi = re.sub(r"[^a-z0-9]+", "-", stem.lower()).strip("-") or "foto"
+    if ext == ".svg":
+        if not contoh:
+            raise ValueError(f"{nama}: SVG tidak diterima (bisa berisi script), pakai JPG/PNG")
+        return rapi + ".svg", data
+    if ext in (".heic", ".heif"):
+        raise ValueError(f"{nama}: format HEIC (iPhone) belum didukung. Di iPhone: Settings > Camera > Formats > "
+                         "Most Compatible, atau ubah ke JPG dulu")
+    import io
+    from PIL import Image, ImageOps, UnidentifiedImageError
+    try:
+        with Image.open(io.BytesIO(data)) as im:
+            im = ImageOps.exif_transpose(im).convert("RGB")
+    except (UnidentifiedImageError, OSError, SyntaxError) as err:
+        raise ValueError(f"{nama}: bukan gambar yang bisa dibaca ({err.__class__.__name__})")
+    im.thumbnail((MAKS_SISI, MAKS_SISI))
+    for kualitas in (85, 78, 70, 62, 55):
+        buf = io.BytesIO()
+        im.save(buf, "JPEG", quality=kualitas, optimize=True)  # tanpa exif=... -> EXIF/GPS tidak ikut
+        if buf.tell() <= BATAS_FOTO_KB * 1024:
+            return rapi + ".jpg", buf.getvalue()
+    raise ValueError(f"{nama}: tetap lebih dari {BATAS_FOTO_KB} KB setelah dikecilkan")
+
+
+def info_foto(nama_asli, nama_baru):
+    """Keterangan dari nama file asli: "P11 Merakit Sensor.jpg" -> P11, "Merakit Sensor"."""
+    m = re.match(r"(?:p(\d+)[-_ ]+)?(.*)$", Path(nama_asli).stem, re.I)
+    teks = re.sub(r"[-_]+", " ", m.group(2)).strip()
+    return {"file": nama_baru, "p": int(m.group(1)) if m.group(1) else None, "keterangan": teks[:1].upper() + teks[1:]}
 
 
 # ---------------------------------------------------------------- susun & bangun
@@ -228,11 +281,12 @@ def susun(s, device_id, slug, anggota, urut, foto, contoh=False):
     }
 
 
-def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto_root=None, peta=None, contoh=False):
-    """penilaian = {ID Siswa: data} dari baca_penilaian (semua jenjang digabung). Return dict masalah;
-    kalau ada masalah, tidak ada yang ditulis."""
+def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto=None, peta=None, contoh=False):
+    """penilaian = {ID Siswa: data} dari baca_penilaian (semua jenjang digabung); foto = daftar folder/zip.
+    Return dict masalah; kalau ada masalah, tidak ada yang ditulis."""
     peta = kelompok_siswa() if peta is None else peta
     masalah, rencana = {}, []
+    semua_foto = kumpulkan_foto(foto)
     per_kelompok = {}
     for sid, dev in peta.items():
         per_kelompok.setdefault(dev, []).append(sid)
@@ -248,14 +302,25 @@ def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto_root=None, peta=None
             if sid[:3].lower() != dev[:3]:
                 masalah[sid] = [f"{sid} bukan jenjang {dev[:3].upper()}"]
                 continue
-            foto = daftar_foto(Path(foto_root) / sid if foto_root else None)
-            m = [x for f, _ in foto for x in [masalah_foto(f, contoh)] if x]
+            olahan, m, dipakai = [], [], set()
+            for nama, isi in semua_foto.get(sid, []):
+                try:
+                    baru, data = olah_foto(nama, isi, contoh)
+                except ValueError as err:
+                    m.append(str(err))
+                    continue
+                dasar, ext, i = baru[:-4], baru[-4:], 1
+                while baru in dipakai:  # dua foto dengan nama sama setelah dirapikan
+                    i += 1
+                    baru = f"{dasar}-{i}{ext}"
+                dipakai.add(baru)
+                olahan.append((data, info_foto(nama, baru)))
             if m:
                 masalah[sid] = m
                 continue
             anggota = [penilaian[t]["nama"] for t in ids if t != sid and t in penilaian and not penilaian[t]["pindah"]]
-            data = susun(s, dev, buat_slug(s["nama"], terpakai), anggota, urut, [x for _, x in foto], contoh)
-            rencana.append((data, foto))
+            data = susun(s, dev, buat_slug(s["nama"], terpakai), anggota, urut, [x for _, x in olahan], contoh)
+            rencana.append((data, olahan))
     if masalah:
         return masalah
     # bangun ulang dari nol: siswa yang keluar/dihapus ikut hilang (hanya folder <id>/siswa/ yang dibersihkan)
@@ -267,8 +332,8 @@ def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto_root=None, peta=None
         for t in TEMPLAT:
             shutil.copy(P / "templat" / t, out / t)
         (out / "data.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-        for f, _ in foto:
-            shutil.copy(f, out / "foto" / f.name)
+        for isi, info in foto:
+            (out / "foto" / info["file"]).write_bytes(isi)
     print(f"{len(rencana)} portofolio dibangun di {keluar}")
     return {}
 
@@ -276,7 +341,7 @@ def bangun(penilaian, keluar=ROOT / "dist/portofolio", foto_root=None, peta=None
 def bangun_contoh(keluar=ROOT / "dist/portofolio"):
     data = json.loads((P / "contoh/penilaian-contoh.json").read_text(encoding="utf-8"))
     penilaian = {sid: {**s, "pertemuan": {int(p): v for p, v in s["pertemuan"].items()}} for sid, s in data["siswa"].items()}
-    return bangun(penilaian, keluar, P / "contoh/foto", data["kelompok"], contoh=True)
+    return bangun(penilaian, keluar, [P / "contoh/foto"], data["kelompok"], contoh=True)
 
 
 # ---------------------------------------------------------------- self-check
@@ -344,17 +409,37 @@ def cek():
         assert pen["SMP-017"]["kekuatan"] == "Teliti merakit." and pen["SMP-017"]["panggilan"] == ""
         assert pen["SMP-099"]["pindah"]
 
-        # foto: nama file jadi keterangan, file "proyek..." jadi foto proyek, foto tidak sah ditolak
-        foto = d / "foto"
-        (foto / "SMP-022").mkdir(parents=True)
-        jpg = b"\xff\xd8\xff\xdb\x00\x04\x00\x00\xff\xd9"
-        (foto / "SMP-022/p11-merakit-sensor.jpg").write_bytes(jpg)
-        (foto / "SMP-022/proyek-akhir.jpg").write_bytes(jpg)
-        (foto / "SMP-022/suasana_kelas.jpg").write_bytes(jpg)
+        # foto mentah dari HP di Google Drive: diunduh sebagai zip (folder "Foto Portofolio/<ID Siswa>/...")
+        # -> dikecilkan, arah diperbaiki, EXIF/GPS dibuang, nama file dirapikan, keterangan dari nama file
+        from PIL import Image
+        def foto_hp(w=4000, h=3000, gps=True, fmt="JPEG"):
+            import io
+            import random
+            acak = random.Random(w * h).randbytes(80 * 60 * 3)  # gradasi + bintik, mirip foto asli
+            img = Image.blend(Image.frombytes("RGB", (80, 60), acak).resize((w, h), Image.BICUBIC),
+                              Image.effect_noise((w, h), 12).convert("RGB"), 0.15)
+            exif = Image.Exif()
+            if gps:
+                exif[0x8825] = {1: "S", 2: (6.0, 12.0, 30.0)}  # GPSInfo
+            exif[0x0112] = 6  # Orientation: HP diputar 90 derajat
+            buf = io.BytesIO()
+            img.save(buf, fmt, quality=95, exif=exif.tobytes()) if fmt == "JPEG" else img.save(buf, fmt)
+            return buf.getvalue()
+
+        mentah = foto_hp()
+        assert len(mentah) > BATAS_FOTO_KB * 1024 and b"Exif" in mentah[:200]
+        zp = d / "drive-download.zip"
+        with zipfile.ZipFile(zp, "w") as z:
+            z.writestr("Foto Portofolio/SMP-022/P11 Merakit Sensor.JPG", mentah)
+            z.writestr("Foto Portofolio/SMP-022/proyek akhir.jpeg", foto_hp(1200, 900, gps=False))
+            z.writestr("Foto Portofolio/SMP-022/desktop.ini", b"x")  # file sampah Drive/Windows dilewati
+        lokal = d / "drive-sinkron"  # Google Drive for Desktop: folder biasa
+        (lokal / "SMP-022").mkdir(parents=True)
+        (lokal / "SMP-022/suasana_kelas.png").write_bytes(foto_hp(800, 600, gps=False, fmt="PNG"))
 
         peta = {"SMP-022": "smp-07", "SMP-017": "smp-07", "SMP-099": "smp-07"}
         out = d / "out"
-        assert bangun(pen, out, foto, peta) == {}
+        assert bangun(pen, out, [zp, lokal], peta) == {}
         data = json.loads((out / "smp-07/siswa/rafif/data.json").read_text(encoding="utf-8"))
         teks = json.dumps(data, ensure_ascii=False)
         assert data["nama"] == "Rafif Ahnaf Rabbani" and data["anggota"] == ["Muhammad Qassim"]
@@ -362,24 +447,31 @@ def cek():
         p10 = data["pertemuan"][9]
         assert [c["nama"] for c in p10["challenge"]] == ["Laptop Siap Tempur", "Lampu Disko"] and p10["tanya_jawab"] == 2
         assert data["proyek_akhir"]["judul"] == "Pemantau Suhu Kelas" and data["proyek_akhir"]["foto"] == "proyek-akhir.jpg"
-        assert {(f["p"], f["keterangan"]) for f in data["foto"]} == {(11, "Merakit sensor"), (None, "Suasana kelas")}
+        assert sorted((f["file"], f["p"], f["keterangan"]) for f in data["foto"]) == [
+            ("p11-merakit-sensor.jpg", 11, "Merakit Sensor"), ("suasana-kelas.jpg", None, "Suasana kelas")], data["foto"]
         assert data["catatan_tutor"] == "Menonjol pada praktik."
         for rahasia in ["0811111", "0822222", "Bapak Rahasia", "123", "Kurang fokus", "Latihan di rumah",
                         "rahasia internal", "internal gradebook"]:
             assert rahasia not in teks, rahasia
+        hasil_foto = out / "smp-07/siswa/rafif/foto/p11-merakit-sensor.jpg"
+        assert masalah_foto(hasil_foto) is None  # JPEG asli, <= 500 KB, tanpa EXIF/XMP
+        with Image.open(hasil_foto) as im:
+            assert max(im.size) <= 1600 and im.size[0] < im.size[1]  # diputar sesuai Orientation (potret)
+            assert not im.getexif()
+        assert not (out / "smp-07/siswa/rafif/foto/desktop.ini").exists()
         q = json.loads((out / "smp-07/siswa/qassim/data.json").read_text(encoding="utf-8"))
         assert q["panggilan"] == "Qassim" and q["peringkat"] is None and q["foto"] == []
         assert not (out / "smp-07/siswa/sudah").exists()  # status Pindah tidak dibangun
-        assert (out / "smp-07/siswa/rafif/foto/p11-merakit-sensor.jpg").exists()
 
-        # foto bermasalah -> semua ditolak, hasil lama tetap utuh
-        (foto / "SMP-022/hp.png").write_bytes(b"\x89PNG")
-        (foto / "SMP-022/gps.jpg").write_bytes(b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00MM\x00\x2a\x00\x00\x00\x08\xff\xd9")
-        m = bangun(pen, out, foto, peta)["SMP-022"]
-        assert any(".jpg" in x for x in m) and any("EXIF" in x for x in m), m
+        # foto yang tidak bisa dibaca (HEIC iPhone, file rusak) -> semua ditolak dengan pesan, hasil lama tetap utuh
+        (lokal / "SMP-022/IMG_0001.HEIC").write_bytes(b"\x00\x00\x00\x18ftypheic")
+        (lokal / "SMP-022/rusak.jpg").write_bytes(b"bukan gambar")
+        m = bangun(pen, out, [zp, lokal], peta)["SMP-022"]
+        assert any("HEIC" in x for x in m) and any("rusak.jpg" in x for x in m), m
         assert (out / "smp-07/siswa/rafif/data.json").exists()
-        (foto / "SMP-022/hp.png").unlink()
-        (foto / "SMP-022/gps.jpg").unlink()
+        (lokal / "SMP-022/IMG_0001.HEIC").unlink()
+        (lokal / "SMP-022/rusak.jpg").unlink()
+        foto = [zp, lokal]
 
         # ID di kelompok.json yang tidak ada di spreadsheet -> ditolak dengan pesan
         assert "SMP-404" in bangun(pen, out, foto, {**peta, "SMP-404": "smp-07"})
@@ -402,7 +494,7 @@ def cek():
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a[:1] == ["bangun"] and len(a) > 1:
-        foto = a[a.index("--foto") + 1] if "--foto" in a else None
+        foto = [a[i + 1] for i, x in enumerate(a) if x == "--foto" and i + 1 < len(a)]
         keluar = a[a.index("--keluar") + 1] if "--keluar" in a else ROOT / "dist/portofolio"
         berkas = [x for i, x in enumerate(a[1:], 1) if not x.startswith("--") and a[i - 1] not in ("--foto", "--keluar")]
         penilaian = {}
