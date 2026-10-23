@@ -61,8 +61,8 @@ Urutan di prototipe (`portofolio/templat/index.html`), dirancang untuk HP dulu:
    satu kalimat), dan challenge yang lulus. Pertemuan dengan lencana diberi tanda oranye.
 4. **Lencana challenge.** Satu stempel untuk tiap challenge yang lulus, warna menurut level (Easy, Medium, Hard).
 5. **Foto selama ekskul.** Hanya muncul kalau orang tua mengizinkan.
-6. **Catatan dari pelatih.** 2 sampai 3 kalimat spesifik tentang anak itu. Diambil dari kolom "Catatan Kualitatif Tutor"
-   di gradebook kalau `siswa.json` kosong.
+6. **Catatan dari pelatih.** 2 sampai 3 kalimat spesifik tentang anak itu, ditulis khusus untuk halaman publik di
+   `catatan_tutor`. Kolom "Catatan Kualitatif Tutor" di gradebook adalah catatan internal dan **tidak pernah** ikut tampil.
 7. **Sertifikat.** Nomor, tanggal, tombol ke halaman cetak.
 
 Sengaja tidak ada: kehadiran (absen publik tidak perlu), nilai akhir, predikat, nilai post-test, kontak, nama kelas.
@@ -81,11 +81,13 @@ py tools/portofolio.py cek               # self-check generator
   sudah ada tidak ditimpa. `izin_foto` mulai dari `false`.
 - Yang diisi tutor per siswa: `id_siswa` (ID di gradebook, mis. `SMP-005`), `peran`, `nama_kelompok`, challenge yang
   lulus per pertemuan (`["easy", "medium"]`), jumlah tanya jawab, hasil satu kalimat (boleh kosong), daftar foto,
-  judul alat dan 3 kalimat P13, `izin_foto`. Contoh lengkap: `portofolio/contoh/smp-00/fulan/siswa.json`.
-- `bangun` menolak semuanya kalau ada satu kesalahan (ID tidak dikenal, level salah, foto hilang, foto > 500 KB,
-  foto masih ber-EXIF), dengan pesan per siswa. Tidak ada portofolio setengah jadi yang ikut terbit.
-- Dengan `--gradebook`, total poin diambil dari kolom "Total Poin Keseluruhan" (sumber resmi, sama dengan leaderboard),
-  dan catatan tutor dari "Catatan Kualitatif Tutor" kalau `siswa.json` kosong.
+  judul alat dan 3 kalimat P13, `izin_foto`, `tampil_nama_lengkap`. Contoh lengkap: `portofolio/contoh/smp-00/fulan/siswa.json`.
+- `bangun` menolak semuanya kalau ada satu kesalahan (ID tidak dikenal, level salah atau dobel, tanya jawab bukan angka
+  0-20, foto hilang, foto > 500 KB, foto bukan JPEG asli, foto masih ber-EXIF/XMP, nama file foto aneh, `id_siswa` tidak
+  ada di gradebook), dengan pesan per siswa. Tidak ada portofolio setengah jadi yang ikut terbit.
+- `bangun` selalu membangun ulang dari nol: folder `<id>/siswa/` di hasil dibersihkan dulu, jadi siswa yang datanya
+  dihapus ikut hilang dari hasil.
+- Dengan `--gradebook`, total poin diambil dari kolom "Total Poin Keseluruhan" (sumber resmi, sama dengan leaderboard).
 - Perkiraan kerja: 5 sampai 10 menit per siswa kalau poin per pertemuan disalin dari Log Poin Sesi, sekitar 4 sampai 6 jam
   untuk 37 siswa, bisa dibagi antar tutor. Ini perkiraan, belum diukur.
 
@@ -111,19 +113,24 @@ ter-commit tidak sengaja.
 - halaman online sampai tanggal tertentu (usul: 30 Juni 2027), lalu diarsipkan,
 - orang tua bisa minta halaman dihapus kapan saja lewat tutor.
 
-Tanpa formulir kembali, `izin_foto` tetap `false`: halaman tetap terbit, tanpa foto. Hapus atas permintaan: hapus
-folder siswa, `bangun`, push. Satu menit.
+Tanpa formulir kembali, `izin_foto` dan `tampil_nama_lengkap` tetap `false`: halaman terbit dengan nama panggilan,
+tanpa foto. Nama teman sekelompok di halaman anak lain juga mengikuti izin teman itu masing-masing. Hapus atas
+permintaan: hapus folder siswa, `bangun`, unggah ulang ke server (lihat di bawah). Kalau data itu pernah masuk git,
+riwayat git tetap menyimpannya, karena itu data portofolio sejak awal tidak di-commit.
 
 **Aturan foto.**
 - Foto anak tanpa wajah jadi pilihan bawaan: tangan merakit, alat, layar dashboard, foto dari belakang.
 - Tidak ada data kontak, alamat rumah, seragam dengan nama, atau papan nama sekolah yang jelas di foto.
 - Semua foto lewat `portofolio/kecilkan-foto.html` dulu. Alat ini jalan di browser tutor (foto tidak di-upload ke
   mana pun), mengecilkan ke 1600 px dan di bawah 500 KB, membetulkan arah foto, dan membuang EXIF termasuk lokasi GPS.
-  Generator menolak JPEG yang masih punya EXIF, jadi foto yang lupa dibersihkan tidak bisa lolos.
+  Generator hanya menerima `.jpg` yang isinya benar-benar JPEG, dan menolak yang masih punya EXIF atau XMP. PNG, WebP,
+  dan SVG ditolak untuk siswa asli (SVG bisa berisi script; SVG hanya dipakai di data contoh).
 - Batas 500 KB per foto. Dengan 5 sampai 8 foto per anak, satu halaman di bawah 4 MB, cukup ringan untuk kuota HP.
 
 **Tidak terindeks.** Halaman memakai `<meta name="robots" content="noindex, nofollow">`; di server ditambah header
 `X-Robots-Tag` (lihat di bawah). Halaman bisa dibuka siapa pun yang punya link, tapi tidak muncul di Google.
+`noindex` tidak membuat halaman rahasia: alamatnya mudah ditebak (`smp-07.inspiralabs.id/siswa/<nama-depan>/`).
+Karena itu yang tampil hanya yang sudah diizinkan orang tua, dan nama lengkap bawaannya tidak tampil.
 
 ## Sertifikat
 
@@ -147,7 +154,7 @@ punya folder sendiri, dilayani oleh container nginx yang sama:
 
 ```yaml
 # docker-compose.yml, service kelompok: tambah satu volume
-      - ./portofolio-terbit:/usr/share/nginx/portofolio:ro
+      - /srv/data/ekskul-portofolio:/usr/share/nginx/portofolio:ro   # di luar repo, tidak ikut git
 ```
 
 ```nginx
@@ -159,9 +166,17 @@ punya folder sendiri, dilayani oleh container nginx yang sama:
     }
 ```
 
-Lalu: `py tools/portofolio.py bangun portofolio/siswa portofolio-terbit`, commit `portofolio-terbit/`, push.
-`deploy.sh` yang sudah ada menjalankan sisanya. Belum diterapkan di branch ini (folder `deploy/` dan
-`docker-compose.yml` tidak diubah); perlu persetujuan dan repo private dulu. Satu baris cek di `deploy/smoke.sh` bisa
+Lalu bangun dan **unggah langsung ke server, tidak lewat git**:
+
+```powershell
+py tools/portofolio.py bangun portofolio/siswa dist/portofolio
+scp -r dist/portofolio/* <user>@<vps>:/srv/data/ekskul-portofolio/   # atau rsync --delete supaya yang dihapus ikut hilang
+```
+
+Hasil bangun **tidak pernah di-commit**: kalau di-commit, Vercel (yang men-deploy root repo ini) ikut menerbitkannya
+di `ekskulcoding.inspiralabs.id` tanpa `X-Robots-Tag`, dan foto anak tersimpan selamanya di riwayat git.
+`.gitignore` dan `.vercelignore` di branch ini sudah mengabaikan `portofolio/siswa/` dan `portofolio-terbit/` sebagai
+pengaman. Belum diterapkan di branch ini: folder `deploy/` dan `docker-compose.yml` tidak diubah, perlu persetujuan. Satu baris cek di `deploy/smoke.sh` bisa
 ditambahkan: `curl -s -H "Host: smp-07.inspiralabs.id" http://127.0.0.1/siswa/<slug>/ | grep -q portofolio.js`.
 
 Dashboard kelompok bisa menautkan ke portofolio anggotanya. Itu cukup satu baris `<a href="/siswa/rafif/">` di

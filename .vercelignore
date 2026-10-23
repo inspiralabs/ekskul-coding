@@ -14,3 +14,4 @@ docker-compose.yml
 .env.example
 deploy/
 portofolio/
+portofolio-terbit/

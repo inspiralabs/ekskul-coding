@@ -21,3 +21,4 @@ __pycache__/
 # Data & foto asli siswa untuk portofolio. Repo ini PUBLIK: jangan commit sebelum repo private
 # (lihat docs/PORTOFOLIO_SISWA.md, bagian Privasi).
 portofolio/siswa/
+portofolio-terbit/

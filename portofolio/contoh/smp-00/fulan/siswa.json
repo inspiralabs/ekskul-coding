@@ -6,28 +6,118 @@
   "panggilan": "Fulan",
   "peran": "Perakit",
   "nama_kelompok": "Tim Kotak Sejuk",
-  "anggota": ["Fulan bin Fulan", "Anggota Kedua", "Anggota Ketiga"],
+  "anggota": [
+    "Fulan bin Fulan",
+    "Anggota Kedua",
+    "Anggota Ketiga"
+  ],
   "izin_foto": true,
+  "tampil_nama_lengkap": true,
   "pertemuan": {
-    "1": {"challenge": [], "tanya_jawab": 1, "hasil": ""},
-    "2": {"challenge": [], "tanya_jawab": 0, "hasil": "Laptop siap dipakai dan sempat mencoba alat demo pemantau suhu."},
-    "3": {"challenge": [], "tanya_jawab": 1, "hasil": ""},
-    "4": {"challenge": [], "tanya_jawab": 0, "hasil": ""},
-    "5": {"challenge": [], "tanya_jawab": 1, "hasil": "Halaman pertama berisi nama dan hobi bersepeda."},
-    "6": {"challenge": [], "tanya_jawab": 0, "hasil": ""},
-    "7": {"challenge": [], "tanya_jawab": 1, "hasil": ""},
-    "8": {"challenge": [], "tanya_jawab": 0, "hasil": "Halaman profil diri selesai, dengan warna hijau favoritnya."},
-    "9": {"challenge": ["easy", "medium"], "tanya_jawab": 1, "hasil": "LED merah menyala di percobaan kedua, setelah kaki LED dibalik."},
-    "10": {"challenge": ["easy", "medium", "hard"], "tanya_jawab": 2, "hasil": "LED berkedip cepat seperti lampu disko, lalu dipindah ke pin lain."},
-    "11": {"challenge": ["easy", "medium"], "tanya_jawab": 1, "hasil": "Suhu naik dari 27 ke 31 derajat saat sensor digenggam."},
-    "12": {"challenge": ["easy", "medium", "hard"], "tanya_jawab": 1, "hasil": "Server menjawab 200 dan suhu ruang kelas tampil di dashboard kelompok."},
-    "13": {"challenge": ["easy", "medium"], "tanya_jawab": 1, "hasil": "Alat masuk ke rumah kardus dan dipresentasikan di depan kelas."}
+    "1": {
+      "challenge": [],
+      "tanya_jawab": 1,
+      "hasil": ""
+    },
+    "2": {
+      "challenge": [],
+      "tanya_jawab": 0,
+      "hasil": "Laptop siap dipakai dan sempat mencoba alat demo pemantau suhu."
+    },
+    "3": {
+      "challenge": [],
+      "tanya_jawab": 1,
+      "hasil": ""
+    },
+    "4": {
+      "challenge": [],
+      "tanya_jawab": 0,
+      "hasil": ""
+    },
+    "5": {
+      "challenge": [],
+      "tanya_jawab": 1,
+      "hasil": "Halaman pertama berisi nama dan hobi bersepeda."
+    },
+    "6": {
+      "challenge": [],
+      "tanya_jawab": 0,
+      "hasil": ""
+    },
+    "7": {
+      "challenge": [],
+      "tanya_jawab": 1,
+      "hasil": ""
+    },
+    "8": {
+      "challenge": [],
+      "tanya_jawab": 0,
+      "hasil": "Halaman profil diri selesai, dengan warna hijau favoritnya."
+    },
+    "9": {
+      "challenge": [
+        "easy",
+        "medium"
+      ],
+      "tanya_jawab": 1,
+      "hasil": "LED merah menyala di percobaan kedua, setelah kaki LED dibalik."
+    },
+    "10": {
+      "challenge": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "tanya_jawab": 2,
+      "hasil": "LED berkedip cepat seperti lampu disko, lalu dipindah ke pin lain."
+    },
+    "11": {
+      "challenge": [
+        "easy",
+        "medium"
+      ],
+      "tanya_jawab": 1,
+      "hasil": "Suhu naik dari 27 ke 31 derajat saat sensor digenggam."
+    },
+    "12": {
+      "challenge": [
+        "easy",
+        "medium",
+        "hard"
+      ],
+      "tanya_jawab": 1,
+      "hasil": "Server menjawab 200 dan suhu ruang kelas tampil di dashboard kelompok."
+    },
+    "13": {
+      "challenge": [
+        "easy",
+        "medium"
+      ],
+      "tanya_jawab": 1,
+      "hasil": "Alat masuk ke rumah kardus dan dipresentasikan di depan kelas."
+    }
   },
   "foto": [
-    {"file": "p09-led.svg", "p": 9, "keterangan": "Rangkaian LED pertama di breadboard"},
-    {"file": "p11-sensor.svg", "p": 11, "keterangan": "Grafik suhu naik saat sensor DHT22 digenggam"},
-    {"file": "p12-dashboard.svg", "p": 12, "keterangan": "Dashboard kelompok menampilkan suhu kelas"},
-    {"file": "p13-showcase.svg", "p": 13, "keterangan": "Presentasi 3 kalimat di depan kelas"}
+    {
+      "file": "p09-led.svg",
+      "p": 9,
+      "keterangan": "Rangkaian LED pertama di breadboard"
+    },
+    {
+      "file": "p11-sensor.svg",
+      "p": 11,
+      "keterangan": "Grafik suhu naik saat sensor DHT22 digenggam"
+    },
+    {
+      "file": "p12-dashboard.svg",
+      "p": 12,
+      "keterangan": "Dashboard kelompok menampilkan suhu kelas"
+    },
+    {
+      "file": "p13-showcase.svg",
+      "p": 13,
+      "keterangan": "Presentasi 3 kalimat di depan kelas"
+    }
   ],
   "proyek_akhir": {
     "judul": "Kotak Sejuk",
