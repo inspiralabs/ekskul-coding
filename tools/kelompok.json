@@ -15,7 +15,7 @@
   {"id": "sma-01", "nama": "Nabil Abdillah", "id_siswa": ["SMA-002"]},
   {"id": "sma-02", "nama": "M Lyu Marioka", "id_siswa": ["SMA-010"]},
   {"id": "sma-03", "nama": "M Syafiy", "id_siswa": ["SMA-011"]},
-  {"id": "sma-04", "nama": "Qowiyyyl Luthfi Pradana & M Kenzo Bagas", "id_siswa": ["SMA-003", "SMA-007"]},
+  {"id": "sma-04", "nama": "Qowiyyul Luthfi Pradana & M Kenzo Bagas", "id_siswa": ["SMA-003", "SMA-007"]},
   {"id": "sma-05", "nama": "Husna Mahira Taqiyya & Aliya Nasifa Putri Kencoro", "id_siswa": ["SMA-005", "SMA-004"]},
   {"id": "sma-06", "nama": "M Dzaki & M Fakhri", "id_siswa": ["SMA-009", "SMA-008"]}
 ]

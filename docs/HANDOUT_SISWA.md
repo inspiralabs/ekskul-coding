@@ -32,7 +32,7 @@ Cukup pastikan cocok dengan tabel ini.
 | SMA | Nabil Abdillah | `sma-01` | `sma-01.inspiralabs.id` |
 | SMA | M Lyu Marioka | `sma-02` | `sma-02.inspiralabs.id` |
 | SMA | M Syafiy | `sma-03` | `sma-03.inspiralabs.id` |
-| SMA | Qowiyyyl Luthfi Pradana & M Kenzo Bagas | `sma-04` | `sma-04.inspiralabs.id` |
+| SMA | Qowiyyul Luthfi Pradana & M Kenzo Bagas | `sma-04` | `sma-04.inspiralabs.id` |
 | SMA | Husna Mahira Taqiyya & Aliya Nasifa Putri Kencoro | `sma-05` | `sma-05.inspiralabs.id` |
 | SMA | M Dzaki & M Fakhri | `sma-06` | `sma-06.inspiralabs.id` |
 
