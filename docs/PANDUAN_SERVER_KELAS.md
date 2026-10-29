@@ -152,5 +152,7 @@ Server bisa dijalankan ulang kapan saja; nilai lama tidak hilang (jawaban baru d
   kelompok, dibangun ulang tiap server start).
 - Soal diambil dari `kurikulum/<smp|sma>/pNN/sumber/POST_TEST_P<N>_<JENJANG>_InspiraLabs.md` (file yang sama dengan
   sumber Google Form). Mengubah soal = edit file itu; server memakai versi terbaru saat dijalankan.
+  Tersedia P2–P13 untuk SMP & SMA. Soal P2–P8 disalin dari Google Form lama (5 opsi A–E, kunci disusun ulang dari
+  soalnya); P7 SMA disusun dari materi karena form-nya tidak bisa dibuka publik.
 - Daftar kelompok & nama siswa: `tools/kelompok.json`.
 - Self-check: `py tools/server_kelas.py cek` dan `py tools/posttest.py cek`.
