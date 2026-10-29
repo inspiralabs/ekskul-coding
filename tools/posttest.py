@@ -14,7 +14,7 @@ from build_bahan_ajar import post_test  # parser yang sama dengan Google Form
 from datetime import datetime
 from xml.sax.saxutils import escape
 
-HURUF = "ABCD"
+HURUF = "ABCDE"
 POIN_PER_BENAR = 2  # kolom "Post - Test" di Log Poin Sesi: 5 soal x 2 = maks 10
 # karakter yang tidak sah di XML (mis. \x0b dari Shift+Enter di Word) + pemisah baris Unicode
 ILEGAL_XML = re.compile("[\x00-\x08\x0b\x0c\x0e-\x1f￾￿\x85]")
@@ -27,8 +27,11 @@ def daftar_tes(root=ROOT):
         m = re.match(r"POST_TEST_P(\d+)_(SMP|SMA)_", f.name)
         n, jenjang = int(m.group(1)), m.group(2)
         materi = f.with_name(f"Materi_Ajar_P{n}_{jenjang}_InspiraLabs.md")
-        judul = (materi.read_text(encoding="utf-8").splitlines()[0].split(": ", 1)[-1].strip()
-                 if materi.is_file() else f"Pertemuan {n}")
+        if materi.is_file():
+            judul = materi.read_text(encoding="utf-8").splitlines()[0].split(": ", 1)[-1].strip()
+        else:  # P2-P8 tanpa Materi_Ajar: judul dari baris "Sumber: SMA — Pertemuan 3: <judul>"
+            m = re.search(r"(?m)^Sumber: .*?Pertemuan \d+: (.+)$", f.read_text(encoding="utf-8"))
+            judul = m.group(1).strip() if m else f"Pertemuan {n}"
         tid = f"{jenjang.lower()}-{n:02d}"
         tes[tid] = {"id": tid, "jenjang": jenjang, "n": n, "judul": judul.rstrip(" 🏆"), "soal": post_test(f)}
     return tes
@@ -174,7 +177,9 @@ def baca_xlsx(data):
 
 def cek():
     tes = daftar_tes()
-    assert "smp-10" in tes and "sma-13" in tes, sorted(tes)
+    assert {f"{j}-{n:02d}" for j in ("smp", "sma") for n in range(2, 14)} <= set(tes), sorted(tes)
+    assert tes["sma-03"]["judul"] == "Variabel & Tipe Data"  # judul dari baris "Sumber:" (tanpa Materi_Ajar)
+    assert len(tes["sma-03"]["soal"][0]["opsi"]) == 5 and tes["sma-03"]["soal"][0]["kunci"] == 2
     t = tes["smp-10"]
     assert t["jenjang"] == "SMP" and t["n"] == 10
     assert t["judul"] == "Pasang Arduino IDE & Kedipkan LED Pertamamu", t["judul"]

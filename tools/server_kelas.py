@@ -314,7 +314,7 @@ def periksa_jawaban(t, form, kelompok_sah):
     jawaban = []
     for i in range(1, len(t["soal"]) + 1):
         h = ambil(f"s{i}").upper()
-        if h not in tuple(posttest.HURUF):  # bukan cek substring: "" in "ABCD" bernilai True
+        if h not in tuple(posttest.HURUF[:len(t["soal"][i - 1]["opsi"])]):  # bukan cek substring: "" in "ABCD" bernilai True
             galat.append(f"Soal {i} belum dijawab.")
             jawaban.append(None)
         else:
@@ -552,6 +552,12 @@ def cek():
 
     benar10 = {"nama": "Siswa Uji", "kelas": "8A", "kelompok": "smp-07",
                "s1": "B", "s2": "A", "s3": "C", "s4": "D", "s5": "B"}
+
+    # opsi E hanya sah di soal 5 opsi (P3-P8), bukan di soal 4 opsi (P9 ke atas)
+    semua = posttest.daftar_tes()
+    isian = lambda h: {k: [v] for k, v in {**benar10, "s1": h}.items()}
+    assert periksa_jawaban(semua["smp-10"], isian("E"), ["smp-07"])[2] == ["Soal 1 belum dijawab."]
+    assert periksa_jawaban(semua["smp-03"], isian("E"), ["smp-07"])[1][0] == 4
 
     with tempfile.TemporaryDirectory() as d:
         tmp = Path(d)

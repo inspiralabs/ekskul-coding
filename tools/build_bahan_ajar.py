@@ -55,16 +55,16 @@ def post_test(path):
     soal = []
     for blk in s.split('\n---\n')[1:]:
         blk = blk.strip()
-        m = re.search(r'\*\*Jawaban: ([A-D])\*\*', blk)
+        m = re.search(r'\*\*Jawaban: ([A-E])\*\*', blk)
         body = blk[:m.start()].strip()
-        opsi = re.findall(r'(?m)^- [A-D]\. (.*)$', body)
-        assert len(opsi) == 4, (path, body[:80])
-        body = re.sub(r'(?m)^- [A-D]\. .*$', '', body).strip()
+        opsi = re.findall(r'(?m)^- [A-E]\. (.*)$', body)
+        assert len(opsi) in (4, 5), (path, body[:80])  # P2-P8 (dari Google Form lama) punya 5 opsi
+        body = re.sub(r'(?m)^- [A-E]\. .*$', '', body).strip()
         kode = re.findall(r'```\w*\n(.*?)```', body, re.S)
         teks = re.sub(r'```\w*\n.*?```', ' ', body, flags=re.S)
         soal.append({'q': ' '.join(clean(l) for l in teks.splitlines() if l.strip()),
                      'kode': kode[0].rstrip() if kode else '',
-                     'opsi': [clean(o) for o in opsi], 'kunci': 'ABCD'.index(m.group(1))})
+                     'opsi': [clean(o) for o in opsi], 'kunci': 'ABCDE'.index(m.group(1))})
     assert len(soal) == 5, path
     return soal
 
