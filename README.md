@@ -21,7 +21,7 @@ ajar per pertemuan, proyek IoT Smart Room Monitor (ESP32 + DHT22), dan alat bant
 
 | Perintah | Gunanya |
 |---|---|
-| `py tools/server_kelas.py --tes smp-10` | Server kelas: post-test (nilai ke `.xlsx`), paket proyek, dashboard |
+| `py tools/server_kelas.py --tes p2-10` | Server kelas: post-test (nilai ke `.xlsx`), paket proyek, dashboard. `--tes` menerima `p2-10`, `sma-p3-5`, `smp-10` |
 | `py tools/kelompok.py paket` | Zip proyek per kelompok (Device ID & nama sudah terisi) |
 | `py tools/kelompok.py deploy <id> <zip>` | Terbitkan website kelompok ke `<id>.inspiralabs.id` (lihat `deploy/README.md`) |
 | `py tools/build_bahan_ajar.py smp 10` | Bangun prompt slide (Gemini) & Apps Script post-test dari `kurikulum/` |

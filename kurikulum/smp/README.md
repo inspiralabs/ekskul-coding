@@ -101,6 +101,7 @@ Laptop pengajar menjalankan satu halaman web untuk kelas, lewat WiFi kelas:
 **Di kelas**
 ```
 py tools/server_kelas.py --tes smp-10     # buka post-test P10 SMP sejak awal (atau buka nanti dari halaman pengajar)
+py tools/server_kelas.py --tes p2-10      # buka P2–P10 SMP & SMA sekaligus (sma-p3-5 = P3–P5 SMA saja)
 py tools/server_kelas.py                  # tanpa post-test terbuka; --port 8080 kalau port 8000 dipakai
 py tools/server_kelas.py cek              # self-check (opsional)
 ```
@@ -120,7 +121,7 @@ py tools/server_kelas.py cek              # self-check (opsional)
   Log Poin Sesi. Panduan lengkap untuk tutor baru: `docs/PANDUAN_SERVER_KELAS.md`.
   Kalau `smp-10.xlsx` sedang dibuka di Excel, jawaban tetap tersimpan di `.jsonl`; unduh ulang dari halaman pengajar.
 - Siswa menekan refresh di halaman "Terima kasih" tidak mengirim ulang. Kalau siswa sengaja mengerjakan dua kali, kedua baris tercatat dengan waktunya; pakai yang terakhir.
-- Pilihan post-test: `smp-09` … `smp-13`, `sma-09` … `sma-13` (soal dari `pNN/sumber/POST_TEST_*.md`).
+- Pilihan post-test: `smp-02` … `smp-13`, `sma-02` … `sma-13` (soal dari `pNN/sumber/POST_TEST_*.md`).
   Google Form di Linktree tetap ada sebagai cadangan kalau server/WiFi bermasalah.
 
 ### P11 — Kenalan Sensor DHT22
