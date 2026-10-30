@@ -1,7 +1,8 @@
 """Server kelas lokal: post-test, paket proyek kelompok, dan tautan dashboard, dari laptop pengajar.
 
-  py tools/server_kelas.py [--port 8000] [--tes smp-10[,sma-10]]
+  py tools/server_kelas.py [--port 8000] [--tes p2-10]
       -> siswa buka http://<IP-laptop-ini>:8000 ; --tes membuka post-test sejak awal
+         contoh --tes: p2-10 (SMP & SMA P2-P10), sma-p3-5, p11, smp-10,sma-10
   py tools/server_kelas.py cek   -> self-check
 
 Pengajar membuka http://127.0.0.1:8000/guru di laptop ini untuk buka/tutup post-test dan unduh nilai (.xlsx).
@@ -501,6 +502,20 @@ def masalah_folder_repo(root, folder_windows=None):
     return None
 
 
+def kode_tes(teks):
+    """"p2-10" -> smp-02..smp-10 + sma-02..sma-10; "smp-10" tetap; bisa digabung dengan koma."""
+    hasil = set()
+    for x in teks.lower().replace(" ", "").split(","):
+        m = re.fullmatch(r"(?:(smp|sma)-?)?p(\d+)(?:-p?(\d+))?", x)
+        if m:
+            jenjang = [m.group(1)] if m.group(1) else ["smp", "sma"]
+            awal = int(m.group(2))
+            hasil |= {f"{j}-{n:02d}" for j in jenjang for n in range(awal, int(m.group(3) or awal) + 1)}
+        elif x:
+            hasil.add(x)
+    return hasil
+
+
 def main(port, buka):
     masalah = masalah_folder_repo(ROOT)
     if masalah:
@@ -555,6 +570,8 @@ def cek():
 
     # opsi E hanya sah di soal 5 opsi (P3-P8), bukan di soal 4 opsi (P9 ke atas)
     semua = posttest.daftar_tes()
+    assert kode_tes("p2-4") == {"smp-02", "smp-03", "smp-04", "sma-02", "sma-03", "sma-04"}
+    assert kode_tes("sma-p9-10, P11,smp-10") == {"sma-09", "sma-10", "smp-11", "sma-11", "smp-10"}
     isian = lambda h: {k: [v] for k, v in {**benar10, "s1": h}.items()}
     assert periksa_jawaban(semua["smp-10"], isian("E"), ["smp-07"])[2] == ["Soal 1 belum dijawab."]
     assert periksa_jawaban(semua["smp-03"], isian("E"), ["smp-07"])[1][0] == 4
@@ -704,7 +721,7 @@ if __name__ == "__main__":
             if a[0] == "--port" and len(a) > 1 and a[1].isdigit():
                 port, a = int(a[1]), a[2:]
             elif a[0] == "--tes" and len(a) > 1:
-                buka |= {x.strip().lower() for x in a[1].split(",") if x.strip()}
+                buka |= kode_tes(a[1])
                 a = a[2:]
             else:
                 sys.exit(__doc__)
