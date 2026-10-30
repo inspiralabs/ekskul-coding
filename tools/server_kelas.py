@@ -80,11 +80,29 @@ a{color:var(--maroon)}
 .kembali{display:inline-block;margin-bottom:10px;color:var(--emas-muda);font-weight:700;text-decoration:none}
 .kembali:hover{text-decoration:underline}
 h2{font-size:1.35rem;margin:36px 0 12px}
-.tes-kartu{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:#fff;
-border:2px solid var(--emas);border-radius:var(--r);padding:20px;margin-bottom:12px}
-.tes-kartu .label{font-size:.85rem;font-weight:800;color:var(--maroon)}
-.tes-kartu h3{margin:2px 0 4px;font-size:1.2rem}
-.tes-kartu .meta{margin:0;color:var(--abu);font-size:.95rem}
+.tab-jenjang{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;margin:0 0 4px;background:#fff;
+border:1px solid var(--garis);border-radius:var(--r)}
+.tab-jenjang a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:10px;
+font-weight:800;text-decoration:none;color:var(--maroon-tua)}
+.tab-jenjang a:hover{background:var(--emas-muda)}
+.tab-jenjang a[aria-current]{background:var(--maroon);color:#fff}
+.tab-jenjang small{font-weight:600;opacity:.8}
+.catatan{margin:0 0 12px;color:var(--abu)}
+.daftar-tes{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.tes-baris{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;background:#fff;
+border:2px solid var(--garis);border-radius:var(--r);color:var(--teks);text-decoration:none}
+.tes-baris:hover{border-color:var(--emas)}
+.tes-baris:focus-visible{outline:3px solid var(--emas);outline-offset:2px}
+.tes-baris .no{flex:none;display:grid;place-items:center;width:46px;height:40px;border-radius:10px;
+background:var(--emas-muda);color:var(--maroon-tua);font-weight:800}
+.tes-baris .judul{flex:1;font-weight:700;line-height:1.3}
+.tes-baris .mulai{flex:none;font-weight:800;color:var(--maroon);font-size:.95rem}
+.pilih-awal{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.pilih-awal a{display:flex;flex-direction:column;gap:4px;padding:28px 20px;background:#fff;border:2px solid var(--garis);
+border-radius:var(--r);text-decoration:none;color:var(--abu)}
+.pilih-awal a:hover{border-color:var(--maroon)}
+.pilih-awal a:focus-visible{outline:3px solid var(--emas);outline-offset:2px}
+.pilih-awal b{font-size:2.6rem;line-height:1;color:var(--maroon)}
 .tombol{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:0;
 border-radius:10px;background:var(--maroon);color:#fff;font:inherit;font-weight:800;text-decoration:none;cursor:pointer;white-space:nowrap}
 .tombol:hover{background:var(--maroon-tua)}
@@ -94,8 +112,6 @@ border-radius:10px;background:var(--maroon);color:#fff;font:inherit;font-weight:
 .kosong-kartu{background:#fff;border:2px dashed var(--garis);border-radius:var(--r);padding:20px;color:var(--abu)}
 .kosong-kartu p{margin:0 0 12px}
 .cari{width:100%;min-height:48px;padding:10px 14px;font:inherit;border:2px solid var(--garis);border-radius:10px;background:#fff;margin-bottom:6px}
-.jenjang{display:flex;align-items:baseline;gap:8px;margin:22px 0 10px;color:var(--maroon);font-size:1.05rem}
-.jenjang span{font-size:.85rem;font-weight:600;color:var(--abu)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
 .kartu{display:flex;flex-direction:column;background:#fff;border:1px solid var(--garis);border-radius:var(--r);padding:16px}
 .kartu-atas{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -139,7 +155,7 @@ td.angka{white-space:nowrap}
 td form{display:inline}
 .alamat{font-family:Consolas,ui-monospace,monospace;font-weight:800;font-size:1.3rem;color:var(--maroon)}
 [hidden]{display:none!important}
-@media (max-width:560px){body{font-size:16px}.tes-kartu .tombol{width:100%}.grid{grid-template-columns:1fr}
+@media (max-width:560px){body{font-size:16px}.grid,.daftar-tes{grid-template-columns:1fr}.pilih-awal a{padding:20px 16px}
 .tabel-guru thead{display:none}.tabel-guru tr{display:block;border-bottom:1px solid var(--garis);padding:8px 0}
 .tabel-guru td{display:block;border:0;padding:4px 12px}}
 """
@@ -152,22 +168,19 @@ def dokumen(judul, isi, script=""):
 
 
 def kepala(judul, sub="", kembali=False):
-    tautan = '<a class="kembali" href="/">&larr; Kembali ke beranda</a>' if kembali else ""
+    """kembali=True -> ke "/", atau string href (mis. "/?j=smp")."""
+    href = kembali if isinstance(kembali, str) else "/"
+    tautan = f'<a class="kembali" href="{e(href)}">&larr; Kembali ke beranda</a>' if kembali else ""
     return (f'<header class="atas"><div class="bungkus">{tautan}<p class="merek">Ekskul Coding &middot; InspiraLabs</p>'
             f'<h1>{judul}</h1>{f"<p class=sub>{sub}</p>" if sub else ""}</div></header>')
 
 
-def kartu_proyek(paket_dir):
-    """Kartu per kelompok: unduh paket zip + buka dashboard online, dikelompokkan per jenjang."""
+def kartu_proyek(paket_dir, jenjang):
+    """Kartu per kelompok satu jenjang ("smp"/"sma"): unduh paket zip + buka dashboard online."""
     nama = nama_kelompok()
-    per_jenjang = {}
+    kartu = ""
     for n in daftar(paket_dir):
-        if n.endswith(".zip"):
-            per_jenjang.setdefault(n[:3].upper(), []).append(n)
-    out = ""
-    for jenjang in sorted(per_jenjang, key=lambda j: (j != "SMP", j)):
-        kartu = ""
-        for n in per_jenjang[jenjang]:
+        if n.endswith(".zip") and n.startswith(jenjang + "-"):
             dev, anggota = n[:-4], nama.get(n[:-4], [])
             label = "individu" if len(anggota) == 1 else f"{len(anggota)} orang" if anggota else ""
             cari = e(" ".join([dev] + anggota).lower())
@@ -176,39 +189,60 @@ def kartu_proyek(paket_dir):
 <ul class="anggota">{"".join(f"<li>{e(a)}</li>" for a in anggota)}</ul>
 <div class="aksi"><a class="tombol kedua" href="/proyek/{e(n)}" download>Unduh paket</a>
 <a class="tombol" href="https://{e(dev)}.inspiralabs.id" target="_blank" rel="noopener">Buka dashboard</a></div></article>"""
-        out += (f'<h3 class="jenjang">{e(jenjang)}<span>{len(per_jenjang[jenjang])} kelompok</span></h3>'
-                f'<div class="grid">{kartu}</div>')
-    return out
+    return f'<div class="grid">{kartu}</div>' if kartu else ""
 
 
 JS_CARI = """<script>
 var c=document.getElementById("cari");
-if(c)c.addEventListener("input",function(){var q=this.value.trim().toLowerCase(),ada=0;
-document.querySelectorAll(".grid").forEach(function(g){var n=0;
-g.querySelectorAll(".kartu").forEach(function(k){var ok=k.dataset.cari.indexOf(q)!==-1;k.hidden=!ok;n+=ok;});
-g.hidden=g.previousElementSibling.hidden=!n;ada+=n;});
-document.getElementById("kosong").hidden=ada>0;});
+if(c)c.addEventListener("input",function(){var q=this.value.trim().toLowerCase(),n=0;
+document.querySelectorAll(".kartu").forEach(function(k){var ok=k.dataset.cari.indexOf(q)!==-1;k.hidden=!ok;n+=ok;});
+document.getElementById("kosong").hidden=n>0;});
 </script>"""
 
+JENJANG = ("smp", "sma")
 
-def halaman_beranda(tes, buka, paket_dir):
-    aktif = [tes[t] for t in sorted(buka) if t in tes]
+
+def jumlah_buka(tes, buka, jenjang):
+    return sum(1 for t in buka if t in tes and tes[t]["jenjang"].lower() == jenjang)
+
+
+def halaman_pilih(tes, buka):
+    """Beranda sebelum jenjang dipilih: dua pilihan besar SMP / SMA."""
+    tile = "".join(
+        f'<a href="/?j={j}"><b>{j.upper()}</b><span>{f"{n} post-test dibuka" if n else "Belum ada post-test dibuka"}</span></a>'
+        for j in JENJANG for n in [jumlah_buka(tes, buka, j)])
+    isi = f"""{kepala("Ruang Kelas IoT", "Kamu siswa SMP atau SMA? Pilih dulu, nanti yang tampil hanya post-test dan kelompok jenjangmu.")}
+<main class="bungkus"><nav class="pilih-awal" aria-label="Pilih jenjang">{tile}</nav></main>"""
+    return dokumen("Ruang Kelas IoT", isi)
+
+
+def halaman_beranda(tes, buka, paket_dir, jenjang):
+    J = jenjang.upper()
+    tab = "".join(f'<a href="/?j={j}"{" aria-current=page" if j == jenjang else ""}>{j.upper()}'
+                  f'{f"<small>{n} dibuka</small>" if n else ""}</a>'
+                  for j in JENJANG for n in [jumlah_buka(tes, buka, j)])
+    aktif = sorted((tes[t] for t in buka if t in tes and tes[t]["jenjang"] == J), key=lambda t: t["n"])
     if aktif:
-        bagian_tes = "".join(f"""<div class="tes-kartu"><div><span class="label">P{t['n']} &middot; {t['jenjang']}</span>
-<h3>{e(t['judul'])}</h3><p class="meta">{len(t['soal'])} soal pilihan ganda, dikerjakan sendiri</p></div>
-<a class="tombol" href="/tes/{t['id']}">Mulai post-test</a></div>""" for t in aktif)
+        baris = "".join(f"""<a class="tes-baris" href="/tes/{t['id']}"><span class="no">P{t['n']}</span>
+<span class="judul">{e(t['judul'])}</span><span class="mulai">Mulai</span></a>""" for t in aktif)
+        bagian_tes = (f'<p class="catatan">Kerjakan post-test pertemuan yang diminta pengajar. '
+                      f'Tiap post-test berisi 5 soal pilihan ganda, dikerjakan sendiri.</p><div class="daftar-tes">{baris}</div>')
     else:
-        bagian_tes = """<div class="kosong-kartu"><p>Belum ada post-test yang dibuka. Tunggu aba-aba pengajar, lalu muat ulang halaman ini.</p>
+        bagian_tes = f"""<div class="kosong-kartu"><p>Belum ada post-test {J} yang dibuka. Tunggu aba-aba pengajar, lalu muat ulang halaman ini.</p>
 <button class="tombol kedua" type="button" onclick="location.reload()">Muat ulang</button></div>"""
-    proyek = kartu_proyek(paket_dir) or '<p class="kosong">Paket proyek belum disiapkan pengajar.</p>'
-    isi = f"""{kepala("Ruang Kelas IoT", "Kerjakan post-test, unduh paket proyek kelompokmu, dan buka dashboard-nya.")}
-<main class="bungkus"><h2>Post-test</h2>{bagian_tes}
-<h2>Paket proyek &amp; dashboard</h2>
-<p>Cari namamu. <b>Unduh paket</b> berisi program ESP32 dan website kelompokmu (buka file zip-nya, pilih <b>Extract All</b>).
+    proyek = kartu_proyek(paket_dir, jenjang)
+    if proyek:
+        proyek = f"""<p class="catatan"><b>Unduh paket</b> berisi program ESP32 dan website kelompokmu (buka zip-nya, pilih <b>Extract All</b>).
 <b>Buka dashboard</b> menampilkan data sensor kelompokmu yang sudah online.</p>
-<input class="cari" id="cari" type="search" placeholder="Ketik namamu atau smp-07" aria-label="Cari nama atau kode kelompok">
-<p class="kosong" id="kosong" hidden>Nama tidak ditemukan. Tanya pengajar kode kelompokmu.</p>{proyek}</main>"""
-    return dokumen("Ruang Kelas IoT", isi, JS_CARI)
+<input class="cari" id="cari" type="search" placeholder="Ketik namamu atau {jenjang}-07" aria-label="Cari nama atau kode kelompok">
+<p class="kosong" id="kosong" hidden>Nama tidak ditemukan. Tanya pengajar kode kelompokmu.</p>{proyek}"""
+    else:
+        proyek = '<p class="kosong">Paket proyek belum disiapkan pengajar.</p>'
+    isi = f"""{kepala(f"Ruang Kelas {J}", "Kerjakan post-test, unduh paket proyek kelompokmu, dan buka dashboard-nya.")}
+<main class="bungkus"><nav class="tab-jenjang" aria-label="Jenjang">{tab}</nav>
+<h2>Post-test {J}</h2>{bagian_tes}
+<h2>Paket proyek &amp; dashboard {J}</h2>{proyek}</main>"""
+    return dokumen(f"Ruang Kelas {J}", isi, JS_CARI)
 
 
 JS_TES = """<script>
@@ -239,7 +273,7 @@ def halaman_tes(t, kelompok, nilai_lama=None, galat=()):
                  f'<span class="tanya">{e(tanya)}</span></legend>{kode}{opsi}</fieldset>')
     kotak_galat = (f'<div class="galat" role="alert"><b>Periksa lagi isianmu:</b><ul>{"".join(f"<li>{e(g)}</li>" for g in galat)}</ul></div>'
                    if galat else "")
-    isi = f"""{kepala(f"Post-test P{t['n']} {t['jenjang']}", e(t['judul']), kembali=True)}
+    isi = f"""{kepala(f"Post-test P{t['n']} {t['jenjang']}", e(t['judul']), kembali=f"/?j={t['jenjang'].lower()}")}
 <main class="bungkus">{kotak_galat}
 <form id="form-tes" method="post" action="/tes/{t['id']}" data-jumlah="{len(t['soal'])}">
 <fieldset class="blok"><legend>Identitas</legend>
@@ -261,7 +295,7 @@ def halaman_selesai(t, nama):
                '<path d="M24 43l12 12 24-26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>')
     isi = f"""<main class="bungkus selesai">{centang}<h1>Terima kasih{", " + e(nama) if nama else ""}!</h1>
 <p>Jawabanmu untuk post-test P{t['n']} {t['jenjang']} sudah tersimpan. Kamu boleh menutup halaman ini.</p>
-<a class="tombol kedua" href="/">Kembali ke beranda</a></main>"""
+<a class="tombol kedua" href="/?j={t['jenjang'].lower()}">Kembali ke beranda</a></main>"""
     return dokumen("Terima kasih", isi)
 
 
@@ -355,7 +389,14 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
             path = unquote(self.path.split("?", 1)[0])
             try:
                 if path == "/":
-                    return self.html(halaman_beranda(tes, buka, paket_dir))
+                    q = parse_qs(self.path.split("?", 1)[1] if "?" in self.path else "")
+                    j = (q.get("j") or [""])[0].lower()
+                    if j in JENJANG:  # pilihan diingat cookie sesi, jadi buka "/" lagi langsung ke jenjangnya
+                        return self.html(halaman_beranda(tes, buka, paket_dir, j), cookie=f"jenjang={j}; Path=/; SameSite=Lax")
+                    j = re.search(r"(?:^|;\s*)jenjang=(smp|sma)\b", self.headers.get("Cookie") or "")
+                    if j:
+                        return self.html(halaman_beranda(tes, buka, paket_dir, j.group(1)))
+                    return self.html(halaman_pilih(tes, buka))
                 if path.startswith("/proyek/"):
                     return self.berkas(Path(paket_dir), path[len("/proyek/"):])
                 if path.startswith("/tes/") and path.endswith("/terima-kasih"):
@@ -433,9 +474,11 @@ def buat_server(port, paket_dir, hasil_dir, tes=None, buka=(), boleh_guru=None):
         def kelompok_untuk(self, t):
             return [k for k in semua_kelompok if k.startswith(t["jenjang"].lower() + "-")]
 
-        def html(self, teks, status=200):
+        def html(self, teks, status=200, cookie=None):
             data = teks.encode("utf-8")
             self.send_response(status)
+            if cookie:
+                self.send_header("Set-Cookie", cookie)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(data)))
             self.send_header("Cache-Control", "no-store")
@@ -587,14 +630,32 @@ def cek():
         port = jalan(srv)
         get = lambda p: minta(port, p)
 
-        # beranda: post-test yang dibuka saja, kartu proyek dengan unduh + dashboard
+        # beranda tanpa jenjang: pilih SMP / SMA dulu, belum ada daftar tes
         st, isi = get("/")
         html = isi.decode()
         assert st == 200 and html.startswith("<!doctype html>")
-        assert 'href="/tes/smp-10"' in html and "Pasang Arduino IDE &amp; Kedipkan LED Pertamamu" in html
-        assert 'href="/tes/sma-10"' not in html
+        assert 'href="/?j=smp"' in html and 'href="/?j=sma"' in html and "/tes/" not in html
+        assert "1 post-test dibuka" in html and "Belum ada post-test dibuka" in html
+
+        # beranda SMP: post-test & kelompok SMP saja, kartu proyek dengan unduh + dashboard
+        st, isi = get("/?j=smp")
+        html = isi.decode()
+        assert st == 200 and 'href="/tes/smp-10"' in html and "Pasang Arduino IDE &amp; Kedipkan LED Pertamamu" in html
+        assert 'href="/tes/sma-10"' not in html and "sma-04" not in html
         assert 'href="/proyek/smp-07.zip"' in html and 'href="https://smp-07.inspiralabs.id"' in html
-        assert "Rafif Ahnaf Rabbani" in html and html.index(">SMP<") < html.index('href="/proyek/smp-07.zip"')
+        assert "Rafif Ahnaf Rabbani" in html and '<a href="/?j=smp" aria-current=page>' in html
+        st, isi = get("/?j=sma")
+        assert 'href="/proyek/sma-04.zip"' in isi.decode() and "smp-07" not in isi.decode()
+        assert "Belum ada post-test SMA yang dibuka" in isi.decode()
+
+        # pilihan jenjang diingat: "/" dengan cookie langsung ke beranda jenjang itu
+        c = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+        c.request("GET", "/?j=sma")
+        r = c.getresponse(); r.read()
+        assert r.getheader("Set-Cookie", "").startswith("jenjang=sma;")
+        c.request("GET", "/", headers={"Cookie": "lain=1; jenjang=sma"})
+        assert "Ruang Kelas SMA" in c.getresponse().read().decode()
+        c.close()
         assert "package_esp32_index" not in html and "Boards Manager" not in html and "/unduh/" not in html  # board & installer dihapus
         for p in ["/board/package_esp32_index.json", "/unduh/x.exe", "/proyek/..%2Fsmp-07.zip",
                   "/proyek/smp-99.zip", "/tes/smp-99", "/lain"]:
@@ -689,8 +750,8 @@ def cek():
         assert minta(port2, "/guru")[0] == 403
         assert minta(port2, "/guru/buka", {"tes": "smp-10"})[0] == 403
         assert minta(port2, "/guru/hasil/smp-10.xlsx")[0] == 403
-        st, isi = minta(port2, "/")
-        assert "Belum ada post-test yang dibuka" in isi.decode()
+        st, isi = minta(port2, "/?j=smp")
+        assert "Belum ada post-test SMP yang dibuka" in isi.decode()
 
         # port sudah dipakai -> OSError
         try:
