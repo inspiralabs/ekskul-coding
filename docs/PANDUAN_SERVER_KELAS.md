@@ -82,7 +82,8 @@ Kalau langkah 5 gagal (halaman tidak terbuka), lihat bagian **E. Kalau ada masal
 ```
 py tools/server_kelas.py --tes smp-10
 ```
-- Ganti `smp-10` dengan pertemuan hari itu: `smp-09` … `smp-13` atau `sma-09` … `sma-13`.
+- Ganti `smp-10` dengan pertemuan hari itu: `smp-02` … `smp-13` atau `sma-02` … `sma-13`.
+- Banyak sekaligus pakai rentang: `--tes p2-10` (P2–P10 SMP & SMA), `--tes sma-p3-5` (P3–P5 SMA saja), `--tes p11` (P11 kedua jenjang).
 - Boleh juga tanpa `--tes` (post-test belum dibuka), lalu buka dari halaman pengajar saat waktunya tiba.
 - Terminal menampilkan alamat untuk siswa. **Tulis di papan atau proyeksikan** alamat bertanda `<- utama (WiFi)`.
   Alamat ini bisa berubah tiap pertemuan (tergantung WiFi), jadi selalu ambil dari terminal hari itu.
