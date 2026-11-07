@@ -76,6 +76,7 @@ const MAKS_LINK = 3;
 function saringPerubahan(peran, data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return { error: "data perubahan tidak valid" };
   const batas = peran === "siswa" ? FIELD_SISWA : { ...FIELD_SISWA, ...FIELD_RESMI };
+  if (!Object.keys(data).length) return { error: "tidak ada isian yang dikirim" };
   const patch = {};
   for (const [k, v] of Object.entries(data)) {
     if (k === "link_karya") {
@@ -83,10 +84,11 @@ function saringPerubahan(peran, data) {
         v.every((u) => typeof u === "string" && /^https:\/\/\S+$/.test(u.trim()) && [...u.trim()].length <= 200);
       if (!ok) return { error: `link_karya: maksimal ${MAKS_LINK} alamat yang diawali https:// (maks 200 karakter)` };
       patch.link_karya = v.map((u) => u.trim());
-    } else if (k in batas) {
+    } else if (Object.hasOwn(batas, k)) {   // bukan `in`: "constructor"/"__proto__" ikut lolos
       if (typeof v !== "string") return { error: `${k}: harus berupa teks` };
       const t = v.trim();
       if ([...t].length > batas[k]) return { error: `${k}: maksimal ${batas[k]} karakter` };
+      if (k === "nama_lengkap" && !t) return { error: "nama_lengkap: wajib diisi" };
       patch[k] = t;
     } else {
       return { error: `field "${k}" tidak boleh diubah` };
@@ -138,7 +140,11 @@ function cekJpeg(buf) {
   return null;
 }
 
+const FORMAT_ID = /^SM[PA]-\d{3}$/;
+const FORMAT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
 module.exports = {
+  FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG,
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
 };

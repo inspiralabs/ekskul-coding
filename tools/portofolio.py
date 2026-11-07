@@ -461,6 +461,92 @@ def impor(berkas, api, email, sandi):
     return dibuat
 
 
+def _uji_impor(xlsx):
+    """Self-check perintah impor terhadap server HTTP tiruan (tanpa jaringan sungguhan)."""
+    import http.server
+    import io
+    import threading
+    from contextlib import redirect_stdout
+
+    keadaan = {"ua": [], "isi": [], "impor": None}
+
+    class Tiruan(http.server.BaseHTTPRequestHandler):
+        def do_POST(self):
+            keadaan["ua"].append(self.headers.get("User-Agent"))
+            body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            keadaan["isi"].append((self.path, body))
+            if self.path.endswith("/masuk/staf"):
+                ok = body.get("password") == "benar"
+                kode, balas = (200, {"ok": True, "token": "t"}) if ok else (401, {"ok": False, "error": "email atau password salah"})
+            else:
+                kode, balas = keadaan["impor"]
+            data = json.dumps(balas).encode()
+            self.send_response(kode)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+
+        def log_message(self, *a):
+            pass
+
+    srv = http.server.HTTPServer(("127.0.0.1", 0), Tiruan)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    api = f"http://127.0.0.1:{srv.server_address[1]}"
+    dist = ROOT / "dist"
+    sebelum = set(dist.glob("kode-akses-*.csv"))
+
+    def csv_baru():
+        baru = set(dist.glob("kode-akses-*.csv")) - sebelum
+        isi = [c.read_text(encoding="utf-8-sig") for c in baru]
+        for c in baru:
+            c.unlink()  # hasil uji, bukan kode asli
+        return isi
+
+    def jalankan(sandi="benar", alamat=None):
+        with redirect_stdout(io.StringIO()):
+            return impor([str(xlsx)], alamat or api, "admin@x.id", sandi)
+
+    satu = {"id_siswa": "SMP-022", "nama_lengkap": "Rafif Ahnaf Rabbani", "jenjang": "smp", "device_id": "smp-07", "slug": "rafif", "kode": "ABC234"}
+    try:
+        # 1. berhasil: CSV lengkap, User-Agent sendiri (Python-urllib diblokir Cloudflare), tanpa kolom sensitif
+        keadaan["impor"] = (200, {"ok": True, "dibuat": [satu], "diperbarui": 1})
+        assert jalankan() == [satu]
+        isi = csv_baru()
+        assert len(isi) == 1 and isi[0].splitlines()[0] == "ID Siswa,Nama,Jenjang,Kelompok,Kode,Alamat profil"
+        assert "SMP-022,Rafif Ahnaf Rabbani,SMP,smp-07,ABC234,https://ekskulcoding.inspiralabs.id/profil/?s=rafif" in isi[0]
+        assert keadaan["ua"] and all(u and not u.startswith("Python-urllib") for u in keadaan["ua"]), keadaan["ua"]
+        dikirim = [b for p, b in keadaan["isi"] if p.endswith("/admin/impor")][-1]["siswa"]
+        assert {i["id_siswa"] for i in dikirim} == {"SMP-022", "SMP-017"}
+        teks = json.dumps(dikirim, ensure_ascii=False)
+        for rahasia in ("0811111", "Bapak Rahasia", "Kurang fokus", "internal gradebook", "rahasia internal"):
+            assert rahasia not in teks, rahasia
+        # 2. impor terhenti di tengah: kode yang sudah dibuat tetap disimpan, lalu keluar dengan pesan gagal
+        keadaan["impor"] = (500, {"ok": False, "error": "impor terhenti di tengah, jalankan ulang", "dibuat": [satu], "diperbarui": 0})
+        try:
+            jalankan()
+            raise AssertionError("impor gagal harus keluar")
+        except SystemExit as e:
+            assert "Impor gagal" in str(e) and "1 kode" in str(e), e
+        assert len(csv_baru()) == 1
+        # 3. password salah: berhenti sebelum mengirim data, tanpa CSV
+        n = len(keadaan["isi"])
+        try:
+            jalankan("salah")
+            raise AssertionError("login gagal harus keluar")
+        except SystemExit as e:
+            assert "Login admin gagal" in str(e), e
+        assert len(keadaan["isi"]) == n + 1 and not csv_baru()
+    finally:
+        srv.shutdown()
+    # 4. server tidak bisa dihubungi: pesan jelas, bukan traceback
+    try:
+        jalankan(alamat="http://127.0.0.1:9")
+        raise AssertionError("server mati harus keluar")
+    except SystemExit as e:
+        assert "Tidak tersambung" in str(e), e
+
+
 def bangun_contoh(keluar=ROOT / "dist/portofolio"):
     data = json.loads((P / "contoh/penilaian-contoh.json").read_text(encoding="utf-8"))
     penilaian = {sid: {**s, "pertemuan": {int(p): v for p, v in s["pertemuan"].items()}} for sid, s in data["siswa"].items()}
@@ -548,6 +634,7 @@ def cek():
             assert rahasia not in teks, rahasia
         dua = payload_impor({**pen, "SMP-050": {**pen["SMP-022"], "id": "SMP-050"}}, {"SMP-022": "smp-07", "SMP-050": "smp-08"})
         assert sorted(i["slug"] for i in dua) == ["rafif", "rafif-ahnaf"]  # unik lintas kelompok
+        _uji_impor(d / "smp.xlsx")  # perintah impor vs server tiruan: sukses, terhenti, password salah, server mati
 
         # foto mentah dari HP di Google Drive: diunduh sebagai zip (folder "Foto Portofolio/<ID Siswa>/...")
         # -> dikecilkan, arah diperbaiki, EXIF/GPS dibuang, nama file dirapikan, keterangan dari nama file

@@ -7,7 +7,7 @@ const express = require("express");
 const crypto = require("crypto");
 const {
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
-  saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg,
+  saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, FORMAT_ID, FORMAT_SLUG,
 } = require("./portofolio-inti");
 
 function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
@@ -49,6 +49,8 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
   r.post("/masuk/siswa", aman(async (req, res) => {
     const id = String(req.body?.id || "").trim().toUpperCase();
     const kode = String(req.body?.kode || "").trim().toUpperCase();
+    // Format salah = pasti bukan siswa: tolak sebelum pembatas & database (ID acak tidak menumpuk di memori/Supabase).
+    if (!FORMAT_ID.test(id)) return gagal(res, 401, "ID atau kode salah");
     const kunci = "siswa:" + id;
     if (pembatas.terkunci(kunci)) return gagal(res, 429, "terlalu banyak percobaan, tunggu 15 menit");
     const b = id && (await store.ambil(id));
@@ -123,9 +125,10 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
     const daftar = req.body?.siswa;
     if (!Array.isArray(daftar)) return gagal(res, 400, "siswa harus berupa daftar");
     for (const it of daftar) {
-      if (!/^SM[PA]-\d{3}$/.test(it?.id_siswa || "")) return gagal(res, 400, `id_siswa tidak valid: ${it?.id_siswa}`);
+      if (!FORMAT_ID.test(it?.id_siswa || "")) return gagal(res, 400, `id_siswa tidak valid: ${it?.id_siswa}`);
       if (!["smp", "sma"].includes(it.jenjang)) return gagal(res, 400, `${it.id_siswa}: jenjang harus smp/sma`);
-      if (!String(it.nama_lengkap || "").trim() || !String(it.slug || "").trim()) return gagal(res, 400, `${it.id_siswa}: nama_lengkap/slug kosong`);
+      if (!String(it.nama_lengkap || "").trim()) return gagal(res, 400, `${it.id_siswa}: nama_lengkap kosong`);
+      if (!FORMAT_SLUG.test(it.slug || "")) return gagal(res, 400, `${it.id_siswa}: slug harus huruf kecil/angka/strip`);
     }
     const dibuat = [];
     let diperbarui = 0;
@@ -175,9 +178,11 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
 // Upload Storage butuh SUPABASE_KEY berjenis service_role (lihat backend/README.md).
 function buatStoreSupabase(supabase, bucket) {
   const tabel = () => supabase.from("portofolio_siswa");
+  // Error Supabase berupa objek biasa: bungkus jadi Error supaya log server terbaca (bukan "[object Object]").
+  const lempar = (error) => { throw new Error(`Supabase: ${error.message || error}`, { cause: error }); };
   const hasil = async (q) => {
     const { data, error } = await q;
-    if (error) throw error;
+    if (error) lempar(error);
     return data;
   };
   const foto = () => supabase.storage.from(bucket);
@@ -194,11 +199,11 @@ function buatStoreSupabase(supabase, bucket) {
     slugDipakai: async (slug) => !!(await hasil(tabel().select("id_siswa").eq("slug", slug).maybeSingle())),
     simpanFoto: async (path, buf) => {
       const { error } = await foto().upload(path, buf, { contentType: "image/jpeg", upsert: false });
-      if (error) throw error;
+      if (error) lempar(error);
     },
     hapusFoto: async (path) => {
       const { error } = await foto().remove([path]);
-      if (error) throw error;
+      if (error) lempar(error);
     },
     urlFoto: (path) => foto().getPublicUrl(path).data.publicUrl,
   };

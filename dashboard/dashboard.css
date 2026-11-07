@@ -13,6 +13,7 @@ input, textarea, select {
 textarea { min-height: 6rem; resize: vertical; }
 input:focus, textarea:focus, select:focus { outline: 3px solid var(--biru-tua); outline-offset: 1px; border-color: var(--biru-tua); }
 .hitung { font-size: .8rem; color: var(--tinta-lemah); font-weight: 600; justify-self: end; }
+.hitung.lebih { color: #b42318; font-weight: 800; }
 .tombol { min-height: 44px; cursor: pointer; font: inherit; font-weight: 800; }
 .tombol:disabled { opacity: .6; cursor: progress; }
 .tab { display: flex; gap: .5rem; margin-bottom: .75rem; }

@@ -5,21 +5,7 @@ var API_BASE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && localSto
   "https://api-ekskulcoding.inspiralabs.id";
 var KUNCI_TOKEN = "tokenPortofolio";
 
-// [kolom, label, batas karakter, jenis]. Batas sama dengan backend/portofolio-inti.js.
-var ISIAN_SISWA = [
-  ["panggilan", "Nama panggilan", 30, "input"],
-  ["tentang", "Tentang aku", 300, "textarea"],
-  ["cita_cita", "Cita-cita / minat", 100, "input"],
-  ["cerita_tersulit", "Bagian tersulit di proyek", 200, "textarea"],
-  ["cerita_terseru", "Bagian paling seru", 200, "textarea"],
-  ["cerita_rencana", "Rencana pengembangan alatmu", 200, "textarea"],
-];
-var ISIAN_RESMI = [
-  ["nama_lengkap", "Nama lengkap", 100, "input"],
-  ["kelas", "Kelas", 20, "input"],
-  ["judul_proyek", "Judul proyek", 100, "input"],
-  ["catatan_pelatih", "Catatan pelatih (tampil di halaman publik)", 500, "textarea"],
-];
+// ISIAN_SISWA, ISIAN_RESMI, panjang, rapikan, perubahan: dari inti.js (dimuat lebih dulu).
 
 function $(id) { return document.getElementById(id); }
 function el(tag, kelas, teks) {
@@ -27,13 +13,6 @@ function el(tag, kelas, teks) {
   if (kelas) e.className = kelas;
   if (teks != null) e.textContent = teks;
   return e;
-}
-function panjang(s) { return Array.from(s).length; }   // per karakter, sama seperti server
-// "tentang: maksimal 300 karakter" -> "Tentang aku: maksimal 300 karakter"
-function rapikan(teks) {
-  var label = { link_karya: "Link karya" };
-  ISIAN_SISWA.concat(ISIAN_RESMI).forEach(function (d) { label[d[0]] = d[1]; });
-  return teks.replace(/^(\w+):/, function (s, k) { return (label[k] || k) + ":"; });
 }
 function pesan(id, teks, jenis) { $(id).textContent = teks || ""; $(id).className = "pesan" + (jenis ? " " + jenis : ""); }
 
@@ -140,10 +119,14 @@ function buatEditor(wadah, siswa, opsi) {
       var label = el("label", null, d[1]);
       var input = el(d[3]);
       input.name = d[0];
-      input.maxLength = d[2];
       input.value = siswa[d[0]] || "";
+      // Tanpa maxLength: browser menghitung emoji sebagai 2. Penghitung (per karakter, sama dengan server) jadi merah.
       var hitung = el("span", "hitung");
-      var perbarui = function () { hitung.textContent = panjang(input.value) + "/" + d[2]; };
+      var perbarui = function () {
+        var n = panjang(input.value);
+        hitung.textContent = n + "/" + d[2] + (n > d[2] ? " (terlalu panjang)" : "");
+        hitung.classList.toggle("lebih", n > d[2]);
+      };
       input.addEventListener("input", perbarui);
       perbarui();
       label.append(input, hitung);
@@ -188,13 +171,9 @@ function buatEditor(wadah, siswa, opsi) {
     ev.preventDefault();
     // Kirim HANYA yang diubah di form ini. Form bisa sudah lama terbuka (admin membuka daftar sebelum siswa
     // mengisi dari HP); mengirim semua isian akan menimpa tulisan siswa yang lebih baru dengan nilai lama.
-    var data = {};
-    (opsi.resmi ? ISIAN_RESMI : []).concat(ISIAN_SISWA).forEach(function (d) {
-      var nilai = form.elements[d[0]].value;
-      if (nilai.trim() !== String(siswa[d[0]] || "").trim()) data[d[0]] = nilai;
-    });
-    var link = linkInput.map(function (i) { return i.value.trim(); }).filter(Boolean);
-    if (JSON.stringify(link) !== JSON.stringify(siswa.link_karya || [])) data.link_karya = link;
+    var nilai = {};
+    (opsi.resmi ? ISIAN_RESMI : []).concat(ISIAN_SISWA).forEach(function (d) { nilai[d[0]] = form.elements[d[0]].value; });
+    var data = perubahan(siswa, nilai, linkInput.map(function (i) { return i.value; }), opsi.resmi);
     if (!Object.keys(data).length) {
       pesanSimpan.className = "pesan";
       pesanSimpan.textContent = "Tidak ada perubahan.";

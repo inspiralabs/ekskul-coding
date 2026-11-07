@@ -103,11 +103,25 @@ sensor/kipas tetap jalan normal. Urutan go-live (jangan dibalik):
 5. **Merge PR** portofolio → deploy otomatis. Cek: `/health` → ok; `/api/portofolio/profil/x` → **404**
    (bukan 503); sensor kelas tetap masuk (`/api/readings/sma-01?limit=1`).
 6. **Impor**: unduh spreadsheet penilaian SMP & SMA sebagai .xlsx →
-   `py tools/portofolio.py impor penilaian-smp.xlsx penilaian-sma.xlsx` → cetak `dist/kode-akses.csv`
+   `py tools/portofolio.py impor penilaian-smp.xlsx penilaian-sma.xlsx` → cetak `dist/kode-akses-<tanggal-jam>.csv`
    jadi kertas lipat per siswa. Impor boleh diulang: kode & isian siswa tidak berubah.
 7. **Uji ujung ke ujung** dengan satu siswa: masuk lewat HP → unggah foto → profil tampil → admin isi kelas.
 
 Coba di laptop tanpa Supabase: `node backend/portofolio-dev.js` (data fiktif, petunjuk di kepala file).
+
+**Tes sebelum push/merge** (tanpa jaringan, tanpa Supabase):
+
+```bash
+cd backend && npm test              # 50 tes: siswa, guru/admin, impor, foto, skema SQL, server.js
+py tools/portofolio.py cek          # parser spreadsheet + perintah impor (server tiruan)
+```
+
+Setelah langkah 2–3 di atas (tabel & bucket sudah ada), jalankan sekali tes Supabase sungguhan. Tes ini hanya
+memakai ID uji `SMA-999`/`SMP-999` dan menghapusnya lagi:
+
+```bash
+cd backend && UJI_SUPABASE=1 UJI_ENV=/path/ke/.env node --test portofolio-supabase.test.js
+```
 
 ## Yang TIDAK boleh diubah siswa/pengajar web dev di folder ini
 
