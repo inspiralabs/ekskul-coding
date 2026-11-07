@@ -66,4 +66,79 @@ function buatPembatas({ maks = 10, jendelaMs = 15 * 60 * 1000, sekarang = Date.n
   };
 }
 
-module.exports = { buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas };
+// ---------------------------------------------------------------- isian & hak akses
+
+// Batas panjang per karakter (bukan byte). Bagian milik siswa vs data resmi (spec §6).
+const FIELD_SISWA = { panggilan: 30, tentang: 300, cita_cita: 100, cerita_tersulit: 200, cerita_terseru: 200, cerita_rencana: 200 };
+const FIELD_RESMI = { nama_lengkap: 100, kelas: 20, judul_proyek: 100, catatan_pelatih: 500 };
+const MAKS_LINK = 3;
+
+function saringPerubahan(peran, data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) return { error: "data perubahan tidak valid" };
+  const batas = peran === "siswa" ? FIELD_SISWA : { ...FIELD_SISWA, ...FIELD_RESMI };
+  const patch = {};
+  for (const [k, v] of Object.entries(data)) {
+    if (k === "link_karya") {
+      const ok = Array.isArray(v) && v.length <= MAKS_LINK &&
+        v.every((u) => typeof u === "string" && /^https:\/\/\S+$/.test(u.trim()) && [...u.trim()].length <= 200);
+      if (!ok) return { error: `link_karya: maksimal ${MAKS_LINK} alamat yang diawali https:// (maks 200 karakter)` };
+      patch.link_karya = v.map((u) => u.trim());
+    } else if (k in batas) {
+      if (typeof v !== "string") return { error: `${k}: harus berupa teks` };
+      const t = v.trim();
+      if ([...t].length > batas[k]) return { error: `${k}: maksimal ${batas[k]} karakter` };
+      patch[k] = t;
+    } else {
+      return { error: `field "${k}" tidak boleh diubah` };
+    }
+  }
+  return { patch };
+}
+
+function bolehKelola(akun, siswa) {
+  if (akun.peran === "admin") return true;
+  return akun.peran === "guru" && akun.jenjang === siswa.jenjang;
+}
+
+const KOLOM_PUBLIK = ["slug", "jenjang", "device_id", "nama_lengkap", "panggilan", "kelas", "tentang", "cita_cita",
+  "cerita_tersulit", "cerita_terseru", "cerita_rencana", "link_karya", "poin", "lencana", "peringkat", "judul_proyek",
+  "catatan_pelatih", "sertifikat_nomor"];
+
+function dataPublik(baris, urlFoto) {
+  const d = {};
+  for (const k of KOLOM_PUBLIK) if (k in baris) d[k] = baris[k];
+  d.foto_url = baris.foto_path ? urlFoto(baris.foto_path) : null;
+  return d;
+}
+
+// ---------------------------------------------------------------- impor dari spreadsheet
+
+const KOLOM_IMPOR = ["id_siswa", "jenjang", "device_id", "slug", "nama_lengkap", "poin", "lencana", "peringkat",
+  "judul_proyek", "catatan_pelatih", "sertifikat_nomor"];
+const IMPOR_SELALU = ["jenjang", "device_id", "poin", "lencana", "peringkat", "sertifikat_nomor"]; // spreadsheet = sumber kebenaran
+const IMPOR_KALAU_KOSONG = ["nama_lengkap", "judul_proyek", "catatan_pelatih"];               // koreksi guru tidak ditimpa
+
+function gabungImpor(lama, baru) {
+  const hasil = {};
+  if (!lama) {
+    for (const k of KOLOM_IMPOR) if (k in baru) hasil[k] = baru[k];
+    return hasil;
+  }
+  for (const k of IMPOR_SELALU) if (k in baru) hasil[k] = baru[k];
+  for (const k of IMPOR_KALAU_KOSONG) if (!lama[k] && baru[k]) hasil[k] = baru[k];
+  return hasil;
+}
+
+const MAKS_FOTO = 600 * 1024;
+
+function cekJpeg(buf) {
+  if (!Buffer.isBuffer(buf) || !buf.length) return "Foto harus berformat JPEG";
+  if (buf.length > MAKS_FOTO) return "Foto terlalu besar (maks 600 KB)";
+  if (buf[0] !== 0xff || buf[1] !== 0xd8 || buf[2] !== 0xff) return "Foto harus berformat JPEG";
+  return null;
+}
+
+module.exports = {
+  buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
+  saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
+};
