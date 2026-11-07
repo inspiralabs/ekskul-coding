@@ -8,6 +8,7 @@ require("dotenv").config();
 const express = require("express");
 const { WebSocketServer } = require("ws");
 const { createClient } = require("@supabase/supabase-js");
+const { pasangPortofolio, buatStoreSupabase } = require("./portofolio");
 
 // db.schema: tabel readings & fan_control ada di skema "ekskul_coding_asy_syahid",
 // bukan "public" -- lihat backend/supabase_schema.sql. Skema ini juga harus
@@ -16,16 +17,22 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
   db: { schema: "ekskul_coding_asy_syahid" },
 });
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "1mb" })); // 1mb: payload impor portofolio (default express 100kb)
 
 // Izinkan dashboard dibuka dari origin mana pun (Live Server, file lokal, dll)
 // memanggil backend ini -- demo kelas LAN, bukan API publik production.
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, X-PIN");
+  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, X-PIN, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
+});
+
+// Portofolio siswa (/api/portofolio/*): 503 selama PORTOFOLIO_SECRET belum diisi, lihat backend/README.md.
+pasangPortofolio(app, {
+  store: buatStoreSupabase(supabase, process.env.PORTOFOLIO_BUCKET || "portofolio-foto"),
+  env: process.env,
 });
 
 const server = app.listen(process.env.PORT || 3334, () => {

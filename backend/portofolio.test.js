@@ -100,3 +100,98 @@ test("cek jpeg", () => {
   assert.match(cekJpeg(Buffer.alloc(0)), /JPEG/);
   assert.match(cekJpeg(undefined), /JPEG/);
 });
+
+// ---------------------------------------------------------------- route (store memori, server sungguhan di port acak)
+const express = require("express");
+const { pasangPortofolio } = require("./portofolio");
+const { buatStoreMemori } = require("./portofolio-memori");
+
+const ENV = { PORTOFOLIO_SECRET: "s", ADMIN_EMAIL: "admin@x.id", ADMIN_PASSWORD: "pw" };
+const siswaAwal = () => [
+  { id_siswa: "SMA-004", jenjang: "sma", slug: "budi", nama_lengkap: "Budi", kode_hash: hashRahasia("K7P2QX"), kode_versi: 1 },
+  { id_siswa: "SMP-022", jenjang: "smp", slug: "rafif", nama_lengkap: "Rafif", kode_hash: hashRahasia("R4F1F2"), kode_versi: 1 },
+];
+
+async function jalankan(t, baris = siswaAwal(), env = ENV) {
+  const app = express();
+  app.use(express.json({ limit: "1mb" }));
+  const store = buatStoreMemori(baris);
+  pasangPortofolio(app, { store, env });
+  const server = await new Promise((ok) => { const s = app.listen(0, () => ok(s)); });
+  t.after(() => server.close());
+  const url = `http://127.0.0.1:${server.address().port}`;
+  const minta = (method, path, body, token) => fetch(url + "/api/portofolio" + path, {
+    method,
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const json = async (res) => {
+    const isi = await res.json();
+    assert.equal(res.status, 200, JSON.stringify(isi));
+    return isi;
+  };
+  return {
+    url, store,
+    getRaw: (p, tk) => minta("GET", p, undefined, tk),
+    postRaw: (p, b, tk) => minta("POST", p, b, tk),
+    get: async (p, tk) => json(await minta("GET", p, undefined, tk)),
+    post: async (p, b, tk) => json(await minta("POST", p, b, tk)),
+  };
+}
+
+test("tanpa secret -> 503", async (t) => { // fitur baru tidak boleh menjatuhkan backend
+  const s = await jalankan(t, siswaAwal(), {});
+  const r = await s.getRaw("/profil/budi");
+  assert.equal(r.status, 503);
+  assert.match((await r.json()).error, /belum diaktifkan/);
+});
+
+test("profil publik", async (t) => {
+  const s = await jalankan(t);
+  const r = await s.get("/profil/budi");
+  assert.equal(r.profil.nama_lengkap, "Budi");
+  assert.ok(!("kode_hash" in r.profil));
+  assert.equal((await s.getRaw("/profil/tidak-ada")).status, 404);
+});
+
+test("login siswa, ubah diri sendiri, tidak bisa data resmi", async (t) => {
+  const s = await jalankan(t);
+  const { token } = await s.post("/masuk/siswa", { id: " sma-004 ", kode: "k7p2qx" });
+  assert.ok(token);
+  assert.equal((await s.get("/saya", token)).siswa.id_siswa, "SMA-004");
+  assert.equal((await s.post("/saya", { tentang: "Suka robot" }, token)).siswa.tentang, "Suka robot");
+  assert.equal((await s.get("/profil/budi")).profil.tentang, "Suka robot"); // langsung tampil
+  assert.equal((await s.postRaw("/saya", { poin: 999 }, token)).status, 400);
+  assert.equal((await s.postRaw("/staf/siswa/SMP-022", { tentang: "x" }, token)).status, 403);
+  assert.equal((await s.postRaw("/saya", {}, "token-palsu")).status, 401);
+  assert.equal((await s.getRaw("/saya")).status, 401);
+  assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-004", kode: "SALAH1" })).status, 401);
+  assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-999", kode: "K7P2QX" })).status, 401);
+});
+
+test("kode salah dibatasi", async (t) => {
+  const s = await jalankan(t);
+  for (let i = 0; i < 10; i++) assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-004", kode: "XXXXXX" })).status, 401);
+  assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).status, 429); // terkunci walau benar
+  assert.equal((await s.postRaw("/masuk/siswa", { id: "SMP-022", kode: "R4F1F2" })).status, 200); // siswa lain tidak ikut terkunci
+});
+
+test("admin: daftar, edit kelas, reset kode membatalkan token lama", async (t) => {
+  const s = await jalankan(t);
+  const siswa = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
+  const admin = (await s.post("/masuk/staf", { email: "ADMIN@x.id", password: "pw" })).token;
+  assert.equal((await s.postRaw("/masuk/staf", { email: "admin@x.id", password: "salah" })).status, 401);
+  const daftar = (await s.get("/staf/siswa?jenjang=sma", admin)).siswa;
+  assert.deepEqual(daftar.map((x) => x.id_siswa), ["SMA-004"]);
+  assert.ok(!("kode_hash" in daftar[0]));
+  assert.equal((await s.get("/staf/siswa", admin)).siswa.length, 2);
+  assert.equal((await s.post("/staf/siswa/SMA-004", { kelas: "XI-2" }, admin)).siswa.kelas, "XI-2");
+  assert.equal((await s.postRaw("/staf/siswa/SMA-004", { poin: 1 }, admin)).status, 400);
+  assert.equal((await s.postRaw("/staf/siswa/SMA-777", { kelas: "X" }, admin)).status, 404);
+  assert.equal((await s.getRaw("/staf/siswa", siswa)).status, 403);
+  const { kode } = await s.post("/staf/siswa/SMA-004/reset-kode", {}, admin);
+  assert.match(kode, /^[A-Z2-9]{6}$/);
+  assert.equal((await s.getRaw("/saya", siswa)).status, 401);                 // token lama mati
+  assert.ok((await s.post("/masuk/siswa", { id: "SMA-004", kode })).token);   // kode baru jalan
+  assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).status, 401); // kode lama mati
+});
