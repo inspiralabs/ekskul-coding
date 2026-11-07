@@ -14,7 +14,8 @@
    saat startup atau saat query pertama.
 4. Buka **Project Settings → API** → catat:
    - `Project URL` → jadi `SUPABASE_URL`
-   - `anon public key` (cukup, tidak perlu service_role) → jadi `SUPABASE_KEY`
+   - `service_role` / secret key → jadi `SUPABASE_KEY` (wajib sejak ada upload foto portofolio;
+     key `anon` cukup untuk sensor & kipas, tapi upload foto ke Storage akan ditolak)
 
 ## 2. Setup & jalankan server
 
@@ -83,6 +84,30 @@ Harus balas `{"ok":true,"fanOn":false}` dan baris baru muncul di tabel `readings
 - Kalau server di-restart/redeploy, data lama tetap aman di Supabase (tidak hilang).
 - Kalau URL backend berubah (pindah hosting, ganti domain), update ulang `SERVER_URL` di
   semua firmware dan `API_BASE` di semua `api.js` sebelum kelas dimulai.
+
+## 7. Portofolio siswa: serah-terima pemilik
+
+Endpoint `/api/portofolio/*` (dashboard `ekskulcoding.inspiralabs.id/dashboard/`, profil
+`/profil/?s=<slug>`). Selama `PORTOFOLIO_SECRET` kosong, semua endpoint ini membalas 503 dan
+sensor/kipas tetap jalan normal. Urutan go-live (jangan dibalik):
+
+1. **Cek jenis `SUPABASE_KEY`** di server. Harus `service_role` (atau `sb_secret_...`):
+   ```bash
+   K=$(sudo grep '^SUPABASE_KEY=' /srv/apps/api-ekskulcoding/.env | cut -d= -f2- | tr -d '"'); case "$K" in sb_secret_*) echo service_role;; sb_publishable_*) echo anon;; *) echo "$K" | cut -d. -f2 | base64 -d 2>/dev/null; echo;; esac
+   ```
+   Masih `anon`? Supabase → Project Settings → API Keys → salin secret/service_role key → ganti di `.env`.
+2. **Supabase → SQL Editor** → jalankan blok `PORTOFOLIO SISWA` di akhir `supabase_schema.sql`.
+3. **Supabase → Storage** → New bucket `portofolio-foto`, **Public bucket: ON**.
+4. **Isi `.env` server**: `PORTOFOLIO_SECRET` (hasil `openssl rand -hex 32`), `ADMIN_EMAIL`,
+   `ADMIN_PASSWORD`, `PORTOFOLIO_BUCKET=portofolio-foto`. Lalu `sudo -u deploy /srv/bin/deploy.sh api-ekskulcoding`.
+5. **Merge PR** portofolio → deploy otomatis. Cek: `/health` → ok; `/api/portofolio/profil/x` → **404**
+   (bukan 503); sensor kelas tetap masuk (`/api/readings/sma-01?limit=1`).
+6. **Impor**: unduh spreadsheet penilaian SMP & SMA sebagai .xlsx →
+   `py tools/portofolio.py impor penilaian-smp.xlsx penilaian-sma.xlsx` → cetak `dist/kode-akses.csv`
+   jadi kertas lipat per siswa. Impor boleh diulang: kode & isian siswa tidak berubah.
+7. **Uji ujung ke ujung** dengan satu siswa: masuk lewat HP → unggah foto → profil tampil → admin isi kelas.
+
+Coba di laptop tanpa Supabase: `node backend/portofolio-dev.js` (data fiktif, petunjuk di kepala file).
 
 ## Yang TIDAK boleh diubah siswa/pengajar web dev di folder ini
 

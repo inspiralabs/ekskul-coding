@@ -25,7 +25,8 @@ function buatStoreMemori(baris = []) {
     simpanFoto: async (path, buf) => { foto.set(path, Buffer.from(buf)); },
     hapusFoto: async (path) => { foto.delete(path); },
     urlFoto: (path) => "memori://" + path,
-    adaFoto: (path) => foto.has(path), // khusus tes
+    adaFoto: (path) => foto.has(path),     // khusus tes
+    ambilFoto: (path) => foto.get(path),   // khusus portofolio-dev.js
   };
 }
 

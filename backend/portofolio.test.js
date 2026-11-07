@@ -221,3 +221,26 @@ test("impor: buat baru dengan kode, ulang tidak menimpa koreksi, slug unik", asy
   const siswa = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
   assert.equal((await s.postRaw("/admin/impor", { siswa: [] }, siswa)).status, 403);
 });
+
+test("foto: tolak non-JPEG, ganti foto menghapus yang lama, admin bisa unggah", async (t) => {
+  const s = await jalankan(t);
+  const tSiswa = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
+  const kirim = (path, buf, token) => fetch(s.url + "/api/portofolio" + path,
+    { method: "POST", headers: { "Content-Type": "image/jpeg", Authorization: "Bearer " + token }, body: buf });
+  const png = await kirim("/saya/foto", Buffer.from("\x89PNG...."), tSiswa);
+  assert.equal(png.status, 400);
+  assert.match((await png.json()).error, /JPEG/);
+  const a = await (await kirim("/saya/foto", Buffer.from([0xff, 0xd8, 0xff, 1]), tSiswa)).json();
+  const b = await (await kirim("/saya/foto", Buffer.from([0xff, 0xd8, 0xff, 2]), tSiswa)).json();
+  assert.match(a.foto_url, /^memori:\/\/SMA-004\/[0-9a-f]{16}\.jpg$/);
+  assert.notEqual(a.foto_url, b.foto_url);
+  assert.equal(s.store.adaFoto(a.foto_url.slice(9)), false); // foto lama dihapus
+  assert.equal(s.store.adaFoto(b.foto_url.slice(9)), true);
+  assert.equal((await s.get("/profil/budi")).profil.foto_url, b.foto_url);
+  assert.equal((await kirim("/saya/foto", Buffer.from("\x89PNG"), tSiswa)).status, 400);
+  assert.equal(s.store.adaFoto(b.foto_url.slice(9)), true); // gagal unggah -> foto lama tetap
+  const admin = (await s.post("/masuk/staf", { email: "admin@x.id", password: "pw" })).token;
+  const c = await (await kirim("/staf/siswa/SMP-022/foto", Buffer.from([0xff, 0xd8, 0xff, 3]), admin)).json();
+  assert.match(c.foto_url, /^memori:\/\/SMP-022\//);
+  assert.equal((await kirim("/staf/siswa/SMP-022/foto", Buffer.from([0xff, 0xd8, 0xff]), tSiswa)).status, 403);
+});

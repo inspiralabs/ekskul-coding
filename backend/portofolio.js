@@ -144,14 +144,57 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
     res.json({ ok: true, dibuat, diperbarui });
   }));
 
+  // ---------------------------------------------------------------- foto (body mentah image/jpeg; dikecilkan di browser)
+  // Urutan: cek -> simpan baru -> catat di tabel -> baru hapus yang lama. Gagal di tengah = foto lama tetap.
+  const fotoMentah = express.raw({ type: "image/jpeg", limit: "700kb" });
+  async function gantiFoto(res, siswa, buf, oleh) {
+    const salah = cekJpeg(buf);
+    if (salah) return gagal(res, 400, salah);
+    const path = `${siswa.id_siswa}/${crypto.randomBytes(8).toString("hex")}.jpg`;
+    await store.simpanFoto(path, buf);
+    await store.ubah(siswa.id_siswa, { foto_path: path, updated_by: oleh });
+    if (siswa.foto_path) await store.hapusFoto(siswa.foto_path).catch((e) => console.error("[portofolio] hapus foto lama", e));
+    res.json({ ok: true, foto_url: store.urlFoto(path) });
+  }
+  r.post("/saya/foto", butuh("siswa"), fotoMentah,
+    aman((req, res) => gantiFoto(res, req.siswaSaya, req.body, "siswa:" + req.siswaSaya.id_siswa)));
+  r.post("/staf/siswa/:id/foto", butuh("admin", "guru"), siswaKelolaan, fotoMentah,
+    aman((req, res) => gantiFoto(res, req.siswa, req.body, req.akun.email)));
+
   app.use("/api/portofolio", r);
 }
 
-// Diisi di Task 5.
-function buatStoreSupabase() {
-  const belum = async () => { throw new Error("store Supabase portofolio belum diimplementasikan"); };
-  return { ambil: belum, ambilSlug: belum, daftar: belum, tambah: belum, ubah: belum, slugDipakai: belum,
-           simpanFoto: belum, hapusFoto: belum, urlFoto: () => null };
+// Store produksi: tabel portofolio_siswa (skema klien = ekskul_coding_asy_syahid) + Supabase Storage.
+// Upload Storage butuh SUPABASE_KEY berjenis service_role (lihat backend/README.md).
+function buatStoreSupabase(supabase, bucket) {
+  const tabel = () => supabase.from("portofolio_siswa");
+  const hasil = async (q) => {
+    const { data, error } = await q;
+    if (error) throw error;
+    return data;
+  };
+  const foto = () => supabase.storage.from(bucket);
+  return {
+    ambil: (id) => hasil(tabel().select("*").eq("id_siswa", id).maybeSingle()),
+    ambilSlug: (slug) => hasil(tabel().select("*").eq("slug", slug).maybeSingle()),
+    daftar: (jenjang) => {
+      let q = tabel().select("*");
+      if (jenjang) q = q.eq("jenjang", jenjang);
+      return hasil(q.order("nama_lengkap"));
+    },
+    tambah: (b) => hasil(tabel().insert(b).select().single()),
+    ubah: (id, patch) => hasil(tabel().update({ ...patch, updated_at: new Date().toISOString() }).eq("id_siswa", id).select().single()),
+    slugDipakai: async (slug) => !!(await hasil(tabel().select("id_siswa").eq("slug", slug).maybeSingle())),
+    simpanFoto: async (path, buf) => {
+      const { error } = await foto().upload(path, buf, { contentType: "image/jpeg", upsert: false });
+      if (error) throw error;
+    },
+    hapusFoto: async (path) => {
+      const { error } = await foto().remove([path]);
+      if (error) throw error;
+    },
+    urlFoto: (path) => foto().getPublicUrl(path).data.publicUrl,
+  };
 }
 
 module.exports = { pasangPortofolio, buatStoreSupabase };
