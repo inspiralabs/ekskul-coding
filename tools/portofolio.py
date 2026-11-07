@@ -8,6 +8,10 @@ satu file per jenjang. Tidak ada data yang diketik ulang.
          default --keluar dist/portofolio. --foto boleh diulang (lihat FOTO di bawah). Butuh: py -m pip install pillow
   py tools/portofolio.py skrip-folder <link folder Drive> [penilaian-smp.xlsx penilaian-sma.xlsx]
       -> portofolio/BUAT_FOLDER_FOTO.gs (Apps Script: buat subfolder "ID Nama" per siswa, nama dari spreadsheet)
+  py tools/portofolio.py impor penilaian-smp.xlsx penilaian-sma.xlsx [--api URL]
+      -> kirim data resmi ke dashboard portofolio (ekskulcoding.inspiralabs.id/dashboard/); siswa baru dapat
+         kode akses -> dist/kode-akses-<waktu>.csv. Login admin dari env PORTOFOLIO_ADMIN_EMAIL/_PASSWORD
+         (kalau kosong ditanya). Aman diulang: kode & isian siswa tidak berubah.
   py tools/portofolio.py contoh   -> bangun halaman contoh fiktif (smp-00) ke dist/portofolio
   py tools/portofolio.py cek      -> self-check
 
@@ -373,6 +377,80 @@ function jalankan() {{
 """
 
 
+# ---------------------------------------------------------------- impor ke backend portofolio (dashboard)
+
+API_PORTOFOLIO = "https://api-ekskulcoding.inspiralabs.id"
+ALAMAT_PROFIL = "https://ekskulcoding.inspiralabs.id/profil/?s="
+
+
+def payload_impor(penilaian, peta=None):
+    """Data resmi per siswa untuk POST /api/portofolio/admin/impor. Slug unik lintas semua kelompok."""
+    peta = kelompok_siswa() if peta is None else peta
+    per_kelompok = {}
+    for sid, dev in peta.items():
+        per_kelompok.setdefault(dev, []).append(sid)
+    items, terpakai = [], set()
+    for dev, ids in sorted(per_kelompok.items()):
+        for urut, sid in enumerate(ids, 1):
+            s = penilaian.get(sid)
+            if not s or s["pindah"]:
+                continue
+            anggota = [penilaian[t]["nama"] for t in ids if t != sid and t in penilaian and not penilaian[t]["pindah"]]
+            d = susun(s, dev, buat_slug(s["nama"], terpakai), anggota, urut, [])
+            items.append({
+                "id_siswa": sid, "jenjang": dev[:3], "device_id": dev, "slug": d["slug"], "nama_lengkap": d["nama"],
+                "poin": d["poin"], "lencana": d["pertemuan"], "peringkat": d["peringkat"],
+                "judul_proyek": d["proyek_akhir"]["judul"], "catatan_pelatih": d["catatan_tutor"],
+                "sertifikat_nomor": d["sertifikat"]["nomor"],
+            })
+    return items
+
+
+def impor(berkas, api, email, sandi):
+    """Kirim data resmi ke backend; siswa baru dapat kode akses -> dist/kode-akses-<waktu>.csv (untuk dicetak)."""
+    import csv
+    import datetime
+    import urllib.error
+    import urllib.request
+
+    penilaian = {}
+    for b in berkas:
+        penilaian.update(baca_penilaian(b))
+    items = payload_impor(penilaian)
+
+    def kirim(path, isi, token=None):
+        kepala = {"Content-Type": "application/json", **({"Authorization": "Bearer " + token} if token else {})}
+        req = urllib.request.Request(api.rstrip("/") + "/api/portofolio" + path, json.dumps(isi).encode(), kepala, method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            isi = e.read().decode("utf-8", "replace")
+            try:
+                isi = json.loads(isi).get("error", isi)
+            except ValueError:
+                pass
+            sys.exit(f"Gagal {path}: HTTP {e.code} {isi}")
+
+    token = kirim("/masuk/staf", {"email": email, "password": sandi})["token"]
+    hasil = kirim("/admin/impor", {"siswa": items}, token)
+    dibuat = hasil["dibuat"]
+    if dibuat:
+        # nama file bertanggal: kode hanya muncul sekali, file impor sebelumnya jangan sampai tertimpa
+        out = ROOT / "dist" / f"kode-akses-{datetime.datetime.now():%Y%m%d-%H%M%S}.csv"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with open(out, "w", newline="", encoding="utf-8-sig") as f:  # utf-8-sig: rapi saat dibuka Excel
+            w = csv.writer(f)
+            w.writerow(["ID Siswa", "Nama", "Jenjang", "Kelompok", "Kode", "Alamat profil"])
+            for d in dibuat:
+                w.writerow([d["id_siswa"], d["nama_lengkap"], d["jenjang"].upper(), d["device_id"], d["kode"], ALAMAT_PROFIL + d["slug"]])
+        for d in dibuat:
+            print(f"  {d['id_siswa']:8} {d['kode']}  {d['nama_lengkap']}")
+        print(f"Kode akses disimpan di {out} (cetak, potong per siswa; JANGAN di-commit)")
+    print(f"{len(dibuat)} siswa baru, {hasil['diperbarui']} diperbarui")
+    return dibuat
+
+
 def bangun_contoh(keluar=ROOT / "dist/portofolio"):
     data = json.loads((P / "contoh/penilaian-contoh.json").read_text(encoding="utf-8"))
     penilaian = {sid: {**s, "pertemuan": {int(p): v for p, v in s["pertemuan"].items()}} for sid, s in data["siswa"].items()}
@@ -443,6 +521,23 @@ def cek():
         assert r["proyek"] == "Pemantau Suhu Kelas" and r["kekuatan"] == "Menonjol pada praktik."  # kosong -> draft
         assert pen["SMP-017"]["kekuatan"] == "Teliti merakit." and pen["SMP-017"]["panggilan"] == ""
         assert pen["SMP-099"]["pindah"]
+
+        # impor ke backend portofolio: data resmi saja, slug unik lintas kelompok, tanpa kolom sensitif
+        items = payload_impor(pen, {"SMP-022": "smp-07", "SMP-017": "smp-07", "SMP-099": "smp-07"})
+        assert [i["id_siswa"] for i in items] == ["SMP-022", "SMP-017"]  # yang pindah dilewati
+        assert {i["slug"] for i in items} == {"rafif", "qassim"}
+        assert items[0]["poin"] == 39 and items[0]["peringkat"] == 2 and items[0]["jenjang"] == "smp"
+        assert items[0]["sertifikat_nomor"] == "EKC-2026-S1-SMP-022" and items[0]["judul_proyek"] == "Pemantau Suhu Kelas"
+        assert items[0]["device_id"] == "smp-07" and items[0]["catatan_pelatih"] == "Menonjol pada praktik."
+        assert items[1]["peringkat"] is None  # peringkat 9 -> tidak tampil
+        assert set(items[0]) == {"id_siswa", "jenjang", "device_id", "slug", "nama_lengkap", "poin", "lencana",
+                                 "peringkat", "judul_proyek", "catatan_pelatih", "sertifikat_nomor"}
+        assert any(c["level"] == "hard" for p in items[0]["lencana"] if p["p"] == 11 for c in p["challenge"])
+        teks = json.dumps(items, ensure_ascii=False)
+        for rahasia in ("0811111", "Bapak Rahasia", "Kurang fokus", "internal gradebook", "rahasia internal", "Latihan di rumah"):
+            assert rahasia not in teks, rahasia
+        dua = payload_impor({**pen, "SMP-050": {**pen["SMP-022"], "id": "SMP-050"}}, {"SMP-022": "smp-07", "SMP-050": "smp-08"})
+        assert sorted(i["slug"] for i in dua) == ["rafif", "rafif-ahnaf"]  # unik lintas kelompok
 
         # foto mentah dari HP di Google Drive: diunduh sebagai zip (folder "Foto Portofolio/<ID Siswa>/...")
         # -> dikecilkan, arah diperbaiki, EXIF/GPS dibuang, nama file dirapikan, keterangan dari nama file
@@ -554,6 +649,14 @@ if __name__ == "__main__":
         f = P / "BUAT_FOLDER_FOTO.gs"
         f.write_text(skrip_folder_drive(a[1], penilaian), encoding="utf-8")
         print(f"ditulis: {f}  -> salin ke script.google.com, Run fungsi jalankan")
+    elif a[:1] == ["impor"] and len(a) > 1:
+        import os
+        import getpass
+        api = a[a.index("--api") + 1] if "--api" in a else API_PORTOFOLIO
+        berkas = [x for i, x in enumerate(a[1:], 1) if not x.startswith("--") and a[i - 1] != "--api"]
+        email = os.environ.get("PORTOFOLIO_ADMIN_EMAIL") or input("Email admin: ")
+        sandi = os.environ.get("PORTOFOLIO_ADMIN_PASSWORD") or getpass.getpass("Password admin: ")
+        impor(berkas, api, email, sandi)
     elif a == ["contoh"]:
         bangun_contoh()
     elif a == ["cek"]:
