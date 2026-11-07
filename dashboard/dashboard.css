@@ -1,0 +1,44 @@
+/* Dashboard portofolio. Warna & font dari ../profil/profil.css. */
+.dasbor { max-width: 44rem; padding-bottom: 3rem; }
+.dasbor h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); font-weight: 800; margin-bottom: 1rem; }
+.dasbor h2 { font-size: 1.5rem; font-weight: 800; margin: 1.25rem 0 .75rem; }
+.kartu { background: var(--putih); border: 1px solid var(--garis); border-radius: 14px; padding: 1.25rem; display: grid; gap: 1rem; margin-bottom: 1.25rem; }
+.kartu h3 { margin: 0; }
+.kartu p { margin: 0; }
+label { display: grid; gap: .3rem; font-weight: 700; font-size: .95rem; }
+input, textarea, select {
+  font: inherit; font-weight: 400; color: var(--tinta); background: var(--kertas);
+  border: 1px solid #c9b99f; border-radius: 10px; padding: .65rem .8rem; min-height: 44px; width: 100%;
+}
+textarea { min-height: 6rem; resize: vertical; }
+input:focus, textarea:focus, select:focus { outline: 3px solid var(--biru-tua); outline-offset: 1px; border-color: var(--biru-tua); }
+.hitung { font-size: .8rem; color: var(--tinta-lemah); font-weight: 600; justify-self: end; }
+.hitung.lebih { color: #b42318; font-weight: 800; }
+.tombol { min-height: 44px; cursor: pointer; font: inherit; font-weight: 800; }
+.tombol:disabled { opacity: .6; cursor: progress; }
+.tab { display: flex; gap: .5rem; margin-bottom: .75rem; }
+.tab button { flex: 1; min-height: 44px; font: inherit; font-weight: 800; border: 1px solid var(--garis); background: transparent; border-radius: 10px; cursor: pointer; color: var(--tinta); }
+.tab button[aria-selected="true"] { background: var(--tinta); color: var(--putih); border-color: var(--tinta); }
+.pesan { min-height: 1.5rem; margin: .25rem 0; font-weight: 700; }
+.pesan.salah { color: #b42318; }
+.pesan.ok { color: var(--hijau-tua); }
+.kepala-layar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.kepala-layar h1 { margin: 0; }
+.info-resmi { color: var(--tinta-lemah); margin: .5rem 0 1.25rem; }
+.foto-baris { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.foto-pratinjau { width: 6.5rem; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; border: 1px solid var(--garis); background: var(--kertas); }
+.aksi { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.saring { display: grid; grid-template-columns: 9rem 1fr; gap: .75rem; margin-bottom: .5rem; }
+.daftar-siswa { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.daftar-siswa button {
+  width: 100%; text-align: left; font: inherit; background: var(--putih); border: 1px solid var(--garis);
+  border-radius: 10px; padding: .7rem .9rem; cursor: pointer; color: var(--tinta); min-height: 44px;
+}
+.daftar-siswa button:hover { border-color: var(--tinta); }
+.daftar-siswa small { color: var(--tinta-lemah); font-weight: 700; }
+.reset { margin-top: 1.5rem; }
+.kode-baru { font: 800 2.2rem/1 var(--judul); letter-spacing: .15em; color: var(--oranye-tua); }
+.kode-baru small { display: block; font: 600 .9rem var(--teks); letter-spacing: 0; color: var(--tinta-lemah); margin-top: .5rem; }
+.kelompok-isian { border: 0; padding: 0; margin: 0; display: grid; gap: 1rem; }
+.kelompok-isian legend { font: 800 1.15rem var(--judul); margin-bottom: .25rem; padding: 0; }
+@media (max-width: 30rem) { .saring { grid-template-columns: 1fr; } }

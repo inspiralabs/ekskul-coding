@@ -52,3 +52,42 @@ alter default privileges in schema ekskul_coding_asy_syahid
   grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema ekskul_coding_asy_syahid
   grant all on sequences to anon, authenticated, service_role;
+
+-- ============================================================
+-- PORTOFOLIO SISWA (ditambahkan Nov 2026). Jalankan blok ini SEKALI di SQL Editor.
+-- Satu baris per siswa. Bagian milik siswa diisi lewat dashboard; data resmi lewat
+-- `py tools/portofolio.py impor`. Kode akses disimpan sebagai hash, bukan aslinya.
+-- Otorisasi dicek di Express (backend/portofolio.js), sama seperti tabel di atas.
+-- ============================================================
+create table if not exists ekskul_coding_asy_syahid.portofolio_siswa (
+  id_siswa         text primary key,                 -- mis. 'SMA-004' (ID di spreadsheet penilaian)
+  jenjang          text not null check (jenjang in ('smp', 'sma')),
+  slug             text unique not null,             -- alamat: ekskulcoding.inspiralabs.id/profil/?s=<slug>
+  device_id        text,                             -- kelompok, dari tools/kelompok.json
+  nama_lengkap     text not null,
+  kelas            text not null default '',
+  panggilan        text not null default '',
+  tentang          text not null default '',
+  cita_cita        text not null default '',
+  cerita_tersulit  text not null default '',
+  cerita_terseru   text not null default '',
+  cerita_rencana   text not null default '',
+  judul_proyek     text not null default '',
+  catatan_pelatih  text not null default '',
+  link_karya       jsonb not null default '[]',
+  lencana          jsonb not null default '[]',      -- per pertemuan: judul, tanggal, challenge yang lulus
+  poin             integer,
+  peringkat        integer,                          -- hanya diisi kalau 3 besar
+  foto_path        text,                             -- path di bucket Storage portofolio-foto
+  sertifikat_nomor text,
+  kode_hash        text,
+  kode_versi       integer not null default 1,       -- naik saat kode direset -> sesi lama tidak berlaku
+  updated_at       timestamptz not null default now(),
+  updated_by       text
+);
+
+alter table ekskul_coding_asy_syahid.portofolio_siswa disable row level security;
+-- Berisi data anak + hash kode akses: HANYA service_role (backend). REVOKE eksplisit wajib karena
+-- "alter default privileges" di atas otomatis memberi anon/authenticated akses ke tabel baru di skema ini.
+revoke all on ekskul_coding_asy_syahid.portofolio_siswa from anon, authenticated;
+grant all on ekskul_coding_asy_syahid.portofolio_siswa to service_role;
