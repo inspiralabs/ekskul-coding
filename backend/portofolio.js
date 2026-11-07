@@ -7,7 +7,7 @@ const express = require("express");
 const crypto = require("crypto");
 const {
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
-  saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
+  saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg,
 } = require("./portofolio-inti");
 
 function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
@@ -114,6 +114,34 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
     const kode = buatKode();
     await store.ubah(req.siswa.id_siswa, { kode_hash: hashRahasia(kode), kode_versi: (req.siswa.kode_versi || 1) + 1, updated_by: req.akun.email });
     res.json({ ok: true, kode });
+  }));
+
+  // ---------------------------------------------------------------- admin: impor dari spreadsheet (tools/portofolio.py impor)
+  // Semua item divalidasi dulu; kalau ada satu yang salah, tidak ada yang ditulis.
+  r.post("/admin/impor", butuh("admin"), aman(async (req, res) => {
+    const daftar = req.body?.siswa;
+    if (!Array.isArray(daftar)) return gagal(res, 400, "siswa harus berupa daftar");
+    for (const it of daftar) {
+      if (!/^SM[PA]-\d{3}$/.test(it?.id_siswa || "")) return gagal(res, 400, `id_siswa tidak valid: ${it?.id_siswa}`);
+      if (!["smp", "sma"].includes(it.jenjang)) return gagal(res, 400, `${it.id_siswa}: jenjang harus smp/sma`);
+      if (!String(it.nama_lengkap || "").trim() || !String(it.slug || "").trim()) return gagal(res, 400, `${it.id_siswa}: nama_lengkap/slug kosong`);
+    }
+    const dibuat = [];
+    let diperbarui = 0;
+    for (const it of daftar) {
+      const lama = await store.ambil(it.id_siswa);
+      if (lama) {
+        await store.ubah(it.id_siswa, { ...gabungImpor(lama, it), updated_by: "impor" });
+        diperbarui++;
+        continue;
+      }
+      let slug = it.slug;
+      for (let i = 2; await store.slugDipakai(slug); i++) slug = `${it.slug}-${i}`;
+      const kode = buatKode();
+      const b = await store.tambah({ ...gabungImpor(null, it), slug, kode_hash: hashRahasia(kode), kode_versi: 1, updated_by: "impor" });
+      dibuat.push({ id_siswa: b.id_siswa, nama_lengkap: b.nama_lengkap, jenjang: b.jenjang, device_id: b.device_id, slug, kode });
+    }
+    res.json({ ok: true, dibuat, diperbarui });
   }));
 
   app.use("/api/portofolio", r);

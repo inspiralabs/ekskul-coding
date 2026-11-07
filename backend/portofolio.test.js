@@ -195,3 +195,29 @@ test("admin: daftar, edit kelas, reset kode membatalkan token lama", async (t) =
   assert.ok((await s.post("/masuk/siswa", { id: "SMA-004", kode })).token);   // kode baru jalan
   assert.equal((await s.postRaw("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).status, 401); // kode lama mati
 });
+
+test("impor: buat baru dengan kode, ulang tidak menimpa koreksi, slug unik", async (t) => {
+  const s = await jalankan(t);
+  const admin = (await s.post("/masuk/staf", { email: "admin@x.id", password: "pw" })).token;
+  const item = (id, slug, extra = {}) => ({ id_siswa: id, jenjang: "sma", device_id: "sma-05", slug, nama_lengkap: "Nama " + id,
+    poin: 10, lencana: [], peringkat: null, judul_proyek: "", catatan_pelatih: "Awal", sertifikat_nomor: "EKC-2026-S1-" + id, ...extra });
+  const r1 = await s.post("/admin/impor", { siswa: [item("SMA-010", "budi"), item("SMA-011", "zaidan"), item("SMA-012", "zaidan")] }, admin);
+  // "budi" sudah dipakai SMA-004 -> "budi-2"; dua "zaidan" dalam satu impor -> "zaidan", "zaidan-2"
+  assert.deepEqual(r1.dibuat.map((d) => d.slug), ["budi-2", "zaidan", "zaidan-2"]);
+  assert.ok(r1.dibuat.every((d) => /^[A-Z2-9]{6}$/.test(d.kode)));
+  assert.equal(r1.diperbarui, 0);
+  assert.ok((await s.post("/masuk/siswa", { id: "SMA-010", kode: r1.dibuat[0].kode })).token);
+  await s.post("/staf/siswa/SMA-010", { catatan_pelatih: "Dikoreksi" }, admin);
+  const r2 = await s.post("/admin/impor", { siswa: [item("SMA-010", "budi", { poin: 55 })] }, admin);
+  assert.deepEqual([r2.dibuat.length, r2.diperbarui], [0, 1]);
+  const p = (await s.get("/profil/budi-2")).profil;
+  assert.deepEqual([p.poin, p.catatan_pelatih], [55, "Dikoreksi"]);
+  assert.ok((await s.post("/masuk/siswa", { id: "SMA-010", kode: r1.dibuat[0].kode })).token); // impor ulang tidak mengganti kode
+  assert.equal((await s.postRaw("/admin/impor", { siswa: [item("salah", "x")] }, admin)).status, 400);
+  assert.equal((await s.postRaw("/admin/impor", { siswa: [item("SMA-013", "y", { jenjang: "sd" })] }, admin)).status, 400);
+  assert.equal((await s.postRaw("/admin/impor", { siswa: [item("SMA-013", "")] }, admin)).status, 400);
+  assert.equal((await s.postRaw("/admin/impor", { siswa: "bukan daftar" }, admin)).status, 400);
+  assert.equal((await s.getRaw("/profil/y")).status, 404); // impor yang ditolak tidak menulis apa pun
+  const siswa = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
+  assert.equal((await s.postRaw("/admin/impor", { siswa: [] }, siswa)).status, 403);
+});
