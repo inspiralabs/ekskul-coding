@@ -112,10 +112,10 @@ const siswaAwal = () => [
   { id_siswa: "SMP-022", jenjang: "smp", slug: "rafif", nama_lengkap: "Rafif", kode_hash: hashRahasia("R4F1F2"), kode_versi: 1 },
 ];
 
-async function jalankan(t, baris = siswaAwal(), env = ENV) {
+async function jalankan(t, baris = siswaAwal(), env = ENV, bungkus = (s) => s) {
   const app = express();
   app.use(express.json({ limit: "1mb" }));
-  const store = buatStoreMemori(baris);
+  const store = bungkus(buatStoreMemori(baris));
   pasangPortofolio(app, { store, env });
   const server = await new Promise((ok) => { const s = app.listen(0, () => ok(s)); });
   t.after(() => server.close());
@@ -243,4 +243,28 @@ test("foto: tolak non-JPEG, ganti foto menghapus yang lama, admin bisa unggah", 
   const c = await (await kirim("/staf/siswa/SMP-022/foto", Buffer.from([0xff, 0xd8, 0xff, 3]), admin)).json();
   assert.match(c.foto_url, /^memori:\/\/SMP-022\//);
   assert.equal((await kirim("/staf/siswa/SMP-022/foto", Buffer.from([0xff, 0xd8, 0xff]), tSiswa)).status, 403);
+});
+
+test("impor gagal di tengah tetap mengembalikan kode siswa yang sudah dibuat", async (t) => {
+  let tambahKe = 0;
+  const s = await jalankan(t, siswaAwal(), ENV, (store) => ({
+    ...store,
+    tambah: async (b) => { if (++tambahKe === 2) throw new Error("supabase putus"); return store.tambah(b); },
+  }));
+  const admin = (await s.post("/masuk/staf", { email: "admin@x.id", password: "pw" })).token;
+  const item = (id, slug) => ({ id_siswa: id, jenjang: "sma", device_id: "sma-05", slug, nama_lengkap: "Nama " + id,
+    poin: 0, lencana: [], peringkat: null, judul_proyek: "", catatan_pelatih: "", sertifikat_nomor: "EKC-2026-S1-" + id });
+  const r = await s.postRaw("/admin/impor", { siswa: [item("SMA-020", "satu"), item("SMA-021", "dua"), item("SMA-022", "tiga")] }, admin);
+  assert.equal(r.status, 500);
+  const isi = await r.json();
+  assert.equal(isi.ok, false);
+  assert.deepEqual(isi.dibuat.map((d) => d.id_siswa), ["SMA-020"]);       // kode yang sudah dibuat tidak hilang
+  assert.ok((await s.post("/masuk/siswa", { id: "SMA-020", kode: isi.dibuat[0].kode })).token);
+});
+
+test("token admin berumur pendek (12 jam)", async (t) => {
+  const s = await jalankan(t);
+  const admin = (await s.post("/masuk/staf", { email: "admin@x.id", password: "pw" })).token;
+  const sisa = JSON.parse(Buffer.from(admin.split(".")[0], "base64url").toString()).exp - Date.now();
+  assert.ok(sisa > 11 * 3600 * 1000 && sisa <= 12 * 3600 * 1000, String(sisa));
 });

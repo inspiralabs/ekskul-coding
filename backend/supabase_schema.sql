@@ -87,4 +87,7 @@ create table if not exists ekskul_coding_asy_syahid.portofolio_siswa (
 );
 
 alter table ekskul_coding_asy_syahid.portofolio_siswa disable row level security;
-grant all on ekskul_coding_asy_syahid.portofolio_siswa to anon, authenticated, service_role;
+-- Berisi data anak + hash kode akses: HANYA service_role (backend). REVOKE eksplisit wajib karena
+-- "alter default privileges" di atas otomatis memberi anon/authenticated akses ke tabel baru di skema ini.
+revoke all on ekskul_coding_asy_syahid.portofolio_siswa from anon, authenticated;
+grant all on ekskul_coding_asy_syahid.portofolio_siswa to service_role;

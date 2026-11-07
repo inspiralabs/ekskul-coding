@@ -76,7 +76,8 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
       return gagal(res, 401, "email atau password salah");
     }
     pembatas.berhasil(kunci);
-    res.json({ ok: true, token: buatToken({ peran: "admin", email }, secret) });
+    // 12 jam: login admin yang lupa keluar di komputer sekolah tidak berlaku sebulan.
+    res.json({ ok: true, token: buatToken({ peran: "admin", email }, secret, 12 * 3600) });
   }));
 
   // ---------------------------------------------------------------- siswa: halaman sendiri
@@ -128,18 +129,24 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
     }
     const dibuat = [];
     let diperbarui = 0;
-    for (const it of daftar) {
-      const lama = await store.ambil(it.id_siswa);
-      if (lama) {
-        await store.ubah(it.id_siswa, { ...gabungImpor(lama, it), updated_by: "impor" });
-        diperbarui++;
-        continue;
+    try {
+      for (const it of daftar) {
+        const lama = await store.ambil(it.id_siswa);
+        if (lama) {
+          await store.ubah(it.id_siswa, { ...gabungImpor(lama, it), updated_by: "impor" });
+          diperbarui++;
+          continue;
+        }
+        let slug = it.slug;
+        for (let i = 2; await store.slugDipakai(slug); i++) slug = `${it.slug}-${i}`;
+        const kode = buatKode();
+        const b = await store.tambah({ ...gabungImpor(null, it), slug, kode_hash: hashRahasia(kode), kode_versi: 1, updated_by: "impor" });
+        dibuat.push({ id_siswa: b.id_siswa, nama_lengkap: b.nama_lengkap, jenjang: b.jenjang, device_id: b.device_id, slug, kode });
       }
-      let slug = it.slug;
-      for (let i = 2; await store.slugDipakai(slug); i++) slug = `${it.slug}-${i}`;
-      const kode = buatKode();
-      const b = await store.tambah({ ...gabungImpor(null, it), slug, kode_hash: hashRahasia(kode), kode_versi: 1, updated_by: "impor" });
-      dibuat.push({ id_siswa: b.id_siswa, nama_lengkap: b.nama_lengkap, jenjang: b.jenjang, device_id: b.device_id, slug, kode });
+    } catch (e) {
+      // Tidak ada transaksi: siswa yang sudah dibuat tetap ada. Kodenya hanya ada di balasan ini, jadi tetap dikirim.
+      console.error("[portofolio] impor terhenti", e);
+      return res.status(500).json({ ok: false, error: "impor terhenti di tengah, jalankan ulang", dibuat, diperbarui });
     }
     res.json({ ok: true, dibuat, diperbarui });
   }));

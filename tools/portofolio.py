@@ -419,22 +419,30 @@ def impor(berkas, api, email, sandi):
     items = payload_impor(penilaian)
 
     def kirim(path, isi, token=None):
-        kepala = {"Content-Type": "application/json", **({"Authorization": "Bearer " + token} if token else {})}
+        # User-Agent sendiri: "Python-urllib/..." diblokir Cloudflare (403) di depan api-ekskulcoding.
+        kepala = {"Content-Type": "application/json", "User-Agent": "ekskul-coding-portofolio-impor/1.0",
+                  **({"Authorization": "Bearer " + token} if token else {})}
         req = urllib.request.Request(api.rstrip("/") + "/api/portofolio" + path, json.dumps(isi).encode(), kepala, method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with urllib.request.urlopen(req, timeout=300) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
-            isi = e.read().decode("utf-8", "replace")
+            teks = e.read().decode("utf-8", "replace")
             try:
-                isi = json.loads(isi).get("error", isi)
+                balas = json.loads(teks)
             except ValueError:
-                pass
-            sys.exit(f"Gagal {path}: HTTP {e.code} {isi}")
+                balas = {"error": teks[:200]}
+            balas["ok"] = False
+            balas["error"] = f"HTTP {e.code} {balas.get('error', '')}".strip()
+            return balas
+        except urllib.error.URLError as e:
+            sys.exit(f"Tidak tersambung ke {api}: {e.reason}")
 
-    token = kirim("/masuk/staf", {"email": email, "password": sandi})["token"]
-    hasil = kirim("/admin/impor", {"siswa": items}, token)
-    dibuat = hasil["dibuat"]
+    masuk = kirim("/masuk/staf", {"email": email, "password": sandi})
+    if not masuk.get("ok"):
+        sys.exit(f"Login admin gagal: {masuk['error']}")
+    hasil = kirim("/admin/impor", {"siswa": items}, masuk["token"])
+    dibuat = hasil.get("dibuat", [])  # tetap ada walau impor terhenti di tengah: kode ini tidak bisa diminta ulang
     if dibuat:
         # nama file bertanggal: kode hanya muncul sekali, file impor sebelumnya jangan sampai tertimpa
         out = ROOT / "dist" / f"kode-akses-{datetime.datetime.now():%Y%m%d-%H%M%S}.csv"
@@ -447,6 +455,8 @@ def impor(berkas, api, email, sandi):
         for d in dibuat:
             print(f"  {d['id_siswa']:8} {d['kode']}  {d['nama_lengkap']}")
         print(f"Kode akses disimpan di {out} (cetak, potong per siswa; JANGAN di-commit)")
+    if not hasil.get("ok"):
+        sys.exit(f"Impor gagal: {hasil['error']}" + (f" ({len(dibuat)} kode siswa baru sudah disimpan di atas)" if dibuat else ""))
     print(f"{len(dibuat)} siswa baru, {hasil['diperbarui']} diperbarui")
     return dibuat
 

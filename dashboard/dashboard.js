@@ -1,6 +1,8 @@
 // Dashboard portofolio: login siswa (ID + kode) atau admin (email + password).
 // Token disimpan di localStorage.tokenPortofolio; semua teks dipasang lewat textContent.
-var API_BASE = localStorage.getItem("apiBase") || "https://api-ekskulcoding.inspiralabs.id";
+// localStorage.apiBase hanya berlaku di localhost (coba-coba dengan backend/portofolio-dev.js).
+var API_BASE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && localStorage.getItem("apiBase")) ||
+  "https://api-ekskulcoding.inspiralabs.id";
 var KUNCI_TOKEN = "tokenPortofolio";
 
 // [kolom, label, batas karakter, jenis]. Batas sama dengan backend/portofolio-inti.js.
@@ -73,7 +75,11 @@ async function kecilkanFoto(file) {
   try {
     gambar = await createImageBitmap(file, { imageOrientation: "from-image" });
   } catch (e) {
-    throw new Error("Format foto tidak bisa dibaca. Pilih foto JPG atau PNG.");
+    try {
+      gambar = await createImageBitmap(file);   // browser lama yang belum kenal opsi imageOrientation
+    } catch (e2) {
+      throw new Error("Format foto tidak bisa dibaca. Pilih foto JPG atau PNG.");
+    }
   }
   var skala = Math.min(1, 1600 / Math.max(gambar.width, gambar.height));
   var kanvas = document.createElement("canvas");
@@ -169,7 +175,7 @@ function buatEditor(wadah, siswa, opsi) {
   aksi.append(tombol);
   if (siswa.slug) {
     var lihat = el("a", null, "Lihat halaman publik ↗");
-    lihat.href = "../profil/?s=" + encodeURIComponent(siswa.slug);
+    lihat.href = "/profil/?s=" + encodeURIComponent(siswa.slug);
     lihat.target = "_blank";
     lihat.rel = "noopener";
     aksi.append(lihat);
@@ -180,9 +186,20 @@ function buatEditor(wadah, siswa, opsi) {
 
   form.addEventListener("submit", async function (ev) {
     ev.preventDefault();
+    // Kirim HANYA yang diubah di form ini. Form bisa sudah lama terbuka (admin membuka daftar sebelum siswa
+    // mengisi dari HP); mengirim semua isian akan menimpa tulisan siswa yang lebih baru dengan nilai lama.
     var data = {};
-    (opsi.resmi ? ISIAN_RESMI : []).concat(ISIAN_SISWA).forEach(function (d) { data[d[0]] = form.elements[d[0]].value; });
-    data.link_karya = linkInput.map(function (i) { return i.value.trim(); }).filter(Boolean);
+    (opsi.resmi ? ISIAN_RESMI : []).concat(ISIAN_SISWA).forEach(function (d) {
+      var nilai = form.elements[d[0]].value;
+      if (nilai.trim() !== String(siswa[d[0]] || "").trim()) data[d[0]] = nilai;
+    });
+    var link = linkInput.map(function (i) { return i.value.trim(); }).filter(Boolean);
+    if (JSON.stringify(link) !== JSON.stringify(siswa.link_karya || [])) data.link_karya = link;
+    if (!Object.keys(data).length) {
+      pesanSimpan.className = "pesan";
+      pesanSimpan.textContent = "Tidak ada perubahan.";
+      return;
+    }
     tombol.disabled = true;
     pesanSimpan.className = "pesan";
     pesanSimpan.textContent = "Menyimpan...";
@@ -190,6 +207,14 @@ function buatEditor(wadah, siswa, opsi) {
       var hasil = await api(opsi.simpanKe, { body: data });
       pesanSimpan.className = "pesan ok";
       pesanSimpan.textContent = opsi.resmi ? "Tersimpan ✓ Halaman publik siswa sudah berubah." : "Tersimpan ✓ Halaman publikmu sudah berubah.";
+      // Pembanding & isi form ikut isi terbaru dari server (termasuk tulisan siswa yang masuk setelah form dibuka),
+      // supaya simpanan berikutnya tidak mengirim nilai lama sebagai "perubahan".
+      Object.assign(siswa, hasil.siswa);
+      (opsi.resmi ? ISIAN_RESMI : []).concat(ISIAN_SISWA).forEach(function (d) {
+        form.elements[d[0]].value = siswa[d[0]] || "";
+        form.elements[d[0]].dispatchEvent(new Event("input"));
+      });
+      linkInput.forEach(function (input, i) { input.value = (siswa.link_karya || [])[i] || ""; });
       if (opsi.sesudahSimpan) opsi.sesudahSimpan(hasil.siswa);
     } catch (e) {
       pesanSimpan.className = "pesan salah";
