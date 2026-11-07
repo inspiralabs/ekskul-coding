@@ -1,8 +1,10 @@
 // Profil siswa: /profil/?s=<slug>. Data dari backend; semua teks dipasang lewat textContent
 // (isian siswa tidak bisa menyisipkan HTML).
-// localStorage.apiBase hanya berlaku di localhost (coba-coba dengan backend/portofolio-dev.js).
-var API_BASE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && localStorage.getItem("apiBase")) ||
-  "https://api-ekskulcoding.inspiralabs.id";
+// Dibuka dari localhost = coba-coba dengan backend/portofolio-dev.js (port 3335; bisa diganti lewat
+// localStorage.apiBase). Selain localhost selalu server produksi.
+var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+  ? localStorage.getItem("apiBase") || "http://localhost:3335"
+  : "https://api-ekskulcoding.inspiralabs.id";
 var LEVEL = { easy: "Easy", medium: "Medium", hard: "Hard" };
 var JENJANG = { smp: "SMP", sma: "SMA" };
 // Sama dengan "ringkasan" di portofolio/kurikulum.json.

@@ -1,8 +1,10 @@
 // Dashboard portofolio: login siswa (ID + kode) atau admin (email + password).
 // Token disimpan di localStorage.tokenPortofolio; semua teks dipasang lewat textContent.
-// localStorage.apiBase hanya berlaku di localhost (coba-coba dengan backend/portofolio-dev.js).
-var API_BASE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && localStorage.getItem("apiBase")) ||
-  "https://api-ekskulcoding.inspiralabs.id";
+// Dibuka dari localhost = coba-coba dengan backend/portofolio-dev.js (port 3335; bisa diganti lewat
+// localStorage.apiBase). Selain localhost selalu server produksi.
+var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+  ? localStorage.getItem("apiBase") || "http://localhost:3335"
+  : "https://api-ekskulcoding.inspiralabs.id";
 var KUNCI_TOKEN = "tokenPortofolio";
 
 // ISIAN_SISWA, ISIAN_RESMI, panjang, rapikan, perubahan: dari inti.js (dimuat lebih dulu).

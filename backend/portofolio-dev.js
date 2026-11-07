@@ -2,7 +2,7 @@
 // Pakai untuk mencoba profil/ & dashboard/ di laptop:
 //   node backend/portofolio-dev.js
 //   py -m http.server 8092            (dari root repo)
-//   di console browser: localStorage.apiBase = "http://localhost:3335"
+//   (halaman dari localhost otomatis memakai server ini)
 //   buka http://localhost:8092/dashboard/  dan  http://localhost:8092/profil/?s=siswa-contoh
 const crypto = require("crypto");
 const express = require("express");
