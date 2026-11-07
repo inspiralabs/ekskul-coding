@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dashboard Portofolio · Ekskul Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../profil/profil.css">
+<link rel="stylesheet" href="dashboard.css">
+<!-- Dashboard portofolio: siswa mengisi halamannya sendiri; admin mengelola semua siswa. API: /api/portofolio/* -->
+</head>
+<body>
+<main class="halaman dasbor">
+  <p class="sampul-asal">Ekskul Coding · Portofolio</p>
+
+  <!-- MASUK -->
+  <section id="layarMasuk" aria-labelledby="judulMasuk">
+    <h1 id="judulMasuk">Masuk</h1>
+    <div class="tab" role="tablist" aria-label="Masuk sebagai">
+      <button type="button" role="tab" id="tabSiswa" aria-selected="true" aria-controls="formSiswa">Siswa</button>
+      <button type="button" role="tab" id="tabStaf" aria-selected="false" aria-controls="formStaf">Guru / Admin</button>
+    </div>
+    <form id="formSiswa" class="kartu" role="tabpanel" aria-labelledby="tabSiswa">
+      <label>ID Siswa <input name="id" autocomplete="username" placeholder="mis. SMA-004" required autocapitalize="characters"></label>
+      <label>Kode akses <input name="kode" autocomplete="current-password" placeholder="6 huruf/angka dari tutor" required autocapitalize="characters" maxlength="6"></label>
+      <button class="tombol" type="submit">Masuk</button>
+    </form>
+    <form id="formStaf" class="kartu" role="tabpanel" aria-labelledby="tabStaf" hidden>
+      <label>Email <input name="email" type="email" autocomplete="username" required></label>
+      <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="tombol" type="submit">Masuk</button>
+    </form>
+    <p class="pesan" id="pesanMasuk" role="alert"></p>
+  </section>
+
+  <!-- SISWA -->
+  <section id="layarSiswa" hidden aria-labelledby="judulSiswa">
+    <div class="kepala-layar">
+      <h1 id="judulSiswa">Halamanku</h1>
+      <button type="button" class="tombol tombol-garis" data-keluar>Keluar</button>
+    </div>
+    <p class="info-resmi" id="infoSiswa"></p>
+    <div id="editorSiswa"></div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="layarAdmin" hidden aria-labelledby="judulAdmin">
+    <div class="kepala-layar">
+      <h1 id="judulAdmin">Kelola siswa</h1>
+      <button type="button" class="tombol tombol-garis" data-keluar>Keluar</button>
+    </div>
+    <div id="daftarAdmin">
+      <div class="saring">
+        <label>Jenjang
+          <select id="pilihJenjang"><option value="">Semua</option><option value="smp">SMP</option><option value="sma">SMA</option></select>
+        </label>
+        <label>Cari nama <input id="cariNama" type="search" placeholder="ketik nama..."></label>
+      </div>
+      <p class="pesan" id="pesanDaftar" role="status"></p>
+      <ul class="daftar-siswa" id="daftarSiswa"></ul>
+    </div>
+    <div id="editorAdmin" hidden>
+      <button type="button" class="tombol tombol-garis" id="kembali">← Kembali ke daftar</button>
+      <h2 id="judulEditor"></h2>
+      <div id="editorAdminIsi"></div>
+      <div class="kartu reset">
+        <h3>Kode akses</h3>
+        <p>Siswa lupa atau kehilangan kode? Buat kode baru. Kode lama langsung tidak berlaku.</p>
+        <button type="button" class="tombol tombol-garis" id="tombolReset">Buat kode baru</button>
+        <p class="kode-baru" id="kodeBaru" role="status" hidden></p>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="dashboard.js"></script>
+</body>
+</html>
