@@ -1,4 +1,4 @@
-# SMA — Pertemuan 13: Dashboard Punya Kita + Demo Day
+# SMA — Pertemuan 13: Perbaikan Alat + Ujian Akhir
 
 | Info | Isi |
 |---|---|
