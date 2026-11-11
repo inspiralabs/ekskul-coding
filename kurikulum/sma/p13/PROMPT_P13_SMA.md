@@ -242,10 +242,10 @@ Sudah sampai langkah 5? Panggil tutor untuk dicek.
 
 ### Sebelum Pulang
 
-- **01 Portofolio & sertifikat**: buka menu **Portofolio** di situs, masuk dengan ID Siswa dan kode dari tutor. Sertifikatmu sudah bisa dibuka hari ini.
-- **02 Form pendapat**: ceritakan pendapatmu tentang ekskul ini. Linknya ada di **Materi** → **Pertemuan 13** → **Kritik & Saran**.
+- **01 Portofolio & sertifikat**: buka menu **Portofolio** di situs, masuk dengan ID Siswa dan kode dari tutor. Sertifikatmu sudah bisa dibuka hari ini; transkrip nilai terbit paling lambat **Sabtu, 21 November 2026**.
+- **02 Form evaluasi**: nilai materi, challenge, post-test, dan kakak pengajarmu. Tanpa nama. Linknya ada di **Materi** → **Pertemuan 13** → **Kritik & Saran**. Sudah selesai? Tunjukkan layar **"Jawaban terkirim"** ke Kak Haikal.
 
-> 🗣️ SPEAKER NOTES: Bagikan kertas kode portofolio sebelum slide ini. Form pendapat boleh tanpa nama. Sebelum kelas: pasang link form pendapat di sheet Materi kolom "Link Kritik & Saran" baris Pertemuan 13.
+> 🗣️ SPEAKER NOTES: Bagikan kertas kode portofolio sebelum slide ini. Form evaluasi tidak menanyakan nama. Kak Haikal mencentang daftar hadir untuk tiap siswa yang sudah menunjukkan layar terkirim. Transkrip nilai menyusul setelah nilai ujian direkap. Sebelum kelas: pasang link form evaluasi di sheet Materi kolom "Link Kritik & Saran" baris Pertemuan 13.
 
 ---
 

@@ -1,4 +1,4 @@
-# SMP — Pertemuan 13: Sempurnakan Alat & Showcase Proyek Akhir 🏆
+# SMP — Pertemuan 13: Mengirim Data Suhu ke Dashboard
 
 | Info | Isi |
 |---|---|

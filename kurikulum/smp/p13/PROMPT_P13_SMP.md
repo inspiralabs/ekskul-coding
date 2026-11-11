@@ -13,7 +13,7 @@ Folder Drive tujuan: https://drive.google.com/drive/folders/1cyCZCwob46KBKH6sKKi
 
 ==================== BAGIAN A — GOOGLE SLIDES (kerjakan sekarang) ====================
 
-Judul presentasi: P13 SMP — Sempurnakan Alat & Showcase Proyek Akhir 🏆
+Judul presentasi: P13 SMP — Mengirim Data Suhu ke Dashboard
 
 BRAND SYSTEM — WAJIB KONSISTEN DI SEMUA SLIDE:
 - Warna Maroon: #7A1F2B (background utama/aksen dominan)
@@ -37,7 +37,7 @@ CARA MEMBACA ISI SLIDE (di antara penanda MULAI/SELESAI ISI SLIDE):
 - Layout tiap slide kamu tentukan sendiri sesuai isi (card, tabel, kode, diagram), tetap dalam brand system.
 
 POLA SLIDE (gaya deck P7 SMA InspiraLabs):
-- Slide 1 "LINK & QR CODE": label kecil "LINK & QR CODE", judul "Akses Materi, Challenge, & Post Test", paragraf penjelasan, link Linktree besar, QR code dari link itu di sisi kanan. Background maroon, lingkaran dekoratif semi-transparan.
+- Slide 1 "LINK & QR CODE": label kecil "LINK & QR CODE", judul "Akses Materi, Challenge, & Post Test", paragraf penjelasan, link besar PERSIS seperti yang tertulis di isi slide (Linktree atau alamat situs ekskul), QR code dari link itu di sisi kanan. Background maroon, lingkaran dekoratif semi-transparan.
 - Slide 2 "COVER": cover pertemuan. Label kecil "P13 SMP", judul materi besar, tagline satu kalimat di bawahnya. Nuansa cover (maroon, lingkaran dekoratif semi-transparan).
 - Slide 3 "PERTANYAAN PEMANTIK": pertanyaan besar di tengah sebagai judul, satu kalimat konteks lebih kecil, lalu ajakan "Penasaran jawabannya? Yuk kita bongkar." Tema terang, layout lega. Ini pembuka materi untuk siswa, BUKAN konten media sosial.
 - Slide "Apa yang kita capai hari ini?": card bernomor 01, 02, 03 (satu card per topik).
@@ -71,25 +71,34 @@ GAMBAR RANGKAIAN (bagian berlabel "wiring" di isi slide):
 
 ---------- MULAI ISI SLIDE ----------
 
-# P13 SMP — Sempurnakan Alat & Showcase Proyek Akhir
+# P13 SMP — Mengirim Data Suhu ke Dashboard
 
 <!-- File ini khusus untuk PPT. 1 blok di antara garis --- = 1 slide, urutan PERSIS seperti di file.
      Footer tiap slide: "InspiraLabs • Ekskul Coding • Sekolah Qur'an Asy Syahid P13 SMP | nomor slide".
      Baris "> 🗣️ SPEAKER NOTES" masuk ke speaker notes, JANGAN tampil di slide.
-     Blok wiring = perintah gambar diagram rangkaian (aturan di prompt/GENERATE-PPT.md).
-     Jawaban challenge & post-test hanya ada di Materi Ajar.
-     Siswa SMP (12–15 tahun): teks slide singkat, satu ide per slide, nuansa main game (level, poin). -->
+     Siswa SMP (12–15 tahun), awam teknologi: teks slide singkat, satu ide per slide, kalimat sehari-hari.
+
+     KHUSUS P13 SMP (pertemuan penutup), berbeda dari pola deck biasanya:
+     - Deck ini DITUNTUN: satu slide = satu langkah yang dikerjakan semua siswa bersama-sama. Jangan menggabung
+       dua langkah dalam satu slide, dan jangan menambah slide.
+     - TIDAK ADA slide Pertanyaan Pemantik, Cara Dapat Poin, Tanya Jawab terpisah, atau Challenge terpisah.
+     - Slide 1 memakai alamat situs ekskul (bukan Linktree). QR code dibuat dari alamat itu.
+     - Slide berjudul "Langkah X: ..." diberi label kecil "LANGKAH X DARI 5" di atas judul, dan nomor langkahnya besar.
+     - Baris "Pos poin: ..." ditampilkan sebagai badge: Easy hijau, Medium kuning, Hard merah, dengan angka poinnya.
+     - Slide "UJIAN AKHIR" memakai gaya slide Evaluasi Mandiri, tetapi judul dan isinya PERSIS seperti di file ini.
+     - Baris "[RUANG GAMBAR: ...]" = sisakan kotak kosong besar bergaris putus-putus dengan tulisan itu di tengahnya.
+       Kotak itu akan diisi tutor dengan foto asli. JANGAN diisi gambar buatan AI, ikon, atau ilustrasi. -->
 
 ---
 
 ### LINK & QR CODE
-**Akses Materi, Challenge, & Post Test**
+**Akses Materi dan Ujian Akhir**
 
-Pindai QR code di samping menggunakan smartphone Anda, atau kunjungi tautan di bawah ini untuk mengakses seluruh materi belajar, tantangan praktis, dan evaluasi sesi.
+Pindai QR code di samping dengan HP, atau buka alamat di bawah ini. Materi, ujian akhir, dan portofolio ada di sana.
 
-**https://linktr.ee/InspiraLabs_SMP**
+**https://ekskulcoding.inspiralabs.id**
 
-> 🗣️ SPEAKER NOTES: Buat QR code dari link Linktree di atas dan taruh di sisi kanan slide.
+> 🗣️ SPEAKER NOTES: Buat QR code dari alamat situs di atas dan taruh di sisi kanan slide. Linktree tidak dipakai lagi. (1 menit)
 
 ---
 
@@ -97,252 +106,218 @@ Pindai QR code di samping menggunakan smartphone Anda, atau kunjungi tautan di b
 
 **P13 SMP**
 
-# Sempurnakan Alat & Showcase Proyek Akhir
+# Mengirim Data Suhu ke Dashboard
 
-Pasang foto kelompokmu, beri alatmu rumah, lalu pamerkan karyamu.
+Pertemuan terakhir: angka suhu dari alatmu tampil di internet.
 
-> 🗣️ SPEAKER NOTES: Slide pembuka materi. Bacakan judul dan tagline, lalu lanjut ke pertanyaan pemantik.
-
----
-
-### PERTANYAAN PEMANTIK
-
-# Alat kita sudah jalan di meja. Kenapa engineer sungguhan tetap menguji ulang setelah alatnya dimasukkan ke kotak?
-
-Banyak alat yang lulus uji di meja, lalu gagal setelah dirapikan atau dipindahkan.
-
-Penasaran jawabannya? Yuk kita bongkar.
-
-> 🗣️ SPEAKER NOTES: Tampung 2–3 tebakan siswa (+2 per penebak) tanpa langsung dijawab. Jawabannya dibahas di Topik 1 (slide Tips Engineer).
+> 🗣️ SPEAKER NOTES: Slide pembuka. Sampaikan bahwa ini pertemuan terakhir Ekskul Coding semester ini. (1 menit)
 
 ---
 
-### Apa yang kita capai hari ini?
+### Pertemuan Lalu: Sensor Sudah Membaca Suhu
 
-- **01 Sempurnakan Alat**: Foto kelompok di dashboard, alat masuk ke "rumahnya".
-- **02 Showcase & Serah Folder**: Pamerkan alat, serahkan website ke tutor.
+[RUANG GAMBAR: foto rakitan ESP32 dan DHT22, serta tulisan suhu di Serial Monitor]
 
----
+- Sensor **DHT22** sudah bisa mengukur suhu dan kelembapan.
+- Angkanya baru terlihat di **laptop kita sendiri**.
 
-### Peran di Kelompok
+**Pertanyaan pembuka:** bagaimana caranya supaya angka itu bisa dilihat dari HP siapa saja?
 
-| Peran | Tugas |
-|---|---|
-| **Fotografer** | Foto kelompok & kecilkan ukurannya |
-| **Perakit** | Memasukkan alat ke rumahnya |
-| **Desainer** | Menghias rumah alat & label |
-| **Presenter** | Memimpin latihan presentasi |
-
-Saat showcase, **semua anggota** bicara minimal 1 kalimat. Kerja sendiri? Pegang semua peran.
-
-> 🗣️ SPEAKER NOTES: Kelompok 2 orang: tiap orang pegang 2 peran. Peserta individu presentasi sendiri; boleh minta teman sebelah membantu memegang alat saat demo.
+> 🗣️ SPEAKER NOTES: Tampung 2 sampai 3 jawaban tanpa dibenarkan dulu; jawabannya ada di slide berikut. Slide ini mengandaikan rakitan DHT22 dari pertemuan lalu masih terpasang. Kalau rakitan sudah dilepas, tuntun dulu tiga kabelnya SATU PER SATU, tunggu semua selesai sebelum kabel berikutnya: (1) kabel merah dari kaki "+" sensor ke pin 3V3, (2) kabel kuning dari kaki "out" ke pin D4, (3) kabel hitam dari kaki "−" ke pin GND. (1 menit, atau 8 menit kalau merakit ulang)
 
 ---
 
-### Cara Dapat Poin Hari Ini
+### Perjalanan Data Suhu
 
-| Kegiatan | Poin |
-|---|---|
-| Bertanya / menjawab saat **Tanya Jawab** & showcase | **+2** |
-| Challenge 🟢 **Easy** | **+5** |
-| Challenge 🟡 **Medium** | **+10** |
-| Challenge 🔴 **Hard** | **+15** |
-
-Di akhir kelas: **Post-Test** di Google Form, dikerjakan sendiri-sendiri.
-
-> 🗣️ SPEAKER NOTES: Hari ini penonton showcase yang bertanya juga dapat +2. Poin challenge untuk setiap anggota kelompok yang ikut mengerjakan. Tidak ada PR.
-
----
-
-### Hari Ini Kalian Jadi Engineer!
-
-| Pertemuan | Yang sudah kalian kuasai |
-|---|---|
-| P9 | ESP32, breadboard, LED |
-| P10 | Pasang Arduino IDE, upload Blink |
-| P11 | Sensor DHT22, grafik suhu |
-| P12 | Firmware, dashboard, warna |
-
-Agenda hari ini: **sempurnakan** → **pamerkan** → **serahkan**.
-
-> 🗣️ SPEAKER NOTES: Ajak siswa mengingat momen paling seru tiap pertemuan (LED pertama berkedip, gunung kelembapan, angka 200 pertama). 5 minggu lalu mereka belum pernah pegang ESP32; hari ini alatnya mengirim suhu ke internet.
-
----
-
-### Kustom 3: Foto Kelompok
-
-1. Foto bersama pakai HP atau kamera laptop.
-2. Kecilkan: **Paint** → **Resize** → lebar **800 piksel** → Save as **JPEG**.
-3. Beri nama **persis**: `foto-kelompok.jpg`.
-4. Simpan di folder `smp-XX`, sebelah `index.html` → refresh browser.
-
-> 🗣️ SPEAKER NOTES: Kamera laptop: buka aplikasi Camera (Windows) / Photo Booth (Mac). Foto dari HP: pindahkan lewat kabel, Google Drive, atau WhatsApp Web. Kesalahan paling sering: Foto-Kelompok.JPG (huruf besar), "foto kelompok.jpg" (spasi), foto-kelompok.jpeg, foto-kelompok.jpg.jpg (akhiran tersembunyi di Windows: nyalakan View → File name extensions), atau foto masih di Downloads. Siswa yang tidak mau wajahnya tampil boleh memotret alatnya.
-
----
-
-### Rumah untuk Alat
-
-Alat sungguhan (router, CCTV) selalu punya **casing**. Kardus kecil dari tutor sudah cukup!
-
-- **DHT22** di dekat lubang, ±5 cm dari ESP32.
-- Ada **lubang** untuk kabel USB.
-- **Tidak** ada logam, aluminium foil, atau air di dalam.
-- **Label**: nama alat + Device ID.
-
-```wiring
-Judul: Tata letak di dalam rumah alat (tampak atas)
-Komponen: kotak kardus, ESP32 DevKit V1 di breadboard, modul DHT22 3-pin, kabel USB ke power bank
-Koneksi:
-- DHT22 "+" → ESP32 3V3 (kabel merah)
-- DHT22 "out" → ESP32 D4 (kabel kuning)
-- DHT22 "−" → ESP32 GND (kabel hitam)
-- port USB ESP32 → lubang di dinding kotak → power bank (kabel USB)
-Sorot: DHT22 di dekat lubang ventilasi, ±5 cm dari ESP32 ; lubang USB ; label "smp-XX" di tutup kotak
+```
+Sensor DHT22  →  ESP32  →  WiFi  →  Server  →  Dashboard
+ (pengukur)     (kurir)   (jalan)   (gudang)    (papan)
 ```
 
-> 🗣️ SPEAKER NOTES: Casing melindungi kabel dari lepas dan tersenggol, dan mencegah korsleting (listrik "ambil jalan pintas" lewat logam atau air). Sensor harus kena udara ruangan, bukan udara di dalam kotak. ESP32 hangat saat WiFi aktif, jadi sensor yang terlalu dekat membaca suhu lebih tinggi. Kotak sebaiknya bisa dibuka lagi untuk perbaikan.
+- Sensor mengukur suhu, lalu memberi tahu ESP32.
+- ESP32 membawa angkanya lewat WiFi, seperti kurir mengantar paket.
+- Server menyimpan angkanya, seperti gudang.
+- Dashboard menampilkan angka terbaru dari gudang, seperti papan pengumuman.
+
+> 🗣️ SPEAKER NOTES: Tampilkan sebagai SATU diagram alur dengan lima kotak dan panah. Ceritakan pelan-pelan, satu kotak satu kalimat. Hindari kata "request", "HTTP", atau "protokol". ESP32 mengirim angka baru tiap 4 detik. (4 menit)
 
 ---
 
-### Praktek: Masukkan ke Rumah Alat
+### Tugas Setiap Bagian
 
-1. **Cabut USB**. Tandai lubang dengan spidol. **Tutor** yang memotong.
-2. Tempel breadboard + ESP32 di dasar kotak (double tape).
-3. DHT22 di dekat lubang, jauh dari ESP32.
-4. Tempel label nama alat + Device ID.
-5. Colok **power bank** → data masih masuk dashboard?
-
-> 🗣️ SPEAKER NOTES: Cutter hanya dipegang tutor. Gunting boleh dipakai siswa. Tidak pakai lem tembak (panas) di dekat board. Fungsi dulu (sensor, lubang USB, label), hias belakangan kalau sempat. Semua pemindahan kabel dilakukan dengan USB dicabut; kabel out tetap di D4.
-
----
-
-### Tips Engineer: Uji Ulang Setelah Dirapikan
-
-| Gejala | Coba ini |
+| Bagian | Tugasnya |
 |---|---|
-| Dashboard tidak update | Buka kotak, colok laptop, baca Serial Monitor |
-| `Gagal baca sensor` kadang-kadang | Kabel tertekan tutup: rapikan, tekan sampai mentok |
-| Suhu naik 1–3°C | Jauhkan sensor dari ESP32 |
+| **Sensor DHT22** | Mengukur suhu dan kelembapan |
+| **ESP32** | Mengirim angkanya lewat WiFi |
+| **Server** | Menyimpan angka yang dikirim |
+| **Dashboard** | Menampilkan angka terbaru |
 
-> 🗣️ SPEAKER NOTES: Slide ini menjawab pertanyaan pemantik: alat yang sudah jalan pun bisa rusak saat dirapikan, makanya selalu uji ulang. Ingatkan kembali tebakan siswa tadi. Lainnya: ESP32 sering restart → kabel USB tertekuk di lubang sempit / power bank lemah → perlebar lubang, ganti power bank.
+**Tanya Jawab (+2):** kalau WiFi mati, data berhenti di bagian mana?
 
----
-
-### Tanya Jawab (+2)
-
-**Kenapa sensor suhu tidak boleh berdempetan dengan ESP32 di dalam kotak tertutup?**
-
-> 🗣️ SPEAKER NOTES: Topik 1 — Sempurnakan Alat. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab (+2 per siswa) sebelum lanjut ke challenge. Jawaban: ESP32 hangat saat WiFi aktif, jadi sensor yang menempel membaca suhu lebih tinggi dari suhu ruangan.
+> 🗣️ SPEAKER NOTES: Tampilkan sebagai empat kartu. Minta 2 sampai 3 siswa menjawab, +2 per siswa. Jawaban: berhenti di ESP32, karena kurirnya tidak punya jalan. Dashboard tetap menampilkan angka terakhir yang sudah tersimpan di server. (3 menit)
 
 ---
 
-### Challenge 🟢 Easy — "Siap Tampil" (+5)
+### Langkah 1: Mengisi Nama dan Password WiFi
 
-**TOPIK 1 DARI 2 — CHALLENGE 🟢**
+```cpp
+const char* WIFI_SSID     = "ISI_DI_SINI";   // nama WiFi
+const char* WIFI_PASSWORD = "ISI_DI_SINI";   // password WiFi
+```
 
-Wajib sebelum showcase:
-- [ ] Alat di dalam rumahnya, ada label Device ID
-- [ ] Menyala pakai **power bank**
-- [ ] Dashboard berubah saat sensor ditiup
-- [ ] Kotak diangkat, tidak ada kabel lepas
+1. Buka folder kelompok `smp-XX` → `firmware` → `smp_room_monitor`.
+2. Klik dua kali file `smp_room_monitor.ino`.
+3. Ganti kedua tulisan `ISI_DI_SINI` dengan nama dan password WiFi di papan tulis.
+4. Simpan dengan **Ctrl+S**.
 
----
+Tanda kutip `" "` jangan sampai terhapus.
 
-### Challenge 🔴 Hard — "Uji Goyang" (+15)
-
-**TOPIK 1 DARI 2 — CHALLENGE 🔴**
-
-1. Tutup kotak, nyalakan dengan power bank.
-2. Goyangkan **pelan** 10 detik (atau bawa keliling kelas).
-3. Data di dashboard harus **tetap masuk**.
-4. Gagal? Cari kabel yang goyang, perbaiki, ulangi.
-
-> 🗣️ SPEAKER NOTES: Challenge ini untuk kelompok yang sudah lulus Siap Tampil. Goyang pelan, jangan dibanting. Minta siswa menyebut kabel mana yang jadi masalah.
+> 🗣️ SPEAKER NOTES: Tulis nama dan password WiFi besar-besar di papan tulis sebelum slide ini. Peragakan di proyektor, lalu berkeliling. Kesalahan paling sering: tanda kutip terhapus, atau huruf besar dan kecil tertukar. Baris lain di kode tidak perlu disentuh. Tunggu semua kelompok selesai sebelum lanjut. (6 menit)
 
 ---
 
-### Format Presentasi: 3 Kalimat Sakti
+### Langkah 2: Mengunggah Program ke ESP32
 
-1. "Alat kami bernama **___**, gunanya untuk **___**."
-2. "Bagian paling seru/susah adalah **___**, kami atasi dengan **___**."
-3. "Kalau dikembangkan, kami ingin menambah **___**."
+[RUANG GAMBAR: tangkapan layar Arduino IDE dengan tombol Upload (panah ke kanan) dilingkari]
 
-Lalu **demo**: tiup sensor, semua lihat angkanya naik!
+1. Sambungkan ESP32 ke laptop dengan kabel USB.
+2. Pastikan board **ESP32 Dev Module** dan **port** sudah terpilih.
+3. Klik tombol **Upload** (panah ke kanan).
+4. Tunggu sampai muncul tulisan `Done uploading`.
 
-> 🗣️ SPEAKER NOTES: Kelompok 3–4 orang: bagi kalimat ke anggota berbeda, anggota ke-4 memegang alat saat demo. Kelompok 2 orang: satu orang 2 kalimat.
-
----
-
-### Serahkan Folder Website
-
-- [ ] Halaman utama tetap `index.html`
-- [ ] `foto-kelompok.jpg` **di dalam** folder, sudah dikecilkan
-- [ ] `api.js` tidak diubah
-- [ ] Total ukuran folder ≤ **5 MB** (tanpa video)
-- [ ] Zip bernama Device ID: **`smp-07.zip`**
-
-Setelah tutor upload: **`smp-07.inspiralabs.id`**. Bisa dibuka dari HP siapa saja!
-
-> 🗣️ SPEAKER NOTES: Ganti smp-07 dengan Device ID tiap kelompok. Cek ukuran: klik kanan folder → Properties → Size. Zip: klik kanan folder smp-XX → Send to → Compressed (zipped) folder (Mac: klik kanan → Compress). Kumpulkan di flashdisk/folder Drive selama showcase. Bagikan link website ke grup setelah deploy.
+> 🗣️ SPEAKER NOTES: Unggahan pertama bisa memakan 2 sampai 5 menit; minta siswa menunggu dan tidak mengklik berulang-ulang. Port tidak muncul: ganti kabel USB (harus kabel data) atau pindah lubang USB. (6 menit)
 
 ---
 
-### Tanya Jawab (+2)
+### Langkah 3: Memeriksa Kode Respons 200
 
-**Apa yang terjadi kalau foto kelompok disimpan di Downloads, bukan di dalam folder website?**
+```
+Menghubungkan ke WiFi.....
+Terhubung! IP ESP32 ini: 192.168.1.23
+Suhu: 28.40 C, Kelembapan: 65.20 %
+Kirim data -> kode respons: 200
+```
 
-> 🗣️ SPEAKER NOTES: Topik 2 — Showcase & Serah Folder. Lempar pertanyaan ke kelas, minta 2–3 siswa menjawab (+2 per siswa) sebelum lanjut ke challenge. Jawaban: foto tidak ikut ter-zip, jadi di website online fotonya hilang.
+1. Buka **Serial Monitor** (ikon kaca pembesar di kanan atas).
+2. Pilih angka **115200**.
+3. Cari tulisan `kode respons: 200`.
 
----
+**200** berarti datamu sudah diterima server, seperti centang dua di WhatsApp.
 
-### Challenge 🟡 Medium — "Latihan 3 Kalimat" (+10)
+Pos poin: Easy +5, tunjukkan angka 200 ke Kak Tyo.
 
-**TOPIK 2 DARI 2 — CHALLENGE 🟡**
-
-1. Isi 3 kalimat sakti di kertas.
-2. Latihan presentasi ke kelompok sebelah.
-3. Kelompok sebelah memberi **1 pertanyaan** tentang alat kalian.
-
----
-
-### Showcase: Panggung Engineer!
-
-- Urutan diundi. Tiap Device ID ±**1 menit**.
-- 3 kalimat sakti → **demo tiup sensor** di layar.
-- Penonton: tepuk tangan + 1 pertanyaan (**+2**).
-
-> 🗣️ SPEAKER NOTES: 13 Device ID, ±1 menit per Device ID. Tampilkan dashboard tiap kelompok di proyektor saat mereka presentasi. Pakai timer yang terlihat semua siswa. Kelompok berikutnya bersiap di samping. Penanya dari penonton dapat +2.
+> 🗣️ SPEAKER NOTES: Kalau belum 200, cek berurutan. Titik-titik tidak berhenti: nama atau password WiFi salah (kembali ke Langkah 1). "Gagal baca sensor DHT22": kabel out tidak di D4, atau kabel + dan − tertukar. Kode respons -1: internet WiFi bermasalah. Titik-titik tidak berhenti padahal password benar: WiFi-nya 5 GHz, pindah ke hotspot 2,4 GHz. (6 menit)
 
 ---
 
-### Refleksi
+### Langkah 4: Membuka Dashboard Kelompok
 
-- Apa yang paling seru selama ekskul IoT ini?
-- Masalah apa yang paling bikin pusing? Bagaimana kamu memperbaikinya?
-- Kalau bisa bikin alat IoT apa saja, kamu mau bikin apa?
+**https://smp-XX.inspiralabs.id**
 
-> 🗣️ SPEAKER NOTES: Minta 3–4 siswa berbagi (+2 per siswa). Pertanyaan ketiga paling penting: catat ide-ide alat IoT mereka, ini bahan untuk semester berikutnya.
+1. Buka Chrome di laptop atau HP.
+2. Ketik alamat di atas. Ganti **XX** dengan nomor kelompokmu, misalnya `smp-07`.
+3. Lihat angka suhu dan kelembapan dari alatmu.
+
+> 🗣️ SPEAKER NOTES: Nomor kelompok sama dengan nama folder kelompok (smp-01 sampai smp-13). Angka di dashboard harus sama dengan angka di Serial Monitor. Dashboard kosong padahal sudah 200: siswa membuka alamat kelompok lain. (6 menit)
 
 ---
 
-### EVALUASI MANDIRI
-**Post-Test: 5 Soal Pilihan Ganda**
+### Langkah 5: Menguji Sensor dengan Hembusan Napas
 
-**linktr.ee/InspiraLabs_SMP**
+[RUANG GAMBAR: foto siswa menghembuskan napas ke arah sensor DHT22]
 
-- **01** Buka tautan Linktree yang telah dibagikan.
-- **02** Temukan dan klik tombol bertuliskan **"Post Test"**.
-- **03** Kerjakan 5 soal pilihan ganda tersebut dengan teliti dan jujur!
+1. Dekatkan sensor DHT22 ke mulut.
+2. Hembuskan napas pelan-pelan selama 5 detik.
+3. Perhatikan angka **kelembapan** di dashboard.
 
-> 🗣️ SPEAKER NOTES: Pastikan tombol "Post Test Pertemuan 13" di Linktree sudah mengarah ke Google Form P13 SMP. Post-test dikerjakan sendiri-sendiri.
+Angkanya naik dalam beberapa detik. Itu tandanya dashboard menampilkan data terbaru dari alatmu.
+
+Pos poin: Medium +10, tunjukkan angka kelembapan yang naik ke Kak Tyo.
+
+> 🗣️ SPEAKER NOTES: Napas kita lembap dan hangat, jadi kelembapan naik lebih cepat daripada suhu. Data dikirim tiap 4 detik, jadi angkanya berubah beberapa detik setelah dihembus, tidak seketika. Sensor cukup dihembus, jangan sampai basah atau tersentuh mulut. (6 menit)
+
+---
+
+### Di Mana Peran Arduino IDE?
+
+```
+Arduino IDE  ──(sekali, saat Upload)──▶  ESP32
+
+Sensor DHT22  →  ESP32  →  WiFi  →  Server  →  Dashboard
+```
+
+- **Arduino IDE** adalah tempat kita menulis perintah untuk ESP32.
+- Perintah itu dikirim ke ESP32 saat kita menekan **Upload**.
+- Setelah itu perintahnya tersimpan di dalam ESP32.
+- Arduino IDE tidak ikut mengantar data ke dashboard.
+
+> 🗣️ SPEAKER NOTES: Tampilkan diagram alur dari slide "Perjalanan Data Suhu", dengan Arduino IDE digambar DI LUAR jalur dan satu panah ke ESP32. Analogi: Arduino IDE seperti menulis surat tugas untuk kurir. Suratnya diberikan sekali, lalu kurir bekerja sendiri. Tanyakan: "Kalau begitu, apakah laptop masih dibutuhkan?" Jawabannya dibuktikan di slide berikut. (4 menit)
+
+---
+
+### Alat Tetap Bekerja Tanpa Laptop
+
+[RUANG GAMBAR: foto ESP32 tersambung ke power bank, dengan dashboard terbuka di HP]
+
+1. Lepaskan kabel USB dari laptop.
+2. Sambungkan kabel USB itu ke **power bank**.
+3. Tunggu sekitar 10 detik.
+4. Buka dashboard di HP. Angkanya tetap berubah.
+
+Pos poin: Hard +15, tunjukkan dashboard yang tetap berjalan ke Kak Tyo.
+
+> 🗣️ SPEAKER NOTES: Ini bukti bahwa program tersimpan di ESP32 dan power bank hanya memberi listrik. Sebagian power bank mati sendiri kalau arus yang ditarik kecil; siapkan adaptor charger HP sebagai cadangan. Kalau power bank terbatas, lakukan bergiliran atau cukup satu kelompok di depan kelas. (4 menit)
+
+---
+
+### Mencoba Sendiri di Rumah
+
+Yang perlu disiapkan:
+
+- ☐ ESP32, sensor DHT22, dan tiga kabel
+- ☐ Kabel USB yang bisa mengirim data, bukan kabel khusus mengecas
+- ☐ Laptop dengan Arduino IDE, board ESP32, dan library DHT
+- ☐ WiFi rumah atau hotspot HP dengan sinyal **2,4 GHz**
+- ☐ Ganti nama dan password WiFi di kode, lalu **Upload** lagi
+
+Tulisan `DEVICE_ID` jangan diganti, supaya datanya tetap masuk ke dashboard kelompokmu.
+
+> 🗣️ SPEAKER NOTES: ESP32 tidak bisa tersambung ke WiFi 5 GHz. Panduan memasang Arduino IDE, board ESP32, dan library DHT ada pada tutor. Kalau alat tidak dibawa pulang, sebutkan komponen yang perlu dibeli sendiri. Pertanyaan yang mungkin muncul: "Kalau tidak pakai breadboard?" Bisa, kaki sensor disambung langsung ke pin ESP32 dengan kabel yang kedua ujungnya berlubang; breadboard hanya tempat mencolok supaya kabel tidak lepas. (4 menit, sisa 8 menit sebagai cadangan)
+
+---
+
+### Mengisi Form Evaluasi
+
+**ekskulcoding.inspiralabs.id** → **Materi** → **SMP** → **Pertemuan 13** → **Kritik & Saran**
+
+- Form ini tanpa nama, jadi jawab dengan jujur.
+- Ada penilaian untuk materi, challenge, post-test, Kak Unggul, dan Kak Tyo.
+- Sudah selesai? Tunjukkan layar **"Jawaban terkirim"** ke Kak Tyo.
+
+> 🗣️ SPEAKER NOTES: Mulai 20 menit sebelum kelas berakhir. Form diisi dulu karena harus selesai di kelas; ujian masih bisa dikumpulkan sampai Senin. Kak Tyo mencentang daftar hadir untuk tiap siswa yang sudah menunjukkan layar terkirim. Sebelum kelas: pasang link form di sheet Materi kolom "Link Kritik & Saran" baris Pertemuan 13.
+
+---
+
+### UJIAN AKHIR
+**10 Soal Pilihan Ganda**
+
+**ekskulcoding.inspiralabs.id** → **Materi** → **SMP** → **Pertemuan 13**
+
+- **01** Klik **Isi Post-Test** di Pertemuan 13.
+- **02** Kerjakan **sendiri**. Boleh membuka catatan.
+- **03** Belum selesai di kelas? Kumpulkan paling lambat **Senin, 16 November 2026 pukul 17.00**.
+
+> 🗣️ SPEAKER NOTES: Ujian akhir menggantikan post-test P13. Soalnya rangkuman P3 sampai P12 ditambah materi hari ini, tidak ada hal baru. Sebelum kelas: pasang link Google Form ujian di sheet Materi kolom "Link Post-Test" baris Pertemuan 13.
 
 ---
 
 ### Terima kasih!
 
-**SELAMAT, KALIAN SUDAH JADI ENGINEER IoT!**
+**TERIMA KASIH SUDAH BELAJAR BERSAMA SATU SEMESTER INI**
 
-Pantau website kalian di **`<device-id>.inspiralabs.id`** setelah dideploy tutor.
+Buka menu **Portofolio** di situs untuk melihat halaman dan sertifikatmu. Masuk dengan ID Siswa dan kode dari tutor. Transkrip nilai terbit paling lambat **Jumat, 20 November 2026**.
+
+> 🗣️ SPEAKER NOTES: Bagikan kertas kode portofolio sebelum slide ini. Sertifikat SMP sudah bisa dibuka hari ini; transkrip nilainya menyusul setelah nilai ujian direkap.
 
 ---------- SELESAI ISI SLIDE ----------
 
@@ -351,7 +326,7 @@ Buat presentasi Google Slides BAGIAN A sekarang. Setelah selesai, tunggu saya me
 
 ==================== BAGIAN B — GOOGLE DOCS MATERI AJAR (kerjakan setelah "LANJUT B") ====================
 
-Judul dokumen: Materi Ajar P13 SMP — Sempurnakan Alat & Showcase Proyek Akhir 🏆
+Judul dokumen: Materi Ajar P13 SMP — Mengirim Data Suhu ke Dashboard
 
 BRAND SYSTEM — WAJIB DIIKUTI KONSISTEN:
 - Warna Maroon: #7A1F2B (untuk heading utama, judul besar)
@@ -379,7 +354,7 @@ STRUKTUR DOKUMEN:
 
 ---------- MULAI ISI MATERI AJAR ----------
 
-# SMP — Pertemuan 13: Sempurnakan Alat & Showcase Proyek Akhir 🏆
+# SMP — Pertemuan 13: Mengirim Data Suhu ke Dashboard
 
 | Info | Isi |
 |---|---|
