@@ -8,7 +8,8 @@ require("dotenv").config();
 const express = require("express");
 const { WebSocketServer } = require("ws");
 const { createClient } = require("@supabase/supabase-js");
-const { pasangPortofolio, buatStoreSupabase } = require("./portofolio");
+const { pasangPortofolio, buatStoreSupabase, buatTandaSertifikat } = require("./portofolio");
+const { buatSumberNilai } = require("./portofolio-nilai");
 
 // db.schema: tabel readings & fan_control ada di skema "ekskul_coding_asy_syahid",
 // bukan "public" -- lihat backend/supabase_schema.sql. Skema ini juga harus
@@ -33,6 +34,10 @@ app.use((req, res, next) => {
 pasangPortofolio(app, {
   store: buatStoreSupabase(supabase, process.env.PORTOFOLIO_BUCKET || "portofolio-foto"),
   env: process.env,
+  // Nilai di sertifikat dibaca langsung dari spreadsheet penilaian. Env kosong = sertifikat tanpa nilai.
+  nilaiSiswa: buatSumberNilai({ idSheet: { smp: process.env.NILAI_SHEET_SMP, sma: process.env.NILAI_SHEET_SMA } }),
+  // Tanda tangan & stempel di sertifikat: bucket privat, lihat buatTandaSertifikat di portofolio.js.
+  tandaSertifikat: buatTandaSertifikat(supabase, process.env.PORTOFOLIO_BUCKET_ASET || "portofolio-aset"),
 });
 
 const server = app.listen(process.env.PORT || 3334, () => {

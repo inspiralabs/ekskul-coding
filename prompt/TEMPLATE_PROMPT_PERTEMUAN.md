@@ -37,7 +37,7 @@ CARA MEMBACA ISI SLIDE (di antara penanda MULAI/SELESAI ISI SLIDE):
 - Layout tiap slide kamu tentukan sendiri sesuai isi (card, tabel, kode, diagram), tetap dalam brand system.
 
 POLA SLIDE (gaya deck P7 SMA InspiraLabs):
-- Slide 1 "LINK & QR CODE": label kecil "LINK & QR CODE", judul "Akses Materi, Challenge, & Post Test", paragraf penjelasan, link Linktree besar, QR code dari link itu di sisi kanan. Background maroon, lingkaran dekoratif semi-transparan.
+- Slide 1 "LINK & QR CODE": label kecil "LINK & QR CODE", judul "Akses Materi, Challenge, & Post Test", paragraf penjelasan, link besar PERSIS seperti yang tertulis di isi slide (Linktree atau alamat situs ekskul), QR code dari link itu di sisi kanan. Background maroon, lingkaran dekoratif semi-transparan.
 - Slide 2 "COVER": cover pertemuan. Label kecil "{{PERTEMUAN}} {{JENJANG}}", judul materi besar, tagline satu kalimat di bawahnya. Nuansa cover (maroon, lingkaran dekoratif semi-transparan).
 - Slide 3 "PERTANYAAN PEMANTIK": pertanyaan besar di tengah sebagai judul, satu kalimat konteks lebih kecil, lalu ajakan "Penasaran jawabannya? Yuk kita bongkar." Tema terang, layout lega. Ini pembuka materi untuk siswa, BUKAN konten media sosial.
 - Slide "Apa yang kita capai hari ini?": card bernomor 01, 02, 03 (satu card per topik).

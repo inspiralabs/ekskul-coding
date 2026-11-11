@@ -1,49 +1,93 @@
-/* Sertifikat siswa: A4 lanskap. Warna dan huruf dari /profil/profil.css (tema pilihan siswa ikut ke sertifikatnya).
-   Ukuran teks memakai cqw (persen lebar sertifikat), jadi pratinjau di layar dan hasil cetak 297 mm sama tata letaknya.
-   Kertas krem + bingkai dua garis: satu-satunya hiasan, supaya terbaca sebagai dokumen resmi, bukan halaman web. */
-.hal-sertifikat .status a { display: inline-flex; align-items: center; min-height: 44px; }
+/* Sertifikat siswa: A4 lanskap. Berdiri sendiri (tidak memakai profil.css).
+   Alasan tiap keputusan:
+   - Tata letak mengikuti referensi pemilik (Nov 2026): judul besar di kiri atas, blok bentuk geometris di kiri bawah,
+     pojok warna di kanan atas, isi sertifikat di kolom kanan.
+   - Warna: palet InspiraLabs (maroon, emas, krem), sama dengan slide materi. Sertifikat adalah dokumen resmi
+     InspiraLabs, jadi TIDAK mengikuti warna halaman pilihan siswa.
+   - Bentuk geometris diambil dari proyek akhir siswa: baling-baling kipas, busur sinyal WiFi, kisi sensor DHT22,
+     lampu LED, garis data. Garis tepi tipis pada bentuk meniru cetakan blok di referensi.
+   - "EKSTRAKURIKULER CODING" dan "DIBERIKAN KEPADA" berhuruf renggang seperti di referensi; hanya dua label itu.
+   - Ukuran memakai cqw (persen lebar sertifikat), jadi pratinjau di layar dan hasil cetak 297 mm sama tata letaknya. */
+:root {
+  --maroon: #7A1F2B; --maroon-gelap: #5A1620; --emas: #C9A24B; --emas-muda: #E8D9B5;
+  --kertas: #FAF7F0; --tinta: #2B2320; --abu: #6B5F58; --latar: #ece7dd;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--latar); color: var(--tinta); font: 400 1rem/1.5 'Nunito', system-ui, sans-serif; }
+a { color: var(--maroon); font-weight: 700; }
+:focus-visible { outline: 3px solid var(--maroon); outline-offset: 3px; border-radius: 4px; }
+
+.status { min-height: 60vh; display: grid; place-items: center; padding: 3rem 1.5rem; text-align: center; color: var(--abu); font-weight: 700; }
+.status p { margin: 0; }
+.status a { display: inline-flex; align-items: center; min-height: 44px; }
 
 .alat-cetak { max-width: 1100px; margin: 0 auto; padding: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
-.alat-cetak p { flex-basis: 100%; font-size: .9rem; color: var(--tinta-lemah); }
+.alat-cetak p { margin: 0; flex-basis: 100%; font-size: .9rem; color: var(--abu); }
 .alat-cetak a { min-height: 44px; display: inline-flex; align-items: center; }
-/* Di halaman terang, hover putih milik profil.css membuat tombol hilang. */
-.alat-cetak .tombol { cursor: pointer; }
-.alat-cetak .tombol:hover { background: var(--gelap-1); border-color: var(--gelap-1); color: var(--putih); }
 .alat-cetak .catatan-staf { color: var(--tinta); font-weight: 700; }
+.tombol {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: .65rem 1.25rem;
+  border-radius: 10px; border: 2px solid var(--maroon); background: var(--maroon); color: #fff;
+  font: 700 1rem 'Nunito', sans-serif; cursor: pointer; transition: background-color .15s, border-color .15s;
+}
+.tombol:hover { background: var(--maroon-gelap); border-color: var(--maroon-gelap); }
 
+/* ---------- kertas ---------- */
 .sertifikat {
   position: relative; width: min(100% - 2rem, 1100px); margin: 0 auto 2rem; aspect-ratio: 297 / 210;
-  background: #fffdf8; container-type: inline-size; border: 1px solid var(--garis);
+  background: var(--kertas); container-type: inline-size; overflow: hidden;
 }
-.sert-bingkai {
-  position: absolute; inset: 2.6cqw; border: .3cqw solid var(--gelap-1);
-  box-shadow: inset 0 0 0 .7cqw #fffdf8, inset 0 0 0 .95cqw var(--aksen);
-  padding: 3.6cqw 6cqw 3cqw; display: flex; flex-direction: column; align-items: center; text-align: center;
-}
-.sert-penerbit { font-size: 1.45cqw; font-weight: 800; color: var(--tinta-lemah); }
-.sertifikat h1 { font-size: 6.4cqw; font-weight: 800; margin-top: 1.4cqw; color: var(--gelap-1); }
-.sert-kecil { font-size: 1.3cqw; color: var(--tinta-lemah); }
-.sertifikat h1 + .sert-kecil { margin-top: .6cqw; }
-.sert-nama {
-  font: 800 4.6cqw/1.15 var(--judul); color: var(--aksen);
-  margin-top: .8cqw; padding: 0 3cqw .4cqw; border-bottom: .2cqw solid var(--garis);
-}
-.sert-isi { font-size: 1.65cqw; line-height: 1.5; max-width: 66cqw; margin-top: 1.6cqw; }
-.sert-angka { font-size: 1.5cqw; font-weight: 800; color: var(--gelap-2); margin-top: 1cqw; }
-.sert-bawah { margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 3cqw; }
-.sert-verif { display: flex; align-items: center; gap: 1.4cqw; text-align: left; }
-.sert-verif .sert-kecil { font-size: 1.15cqw; }
-.sert-verif strong { color: var(--tinta); }
-.sert-qr { width: 9.5cqw; flex: none; }
-.sert-qr svg { display: block; width: 100%; height: auto; }
-.sert-ttd { width: 25cqw; }
-.sert-garis { height: 5.5cqw; border-bottom: .15cqw solid var(--tinta); margin: .4cqw 0 .6cqw; }
-.sert-penanda { font: 700 1.7cqw var(--judul); }
+.sertifikat :where(p, h1, dl, dd) { margin: 0; }
+.s-pojok { position: absolute; top: 0; right: 0; width: 29cqw; display: block; }
+.s-seni { position: absolute; left: 0; bottom: 0; width: 54.5cqw; height: 31.1cqw; display: block; }
+
+/* ---------- kiri atas: merek + judul ---------- */
+.s-kiri { position: absolute; left: 5cqw; top: 4.4cqw; width: 47cqw; }
+.s-merek { display: flex; align-items: center; gap: 1cqw; font-size: 1.25cqw; font-weight: 800; }
+.s-merek img { height: 4.6cqw; width: auto; display: block; margin-left: -.8cqw; }
+.s-mitra { border-left: .12cqw solid var(--tinta); padding-left: 1.2cqw; line-height: 1.25; }
+.s-mitra small { display: block; font-size: 1cqw; font-weight: 600; color: var(--abu); }
+.sertifikat h1 { font: 800 9.2cqw/1 'Baloo 2', sans-serif; margin-top: 4.6cqw; }
+.s-sub { font-size: 1.45cqw; font-weight: 700; letter-spacing: .32em; margin-top: .4cqw; }
+.s-garis { border-top: .12cqw solid var(--tinta); margin-top: 2.2cqw; }
+
+/* ---------- kolom kanan: isi ---------- */
+.s-kanan { position: absolute; left: 60.5cqw; right: 5cqw; top: 9cqw; bottom: 4.2cqw; display: flex; flex-direction: column; }
+.s-lencana { width: 8.4cqw; display: block; flex: none; }
+.s-kepada { font-size: 1.1cqw; font-weight: 800; letter-spacing: .18em; margin-top: 1.4cqw; }
+.s-nama { font: 800 3.5cqw/1.1 'Baloo 2', sans-serif; margin-top: .5cqw; }
+.s-nama.panjang { font-size: 2.7cqw; }   /* nama lebih dari 20 huruf: dikecilkan supaya tetap dua baris paling banyak */
+.s-isi { font-size: 1.22cqw; line-height: 1.6; color: var(--abu); margin-top: 1.3cqw; }
+.s-angka { font-size: 1.22cqw; font-weight: 800; color: var(--maroon); margin-top: .7cqw; }
+
+/* Nilai dari Gradebook: hanya ada kalau server mengirimnya (pemilik sertifikat yang login, atau admin). */
+.s-nilai { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 1.2cqw; border-block: .12cqw solid var(--tinta); }
+.s-nilai div { padding: .7cqw .3cqw .6cqw; text-align: center; }
+.s-nilai div + div { border-left: .08cqw solid var(--emas); }
+.s-nilai dt { font-size: .92cqw; font-weight: 700; color: var(--abu); line-height: 1.2; }
+.s-nilai dd { font: 800 1.9cqw/1.2 'Baloo 2', sans-serif; font-variant-numeric: tabular-nums; }
+.s-nilai .utama dd { color: var(--maroon); }
+
+.s-tanggal { font-size: 1.15cqw; font-weight: 700; margin-top: 1.2cqw; }
+.s-tanggal + .s-tanggal { margin-top: .2cqw; }
+
+.s-bawah { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; gap: 2cqw; }
+.s-ttd { width: 19cqw; }
+.s-ttd-ruang { position: relative; height: 6.4cqw; border-bottom: .12cqw solid var(--tinta); margin-bottom: .6cqw; }
+/* Stempel menimpa ujung kiri tanda tangan, seperti cap basah di atas tanda tangan. */
+.s-stempel { position: absolute; left: -1.4cqw; bottom: -.7cqw; width: 7.4cqw; height: auto; opacity: .88; }
+.s-tanda { position: absolute; left: 5.6cqw; bottom: -1.5cqw; height: 8.6cqw; width: auto; }
+.s-ttd-nama { font-size: 1.3cqw; font-weight: 800; }
+.s-kecil { font-size: 1.05cqw; color: var(--abu); }
+.s-verif { text-align: center; }
+.s-qr { width: 6.4cqw; margin: 0 auto .4cqw; }
+.s-qr svg { display: block; width: 100%; height: auto; }
 
 @media print {
   @page { size: A4 landscape; margin: 0; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  body.hal-sertifikat { background: none; margin: 0; }
+  body { background: none; }
   .alat-cetak, .status { display: none !important; }
-  .sertifikat { width: 297mm; height: 210mm; aspect-ratio: auto; margin: 0; border: 0; break-inside: avoid; }
+  .sertifikat { width: 297mm; height: 210mm; aspect-ratio: auto; margin: 0; break-inside: avoid; }
 }

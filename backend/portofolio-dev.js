@@ -5,6 +5,8 @@
 //   (halaman dari localhost otomatis memakai server ini)
 //   buka http://localhost:8092/dashboard/  dan  http://localhost:8092/profil/?s=siswa-contoh
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const { pasangPortofolio } = require("./portofolio");
 const { buatStoreMemori } = require("./portofolio-memori");
@@ -41,9 +43,20 @@ app.get("/foto/*", (req, res) => {
   if (!isi) return res.status(404).end();
   res.type("image/jpeg").send(isi);
 });
+// Tanda tangan & stempel di mode coba-coba: file di dist/sertifikat-contoh/ (tidak ikut repo). Tidak ada = garis kosong.
+const ASET = { "ttd.png": "aset-asli/ttd-unggul.png", "stempel.png": "stempel.png" };
+app.get("/aset/:nama", (req, res) => {
+  const f = ASET[req.params.nama] && path.join(__dirname, "..", "dist", "sertifikat-contoh", ASET[req.params.nama]);
+  if (!f || !fs.existsSync(f)) return res.status(404).end();
+  res.sendFile(f);
+});
 pasangPortofolio(app, {
   store: { ...store, urlFoto: (p) => `http://localhost:${port}/foto/${p}` },
   env: { PORTOFOLIO_SECRET: crypto.randomBytes(16).toString("hex"), ADMIN_EMAIL: "admin@contoh.id", ADMIN_PASSWORD: "admin" },
+  // Nilai fiktif (server sungguhan membacanya dari Google Sheets, lihat portofolio-nilai.js).
+  tandaSertifikat: async () => ({ ttd: `http://localhost:${port}/aset/ttd.png`, stempel: `http://localhost:${port}/aset/stempel.png` }),
+  nilaiSiswa: async (jenjang, id) => (id === "SMA-901"
+    ? { post_test: 72.5, gamifikasi: 80, ujian_akhir: 90, nilai_akhir: 81.8, predikat: "B" } : null),
 });
 app.listen(port, () => {
   console.log(`Portofolio coba-coba: http://localhost:${port}/api/portofolio`);

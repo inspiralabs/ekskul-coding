@@ -11,7 +11,8 @@ const {
   SERTIFIKAT_BUKA, sertifikatTerbuka,
 } = require("./portofolio-inti");
 
-function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang = Date.now }) {
+function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang = Date.now, nilaiSiswa = async () => null,
+  tandaSertifikat = async () => null }) {
   const r = express.Router();
   const secret = env.PORTOFOLIO_SECRET;
   const gagal = (res, status, error) => res.status(status).json({ ok: false, error });
@@ -52,10 +53,19 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
     if (!b || !b.sertifikat_nomor) return gagal(res, 404, "sertifikat tidak ditemukan");
     const akun = bacaToken((req.header("Authorization") || "").replace(/^Bearer /, ""), secret);
     const buka = SERTIFIKAT_BUKA[b.jenjang];
-    if (!(akun && bolehKelola(akun, b)) && !sertifikatTerbuka(b.jenjang, sekarang())) {
+    const staf = !!akun && bolehKelola(akun, b);
+    if (!staf && !sertifikatTerbuka(b.jenjang, sekarang())) {
       return res.status(403).json({ ok: false, error: "sertifikat belum dibuka", buka, jenjang: b.jenjang });
     }
-    res.json({ ok: true, sertifikat: { ...dataPublik(b, store.urlFoto), tanggal: buka } });
+    const sertifikat = { ...dataPublik(b, store.urlFoto), tanggal: buka };
+    // Nilai (dari Gradebook), tanda tangan, dan stempel hanya untuk staf dan siswa pemilik sertifikat yang sedang
+    // login. Pengunjung lain yang punya link tetap melihat sertifikatnya, tanpa ketiganya.
+    const pemilik = !!akun && akun.peran === "siswa" && akun.id === b.id_siswa && akun.v === b.kode_versi;
+    if (staf || pemilik) {
+      sertifikat.nilai = await nilaiSiswa(b.jenjang, b.id_siswa);
+      sertifikat.tanda = await tandaSertifikat();
+    }
+    res.json({ ok: true, sertifikat });
   }));
 
   // ---------------------------------------------------------------- masuk
@@ -222,4 +232,21 @@ function buatStoreSupabase(supabase, bucket) {
   };
 }
 
-module.exports = { pasangPortofolio, buatStoreSupabase };
+// Tanda tangan penanda tangan sertifikat dan stempel InspiraLabs: file ttd.png & stempel.png di bucket PRIVAT
+// (bukan di repo, bukan di bucket foto yang publik). Yang dikirim ke browser adalah alamat sementara (10 menit).
+// Bucket/file belum ada atau Supabase gagal -> null: sertifikat tetap tampil, garis tanda tangannya kosong.
+function buatTandaSertifikat(supabase, bucket) {
+  return async function tandaSertifikat() {
+    try {
+      const { data, error } = await supabase.storage.from(bucket).createSignedUrls(["ttd.png", "stempel.png"], 600);
+      if (error) throw new Error(error.message);
+      const alamat = (i) => (data[i] && !data[i].error ? data[i].signedUrl : null);
+      return { ttd: alamat(0), stempel: alamat(1) };
+    } catch (e) {
+      console.error("[portofolio] tanda tangan/stempel tidak bisa diambil:", e.message);
+      return null;
+    }
+  };
+}
+
+module.exports = { pasangPortofolio, buatStoreSupabase, buatTandaSertifikat };

@@ -127,3 +127,23 @@ cd backend && UJI_SUPABASE=1 UJI_ENV=/path/ke/.env node --test portofolio-supaba
 
 Seluruh isi folder `backend/` (termasuk `server.js`, `.env`, skema Supabase) adalah infrastruktur
 siap pakai. Tidak ada bagian di sini yang menjadi materi ajar atau tugas siswa.
+
+### Nilai di sertifikat (opsional)
+
+Sertifikat (`/profil/sertifikat/?s=<slug>`) menampilkan nilai dari sheet **Gradebook** untuk siswa pemiliknya (sedang
+login) dan admin. Nilai dibaca langsung dari Google Sheets, bukan diimpor, dan disimpan di memori 5 menit.
+Isi di `.env` server (ID = bagian di antara `/d/` dan `/edit` pada link spreadsheet), lalu redeploy:
+
+```
+NILAI_SHEET_SMP=<id spreadsheet penilaian SMP>
+NILAI_SHEET_SMA=<id spreadsheet penilaian SMA>
+```
+
+Kalau kosong, sertifikat tampil tanpa nilai. ID ini jangan ditulis di repo (siapa pun yang punya ID bisa mengunduh
+seluruh spreadsheet). Logikanya di `portofolio-nilai.js`.
+
+### Tanda tangan dan stempel di sertifikat (opsional)
+
+Simpan `ttd.png` (tanda tangan, latar transparan) dan `stempel.png` di bucket Storage **privat** `portofolio-aset`
+(nama lain: env `PORTOFOLIO_BUCKET_ASET`). Keduanya hanya dikirim ke siswa pemilik sertifikat yang sedang login dan
+admin, lewat alamat sementara 10 menit. Jangan menaruh file ini di repo atau di bucket foto yang publik.
