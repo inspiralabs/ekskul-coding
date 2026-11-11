@@ -8,9 +8,10 @@ const crypto = require("crypto");
 const {
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, FORMAT_ID, FORMAT_SLUG,
+  SERTIFIKAT_BUKA, sertifikatTerbuka,
 } = require("./portofolio-inti");
 
-function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
+function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang = Date.now }) {
   const r = express.Router();
   const secret = env.PORTOFOLIO_SECRET;
   const gagal = (res, status, error) => res.status(status).json({ ok: false, error });
@@ -43,6 +44,18 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas() }) {
     const b = await store.ambilSlug(req.params.slug);
     if (!b) return gagal(res, 404, "halaman tidak ditemukan");
     res.json({ ok: true, profil: dataPublik(b, store.urlFoto) });
+  }));
+
+  // Sertifikat: sebelum tanggal buka jenjangnya hanya staf (token admin/guru) yang bisa melihat.
+  r.get("/sertifikat/:slug", aman(async (req, res) => {
+    const b = await store.ambilSlug(req.params.slug);
+    if (!b || !b.sertifikat_nomor) return gagal(res, 404, "sertifikat tidak ditemukan");
+    const akun = bacaToken((req.header("Authorization") || "").replace(/^Bearer /, ""), secret);
+    const buka = SERTIFIKAT_BUKA[b.jenjang];
+    if (!(akun && bolehKelola(akun, b)) && !sertifikatTerbuka(b.jenjang, sekarang())) {
+      return res.status(403).json({ ok: false, error: "sertifikat belum dibuka", buka, jenjang: b.jenjang });
+    }
+    res.json({ ok: true, sertifikat: { ...dataPublik(b, store.urlFoto), tanggal: buka } });
   }));
 
   // ---------------------------------------------------------------- masuk

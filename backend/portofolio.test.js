@@ -236,3 +236,38 @@ test("token admin berumur pendek (12 jam)", async (t) => {
   const sisa = JSON.parse(Buffer.from(admin.split(".")[0], "base64url").toString()).exp - Date.now();
   assert.ok(sisa > 11 * 3600 * 1000 && sisa <= 12 * 3600 * 1000, String(sisa));
 });
+
+test("sertifikat: tertutup sebelum hari pertemuan terakhir, admin bisa kapan saja", async (t) => {
+  const { sertifikatTerbuka } = require("./portofolio-inti");
+  const jam = (teks) => Date.parse(teks);
+  // batas tepat 00.00 WIB di tanggal masing-masing jenjang
+  assert.equal(sertifikatTerbuka("smp", jam("2026-11-12T23:59:59+07:00")), false);
+  assert.equal(sertifikatTerbuka("smp", jam("2026-11-13T00:00:00+07:00")), true);
+  assert.equal(sertifikatTerbuka("sma", jam("2026-11-13T12:00:00+07:00")), false);
+  assert.equal(sertifikatTerbuka("sma", jam("2026-11-14T00:00:00+07:00")), true);
+  assert.equal(sertifikatTerbuka("sd", jam("2030-01-01T00:00:00+07:00")), false);
+
+  let kini = jam("2026-11-13T08:00:00+07:00"); // Jumat pagi: SMP sudah buka, SMA belum
+  const baris = siswaAwal().map((b) => ({ ...b, sertifikat_nomor: "EKC-2026-S1-" + b.id_siswa }));
+  baris.push({ id_siswa: "SMA-050", jenjang: "sma", slug: "tanpa-nomor", nama_lengkap: "Tanpa Nomor", kode_versi: 1 });
+  const s = await jalankan(t, baris, ENV, (x) => x, { sekarang: () => kini });
+
+  const smp = await s.get("/sertifikat/rafif");
+  assert.deepEqual([smp.sertifikat.nama_lengkap, smp.sertifikat.sertifikat_nomor, smp.sertifikat.tanggal], ["Rafif", "EKC-2026-S1-SMP-022", "2026-11-13"]);
+  assert.ok(!("kode_hash" in smp.sertifikat) && !("id_siswa" in smp.sertifikat));
+
+  const tutup = await s.getRaw("/sertifikat/budi");
+  assert.equal(tutup.status, 403);
+  assert.deepEqual(await tutup.json(), { ok: false, error: "sertifikat belum dibuka", buka: "2026-11-14", jenjang: "sma" });
+  // token siswa (pemilik sekalipun) tidak membuka lebih awal; token admin bisa
+  const siswa = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
+  assert.equal((await s.getRaw("/sertifikat/budi", siswa)).status, 403);
+  const admin = (await s.post("/masuk/staf", { email: ENV.ADMIN_EMAIL, password: ENV.ADMIN_PASSWORD })).token;
+  assert.equal((await s.get("/sertifikat/budi", admin)).sertifikat.tanggal, "2026-11-14");
+  assert.equal((await s.getRaw("/sertifikat/budi", "token-ngawur")).status, 403);
+
+  kini = jam("2026-11-14T07:00:00+07:00"); // Sabtu: SMA ikut buka
+  assert.equal((await s.get("/sertifikat/budi")).sertifikat.nama_lengkap, "Budi");
+  assert.equal((await s.getRaw("/sertifikat/tanpa-nomor")).status, 404);
+  assert.equal((await s.getRaw("/sertifikat/tidak-ada")).status, 404);
+});

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sertifikat · Ekskul Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/profil/profil.css">
+<link rel="stylesheet" href="/profil/sertifikat/sertifikat.css">
+<!-- Sertifikat siswa: /profil/sertifikat/?s=<slug>. Isi dari backend (/api/portofolio/sertifikat/<slug>), yang menolak
+     sebelum tanggal buka jenjangnya kecuali untuk admin/guru yang sedang login di /dashboard/.
+     Pembuat QR dikunci dengan integrity: halaman ini satu asal dengan dashboard (token login ada di localStorage).
+     Kalau gagal dimuat, alamat profil tetap tercetak sebagai teks. -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+  integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k" crossorigin="anonymous"></script>
+</head>
+<body class="hal-sertifikat">
+<main>
+  <div class="status" id="status" role="status">
+    <div>
+      <p id="statusTeks">Memuat sertifikat...</p>
+      <p><a id="statusKembali" href="/" hidden>Kembali ke profil</a></p>
+    </div>
+  </div>
+
+  <div id="konten" hidden>
+    <div class="alat-cetak">
+      <a id="kembali" href="/">Kembali ke profil</a>
+      <button type="button" class="tombol" id="cetak">Cetak atau simpan PDF</button>
+      <p class="catatan-staf" id="catatanStaf" hidden></p>
+      <p>Di jendela cetak pilih kertas A4, orientasi lanskap, margin "Tidak ada", dan centang "Grafik latar".</p>
+    </div>
+
+    <article class="sertifikat">
+      <div class="sert-bingkai">
+        <p class="sert-penerbit">InspiraLabs <span aria-hidden="true">×</span> Sekolah Qur'an Asy Syahid</p>
+        <h1>Sertifikat</h1>
+        <p class="sert-kecil">diberikan kepada</p>
+        <p class="sert-nama" id="sertNama"></p>
+        <p class="sert-isi" id="sertIsi"></p>
+        <p class="sert-angka" id="sertAngka"></p>
+
+        <div class="sert-bawah">
+          <div class="sert-verif">
+            <div class="sert-qr" id="sertQr" aria-hidden="true"></div>
+            <div>
+              <p class="sert-kecil">Nomor <strong id="sertNomor"></strong></p>
+              <p class="sert-kecil">Cek keaslian: <span id="sertUrl"></span></p>
+            </div>
+          </div>
+          <div class="sert-ttd">
+            <p class="sert-kecil" id="sertTanggal"></p>
+            <div class="sert-garis"></div>
+            <p class="sert-penanda">Unggul Sulaiman, S.Kom</p>
+            <p class="sert-kecil">Pelatih Ekskul Coding</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<script src="/profil/sertifikat/sertifikat.js"></script>
+</body>
+</html>
