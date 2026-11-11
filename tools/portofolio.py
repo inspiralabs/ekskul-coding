@@ -403,6 +403,18 @@ def payload_impor(penilaian, peta=None):
                 "judul_proyek": d["proyek_akhir"]["judul"], "catatan_pelatih": d["catatan_tutor"],
                 "sertifikat_nomor": d["sertifikat"]["nomor"],
             })
+    # Siswa aktif yang tidak terdaftar di kelompok mana pun tetap dapat halaman (keputusan pemilik, Nov 2026):
+    # tanpa device_id, jadi profilnya tidak menampilkan data alat.
+    for sid, s in sorted(penilaian.items()):
+        if sid in peta or s["pindah"]:
+            continue
+        d = susun(s, sid[:3].lower(), buat_slug(s["nama"], terpakai), [], 1, [])
+        items.append({
+            "id_siswa": sid, "jenjang": d["jenjang"], "device_id": None, "slug": d["slug"], "nama_lengkap": d["nama"],
+            "poin": d["poin"], "lencana": d["pertemuan"], "peringkat": d["peringkat"],
+            "judul_proyek": d["proyek_akhir"]["judul"], "catatan_pelatih": d["catatan_tutor"],
+            "sertifikat_nomor": d["sertifikat"]["nomor"],
+        })
     return items
 
 
@@ -633,7 +645,10 @@ def cek():
         for rahasia in ("0811111", "Bapak Rahasia", "Kurang fokus", "internal gradebook", "rahasia internal", "Latihan di rumah"):
             assert rahasia not in teks, rahasia
         dua = payload_impor({**pen, "SMP-050": {**pen["SMP-022"], "id": "SMP-050"}}, {"SMP-022": "smp-07", "SMP-050": "smp-08"})
-        assert sorted(i["slug"] for i in dua) == ["rafif", "rafif-ahnaf"]  # unik lintas kelompok
+        assert sorted(i["slug"] for i in dua if i["device_id"]) == ["rafif", "rafif-ahnaf"]  # unik lintas kelompok
+        # SMP-017 aktif tapi tidak ada di kelompok mana pun: tetap ikut, tanpa device_id; yang pindah tetap dilewati
+        lepas = [i for i in dua if not i["device_id"]]
+        assert [(i["id_siswa"], i["jenjang"], i["slug"], i["sertifikat_nomor"]) for i in lepas] == [("SMP-017", "smp", "qassim", "EKC-2026-S1-SMP-017")]
         _uji_impor(d / "smp.xlsx")  # perintah impor vs server tiruan: sukses, terhenti, password salah, server mati
 
         # foto mentah dari HP di Google Drive: diunduh sebagai zip (folder "Foto Portofolio/<ID Siswa>/...")
