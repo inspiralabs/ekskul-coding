@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
-const { FIELD_SISWA, FIELD_RESMI, KOLOM_IMPOR } = require("./portofolio-inti");
+const { FIELD_SISWA, FIELD_RESMI, KOLOM_IMPOR, TEMA } = require("./portofolio-inti");
 const { buatStoreSupabase } = require("./portofolio");
 
 const SQL = fs.readFileSync(path.join(__dirname, "supabase_schema.sql"), "utf8");
@@ -19,8 +19,46 @@ function kolomTabel() {
 test("skema: semua kolom yang ditulis/dibaca kode ada di tabel portofolio_siswa", () => {
   const kolom = new Set(kolomTabel());
   const dipakai = [...KOLOM_IMPOR, ...Object.keys(FIELD_SISWA), ...Object.keys(FIELD_RESMI), "link_karya",
-    "kode_hash", "kode_versi", "updated_by", "updated_at", "foto_path"];
+    "kode_hash", "kode_versi", "updated_by", "updated_at", "foto_path", "tema"];
   for (const k of dipakai) assert.ok(kolom.has(k), `kolom "${k}" dipakai kode tapi tidak ada di supabase_schema.sql`);
+});
+
+// Daftar tema ada di 4 tempat (backend, SQL default, profil.css, dashboard/inti.js). Tes ini menjaga semuanya sama
+// dan setiap warna tetap terbaca (WCAG AA 4.5:1) di semua pasangan teks/latar yang dipakai profil.css.
+test("tema: daftar sama di semua tempat dan setiap warna lolos kontras 4.5:1", () => {
+  const css = fs.readFileSync(path.join(__dirname, "..", "profil", "profil.css"), "utf8");
+  const temaDasbor = require("../dashboard/inti.js").TEMA;
+  assert.deepEqual(temaDasbor.map((t) => t[0]), TEMA);
+  assert.ok(fs.readFileSync(path.join(__dirname, "..", "profil", "profil.js"), "utf8").includes(`var TEMA = ${JSON.stringify(TEMA).replaceAll(",", ", ")};`),
+    "TEMA di profil/profil.js beda dengan backend");
+  assert.ok(SQL.replace(/ +/g, " ").includes(`tema text not null default '${TEMA[0]}'`), "default kolom tema di SQL bukan tema pertama");
+
+  const terang = (hex) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const kontras = (a, b) => { const [x, y] = [terang(a), terang(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const umum = Object.fromEntries([...css.matchAll(/--(tinta|tinta-lemah|dasar|putih|hero-lemah): (#[0-9a-f]{6})/g)].map((m) => [m[1], m[2]]));
+  for (const k of ["tinta", "tinta-lemah", "dasar", "putih", "hero-lemah"]) assert.ok(umum[k], `--${k} tidak ditemukan di profil.css`);
+
+  for (const tema of TEMA) {
+    const awal = css.indexOf(`[data-tema="${tema}"]`);
+    const blok = awal >= 0 && css.slice(awal).match(/{([^}]*)}/);
+    assert.ok(blok, `blok [data-tema="${tema}"] tidak ada di profil.css`);
+    const w = Object.fromEntries([...blok[1].matchAll(/--([a-z0-9-]+): (#[0-9a-f]{6})/g)].map((m) => [m[1], m[2]]));
+    assert.equal(w.aksen, temaDasbor.find((t) => t[0] === tema)[2], `${tema}: warna contoh di dashboard beda dengan --aksen`);
+    const pasangan = [   // [teks, latar, dipakai di]
+      [umum.putih, w.aksen, "tombol & kotak poin"], [umum.putih, w["gelap-2"], "teks hero"],
+      [umum["hero-lemah"], w["gelap-2"], "teks sekunder hero"], [w.terang, w["gelap-2"], "nama di hero"],
+      [w.aksen, umum.putih, "angka & link"], [w.aksen, umum.dasar, "link di lembar"], [w.aksen, w.lembut, "tanda materi & inisial"],
+      [umum.tinta, w.lembut, "chip challenge"], [umum["tinta-lemah"], umum.dasar, "teks lemah"],
+    ];
+    for (const [teks, latar, pakai] of pasangan) {
+      const k = kontras(teks, latar);
+      assert.ok(k >= 4.5, `${tema}: ${pakai} (${teks} di ${latar}) kontras ${k.toFixed(2)} < 4.5`);
+    }
+  }
 });
 
 test("skema: tabel data anak hanya untuk service_role (anon/authenticated dicabut)", () => {

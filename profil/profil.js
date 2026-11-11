@@ -7,10 +7,20 @@ var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
   : "https://api-ekskulcoding.inspiralabs.id";
 var LEVEL = { easy: "Easy", medium: "Medium", hard: "Hard" };
 var JENJANG = { smp: "SMP", sma: "SMA" };
+// Warna halaman pilihan siswa. Sama dengan blok [data-tema] di profil.css dan TEMA di backend/portofolio-inti.js.
+var TEMA = ["ungu", "biru", "hijau", "jingga", "merah-muda"];
 // Sama dengan "ringkasan" di portofolio/kurikulum.json.
 var RINGKASAN = {
   smp: "{panggilan} merakit alat pemantau suhu sendiri, mulai dari LED pertama sampai angka suhunya tampil di internet.",
   sma: "{panggilan} merakit alat pemantau suhu yang bisa menyalakan kipas sendiri, dan kipasnya bisa dikendalikan dari dashboard di HP.",
+};
+// Materi satu semester per jenjang (dari judul pertemuan di kurikulum/). Sama untuk semua siswa di jenjang itu.
+var MATERI = {
+  smp: [["x=1", "Urutan & variabel"], ["if", "Percabangan"], ["</>", "HTML"], ["{ }", "CSS"], ["ESP", "ESP32"],
+    ["LED", "Rangkaian LED"], ["IDE", "Arduino IDE"], ["°C", "Sensor DHT22"], ["WiFi", "Kirim data ke internet"]],
+  sma: [["x=1", "Variabel & tipe data"], ["if", "Percabangan"], ["for", "Perulangan & array"], ["</>", "HTML"],
+    ["{ }", "CSS"], ["DOM", "DOM & event"], ["ESP", "ESP32"], ["°C", "Sensor DHT22"], ["I/O", "Relay & kipas"],
+    ["IDE", "Arduino IDE"]],
 };
 
 function $(id) { return document.getElementById(id); }
@@ -22,46 +32,88 @@ function el(tag, kelas, teks) {
   return e;
 }
 
-function tampilkan(id, isi) {
-  if (!isi) return false;
-  $(id).textContent = isi;
-  $(id).hidden = false;
-  return true;
+// <div><dt>label</dt><dd>isi</dd></div> ke dalam <dl>
+function pasangan(dl, label, isi) {
+  var grup = el("div");
+  grup.append(el("dt", null, label), el("dd", null, String(isi)));
+  dl.append(grup);
 }
 
 function isiProfil(d) {
   var panggilan = d.panggilan || d.nama_lengkap.split(" ")[0];
   var lencana = d.lencana || [];
   var semuaChallenge = [];
-  lencana.forEach(function (p) { (p.challenge || []).forEach(function (c) { semuaChallenge.push([p.p, c]); }); });
+  var tanyaJawab = 0;
+  lencana.forEach(function (p) {
+    tanyaJawab += Number(p.tanya_jawab) || 0;
+    (p.challenge || []).forEach(function (c) { semuaChallenge.push([p.p, c]); });
+  });
   document.title = d.nama_lengkap + " · Ekskul Coding";
+  document.documentElement.dataset.tema = TEMA.indexOf(d.tema) >= 0 ? d.tema : TEMA[0];
 
-  // SAMPUL
+  // HERO
   $("asal").textContent = ["Ekskul Coding " + (JENJANG[d.jenjang] || ""), d.kelas ? "Kelas " + d.kelas : ""].filter(Boolean).join(" · ");
   $("nama").textContent = d.nama_lengkap;
   $("ringkasan").textContent = (RINGKASAN[d.jenjang] || "").replace("{panggilan}", panggilan);
-  var fakta = [];
-  if (d.poin != null) fakta.push([d.poin, "poin"]);
-  fakta.push([semuaChallenge.length, "lencana challenge"]);
-  if (d.peringkat) fakta.push(["#" + d.peringkat, "leaderboard " + (JENJANG[d.jenjang] || "")]);
-  fakta.forEach(function (f) {
-    var grup = el("div");
-    grup.append(el("dt", null, f[1]), el("dd", null, String(f[0])));
-    $("fakta").append(grup);
-  });
   if (d.foto_url) {
     var img = el("img");
     img.src = d.foto_url;
     img.alt = "Foto " + panggilan;
     img.width = 800;
     img.height = 1000;
-    $("sampulFoto").append(img);
-    $("sampulFoto").hidden = false;
+    $("potret").append(img);
+  } else {
+    // Belum ada foto: inisial nama, bukan gambar buatan.
+    var inisial = d.nama_lengkap.split(/\s+/).slice(0, 2).map(function (k) { return k.charAt(0).toUpperCase(); }).join("");
+    var tanda = el("span", "potret-inisial", inisial);
+    tanda.setAttribute("aria-hidden", "true");
+    $("potret").append(tanda);
   }
 
-  // TENTANG AKU
-  var adaTentang = tampilkan("tentang", d.tentang);
-  if (d.cita_cita) { $("citaCita").textContent = d.cita_cita; $("kotakCita").hidden = false; adaTentang = true; }
+  // KENALAN
+  if (d.tentang) $("tentang").textContent = d.tentang;
+  else { $("tentang").textContent = panggilan + " belum menulis tentang dirinya."; $("tentang").className += " kosong"; }
+  pasangan($("rincian"), "Panggilan", panggilan);
+  if (d.kelas) pasangan($("rincian"), "Kelas", d.kelas);
+  if (d.device_id) pasangan($("rincian"), "Kelompok", d.device_id);
+  if (d.cita_cita) pasangan($("rincian"), "Cita-cita", d.cita_cita);
+
+  if (d.poin != null) pasangan($("angka"), "poin", d.poin);
+  // Angka nol tidak ditampilkan: halaman siswa yang poinnya masih sedikit tidak dipenuhi deretan "0".
+  if (semuaChallenge.length) pasangan($("angka"), "lencana challenge", semuaChallenge.length);
+  if (tanyaJawab) pasangan($("angka"), "kali tanya jawab", tanyaJawab);
+  if (d.peringkat) pasangan($("angka"), "leaderboard " + (JENJANG[d.jenjang] || ""), "#" + d.peringkat);
+  else if (lencana.length) pasangan($("angka"), "pertemuan dapat poin", lencana.length);
+  $("angka").hidden = !$("angka").children.length;
+
+  // MATERI
+  (MATERI[d.jenjang] || []).forEach(function (m) {
+    var li = el("li");
+    var tandaMateri = el("span", "materi-tanda", m[0]);
+    tandaMateri.setAttribute("aria-hidden", "true");
+    li.append(tandaMateri, el("span", null, m[1]));
+    $("materi").append(li);
+  });
+  $("bagianMateri").hidden = !$("materi").children.length;
+
+  // PROYEK AKHIR
+  if (d.judul_proyek) { $("namaProyek").textContent = d.judul_proyek; $("namaProyek").hidden = false; }
+  [["Bagian tersulit", d.cerita_tersulit], ["Bagian paling seru", d.cerita_terseru], ["Rencana pengembangan", d.cerita_rencana]]
+    .forEach(function (c) {
+      if (!c[1]) return;
+      var li = el("li");
+      li.append(el("span", null, c[0]), el("p", null, c[1]));
+      $("cerita").append(li);
+    });
+  if (!$("cerita").children.length) $("cerita").replaceWith(el("p", "kosong", panggilan + " belum menulis cerita proyeknya."));
+  if (d.device_id) {
+    $("linkDashboard").href = "https://" + d.device_id + ".inspiralabs.id/";
+    $("linkDashboard").textContent = "Buka dashboard " + d.device_id;
+    $("linkDashboard").hidden = false;
+    ambilDataAlat(d.device_id);
+  } else {
+    $("alatStatus").textContent = "Belum terhubung ke alat kelompok.";
+  }
   (d.link_karya || []).forEach(function (u) {
     if (!/^https:\/\//.test(u)) return;
     var a = el("a", null, u.replace(/^https:\/\//, ""));
@@ -72,27 +124,21 @@ function isiProfil(d) {
     li.append(a);
     $("link").append(li);
   });
-  if ($("link").children.length) { $("kotakLink").hidden = false; adaTentang = true; }
-  $("bagianTentang").hidden = !adaTentang;
+  $("kotakLink").hidden = !$("link").children.length;
 
-  // PROYEK AKHIR
-  $("judulProyek").textContent = "Proyek akhir" + (d.judul_proyek ? ": " + d.judul_proyek : "");
-  [["Bagian tersulit", d.cerita_tersulit], ["Bagian paling seru", d.cerita_terseru], ["Rencana pengembangan", d.cerita_rencana]]
-    .forEach(function (c) {
-      if (!c[1]) return;
-      var li = el("li");
-      li.append(el("span", "label-kecil", c[0]), el("p", null, c[1]));
-      $("cerita").append(li);
-    });
-  if (!$("cerita").children.length) $("cerita").replaceWith(el("p", null, panggilan + " belum menulis cerita proyeknya."));
-  if (d.device_id) {
-    $("linkDashboard").href = "https://" + d.device_id + ".inspiralabs.id/";
-    $("linkDashboard").textContent = "Buka dashboard " + d.device_id;
-    $("linkDashboard").hidden = false;
-    ambilDataAlat(d.device_id);
-  } else {
-    $("alatStatus").textContent = "Belum terhubung ke alat kelompok.";
-  }
+  // LENCANA
+  semuaChallenge.forEach(function (x) {
+    var c = x[1];
+    var li = el("li");
+    var tingkat = el("span", "tingkat tingkat-" + c.level);
+    tingkat.setAttribute("aria-hidden", "true");
+    tingkat.append(el("i"), el("i"), el("i"));
+    var ket = [LEVEL[c.level] || c.level, "P" + x[0]];
+    if (c.poin) ket.push("+" + c.poin + " poin");
+    li.append(tingkat, el("span", "lencana-nama", c.nama), el("span", "lencana-ket", ket.join(" · ")));
+    $("lencana").append(li);
+  });
+  if (!semuaChallenge.length) $("lencana").replaceWith(el("p", "kosong", "Belum ada lencana. Lencana muncul di sini setelah challenge pertama lulus."));
 
   // PERJALANAN (hanya pertemuan yang ada lencana atau tanya jawab, supaya ringkas)
   lencana.filter(function (p) { return (p.challenge || []).length || p.tanya_jawab; }).forEach(function (p) {
@@ -111,7 +157,7 @@ function isiProfil(d) {
     if ((p.challenge || []).length) {
       var ul = el("ul", "titik-lencana");
       ul.setAttribute("aria-label", "Challenge yang lulus");
-      p.challenge.forEach(function (c) { ul.append(el("li", "cap-" + c.level, (LEVEL[c.level] || c.level) + " · " + c.nama)); });
+      p.challenge.forEach(function (c) { ul.append(el("li", null, (LEVEL[c.level] || c.level) + " · " + c.nama)); });
       isi.append(ul);
     }
     li.append(isi);
@@ -119,19 +165,12 @@ function isiProfil(d) {
   });
   $("bagianPerjalanan").hidden = !$("linimasa").children.length;
 
-  // LENCANA
-  semuaChallenge.forEach(function (x) {
-    var li = el("li", "stempel stempel-" + x[1].level);
-    li.append(el("span", "stempel-nama", x[1].nama), el("span", "stempel-level", (LEVEL[x[1].level] || x[1].level) + " · P" + x[0]));
-    $("lencana").append(li);
-  });
-  if (!semuaChallenge.length) $("lencana").replaceWith(el("p", null, "Lencana muncul di sini setelah challenge pertama lulus."));
-
   // CATATAN PELATIH & SERTIFIKAT
-  if (tampilkan("catatan", d.catatan_pelatih)) $("bagianCatatan").hidden = false;
+  if (d.catatan_pelatih) { $("catatan").textContent = d.catatan_pelatih; $("bagianCatatan").hidden = false; }
   if (d.sertifikat_nomor) {
-    $("sertifikatInfo").textContent = "Nomor " + d.sertifikat_nomor + ". Sertifikat cetak menyusul setelah pertemuan terakhir.";
-    $("bagianSertifikat").hidden = false;
+    $("sertifikatNomor").textContent = "Nomor " + d.sertifikat_nomor;
+    $("sertifikat").hidden = false;
+    $("keSertifikat").hidden = false;
   }
 }
 

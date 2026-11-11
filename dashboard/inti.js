@@ -16,6 +16,15 @@ var ISIAN_RESMI = [
   ["catatan_pelatih", "Catatan pelatih (tampil di halaman publik)", 500, "textarea"],
 ];
 
+// [id, label, warna contoh]. id sama dengan TEMA di backend/portofolio-inti.js; warna = --aksen di profil/profil.css.
+var TEMA = [
+  ["ungu", "Ungu", "#6a35e8"],
+  ["biru", "Biru", "#1a62d6"],
+  ["hijau", "Hijau", "#0b7a57"],
+  ["jingga", "Jingga", "#b8430c"],
+  ["merah-muda", "Merah muda", "#b81d73"],
+];
+
 function panjang(s) { return Array.from(s).length; }   // per karakter, sama seperti server
 
 // "tentang: maksimal 300 karakter" -> "Tentang aku: maksimal 300 karakter"
@@ -40,4 +49,4 @@ function perubahan(siswa, nilai, link, resmi) {
   return data;
 }
 
-if (typeof module !== "undefined") module.exports = { ISIAN_SISWA, ISIAN_RESMI, panjang, rapikan, perubahan };
+if (typeof module !== "undefined") module.exports = { ISIAN_SISWA, ISIAN_RESMI, TEMA, panjang, rapikan, perubahan };

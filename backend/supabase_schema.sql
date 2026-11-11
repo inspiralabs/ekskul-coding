@@ -80,14 +80,20 @@ create table if not exists ekskul_coding_asy_syahid.portofolio_siswa (
   peringkat        integer,                          -- hanya diisi kalau 3 besar
   foto_path        text,                             -- path di bucket Storage portofolio-foto
   sertifikat_nomor text,
+  tema             text not null default 'ungu',     -- warna halaman profil pilihan siswa
   kode_hash        text,
   kode_versi       integer not null default 1,       -- naik saat kode direset -> sesi lama tidak berlaku
   updated_at       timestamptz not null default now(),
   updated_by       text
 );
 
+-- Tabel sudah dibuat sebelum kolom tema ada? Baris ini menambahkannya; aman dijalankan ulang.
+alter table ekskul_coding_asy_syahid.portofolio_siswa add column if not exists tema text not null default 'ungu';
+
 alter table ekskul_coding_asy_syahid.portofolio_siswa disable row level security;
 -- Berisi data anak + hash kode akses: HANYA service_role (backend). REVOKE eksplisit wajib karena
 -- "alter default privileges" di atas otomatis memberi anon/authenticated akses ke tabel baru di skema ini.
 revoke all on ekskul_coding_asy_syahid.portofolio_siswa from anon, authenticated;
 grant all on ekskul_coding_asy_syahid.portofolio_siswa to service_role;
+-- Supaya API Supabase langsung mengenali tabel baru (tanpa ini kadang masih "table not found").
+notify pgrst, 'reload schema';

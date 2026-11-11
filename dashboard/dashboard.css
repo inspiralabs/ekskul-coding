@@ -1,4 +1,4 @@
-/* Dashboard portofolio. Warna & font dari ../profil/profil.css. */
+/* Dashboard portofolio. Warna & font dari dasar.css. */
 .dasbor { max-width: 44rem; padding-bottom: 3rem; }
 .dasbor h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); font-weight: 800; margin-bottom: 1rem; }
 .dasbor h2 { font-size: 1.5rem; font-weight: 800; margin: 1.25rem 0 .75rem; }
@@ -42,3 +42,12 @@ input:focus, textarea:focus, select:focus { outline: 3px solid var(--biru-tua); 
 .kelompok-isian { border: 0; padding: 0; margin: 0; display: grid; gap: 1rem; }
 .kelompok-isian legend { font: 800 1.15rem var(--judul); margin-bottom: .25rem; padding: 0; }
 @media (max-width: 30rem) { .saring { grid-template-columns: 1fr; } }
+.pilih-tema { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tema-opsi {
+  display: flex; grid-template-columns: none; align-items: center; gap: .5rem; min-height: 44px; padding: .4rem .8rem .4rem .5rem;
+  border: 1px solid #c9b99f; border-radius: 10px; background: var(--kertas); cursor: pointer;
+}
+.tema-opsi input { width: 1.15rem; min-height: 0; height: 1.15rem; padding: 0; margin: 0; accent-color: var(--tinta); }
+.tema-contoh { width: 1.5rem; height: 1.5rem; border-radius: 6px; flex: none; }
+.tema-opsi:has(input:checked) { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); background: var(--putih); }
+.tema-opsi:has(input:focus-visible) { outline: 3px solid var(--biru-tua); outline-offset: 2px; }
