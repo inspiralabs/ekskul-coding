@@ -7,7 +7,7 @@ var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
   : "https://api-ekskulcoding.inspiralabs.id";
 var KUNCI_TOKEN = "tokenPortofolio";
 
-// ISIAN_SISWA, ISIAN_RESMI, panjang, rapikan, perubahan: dari inti.js (dimuat lebih dulu).
+// ISIAN_SISWA, ISIAN_RESMI, TEMA, panjang, rapikan, perubahan: dari inti.js (dimuat lebih dulu).
 
 function $(id) { return document.getElementById(id); }
 function el(tag, kelas, teks) {
@@ -112,6 +112,43 @@ function buatEditor(wadah, siswa, opsi) {
     }
     inputFoto.value = "";
   });
+
+  // warna halaman: langsung tersimpan saat dipilih (seperti foto), terpisah dari tombol Simpan
+  var fsTema = el("fieldset", "kelompok-isian");
+  fsTema.append(el("legend", null, "Warna halaman"));
+  var pilihanTema = el("div", "pilih-tema");
+  var pesanTema = el("p", "pesan");
+  pesanTema.setAttribute("role", "status");
+  var namaRadio = "tema-" + (siswa.id_siswa || "saya");
+  TEMA.forEach(function (t) {
+    var label = el("label", "tema-opsi");
+    var radio = el("input");
+    radio.type = "radio";
+    radio.name = namaRadio;
+    radio.value = t[0];
+    radio.checked = (siswa.tema || TEMA[0][0]) === t[0];
+    var contoh = el("span", "tema-contoh");
+    contoh.style.background = t[2];
+    radio.addEventListener("change", async function () {
+      pesanTema.className = "pesan";
+      pesanTema.textContent = "Menyimpan warna...";
+      try {
+        var hasil = await api(opsi.simpanKe, { body: { tema: t[0] } });
+        siswa.tema = hasil.siswa.tema;
+        pesanTema.className = "pesan ok";
+        pesanTema.textContent = "Warna " + t[1].toLowerCase() + " tersimpan ✓";
+      } catch (e) {
+        // Gagal: kembalikan pilihan ke warna yang benar-benar tersimpan.
+        pilihanTema.querySelectorAll("input").forEach(function (r) { r.checked = (siswa.tema || TEMA[0][0]) === r.value; });
+        pesanTema.className = "pesan salah";
+        pesanTema.textContent = e.message;
+      }
+    });
+    label.append(radio, contoh, document.createTextNode(t[1]));
+    pilihanTema.append(label);
+  });
+  fsTema.append(pilihanTema, pesanTema);
+  form.append(fsTema);
 
   // isian teks
   function kelompok(judul, daftar) {

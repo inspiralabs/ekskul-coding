@@ -72,6 +72,8 @@ function buatPembatas({ maks = 10, jendelaMs = 15 * 60 * 1000, sekarang = Date.n
 const FIELD_SISWA = { panggilan: 30, tentang: 300, cita_cita: 100, cerita_tersulit: 200, cerita_terseru: 200, cerita_rencana: 200 };
 const FIELD_RESMI = { nama_lengkap: 100, kelas: 20, judul_proyek: 100, catatan_pelatih: 500 };
 const MAKS_LINK = 3;
+// Warna halaman profil pilihan siswa. Sama dengan blok [data-tema] di profil/profil.css (dijaga tes "tema").
+const TEMA = ["ungu", "biru", "hijau", "jingga", "merah-muda"];
 
 function saringPerubahan(peran, data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return { error: "data perubahan tidak valid" };
@@ -84,6 +86,9 @@ function saringPerubahan(peran, data) {
         v.every((u) => typeof u === "string" && /^https:\/\/\S+$/.test(u.trim()) && [...u.trim()].length <= 200);
       if (!ok) return { error: `link_karya: maksimal ${MAKS_LINK} alamat yang diawali https:// (maks 200 karakter)` };
       patch.link_karya = v.map((u) => u.trim());
+    } else if (k === "tema") {
+      if (!TEMA.includes(v)) return { error: `tema: pilih salah satu dari ${TEMA.join(", ")}` };
+      patch.tema = v;
     } else if (Object.hasOwn(batas, k)) {   // bukan `in`: "constructor"/"__proto__" ikut lolos
       if (typeof v !== "string") return { error: `${k}: harus berupa teks` };
       const t = v.trim();
@@ -104,7 +109,7 @@ function bolehKelola(akun, siswa) {
 
 const KOLOM_PUBLIK = ["slug", "jenjang", "device_id", "nama_lengkap", "panggilan", "kelas", "tentang", "cita_cita",
   "cerita_tersulit", "cerita_terseru", "cerita_rencana", "link_karya", "poin", "lencana", "peringkat", "judul_proyek",
-  "catatan_pelatih", "sertifikat_nomor"];
+  "catatan_pelatih", "sertifikat_nomor", "tema"];
 
 function dataPublik(baris, urlFoto) {
   const d = {};
@@ -144,7 +149,7 @@ const FORMAT_ID = /^SM[PA]-\d{3}$/;
 const FORMAT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 module.exports = {
-  FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG,
+  FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG, TEMA,
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
 };

@@ -47,6 +47,9 @@ test("saring perubahan siswa", () => {
   assert.match(saringPerubahan("siswa", { poin: 999 }).error, /"poin" tidak boleh diubah/);
   assert.match(saringPerubahan("siswa", { kelas: "XI-2" }).error, /"kelas"/);
   assert.ok(saringPerubahan("siswa", { tentang: "😀".repeat(300) }).patch); // 300 karakter, bukan byte
+  assert.deepEqual(saringPerubahan("siswa", { tema: "hijau" }), { patch: { tema: "hijau" } });
+  assert.match(saringPerubahan("siswa", { tema: "emas" }).error, /tema: pilih salah satu/);
+  assert.match(saringPerubahan("siswa", { tema: ["hijau"] }).error, /tema: pilih salah satu/);
   assert.match(saringPerubahan("siswa", { tentang: "a".repeat(301) }).error, /tentang/);
   assert.match(saringPerubahan("siswa", { tentang: 5 }).error, /tentang/);
   assert.ok(saringPerubahan("siswa", { link_karya: ["https://a.id", "https://b.id"] }).patch);

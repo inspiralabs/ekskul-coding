@@ -10,77 +10,101 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/profil/profil.css">
-<!-- Profil siswa: /profil/?s=<slug>. Isi dari backend (/api/portofolio/profil/<slug>), diisi siswa lewat /dashboard/. -->
+<!-- Profil siswa: /profil/?s=<slug>. Isi dari backend (/api/portofolio/profil/<slug>), diisi siswa lewat /dashboard/.
+     Warna halaman = pilihan siswa (data-tema di <html>, dipasang profil.js). -->
 </head>
 <body>
 <a class="lewati" href="#isi">Langsung ke isi</a>
 
-<main id="isi" class="halaman">
+<main id="isi">
   <p class="status" id="status" role="status">Memuat profil...</p>
 
   <div id="konten" hidden>
-    <header class="sampul">
-      <div class="sampul-teks">
-        <p class="sampul-asal" id="asal"></p>
-        <h1 id="nama"></h1>
-        <p class="sampul-ringkasan" id="ringkasan"></p>
-        <dl class="fakta" id="fakta"></dl>
+    <header class="hero">
+      <div class="hero-dalam lebar">
+        <div class="hero-teks">
+          <p class="hero-asal" id="asal"></p>
+          <h1><span class="hero-sapa">Hai, aku</span> <span class="hero-nama" id="nama"></span></h1>
+          <p class="hero-ringkasan" id="ringkasan"></p>
+          <div class="hero-aksi">
+            <a class="tombol" href="#proyek">Lihat proyek akhirku</a>
+            <a class="tombol tombol-garis" href="#sertifikat" id="keSertifikat" hidden>Lihat sertifikat</a>
+          </div>
+        </div>
+        <div class="hero-potret">
+          <span class="keping keping-1" aria-hidden="true">{ }</span>
+          <span class="keping keping-2" aria-hidden="true">&lt;/&gt;</span>
+          <figure class="potret" id="potret"></figure>
+        </div>
       </div>
-      <figure class="sampul-foto" id="sampulFoto" hidden></figure>
     </header>
 
-    <section class="bagian" aria-labelledby="judulTentang" id="bagianTentang" hidden>
-      <h2 id="judulTentang">Tentang aku</h2>
-      <div class="tentang-isi">
-        <p id="tentang" hidden></p>
-        <div id="kotakCita" hidden><span class="label-kecil">Cita-cita / minat</span><p id="citaCita"></p></div>
-        <div id="kotakLink" hidden><span class="label-kecil">Karyaku</span><ul class="daftar-link" id="link"></ul></div>
-      </div>
-    </section>
-
-    <section class="bagian proyek" aria-labelledby="judulProyek">
-      <h2 id="judulProyek">Proyek akhir</h2>
-      <div class="proyek-isi">
-        <div>
-          <ul class="cerita" id="cerita"></ul>
+    <div class="lembar">
+      <section class="bagian kenalan lebar" aria-labelledby="judulKenalan">
+        <div class="kenalan-teks">
+          <h2 id="judulKenalan">Kenalan dulu</h2>
+          <p class="kenalan-cerita" id="tentang"></p>
+          <dl class="rincian" id="rincian"></dl>
         </div>
-        <aside class="alat" aria-labelledby="judulAlat">
-          <h3 id="judulAlat">Kiriman terakhir dari alat</h3>
-          <div class="alat-angka" id="alatAngka" hidden>
-            <p><span class="angka" id="alatSuhu"></span><span class="satuan">°C</span><span class="label">suhu</span></p>
-            <p><span class="angka" id="alatLembap"></span><span class="satuan">%</span><span class="label">kelembapan</span></p>
+        <dl class="angka" id="angka"></dl>
+      </section>
+
+      <section class="bagian materi lebar" aria-labelledby="judulMateri" id="bagianMateri" hidden>
+        <h2 id="judulMateri">Yang dipelajari di ekskul</h2>
+        <ul class="materi-daftar" id="materi"></ul>
+      </section>
+
+      <section class="bagian lebar" aria-labelledby="judulProyek" id="proyek">
+        <div class="proyek-kartu">
+          <div class="proyek-cerita">
+            <h2 id="judulProyek">Proyek akhir</h2>
+            <p class="proyek-nama" id="namaProyek" hidden></p>
+            <ul class="cerita" id="cerita"></ul>
           </div>
-          <p class="alat-waktu" id="alatStatus" role="status">Mengambil data dari alat...</p>
-          <a class="tombol tombol-garis" id="linkDashboard" hidden>Buka dashboard kelompok</a>
-        </aside>
+          <aside class="alat" aria-labelledby="judulAlat">
+            <h3 id="judulAlat">Kiriman terakhir dari alat</h3>
+            <div class="alat-angka" id="alatAngka" hidden>
+              <p><span class="nilai" id="alatSuhu"></span><span class="satuan">°C</span><span class="label">suhu</span></p>
+              <p><span class="nilai" id="alatLembap"></span><span class="satuan">%</span><span class="label">kelembapan</span></p>
+            </div>
+            <p class="alat-waktu" id="alatStatus" role="status">Mengambil data dari alat...</p>
+            <a class="tombol tombol-garis" id="linkDashboard" hidden></a>
+          </aside>
+        </div>
+        <div class="karya" id="kotakLink" hidden>
+          <h3>Karya lainnya</h3>
+          <ul class="daftar-link" id="link"></ul>
+        </div>
+      </section>
+
+      <div class="bagian dua-kolom lebar">
+        <section aria-labelledby="judulLencana">
+          <h2 id="judulLencana">Lencana challenge</h2>
+          <p class="pengantar">Satu lencana untuk tiap challenge yang lulus. Makin banyak balok, makin sulit challenge-nya.</p>
+          <ul class="lencana" id="lencana"></ul>
+        </section>
+        <section aria-labelledby="judulPerjalanan" id="bagianPerjalanan" hidden>
+          <h2 id="judulPerjalanan">Perjalanan di ekskul</h2>
+          <ol class="linimasa" id="linimasa"></ol>
+        </section>
       </div>
-    </section>
 
-    <section class="bagian" aria-labelledby="judulPerjalanan" id="bagianPerjalanan" hidden>
-      <h2 id="judulPerjalanan">Perjalanan di ekskul</h2>
-      <ol class="linimasa" id="linimasa"></ol>
-    </section>
+      <section class="bagian catatan lebar" aria-labelledby="judulCatatan" id="bagianCatatan" hidden>
+        <h2 id="judulCatatan">Catatan dari pelatih</h2>
+        <blockquote>
+          <p id="catatan"></p>
+          <footer>Unggul Sulaiman, S.Kom, pelatih Ekskul Coding</footer>
+        </blockquote>
+      </section>
 
-    <section class="bagian" aria-labelledby="judulLencana">
-      <h2 id="judulLencana">Lencana challenge</h2>
-      <p class="pengantar">Satu lencana untuk tiap challenge yang lulus. Easy +5, Medium +10, Hard +15 poin.</p>
-      <ul class="lencana" id="lencana"></ul>
-    </section>
-
-    <section class="bagian catatan" aria-labelledby="judulCatatan" id="bagianCatatan" hidden>
-      <h2 id="judulCatatan">Catatan dari pelatih</h2>
-      <blockquote>
-        <p id="catatan"></p>
-        <footer>Unggul Sulaiman, S.Kom, pelatih Ekskul Coding</footer>
-      </blockquote>
-    </section>
-
-    <section class="bagian sertifikat-ajak" aria-labelledby="judulSertifikat" id="bagianSertifikat" hidden>
-      <div>
-        <h2 id="judulSertifikat">Sertifikat</h2>
-        <p id="sertifikatInfo"></p>
+      <div class="lebar">
+        <section class="pita" aria-labelledby="judulSertifikat" id="sertifikat" hidden>
+          <h2 id="judulSertifikat">Sertifikat</h2>
+          <p class="pita-nomor" id="sertifikatNomor"></p>
+          <p>Sertifikat cetak menyusul setelah pertemuan terakhir.</p>
+        </section>
       </div>
-    </section>
+    </div>
   </div>
 </main>
 
