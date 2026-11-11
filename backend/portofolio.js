@@ -58,7 +58,7 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
       return res.status(403).json({ ok: false, error: "sertifikat belum dibuka", buka, jenjang: b.jenjang });
     }
     const sertifikat = { ...dataPublik(b, store.urlFoto), tanggal: buka };
-    // Nilai (dari Gradebook), tanda tangan, dan stempel hanya untuk staf dan siswa pemilik sertifikat yang sedang
+    // Lembar nilai (rincian dari Gradebook), tanda tangan, dan stempel hanya untuk staf dan siswa pemilik sertifikat yang sedang
     // login. Pengunjung lain yang punya link tetap melihat sertifikatnya, tanpa ketiganya.
     const pemilik = !!akun && akun.peran === "siswa" && akun.id === b.id_siswa && akun.v === b.kode_versi;
     if (staf || pemilik) {

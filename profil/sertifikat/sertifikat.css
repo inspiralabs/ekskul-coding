@@ -61,14 +61,6 @@ a { color: var(--maroon); font-weight: 700; }
 .s-isi { font-size: 1.22cqw; line-height: 1.6; color: var(--abu); margin-top: 1.3cqw; }
 .s-angka { font-size: 1.22cqw; font-weight: 800; color: var(--maroon); margin-top: .7cqw; }
 
-/* Nilai dari Gradebook: hanya ada kalau server mengirimnya (pemilik sertifikat yang login, atau admin). */
-.s-nilai { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 1.2cqw; border-block: .12cqw solid var(--tinta); }
-.s-nilai div { padding: .7cqw .3cqw .6cqw; text-align: center; }
-.s-nilai div + div { border-left: .08cqw solid var(--emas); }
-.s-nilai dt { font-size: .92cqw; font-weight: 700; color: var(--abu); line-height: 1.2; }
-.s-nilai dd { font: 800 1.9cqw/1.2 'Baloo 2', sans-serif; font-variant-numeric: tabular-nums; }
-.s-nilai .utama dd { color: var(--maroon); }
-
 .s-tanggal { font-size: 1.15cqw; font-weight: 700; margin-top: 1.2cqw; }
 .s-tanggal + .s-tanggal { margin-top: .2cqw; }
 
@@ -84,10 +76,30 @@ a { color: var(--maroon); font-weight: 700; }
 .s-qr { width: 6.4cqw; margin: 0 auto .4cqw; }
 .s-qr svg { display: block; width: 100%; height: auto; }
 
+/* ---------- halaman kedua: rincian nilai dari Gradebook ---------- */
+.lembar-nilai { margin-top: 1.5rem; }
+.sertifikat :where(h2, h3) { margin: 0; }
+.n-merek { position: absolute; left: 5cqw; top: 4.4cqw; }
+.n-isi { position: absolute; left: 5cqw; right: 5cqw; top: 13.5cqw; bottom: 4.2cqw; display: flex; flex-direction: column; }
+.lembar-nilai h2 { font: 800 4.6cqw/1 'Baloo 2', sans-serif; }
+.n-siapa { font-size: 1.4cqw; font-weight: 700; color: var(--abu); margin-top: .9cqw; }
+.n-kolom { display: grid; grid-template-columns: 1fr 1fr; gap: 6cqw; margin-top: 3cqw; align-items: start; }
+.n-kolom h3 { font: 800 1.5cqw/1.3 'Nunito', sans-serif; padding-bottom: .8cqw; border-bottom: .12cqw solid var(--tinta); }
+.n-kolom dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 2cqw; padding: .72cqw 0; border-bottom: .08cqw solid var(--emas-muda); font-size: 1.35cqw; }
+.n-kolom dt { font-weight: 600; }
+.n-kolom dd { font-weight: 800; font-variant-numeric: tabular-nums; }
+.n-kolom .total dt { font-weight: 800; }
+/* Nilai akhir dan predikat: hasil yang paling dicari di lembar ini. */
+.n-kolom .utama { border-bottom-color: var(--tinta); }
+.n-kolom .utama dt { font-weight: 800; }
+.n-kolom .utama dd { font: 800 2.3cqw/1 'Baloo 2', sans-serif; color: var(--maroon); }
+.n-kaki { margin-top: auto; font-size: 1.05cqw; color: var(--abu); max-width: 60cqw; }
+
 @media print {
   @page { size: A4 landscape; margin: 0; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { background: none; }
   .alat-cetak, .status { display: none !important; }
   .sertifikat { width: 297mm; height: 210mm; aspect-ratio: auto; margin: 0; break-inside: avoid; }
+  .lembar-nilai { break-before: page; }
 }

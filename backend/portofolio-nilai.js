@@ -1,5 +1,5 @@
 // ============================================================
-// Nilai siswa untuk sertifikat, dibaca LANGSUNG dari sheet "Gradebook" di Google Sheets (ekspor CSV).
+// Nilai siswa untuk LEMBAR NILAI di belakang sertifikat, dibaca LANGSUNG dari sheet "Gradebook" di Google Sheets (ekspor CSV).
 // Tidak ada impor: begitu tutor mengubah spreadsheet, nilai di sertifikat ikut berubah (paling lambat 5 menit,
 // selama itu hasil terakhir disimpan di memori supaya Google tidak dipanggil tiap halaman dibuka).
 //
@@ -8,14 +8,8 @@
 // Spreadsheet harus dibagikan "siapa saja yang memiliki link" (sudah begitu sejak awal).
 // ============================================================
 
-// kunci di balasan API -> judul kolom di sheet Gradebook. Kolom "Nilai Final Project" diisi nilai ujian akhir.
-const KOLOM = {
-  post_test: "Rata-rata Post-Test (0-100)",
-  gamifikasi: "Skor Gamifikasi (0-100)",
-  ujian_akhir: "Nilai Final Project (0-100)",
-  nilai_akhir: "NILAI AKHIR",
-  predikat: "Predikat",
-};
+// Kolom identitas tidak ikut ke lembar nilai (sudah ada di sertifikat).
+const BUKAN_NILAI = ["ID Siswa", "Nama Lengkap", "Kelas"];
 // Sheet Gradebook bernama "Gradebook SMA" di file SMP maupun SMA; judul kolom ada di baris 4.
 const alamatCsv = (id) =>
   `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent("Gradebook SMA")}&range=A4:S200&headers=1`;
@@ -50,7 +44,11 @@ function angka(teks) {
   return Number.isFinite(n) ? n : null;
 }
 
-// CSV Gradebook -> Map("SMA-004" -> { post_test, gamifikasi, ujian_akhir, nilai_akhir, predikat }).
+// CSV Gradebook -> Map("SMA-004" -> { rincian: [[judul kolom, isi], ...] }), urutan kolom sama dengan sheet.
+// Judul kolom dipakai apa adanya sebagai label di lembar nilai, jadi kalau tutor menambah/mengganti kolom di sheet,
+// lembar nilai ikut. Dua penyesuaian:
+// - "Final Project" ditulis "Ujian Akhir": kolom itu diisi nilai ujian akhir (keputusan pemilik, Nov 2026).
+// - "Ranking" hanya ikut kalau 3 besar (sama dengan aturan peringkat di halaman profil), berlabel "Peringkat".
 // Baris judul dicari lewat sel "ID Siswa", jadi baris keterangan di atasnya tidak mengganggu.
 function nilaiDariCsv(teks) {
   const baris = bacaCsv(teks);
@@ -58,22 +56,27 @@ function nilaiDariCsv(teks) {
   const peta = new Map();
   if (iJudul < 0) return peta; // mis. Google membalas halaman login karena spreadsheet tidak lagi dibagikan
   const judul = baris[iJudul].map((s) => s.trim());
-  const kolom = (nama) => judul.indexOf(nama);
-  const iId = kolom("ID Siswa");
+  const iId = judul.indexOf("ID Siswa");
   for (const b of baris.slice(iJudul + 1)) {
     const id = (b[iId] || "").trim().toUpperCase();
     if (!id) continue;
-    const n = {};
-    for (const [kunci, nama] of Object.entries(KOLOM)) {
-      const isi = kolom(nama) >= 0 ? b[kolom(nama)] : "";
-      n[kunci] = kunci === "predikat" ? String(isi ?? "").trim() || null : angka(isi);
-    }
-    peta.set(id, n);
+    const rincian = [];
+    judul.forEach((nama, k) => {
+      if (!nama || BUKAN_NILAI.includes(nama)) return;
+      const mentah = String(b[k] ?? "").trim();
+      const n = angka(mentah);
+      if (nama === "Ranking") {
+        if (n >= 1 && n <= 3) rincian.push(["Peringkat", n]);
+        return;
+      }
+      rincian.push([nama.replace("Final Project", "Ujian Akhir"), n ?? (mentah || null)]);
+    });
+    peta.set(id, { rincian });
   }
   return peta;
 }
 
-// -> async nilaiSiswa(jenjang, idSiswa): objek nilai, atau null kalau tidak ada / tidak bisa dibaca.
+// -> async nilaiSiswa(jenjang, idSiswa): { rincian }, atau null kalau tidak ada / tidak bisa dibaca.
 // Gagal mengambil (internet, Google) tidak pernah melempar error: sertifikat tetap tampil tanpa nilai,
 // atau dengan nilai terakhir yang masih tersimpan.
 function buatSumberNilai({ idSheet, ambil = fetch, umurMs = 5 * 60 * 1000, sekarang = Date.now }) {
@@ -97,4 +100,4 @@ function buatSumberNilai({ idSheet, ambil = fetch, umurMs = 5 * 60 * 1000, sekar
   };
 }
 
-module.exports = { bacaCsv, nilaiDariCsv, buatSumberNilai, KOLOM };
+module.exports = { bacaCsv, nilaiDariCsv, buatSumberNilai };

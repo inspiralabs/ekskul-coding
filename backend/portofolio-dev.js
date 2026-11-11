@@ -55,8 +55,13 @@ pasangPortofolio(app, {
   env: { PORTOFOLIO_SECRET: crypto.randomBytes(16).toString("hex"), ADMIN_EMAIL: "admin@contoh.id", ADMIN_PASSWORD: "admin" },
   // Nilai fiktif (server sungguhan membacanya dari Google Sheets, lihat portofolio-nilai.js).
   tandaSertifikat: async () => ({ ttd: `http://localhost:${port}/aset/ttd.png`, stempel: `http://localhost:${port}/aset/stempel.png` }),
-  nilaiSiswa: async (jenjang, id) => (id === "SMA-901"
-    ? { post_test: 72.5, gamifikasi: 80, ujian_akhir: 90, nilai_akhir: 81.8, predikat: "B" } : null),
+  nilaiSiswa: async (jenjang, id) => (id === "SMA-901" ? { rincian: [
+    ["Poin Keaktifan Umum", 6], ["Poin Challenge Easy", 5], ["Poin Challenge Medium", 10], ["Poin Challenge Hard", 15],
+    ["Total Poin Challenge", 30], ["Inisiatif Eksplorasi", 0], ["Total Poin Keseluruhan", 36],
+    ["Skor Gamifikasi (0-100)", 90], ["Rata-rata Post-Test (0-100)", 72.5], ["Nilai Ujian Akhir (0-100)", 90],
+    ["Bobot Post-Test 30%", 21.8], ["Bobot Gamifikasi 30%", 27], ["Bobot Ujian Akhir 40%", 36],
+    ["NILAI AKHIR", 84.8], ["Predikat", "B"], ["Peringkat", 2],
+  ] } : null),
 });
 app.listen(port, () => {
   console.log(`Portofolio coba-coba: http://localhost:${port}/api/portofolio`);
