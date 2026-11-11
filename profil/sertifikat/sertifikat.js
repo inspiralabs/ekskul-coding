@@ -54,8 +54,6 @@ function isiLembarNilai(d, label) {
   });
   $("nilaiBagianPoin").hidden = !$("nilaiPoin").children.length;
   $("nilaiSiapa").textContent = d.nama_lengkap + " · Ekskul Coding " + label + " · " + SEMESTER;
-  $("nilaiKaki").textContent = "Lampiran sertifikat nomor " + d.sertifikat_nomor + ". Nilai dibaca dari Gradebook pada " +
-    new Date().toLocaleString("id-ID", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) + ".";
   $("lembarNilai").hidden = false;
   return true;
 }
