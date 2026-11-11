@@ -60,7 +60,7 @@ pasangPortofolio(app, {
     ["Total Poin Challenge", 30], ["Inisiatif Eksplorasi", 0], ["Total Poin Keseluruhan", 36],
     ["Skor Gamifikasi (0-100)", 90], ["Rata-rata Post-Test (0-100)", 72.5], ["Nilai Ujian Akhir (0-100)", 90],
     ["Bobot Post-Test 30%", 21.8], ["Bobot Gamifikasi 30%", 27], ["Bobot Ujian Akhir 40%", 36],
-    ["NILAI AKHIR", 84.8], ["Predikat", "B"], ["Peringkat", 2],
+    ["NILAI AKHIR", 84.8], ["Predikat", "B"],
   ] } : null),
 });
 app.listen(port, () => {

@@ -8,8 +8,8 @@
 // Spreadsheet harus dibagikan "siapa saja yang memiliki link" (sudah begitu sejak awal).
 // ============================================================
 
-// Kolom identitas tidak ikut ke lembar nilai (sudah ada di sertifikat).
-const BUKAN_NILAI = ["ID Siswa", "Nama Lengkap", "Kelas"];
+// Kolom yang tidak ikut ke transkrip: identitas (sudah ada di kepala transkrip) dan Ranking (lihat di bawah).
+const BUKAN_NILAI = ["ID Siswa", "Nama Lengkap", "Kelas", "Ranking"];
 // Sheet Gradebook bernama "Gradebook SMA" di file SMP maupun SMA; judul kolom ada di baris 4.
 const alamatCsv = (id) =>
   `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent("Gradebook SMA")}&range=A4:S200&headers=1`;
@@ -48,7 +48,8 @@ function angka(teks) {
 // Judul kolom dipakai apa adanya sebagai label di lembar nilai, jadi kalau tutor menambah/mengganti kolom di sheet,
 // lembar nilai ikut. Dua penyesuaian:
 // - "Final Project" ditulis "Ujian Akhir": kolom itu diisi nilai ujian akhir (keputusan pemilik, Nov 2026).
-// - "Ranking" hanya ikut kalau 3 besar (sama dengan aturan peringkat di halaman profil), berlabel "Peringkat".
+// - "Ranking" tidak ikut: peringkat tidak dicetak di transkrip (keputusan tim, Nov 2026), supaya siswa di luar
+//   papan atas tidak dirugikan. Yang berperingkat diapresiasi dengan cara lain.
 // Baris judul dicari lewat sel "ID Siswa", jadi baris keterangan di atasnya tidak mengganggu.
 function nilaiDariCsv(teks) {
   const baris = bacaCsv(teks);
@@ -65,10 +66,6 @@ function nilaiDariCsv(teks) {
       if (!nama || BUKAN_NILAI.includes(nama)) return;
       const mentah = String(b[k] ?? "").trim();
       const n = angka(mentah);
-      if (nama === "Ranking") {
-        if (n >= 1 && n <= 3) rincian.push(["Peringkat", n]);
-        return;
-      }
       rincian.push([nama.replace("Final Project", "Ujian Akhir"), n ?? (mentah || null)]);
     });
     peta.set(id, { rincian });

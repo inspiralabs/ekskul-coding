@@ -1,8 +1,8 @@
 // Sertifikat siswa: /profil/sertifikat/?s=<slug>. Server yang memutuskan boleh dibuka atau belum (tanggal buka per
 // jenjang ada di backend/portofolio-inti.js, SERTIFIKAT_BUKA); jam di HP/laptop siswa tidak berpengaruh.
 // Admin/guru yang sedang login di /dashboard/ bisa membukanya kapan saja (token ikut dikirim).
-// Lembar nilai (halaman kedua), tanda tangan, dan stempel hanya dikirim server untuk siswa pemilik sertifikat
-// (sedang login) dan admin.
+// Tanda tangan, stempel, dan transkrip nilai (halaman kedua) hanya dikirim server untuk siswa pemilik sertifikat
+// (sedang login) dan admin. Transkrip baru dikirim ke siswa setelah tanggal terbitnya (nilai_terbit).
 var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
   ? localStorage.getItem("apiBase") || "http://localhost:3335"
   : "https://api-ekskulcoding.inspiralabs.id";
@@ -23,7 +23,7 @@ function tanggal(iso, denganHari) {
 }
 
 function gambarQr(alamat) {
-  if (typeof qrcode !== "function") { $("sertQr").parentNode.hidden = true; return; }
+  if (typeof qrcode !== "function") { $("sertQr").hidden = true; return; }
   var qr = qrcode(0, "M");
   qr.addData(alamat);
   qr.make();
@@ -34,26 +34,68 @@ function gambarQr(alamat) {
     (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + jalur + '" fill="#2B2320"/></svg>';
 }
 
-// Halaman kedua: rincian nilai. Server mengirim seluruh kolom baris siswa di sheet Gradebook sebagai
-// [judul kolom, isi], urutannya sama dengan sheet. Kolom poin masuk tabel kiri, sisanya tabel kanan.
-// Sel kosong di spreadsheet ditulis "-", bukan 0.
-function isiLembarNilai(d, label) {
+// Keterangan tiap baris transkrip, dicocokkan dari judul kolom di sheet Gradebook. Kolom yang tidak dikenal tetap
+// tampil, hanya tanpa keterangan. Bobot dicek lebih dulu karena judulnya memuat kata yang sama dengan kolom skornya.
+var KETERANGAN = [
+  [/^bobot post-test/i, "30% dari rata-rata post-test"],
+  [/^bobot gamifikasi/i, "30% dari skor gamifikasi"],
+  [/^bobot ujian akhir/i, "40% dari nilai ujian akhir"],
+  [/keaktifan/i, "Bertanya atau menjawab saat Tanya Jawab, +2 tiap kali"],
+  [/challenge easy/i, "Challenge Easy yang lulus, +5 tiap challenge"],
+  [/challenge medium/i, "Challenge Medium yang lulus, +10 tiap challenge"],
+  [/challenge hard/i, "Challenge Hard yang lulus, +15 tiap challenge"],
+  [/^total poin challenge/i, "Jumlah poin Easy, Medium, dan Hard"],
+  [/inisiatif/i, "Poin tambahan untuk eksplorasi di luar tugas"],
+  [/^total poin keseluruhan/i, "Keaktifan, challenge, dan eksplorasi"],
+  [/gamifikasi/i, "Total poin diubah ke skala 0 sampai 100"],
+  [/post-test/i, "Rata-rata post-test semua pertemuan"],
+  [/ujian akhir/i, "Ujian akhir 10 soal pilihan ganda"],
+];
+
+function tulis(v) {
+  return v == null || v === "" ? "-" : typeof v === "number" ? v.toLocaleString("id-ID", { maximumFractionDigits: 1 }) : String(v);
+}
+
+function sel(tag, teks) {
+  var e = document.createElement(tag);
+  e.textContent = teks;
+  return e;
+}
+
+// Halaman kedua: transkrip nilai. Server mengirim seluruh kolom baris siswa di sheet Gradebook sebagai
+// [judul kolom, isi], urutannya sama dengan sheet. Kolom poin masuk tabel kiri, sisanya tabel kanan;
+// Nilai Akhir dan Predikat jadi baris penutup tabel kanan. Sel kosong di spreadsheet ditulis "-", bukan 0.
+function isiTranskrip(d, label) {
   var rincian = d.nilai && d.nilai.rincian;
   if (!rincian || !rincian.length) return false;
+  var no = { tabelPoin: 0, tabelNilai: 0 };
   rincian.forEach(function (x) {
-    var nama = x[0], v = x[1];
-    var grup = document.createElement("div");
-    if (/^total/i.test(nama)) grup.className = "total";
-    if (/^(nilai akhir|predikat)$/i.test(nama)) grup.className = "utama";
-    var dt = document.createElement("dt");
-    dt.textContent = nama;
-    var dd = document.createElement("dd");
-    dd.textContent = v == null || v === "" ? "-" : typeof v === "number" ? v.toLocaleString("id-ID", { maximumFractionDigits: 1 }) : v;
-    grup.append(dt, dd);
-    $(/^(poin|total poin|inisiatif)/i.test(nama) ? "nilaiPoin" : "nilaiAngka").append(grup);
+    var nama = x[0];
+    var tr = document.createElement("tr");
+    if (/^(nilai akhir|predikat)$/i.test(nama)) {
+      var th = sel("th", nama.toUpperCase());
+      th.colSpan = 3;
+      th.scope = "row";
+      tr.append(th, sel("td", tulis(x[1])));
+      $("tabelNilai").tFoot.append(tr);
+      return;
+    }
+    var tabel = /^(poin|total poin|inisiatif)/i.test(nama) ? "tabelPoin" : "tabelNilai";
+    var ket = "";
+    KETERANGAN.some(function (k) { return k[0].test(nama) && (ket = k[1]); });
+    if (/^total/i.test(nama)) tr.className = "total";
+    tr.append(sel("td", ++no[tabel]), sel("td", nama), sel("td", ket), sel("td", tulis(x[1])));
+    $(tabel).tBodies[0].append(tr);
   });
-  $("nilaiBagianPoin").hidden = !$("nilaiPoin").children.length;
-  $("nilaiSiapa").textContent = d.nama_lengkap + " · Ekskul Coding " + label + " · " + SEMESTER;
+  $("tabelPoin").hidden = !no.tabelPoin;
+  [["Nama", d.nama_lengkap], ["Kelas", d.kelas], ["Nomor sertifikat", d.sertifikat_nomor],
+    ["Program", "Ekstrakurikuler Coding " + label], ["Periode", SEMESTER], ["Proyek akhir", d.judul_proyek]]
+    .forEach(function (b) {
+      if (!b[1]) return;
+      var grup = document.createElement("div");
+      grup.append(sel("dt", b[0]), sel("dd", b[1]));
+      $("nilaiIdentitas").append(grup);
+    });
   $("lembarNilai").hidden = false;
   return true;
 }
@@ -89,17 +131,24 @@ function isiSertifikat(d) {
   $("sertNomor").textContent = "Nomor: " + d.sertifikat_nomor;
   gambarQr(ALAMAT_PROFIL + d.slug);
 
-  var adaNilai = isiLembarNilai(d, label);
+  var adaNilai = isiTranskrip(d, label);
   if (d.tanda) {
     pasangGambar("s-stempel", d.tanda.stempel, "Stempel InspiraLabs");
     pasangGambar("s-tanda", d.tanda.ttd, "Tanda tangan Unggul Sulaiman");
   }
-  // Server hanya mengirim "nilai" (walau null) untuk pemilik sertifikat dan admin.
-  $("catatanNilai").hidden = "nilai" in d;
+  // Server hanya mengirim "nilai_terbit" untuk pemilik sertifikat dan admin.
+  var pemilikAtauStaf = "nilai_terbit" in d;
+  $("catatanNilai").hidden = pemilikAtauStaf;
+  var belumTerbit = d.nilai_terbit && Date.now() < Date.parse(d.nilai_terbit + "T00:00:00+07:00");
+  var terbit = "";
+  if (belumTerbit && adaNilai) terbit = "Siswa " + label + " baru bisa melihat transkrip nilai mulai " + tanggal(d.nilai_terbit, true) + ".";
+  else if (belumTerbit) terbit = "Transkrip nilai terbit paling lambat " + tanggal(d.nilai_terbit, true) + ". Sampai saat itu halaman ini hanya berisi sertifikat.";
+  else if (pemilikAtauStaf && !adaNilai) terbit = "Transkrip nilai belum bisa dibaca dari spreadsheet. Coba muat ulang beberapa menit lagi.";
+  $("catatanTerbit").textContent = terbit;
+  $("catatanTerbit").hidden = !terbit;
   // Hanya staf yang bisa sampai sini sebelum tanggal buka: beri tahu bahwa siswa belum bisa melihatnya.
   if (Date.now() < Date.parse(d.tanggal + "T00:00:00+07:00")) {
-    $("catatanStaf").textContent = "Kamu melihat ini sebagai admin. Siswa " + label + " baru bisa membukanya mulai " + tanggal(d.tanggal, true) + "." +
-      (adaNilai ? "" : " Lembar nilai belum bisa dibaca dari spreadsheet.");
+    $("catatanStaf").textContent = "Kamu melihat ini sebagai admin. Siswa " + label + " baru bisa membuka sertifikat ini mulai " + tanggal(d.tanggal, true) + ".";
     $("catatanStaf").hidden = false;
   }
 }
