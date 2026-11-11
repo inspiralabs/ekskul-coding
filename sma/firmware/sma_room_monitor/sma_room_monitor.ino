@@ -23,21 +23,27 @@ const char* DEVICE_ID     = "sma-01";        // sudah diisi tutor, JANGAN digant
 const char* WIFI_SSID     = "ISI_DI_SINI";  // Di isi sesuai dengan nama WiFi
 const char* WIFI_PASSWORD = "ISI_DI_SINI";  // Di isi sesuai dengan password WiFi
 
-#define DHT_PIN 13                           // ganti sesuai pemasangan kabel DHT22
-#define RELAY_PIN 14                         // ganti sesuai pemasangan modul relay (hindari GPIO 0,2,5,12,15 = strapping pin)
+#define DHT_PIN 13                          // ganti sesuai pemasangan kabel DHT22
+#define RELAY_PIN 16                        // ganti sesuai pemasangan modul relay (misal GPIO 14 / GPIO 16)
 
 DHT dht(DHT_PIN, DHT22);
 WebServer fanServer(80);
 
 bool fanOn = false;  // status relay/fan terkini
 
-// Nyalakan/matikan relay. Modul relay umumnya ACTIVE-LOW:
-//   LOW  => relay ON (kipas menyala),  HIGH => relay OFF.
-// Kalau relaymu ternyata active-HIGH, ganti RELAY_ACTIVE_LOW jadi false.
-#define RELAY_ACTIVE_LOW true
+// Modul relay 5V Active-LOW sering bocor tegangan jika dipicu 3.3V HIGH.
+// Solusi: Gunakan mode INPUT (Hi-Z) untuk mematikan relay total,
+// dan mode OUTPUT LOW untuk mengaktifkan relay.
 void setRelay(bool on) {
   fanOn = on;
-  digitalWrite(RELAY_PIN, (on == RELAY_ACTIVE_LOW) ? LOW : HIGH);
+  if (on) {
+    pinMode(RELAY_PIN, OUTPUT);
+    digitalWrite(RELAY_PIN, LOW); // Relay ON (Kipas Nyala)
+    Serial.println("[Relay] Kipas NYALA");
+  } else {
+    pinMode(RELAY_PIN, INPUT);    // High-Impedance -> Optocoupler OFF (Kipas Mati)
+    Serial.println("[Relay] Kipas MATI");
+  }
 }
 
 // Dipanggil saat ada POST ke http://<ip-esp32-ini>/fan dengan body
@@ -52,8 +58,9 @@ void setup() {
   // ==== JANGAN UBAH ====
   Serial.begin(115200);
   dht.begin();
-  setRelay(false);  // kipas mati saat baru menyala (ditulis sebelum pinMode)
-  pinMode(RELAY_PIN, OUTPUT);
+
+  // Pastikan kipas langsung dalam kondisi MATI saat boot
+  setRelay(false);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Menghubungkan ke WiFi");
@@ -84,6 +91,13 @@ void loop() {
   if (millis() - lastSendTime < SEND_INTERVAL_MS) return;
   lastSendTime = millis();
 
+  // WiFi sempat putus? Sambungkan lagi, coba kirim di putaran berikutnya.
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi putus, coba reconnect...");
+    WiFi.reconnect();
+    return;
+  }
+
   float temp = dht.readTemperature();
   float humidity = dht.readHumidity();
 
@@ -103,8 +117,6 @@ void loop() {
   json += "}";
 
   // SERVER_URL diawali "https://" (server online), jadi butuh WiFiClientSecure.
-  // setInsecure() melewati verifikasi sertifikat -- cukup untuk demo kelas,
-  // BUKAN cara aman untuk aplikasi production sungguhan.
   WiFiClientSecure client;
   client.setInsecure();
 
@@ -119,9 +131,8 @@ void loop() {
   if (responseCode > 0) {
     String body = http.getString();
     Serial.println(body);
-    // Backend membalas dengan status fan terbaru ({"ok":true,"fanOn":...}),
-    // relay mengikuti balasan ini -- jadi perubahan dari dashboard sampai
-    // ke kipas paling lama ~4 detik.
+    // Backend membalas status fan ({"ok":true,"fanOn":...}),
+    // relay mengikuti instruksi ini.
     setRelay(body.indexOf("\"fanOn\":true") >= 0);
   }
   http.end();
