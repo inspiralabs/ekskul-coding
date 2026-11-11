@@ -145,6 +145,15 @@ function cekJpeg(buf) {
   return null;
 }
 
+// Sertifikat baru bisa dibuka siswa (dan siapa pun yang punya link) mulai hari pertemuan terakhir jenjangnya,
+// pukul 00.00 WIB. Admin/guru bisa membukanya kapan saja. Tanggal ini juga tercetak di sertifikat.
+const SERTIFIKAT_BUKA = { smp: "2026-11-13", sma: "2026-11-14" };
+
+function sertifikatTerbuka(jenjang, sekarangMs = Date.now()) {
+  const t = SERTIFIKAT_BUKA[jenjang];
+  return !!t && sekarangMs >= Date.parse(t + "T00:00:00+07:00");
+}
+
 const FORMAT_ID = /^SM[PA]-\d{3}$/;
 const FORMAT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -152,4 +161,5 @@ module.exports = {
   FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG, TEMA,
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
+  SERTIFIKAT_BUKA, sertifikatTerbuka,
 };

@@ -201,6 +201,14 @@ function buatEditor(wadah, siswa, opsi) {
     lihat.target = "_blank";
     lihat.rel = "noopener";
     aksi.append(lihat);
+    if (siswa.sertifikat_nomor) {
+      // Siswa: halaman itu sendiri yang bilang kalau belum dibuka. Admin/guru: selalu terbuka.
+      var sert = el("a", null, "Lihat sertifikat ↗");
+      sert.href = "/profil/sertifikat/?s=" + encodeURIComponent(siswa.slug);
+      sert.target = "_blank";
+      sert.rel = "noopener";
+      aksi.append(sert);
+    }
   }
   var pesanSimpan = el("p", "pesan");
   pesanSimpan.setAttribute("role", "status");

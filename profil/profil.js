@@ -82,7 +82,8 @@ function isiProfil(d) {
   // Angka nol tidak ditampilkan: halaman siswa yang poinnya masih sedikit tidak dipenuhi deretan "0".
   if (semuaChallenge.length) pasangan($("angka"), "lencana challenge", semuaChallenge.length);
   if (tanyaJawab) pasangan($("angka"), "kali tanya jawab", tanyaJawab);
-  if (d.peringkat) pasangan($("angka"), "leaderboard " + (JENJANG[d.jenjang] || ""), "#" + d.peringkat);
+  // Peringkat = urutan Nilai Akhir di Gradebook (bukan urutan poin di halaman Leaderboard), jadi labelnya "peringkat".
+  if (d.peringkat) pasangan($("angka"), "peringkat " + (JENJANG[d.jenjang] || ""), "#" + d.peringkat);
   else if (lencana.length) pasangan($("angka"), "pertemuan dapat poin", lencana.length);
   $("angka").hidden = !$("angka").children.length;
 
@@ -169,6 +170,7 @@ function isiProfil(d) {
   if (d.catatan_pelatih) { $("catatan").textContent = d.catatan_pelatih; $("bagianCatatan").hidden = false; }
   if (d.sertifikat_nomor) {
     $("sertifikatNomor").textContent = "Nomor " + d.sertifikat_nomor;
+    $("linkSertifikat").href = "/profil/sertifikat/?s=" + encodeURIComponent(d.slug);
     $("sertifikat").hidden = false;
     $("keSertifikat").hidden = false;
   }

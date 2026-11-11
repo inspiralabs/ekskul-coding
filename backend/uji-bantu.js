@@ -11,11 +11,11 @@ const siswaAwal = () => [
   { id_siswa: "SMP-022", jenjang: "smp", slug: "rafif", nama_lengkap: "Rafif", kode_hash: hashRahasia("R4F1F2"), kode_versi: 1 },
 ];
 
-async function jalankan(t, baris = siswaAwal(), env = ENV, bungkus = (s) => s) {
+async function jalankan(t, baris = siswaAwal(), env = ENV, bungkus = (s) => s, opsi = {}) {
   const app = express();
   app.use(express.json({ limit: "1mb" }));
   const store = bungkus(buatStoreMemori(baris));
-  pasangPortofolio(app, { store, env });
+  pasangPortofolio(app, { store, env, ...opsi });
   const server = await new Promise((ok) => { const s = app.listen(0, () => ok(s)); });
   t.after(() => server.close());
   const url = `http://127.0.0.1:${server.address().port}`;
