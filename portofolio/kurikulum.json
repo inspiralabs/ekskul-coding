@@ -6,7 +6,7 @@
   "api_base": "https://api-ekskulcoding.inspiralabs.id",
   "smp": {
     "label": "SMP",
-    "proyek": "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya tampil di internet",
+    "proyek": "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya ditampilkan pada dashboard monitoring",
     "ringkasan": "{panggilan} merakit alat pemantau suhu sendiri, mulai dari LED pertama sampai angka suhunya tampil di internet.",
     "pertemuan": [
       {"p": 1, "tanggal": "2026-07-31", "judul": "Kenalan dengan IoT", "dipelajari": "Melihat contoh alat IoT (Smart Dustbin, Smart Locker, Smart Room Monitor) dan menyusun harapan untuk satu semester."},

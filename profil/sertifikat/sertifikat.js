@@ -11,7 +11,7 @@ var JENJANG = { smp: "SMP", sma: "SMA" };
 var SEMESTER = "Semester 1, TP 2026/2027";
 // Sama dengan "proyek" di portofolio/kurikulum.json.
 var PROYEK = {
-  smp: "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya tampil di internet",
+  smp: "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya ditampilkan pada dashboard monitoring",
   sma: "alat pemantau suhu berbasis ESP32 yang menyalakan kipas otomatis dan bisa dikendalikan dari dashboard",
 };
 function $(id) { return document.getElementById(id); }
