@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kode Firmware SMA - Ekskul Coding Asy Syahid</title>
+<link rel="icon" href="/icon.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared/site.css">
+<!-- Kode firmware SMA terbaru untuk disalin ke Arduino IDE (dipakai di slide P13 "Ambil Kode yang Baru").
+     Isinya dibaca dari /sma/firmware/sma_room_monitor/sma_room_monitor.ino, jadi hanya ada satu sumber kode.
+     Device ID diisi otomatis sesuai kelompok yang dipilih, supaya data tidak nyasar ke dashboard kelompok lain. -->
+<style>
+  .blok{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+  .blok h2{font-size:22px;font-weight:800;margin-bottom:10px}
+  .blok ol{margin:0;padding-left:22px;color:#3d4653;font-weight:600}
+  .blok li{margin-bottom:6px}
+  .pilih{display:flex;flex-wrap:wrap;align-items:end;gap:12px}
+  .pilih label{display:grid;gap:4px;font-weight:800}
+  .pilih select{min-height:44px;padding:0 12px;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--card);font:700 16px 'Nunito',sans-serif;color:var(--ink)}
+  .keterangan{margin:10px 0 0;font-weight:700;color:var(--teal-ink);min-height:1.55em}
+  .keterangan.gagal{color:#a11d1d}
+  #kode{display:block;width:100%;height:60vh;min-height:320px;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r-sm);
+    background:#fffdf8;color:var(--ink);font:14px/1.5 ui-monospace,Consolas,'Courier New',monospace;white-space:pre;overflow:auto;resize:vertical;tab-size:2}
+</style>
+</head>
+<body>
+<header class="situs-header"><div class="wadah">
+  <a class="merek" href="/"><img src="/logo.jpeg" alt="" width="34" height="34">Ekskul Coding</a>
+  <nav class="nav" aria-label="Menu utama">
+    <a href="/materi/">Materi</a><a href="/leaderboard/">Leaderboard</a><a href="/dashboard/">Portofolio</a><a href="/#kelompok">Kelompok</a><a href="/tentang/">Tentang</a>
+  </nav>
+</div></header>
+
+<main class="wadah wadah-sempit">
+  <div class="judul-halaman">
+    <h1>Kode firmware SMA</h1>
+    <p>Kode terbaru Smart Room Monitor untuk ESP32. Pilih kelompokmu, salin, lalu tempel di Arduino IDE.</p>
+  </div>
+
+  <div class="blok">
+    <div class="pilih">
+      <label for="kelompok">Kelompokmu
+        <select id="kelompok">
+          <option>sma-01</option><option>sma-02</option><option>sma-03</option>
+          <option>sma-04</option><option>sma-05</option><option>sma-06</option>
+        </select>
+      </label>
+      <button type="button" class="tombol" id="salin" disabled>Salin kode</button>
+    </div>
+    <p class="keterangan" id="keterangan" role="status">Memuat kode...</p>
+    <textarea id="kode" readonly spellcheck="false" aria-label="Kode firmware"></textarea>
+  </div>
+
+  <div class="blok">
+    <h2>Setelah disalin</h2>
+    <ol>
+      <li>Di Arduino IDE, buka <strong>sma_room_monitor</strong>.</li>
+      <li>Tekan <strong>Ctrl+A</strong> lalu <strong>Ctrl+V</strong> supaya seluruh kode lama tertimpa (di Mac: ⌘+A lalu ⌘+V).</li>
+      <li>Isi nama dan password WiFi di <strong>WIFI_SSID</strong> dan <strong>WIFI_PASSWORD</strong>.</li>
+      <li>Pastikan kabel DHT22 dan relay dicolok di pin yang tertulis di <strong>DHT_PIN</strong> dan <strong>RELAY_PIN</strong>.</li>
+      <li>Klik <strong>Upload</strong>, lalu buka Serial Monitor (115200).</li>
+    </ol>
+  </div>
+</main>
+
+<footer class="situs-footer"><div class="wadah">
+  <span>InspiraLabs × Sekolah Qur'an Asy Syahid</span>
+  <a href="/">Kembali ke beranda</a>
+</div></footer>
+
+<script src="/kode/kode.js"></script>
+</body>
+</html>
