@@ -128,7 +128,7 @@ cd backend && UJI_SUPABASE=1 UJI_ENV=/path/ke/.env node --test portofolio-supaba
 Seluruh isi folder `backend/` (termasuk `server.js`, `.env`, skema Supabase) adalah infrastruktur
 siap pakai. Tidak ada bagian di sini yang menjadi materi ajar atau tugas siswa.
 
-### Lembar nilai di belakang sertifikat (opsional)
+### Transkrip nilai di belakang sertifikat (opsional)
 
 Sertifikat (`/profil/sertifikat/?s=<slug>`) punya lembar kedua berisi rincian nilai dari sheet **Gradebook** (seluruh
 kolom baris siswa itu) untuk siswa pemiliknya (sedang login) dan admin. Nilai dibaca langsung dari Google Sheets, bukan diimpor, dan disimpan di memori 5 menit.

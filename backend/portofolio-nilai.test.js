@@ -21,15 +21,15 @@ test("baca CSV: kutip, koma di dalam kutip, baris kosong", () => {
 test("rincian nilai dari CSV Gradebook: semua kolom, urutan sheet", () => {
   const peta = nilaiDariCsv(CSV);
   assert.deepEqual([...peta.keys()], ["SMA-004", "SMA-007"]);
-  // identitas tidak ikut; "Final Project" jadi "Ujian Akhir"; ranking 5 tidak ikut
+  // identitas dan ranking tidak ikut; "Final Project" jadi "Ujian Akhir"
   assert.deepEqual(peta.get("SMA-004").rincian, [
     ["Total Poin Keseluruhan", 42], ["Skor Gamifikasi (0-100)", 55.3], ["Rata-rata Post-Test (0-100)", 37.5],
     ["Nilai Ujian Akhir (0-100)", 80], ["Bobot Ujian Akhir 40%", 32], ["NILAI AKHIR", 54.9], ["Predikat", "D"],
   ]);
-  // koma desimal, sel kosong, ranking 3 besar ikut sebagai "Peringkat"
+  // koma desimal dan sel kosong; ranking 1 pun tidak ikut
   assert.deepEqual(peta.get("SMA-007").rincian, [
     ["Total Poin Keseluruhan", 75], ["Skor Gamifikasi (0-100)", 98.7], ["Rata-rata Post-Test (0-100)", 52.5],
-    ["Nilai Ujian Akhir (0-100)", null], ["Bobot Ujian Akhir 40%", 0], ["NILAI AKHIR", 45.4], ["Predikat", "D"], ["Peringkat", 1],
+    ["Nilai Ujian Akhir (0-100)", null], ["Bobot Ujian Akhir 40%", 0], ["NILAI AKHIR", 45.4], ["Predikat", "D"],
   ]);
   // baris keterangan di atas judul kolom tidak mengganggu
   assert.equal(akhir(nilaiDariCsv('"GRADEBOOK","",""\n' + CSV).get("SMA-004")), 54.9);
@@ -71,7 +71,7 @@ test("sumber nilai: disimpan 5 menit, gagal ambil tidak melempar error", async (
   assert.equal(await idAneh("sma", "SMA-004"), null);
 });
 
-test("sertifikat: lembar nilai, tanda tangan, stempel hanya untuk siswa pemilik dan admin", async (t) => {
+test("sertifikat: tanda tangan & stempel untuk pemilik dan admin; transkrip nilai untuk siswa baru terbit H+7", async (t) => {
   const baris = siswaAwal().map((b) => ({ ...b, sertifikat_nomor: "EKC-2026-S1-" + b.id_siswa }));
   baris.push({ id_siswa: "SMA-005", jenjang: "sma", slug: "husna", nama_lengkap: "Husna", sertifikat_nomor: "EKC-2026-S1-SMA-005",
     kode_hash: require("./portofolio-inti").hashRahasia("H5SNAA"), kode_versi: 1 });
@@ -82,7 +82,8 @@ test("sertifikat: lembar nilai, tanda tangan, stempel hanya untuk siswa pemilik 
     return id === "SMA-004" ? nilaiBudi : null;
   };
   const tanda = { ttd: "https://contoh.id/ttd.png", stempel: "https://contoh.id/stempel.png" };
-  const s = await jalankan(t, baris, ENV, (x) => x, { sekarang: () => Date.parse("2026-11-14T08:00:00+07:00"), nilaiSiswa,
+  let kini = Date.parse("2026-11-14T08:00:00+07:00"); // hari ekskul SMA: sertifikat terbuka, nilai belum terbit
+  const s = await jalankan(t, baris, ENV, (x) => x, { sekarang: () => kini, nilaiSiswa,
     tandaSertifikat: async () => tanda });
 
   // pengunjung tanpa login: sertifikat ada; nilai & tanda tidak ikut dan spreadsheet tidak dibaca
@@ -95,14 +96,25 @@ test("sertifikat: lembar nilai, tanda tangan, stempel hanya untuk siswa pemilik 
   assert.ok(!("nilai" in punyaLain) && !("tanda" in punyaLain));
   assert.deepEqual(diminta, []);
 
-  // pemiliknya sendiri dan admin: semuanya ikut
+  // pemilik di hari ekskul: tanda tangan & stempel ikut, nilai belum (hanya tanggal terbitnya), spreadsheet tidak dibaca
   const budi = (await s.post("/masuk/siswa", { id: "SMA-004", kode: "K7P2QX" })).token;
-  assert.deepEqual((await s.get("/sertifikat/budi", budi)).sertifikat.nilai, nilaiBudi);
+  const hariH = (await s.get("/sertifikat/budi", budi)).sertifikat;
+  assert.ok(!("nilai" in hariH));
+  assert.deepEqual([hariH.tanda, hariH.nilai_terbit], [tanda, "2026-11-21"]);
+  assert.deepEqual(diminta, []);
+  // admin di hari yang sama sudah bisa melihat nilainya
   const admin = (await s.post("/masuk/staf", { email: ENV.ADMIN_EMAIL, password: ENV.ADMIN_PASSWORD })).token;
   const punyaAdmin = (await s.get("/sertifikat/budi", admin)).sertifikat;
   assert.deepEqual([punyaAdmin.nilai, punyaAdmin.tanda], [nilaiBudi, tanda]);
   assert.equal((await s.get("/sertifikat/husna", admin)).sertifikat.nilai, null); // tidak ada di Gradebook
-  assert.deepEqual(diminta, ["sma:SMA-004", "sma:SMA-004", "sma:SMA-005"]);
+  assert.deepEqual(diminta, ["sma:SMA-004", "sma:SMA-005"]);
+  // H+7 pukul 00.00 WIB: pemilik ikut melihat nilainya; pengunjung lain tetap tidak
+  kini = Date.parse("2026-11-20T23:59:59+07:00");
+  assert.ok(!("nilai" in (await s.get("/sertifikat/budi", budi)).sertifikat));
+  kini = Date.parse("2026-11-21T00:00:00+07:00");
+  assert.deepEqual((await s.get("/sertifikat/budi", budi)).sertifikat.nilai, nilaiBudi);
+  assert.ok(!("nilai" in (await s.get("/sertifikat/budi", lain)).sertifikat));
+  assert.ok(!("nilai" in (await s.get("/sertifikat/budi")).sertifikat));
 
   // kode direset -> token lama pemilik tidak lagi membuka nilai
   await s.post("/staf/siswa/SMA-004/reset-kode", {}, admin);

@@ -11,8 +11,9 @@
 <link rel="stylesheet" href="/profil/sertifikat/sertifikat.css">
 <!-- Sertifikat siswa: /profil/sertifikat/?s=<slug>. Isi dari backend (/api/portofolio/sertifikat/<slug>), yang menolak
      sebelum tanggal buka jenjangnya kecuali untuk admin/guru yang sedang login di /dashboard/.
-     Lembar nilai (halaman kedua), tanda tangan, dan stempel hanya dikirim server untuk siswa pemilik sertifikat
+     Tanda tangan, stempel, dan transkrip nilai (halaman kedua) hanya dikirim server untuk siswa pemilik sertifikat
      (sedang login) dan admin. Pengunjung lain hanya melihat halaman pertama, tanpa tanda tangan dan stempel.
+     Transkrip nilai baru terbit untuk siswa H+7 dari pertemuan terakhir (NILAI_TERBIT di backend/portofolio-inti.js).
      Pembuat QR dikunci dengan integrity: halaman ini satu asal dengan dashboard (token login ada di localStorage).
      Kalau gagal dimuat, sertifikat tetap tampil tanpa QR. -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
@@ -32,7 +33,8 @@
       <a id="kembali" href="/">Kembali ke profil</a>
       <button type="button" class="tombol" id="cetak">Cetak atau simpan PDF</button>
       <p class="catatan-staf" id="catatanStaf" hidden></p>
-      <p id="catatanNilai" hidden>Lembar nilai, tanda tangan, dan stempel hanya tampil untuk pemilik sertifikat. Masuk dulu di menu Portofolio, lalu buka lagi halaman ini.</p>
+      <p id="catatanNilai" hidden>Tanda tangan, stempel, dan transkrip nilai hanya tampil untuk pemilik sertifikat. Masuk dulu di menu Portofolio, lalu buka lagi halaman ini.</p>
+      <p id="catatanTerbit" hidden></p>
       <p>Di jendela cetak pilih kertas A4, orientasi lanskap, margin "Tidak ada", dan centang "Grafik latar".</p>
     </div>
 
@@ -128,13 +130,12 @@
           </div>
           <div class="s-verif">
             <div class="s-qr" id="sertQr" aria-hidden="true"></div>
-            <p class="s-kecil">Pindai untuk cek keaslian</p>
           </div>
         </div>
       </div>
     </article>
 
-    <!-- Halaman kedua: rincian nilai dari sheet Gradebook. Hanya ada kalau server mengirim nilainya. -->
+    <!-- Halaman kedua: transkrip nilai dari sheet Gradebook. Hanya ada kalau server mengirim nilainya. -->
     <article class="sertifikat lembar-nilai" id="lembarNilai" hidden>
       <svg class="s-pojok" viewBox="0 0 290 110" aria-hidden="true"><use href="#bentukPojok"/></svg>
       <p class="s-merek n-merek">
@@ -142,17 +143,28 @@
         <span class="s-mitra"><small>bekerja sama dengan</small>Sekolah Qur'an Asy Syahid</span>
       </p>
       <div class="n-isi">
-        <h2>Rincian Nilai</h2>
-        <p class="n-siapa" id="nilaiSiapa"></p>
+        <h2>Transkrip Nilai</h2>
+        <dl class="n-identitas" id="nilaiIdentitas"></dl>
         <div class="n-kolom">
-          <section id="nilaiBagianPoin">
-            <h3>Poin keaktifan dan challenge</h3>
-            <dl id="nilaiPoin"></dl>
-          </section>
-          <section>
-            <h3>Nilai</h3>
-            <dl id="nilaiAngka"></dl>
-          </section>
+          <table class="n-tabel" id="tabelPoin">
+            <thead><tr><th scope="col">No</th><th scope="col">Poin keaktifan dan challenge</th><th scope="col">Keterangan</th><th scope="col">Poin</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div>
+            <table class="n-tabel" id="tabelNilai">
+              <thead><tr><th scope="col">No</th><th scope="col">Komponen nilai</th><th scope="col">Keterangan</th><th scope="col">Nilai</th></tr></thead>
+              <tbody></tbody>
+              <tfoot></tfoot>
+            </table>
+            <!-- Sama dengan rumus kolom Predikat di sheet Gradebook: >=90 A, >=80 B, >=70 C, di bawah 70 D. -->
+            <table class="n-tabel n-skala">
+              <caption>Skala predikat</caption>
+              <tbody>
+                <tr><th scope="row">Nilai akhir</th><td>90-100</td><td>80-89</td><td>70-79</td><td>di bawah 70</td></tr>
+                <tr><th scope="row">Predikat</th><td>A</td><td>B</td><td>C</td><td>D</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </article>

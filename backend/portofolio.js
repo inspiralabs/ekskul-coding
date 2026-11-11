@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const {
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, FORMAT_ID, FORMAT_SLUG,
-  SERTIFIKAT_BUKA, sertifikatTerbuka,
+  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit,
 } = require("./portofolio-inti");
 
 function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang = Date.now, nilaiSiswa = async () => null,
@@ -58,12 +58,14 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
       return res.status(403).json({ ok: false, error: "sertifikat belum dibuka", buka, jenjang: b.jenjang });
     }
     const sertifikat = { ...dataPublik(b, store.urlFoto), tanggal: buka };
-    // Lembar nilai (rincian dari Gradebook), tanda tangan, dan stempel hanya untuk staf dan siswa pemilik sertifikat yang sedang
-    // login. Pengunjung lain yang punya link tetap melihat sertifikatnya, tanpa ketiganya.
+    // Tanda tangan, stempel, dan transkrip nilai (dari Gradebook) hanya untuk staf dan siswa pemilik sertifikat yang
+    // sedang login. Pengunjung lain yang punya link tetap melihat sertifikatnya, tanpa ketiganya.
+    // Transkrip nilai baru dikirim ke siswa setelah tanggal terbitnya; staf bisa melihatnya kapan saja.
     const pemilik = !!akun && akun.peran === "siswa" && akun.id === b.id_siswa && akun.v === b.kode_versi;
     if (staf || pemilik) {
-      sertifikat.nilai = await nilaiSiswa(b.jenjang, b.id_siswa);
       sertifikat.tanda = await tandaSertifikat();
+      sertifikat.nilai_terbit = NILAI_TERBIT[b.jenjang];
+      if (staf || nilaiTerbit(b.jenjang, sekarang())) sertifikat.nilai = await nilaiSiswa(b.jenjang, b.id_siswa);
     }
     res.json({ ok: true, sertifikat });
   }));

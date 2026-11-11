@@ -154,6 +154,15 @@ function sertifikatTerbuka(jenjang, sekarangMs = Date.now()) {
   return !!t && sekarangMs >= Date.parse(t + "T00:00:00+07:00");
 }
 
+// Transkrip nilai (halaman kedua sertifikat) terbit H+7 dari pertemuan terakhir, pukul 00.00 WIB: nilai di hari
+// ekskul belum final (ujian akhir dan rekap belum masuk). Admin/guru bisa melihatnya kapan saja.
+const NILAI_TERBIT = { smp: "2026-11-20", sma: "2026-11-21" };
+
+function nilaiTerbit(jenjang, sekarangMs = Date.now()) {
+  const t = NILAI_TERBIT[jenjang];
+  return !!t && sekarangMs >= Date.parse(t + "T00:00:00+07:00");
+}
+
 const FORMAT_ID = /^SM[PA]-\d{3}$/;
 const FORMAT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -161,5 +170,5 @@ module.exports = {
   FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG, TEMA,
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
-  SERTIFIKAT_BUKA, sertifikatTerbuka,
+  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit,
 };

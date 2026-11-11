@@ -72,27 +72,37 @@ a { color: var(--maroon); font-weight: 700; }
 .s-tanda { position: absolute; left: 5.6cqw; bottom: -1.5cqw; height: 8.6cqw; width: auto; }
 .s-ttd-nama { font-size: 1.3cqw; font-weight: 800; }
 .s-kecil { font-size: 1.05cqw; color: var(--abu); }
-.s-verif { text-align: center; }
-.s-qr { width: 6.4cqw; margin: 0 auto .4cqw; }
+/* Kode QR ke halaman profil, berbingkai tipis supaya terbaca sebagai cap verifikasi, tanpa keterangan. */
+.s-qr { width: 5.6cqw; padding: .35cqw; background: #fff; border: .12cqw solid var(--tinta); }
 .s-qr svg { display: block; width: 100%; height: auto; }
 
-/* ---------- halaman kedua: rincian nilai dari Gradebook ---------- */
+/* ---------- halaman kedua: transkrip nilai dari Gradebook ----------
+   Bentuknya mengikuti contoh transkrip dari pemilik: kepala identitas, tabel bernomor dengan kolom keterangan,
+   baris nilai akhir yang disorot, dan tabel skala predikat. */
 .lembar-nilai { margin-top: 1.5rem; }
-.sertifikat :where(h2, h3) { margin: 0; }
+.sertifikat :where(h2) { margin: 0; }
 .n-merek { position: absolute; left: 5cqw; top: 4.4cqw; }
-.n-isi { position: absolute; left: 5cqw; right: 5cqw; top: 13.5cqw; bottom: 4.2cqw; display: flex; flex-direction: column; }
-.lembar-nilai h2 { font: 800 4.6cqw/1 'Baloo 2', sans-serif; }
-.n-siapa { font-size: 1.4cqw; font-weight: 700; color: var(--abu); margin-top: .9cqw; }
-.n-kolom { display: grid; grid-template-columns: 1fr 1fr; gap: 6cqw; margin-top: 3cqw; align-items: start; }
-.n-kolom h3 { font: 800 1.5cqw/1.3 'Nunito', sans-serif; padding-bottom: .8cqw; border-bottom: .12cqw solid var(--tinta); }
-.n-kolom dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 2cqw; padding: .72cqw 0; border-bottom: .08cqw solid var(--emas-muda); font-size: 1.35cqw; }
-.n-kolom dt { font-weight: 600; }
-.n-kolom dd { font-weight: 800; font-variant-numeric: tabular-nums; }
-.n-kolom .total dt { font-weight: 800; }
-/* Nilai akhir dan predikat: hasil yang paling dicari di lembar ini. */
-.n-kolom .utama { border-bottom-color: var(--tinta); }
-.n-kolom .utama dt { font-weight: 800; }
-.n-kolom .utama dd { font: 800 2.3cqw/1 'Baloo 2', sans-serif; color: var(--maroon); }
+.n-isi { position: absolute; left: 5cqw; right: 5cqw; top: 12cqw; bottom: 3.6cqw; display: flex; flex-direction: column; }
+.lembar-nilai h2 { font: 800 3.6cqw/1 'Baloo 2', sans-serif; color: var(--maroon); }
+.n-identitas { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6cqw; row-gap: .35cqw; margin-top: 1.6cqw; font-size: 1.22cqw; }
+.n-identitas div { display: grid; grid-template-columns: 11cqw 1fr; }
+.n-identitas dt { font-weight: 800; }
+.n-identitas dd::before { content: ": "; }
+.n-kolom { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4cqw; margin-top: 2.2cqw; align-items: start; }
+.n-tabel { width: 100%; border-collapse: collapse; font-size: 1.12cqw; line-height: 1.3; }
+.n-tabel th, .n-tabel td { border: .1cqw solid var(--tinta); padding: .62cqw .7cqw; text-align: left; vertical-align: middle; }
+.n-tabel thead th { background: var(--maroon); color: #fff; font-weight: 800; }
+.n-tabel :is(th, td):first-child { width: 3.2cqw; text-align: center; }
+.n-tabel :is(th, td):last-child { width: 6cqw; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+.n-tabel td:nth-child(3) { color: var(--abu); }
+.n-tabel .total td { background: #f1eadb; font-weight: 800; color: var(--tinta); }
+.n-tabel tfoot th { background: var(--emas-muda); font-weight: 800; text-align: center; width: auto; }
+.n-tabel tfoot td { background: var(--maroon); color: #fff; font: 800 1.7cqw/1 'Baloo 2', sans-serif; }
+.n-skala { margin-top: 1.8cqw; }
+.n-skala caption { caption-side: top; text-align: left; font-weight: 800; font-size: 1.12cqw; padding-bottom: .5cqw; }
+.n-skala :is(th, td) { text-align: center; width: auto !important; }
+.n-skala td { color: var(--tinta) !important; font-weight: 600 !important; }
+.n-skala th { background: var(--emas-muda); font-weight: 800; }
 
 @media print {
   @page { size: A4 landscape; margin: 0; }
