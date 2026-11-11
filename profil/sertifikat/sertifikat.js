@@ -1,7 +1,8 @@
 // Sertifikat siswa: /profil/sertifikat/?s=<slug>. Server yang memutuskan boleh dibuka atau belum (tanggal buka per
 // jenjang ada di backend/portofolio-inti.js, SERTIFIKAT_BUKA); jam di HP/laptop siswa tidak berpengaruh.
 // Admin/guru yang sedang login di /dashboard/ bisa membukanya kapan saja (token ikut dikirim).
-// Nilai, tanda tangan, dan stempel hanya dikirim server untuk siswa pemilik sertifikat (sedang login) dan admin.
+// Lembar nilai (halaman kedua), tanda tangan, dan stempel hanya dikirim server untuk siswa pemilik sertifikat
+// (sedang login) dan admin.
 var API_BASE = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
   ? localStorage.getItem("apiBase") || "http://localhost:3335"
   : "https://api-ekskulcoding.inspiralabs.id";
@@ -13,12 +14,6 @@ var PROYEK = {
   smp: "alat pemantau suhu dan kelembapan berbasis ESP32 yang datanya tampil di internet",
   sma: "alat pemantau suhu berbasis ESP32 yang menyalakan kipas otomatis dan bisa dikendalikan dari dashboard",
 };
-// [judul di sertifikat, kunci di balasan server, sorot?]. Kunci sama dengan KOLOM di backend/portofolio-nilai.js.
-var NILAI = [
-  ["Post-Test", "post_test"], ["Gamifikasi", "gamifikasi"], ["Ujian Akhir", "ujian_akhir"],
-  ["Nilai Akhir", "nilai_akhir", true], ["Predikat", "predikat", true],
-];
-
 function $(id) { return document.getElementById(id); }
 
 function tanggal(iso, denganHari) {
@@ -39,21 +34,29 @@ function gambarQr(alamat) {
     (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + jalur + '" fill="#2B2320"/></svg>';
 }
 
-// Nilai dari Gradebook. Angka kosong di spreadsheet ditulis "-", bukan 0.
-function isiNilai(nilai) {
-  if (!nilai) return false;
-  NILAI.forEach(function (n) {
-    var v = nilai[n[1]];
+// Halaman kedua: rincian nilai. Server mengirim seluruh kolom baris siswa di sheet Gradebook sebagai
+// [judul kolom, isi], urutannya sama dengan sheet. Kolom poin masuk tabel kiri, sisanya tabel kanan.
+// Sel kosong di spreadsheet ditulis "-", bukan 0.
+function isiLembarNilai(d, label) {
+  var rincian = d.nilai && d.nilai.rincian;
+  if (!rincian || !rincian.length) return false;
+  rincian.forEach(function (x) {
+    var nama = x[0], v = x[1];
     var grup = document.createElement("div");
-    if (n[2]) grup.className = "utama";
+    if (/^total/i.test(nama)) grup.className = "total";
+    if (/^(nilai akhir|predikat)$/i.test(nama)) grup.className = "utama";
     var dt = document.createElement("dt");
-    dt.textContent = n[0];
+    dt.textContent = nama;
     var dd = document.createElement("dd");
     dd.textContent = v == null || v === "" ? "-" : typeof v === "number" ? v.toLocaleString("id-ID", { maximumFractionDigits: 1 }) : v;
     grup.append(dt, dd);
-    $("sertNilai").append(grup);
+    $(/^(poin|total poin|inisiatif)/i.test(nama) ? "nilaiPoin" : "nilaiAngka").append(grup);
   });
-  $("sertNilai").hidden = false;
+  $("nilaiBagianPoin").hidden = !$("nilaiPoin").children.length;
+  $("nilaiSiapa").textContent = d.nama_lengkap + " · Ekskul Coding " + label + " · " + SEMESTER;
+  $("nilaiKaki").textContent = "Lampiran sertifikat nomor " + d.sertifikat_nomor + ". Nilai dibaca dari Gradebook pada " +
+    new Date().toLocaleString("id-ID", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) + ".";
+  $("lembarNilai").hidden = false;
   return true;
 }
 
@@ -88,7 +91,7 @@ function isiSertifikat(d) {
   $("sertNomor").textContent = "Nomor: " + d.sertifikat_nomor;
   gambarQr(ALAMAT_PROFIL + d.slug);
 
-  var adaNilai = isiNilai(d.nilai);
+  var adaNilai = isiLembarNilai(d, label);
   if (d.tanda) {
     pasangGambar("s-stempel", d.tanda.stempel, "Stempel InspiraLabs");
     pasangGambar("s-tanda", d.tanda.ttd, "Tanda tangan Unggul Sulaiman");
@@ -98,7 +101,7 @@ function isiSertifikat(d) {
   // Hanya staf yang bisa sampai sini sebelum tanggal buka: beri tahu bahwa siswa belum bisa melihatnya.
   if (Date.now() < Date.parse(d.tanggal + "T00:00:00+07:00")) {
     $("catatanStaf").textContent = "Kamu melihat ini sebagai admin. Siswa " + label + " baru bisa membukanya mulai " + tanggal(d.tanggal, true) + "." +
-      (adaNilai ? "" : " Nilai belum bisa dibaca dari spreadsheet.");
+      (adaNilai ? "" : " Lembar nilai belum bisa dibaca dari spreadsheet.");
     $("catatanStaf").hidden = false;
   }
 }
