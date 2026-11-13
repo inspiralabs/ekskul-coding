@@ -120,10 +120,12 @@ function dataPublik(baris, urlFoto) {
 
 // ---------------------------------------------------------------- impor dari spreadsheet
 
+// Judul proyek dan catatan pelatih TIDAK diimpor: keduanya dibaca langsung dari sheet Catatan Tutor (lengkapi() di
+// portofolio.js). Yang tersimpan di tabel hanya koreksi admin lewat dashboard, dan koreksi itu yang dipakai.
 const KOLOM_IMPOR = ["id_siswa", "jenjang", "device_id", "slug", "nama_lengkap", "poin", "lencana", "peringkat",
-  "judul_proyek", "catatan_pelatih", "sertifikat_nomor"];
+  "sertifikat_nomor"];
 const IMPOR_SELALU = ["jenjang", "device_id", "poin", "lencana", "peringkat", "sertifikat_nomor"]; // spreadsheet = sumber kebenaran
-const IMPOR_KALAU_KOSONG = ["nama_lengkap", "judul_proyek", "catatan_pelatih"];               // koreksi guru tidak ditimpa
+const IMPOR_KALAU_KOSONG = ["nama_lengkap"];               // koreksi guru tidak ditimpa
 
 function gabungImpor(lama, baru) {
   const hasil = {};
@@ -163,6 +165,23 @@ function nilaiTerbit(jenjang, sekarangMs = Date.now()) {
   return !!t && sekarangMs >= Date.parse(t + "T00:00:00+07:00");
 }
 
+// Judul proyek kalau tutor tidak mengisi apa pun (sheet maupun dashboard).
+const JUDUL_BAWAAN = { smp: "Pemantau Suhu Kelas", sma: "Smart Room Monitoring" };
+
+// Portofolio contoh (data karangan) untuk diperlihatkan ke siswa: SMA-990 dan SMP-990. Sertifikatnya terbuka untuk
+// siapa saja kapan saja, dengan transkrip nilai karangan, tanpa tanda tangan dan stempel.
+const CONTOH = /^SM[PA]-990$/;
+const NILAI_CONTOH = {
+  sma: [["Poin Keaktifan Umum", 8], ["Poin Challenge Easy", 15], ["Poin Challenge Medium", 30], ["Poin Challenge Hard", 30],
+    ["Total Poin Challenge", 75], ["Inisiatif Eksplorasi", 0], ["Total Poin Keseluruhan", 83], ["Skor Gamifikasi (0-100)", 100],
+    ["Rata-rata Post-Test (0-100)", 82.5], ["Nilai Ujian Akhir (0-100)", 90], ["Bobot Post-Test 30%", 24.8],
+    ["Bobot Gamifikasi 30%", 30], ["Bobot Ujian Akhir 40%", 36], ["NILAI AKHIR", 90.8], ["Predikat", "A"]],
+  smp: [["Poin Keaktifan Umum", 8], ["Poin Challenge Easy", 20], ["Poin Challenge Medium", 30], ["Poin Challenge Hard", 15],
+    ["Total Poin Challenge", 65], ["Inisiatif Eksplorasi", 0], ["Total Poin Keseluruhan", 73], ["Skor Gamifikasi (0-100)", 100],
+    ["Rata-rata Post-Test (0-100)", 76], ["Nilai Ujian Akhir (0-100)", 80], ["Bobot Post-Test 30%", 22.8],
+    ["Bobot Gamifikasi 30%", 30], ["Bobot Ujian Akhir 40%", 32], ["NILAI AKHIR", 84.8], ["Predikat", "B"]],
+};
+
 const FORMAT_ID = /^SM[PA]-\d{3}$/;
 const FORMAT_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
@@ -170,5 +189,5 @@ module.exports = {
   FIELD_SISWA, FIELD_RESMI, FORMAT_ID, FORMAT_SLUG, TEMA,
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, KOLOM_IMPOR,
-  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit,
+  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit, JUDUL_BAWAAN, CONTOH, NILAI_CONTOH,
 };

@@ -9,7 +9,7 @@ const express = require("express");
 const { WebSocketServer } = require("ws");
 const { createClient } = require("@supabase/supabase-js");
 const { pasangPortofolio, buatStoreSupabase, buatTandaSertifikat } = require("./portofolio");
-const { buatSumberNilai } = require("./portofolio-nilai");
+const { buatSumberNilai, buatSumberCatatan } = require("./portofolio-nilai");
 
 // db.schema: tabel readings & fan_control ada di skema "ekskul_coding_asy_syahid",
 // bukan "public" -- lihat backend/supabase_schema.sql. Skema ini juga harus
@@ -36,6 +36,8 @@ pasangPortofolio(app, {
   env: process.env,
   // Nilai di sertifikat dibaca langsung dari spreadsheet penilaian. Env kosong = sertifikat tanpa nilai.
   nilaiSiswa: buatSumberNilai({ idSheet: { smp: process.env.NILAI_SHEET_SMP, sma: process.env.NILAI_SHEET_SMA } }),
+  // Judul proyek & catatan pelatih dibaca dari sheet Catatan Tutor di spreadsheet yang sama.
+  catatanSiswa: buatSumberCatatan({ idSheet: { smp: process.env.NILAI_SHEET_SMP, sma: process.env.NILAI_SHEET_SMA } }),
   // Tanda tangan & stempel di sertifikat: bucket privat, lihat buatTandaSertifikat di portofolio.js.
   tandaSertifikat: buatTandaSertifikat(supabase, process.env.PORTOFOLIO_BUCKET_ASET || "portofolio-aset"),
 });

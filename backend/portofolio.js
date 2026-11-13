@@ -8,15 +8,23 @@ const crypto = require("crypto");
 const {
   buatKode, hashRahasia, cocokRahasia, buatToken, bacaToken, buatPembatas,
   saringPerubahan, bolehKelola, dataPublik, gabungImpor, cekJpeg, FORMAT_ID, FORMAT_SLUG,
-  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit,
+  SERTIFIKAT_BUKA, sertifikatTerbuka, NILAI_TERBIT, nilaiTerbit, JUDUL_BAWAAN, CONTOH, NILAI_CONTOH,
 } = require("./portofolio-inti");
 
 function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang = Date.now, nilaiSiswa = async () => null,
-  tandaSertifikat = async () => null }) {
+  tandaSertifikat = async () => null, catatanSiswa = async () => null }) {
   const r = express.Router();
   const secret = env.PORTOFOLIO_SECRET;
   const gagal = (res, status, error) => res.status(status).json({ ok: false, error });
-  const untukStaf = (b) => ({ ...dataPublik(b, store.urlFoto), id_siswa: b.id_siswa });
+  // Judul proyek & catatan pelatih: koreksi admin di tabel menang; kalau kosong, dibaca dari sheet Catatan Tutor;
+  // judul yang tetap kosong diberi judul bawaan jenjang. Kotak di dashboard dikosongkan = kembali ikut spreadsheet.
+  const lengkapi = async (b) => {
+    if (b.catatan_pelatih && b.judul_proyek) return b;
+    const c = (await catatanSiswa(b.jenjang, b.id_siswa)) || {};
+    return { ...b, catatan_pelatih: b.catatan_pelatih || c.catatan || "",
+      judul_proyek: b.judul_proyek || c.proyek || JUDUL_BAWAAN[b.jenjang] || "" };
+  };
+  const untukStaf = async (b) => ({ ...dataPublik(await lengkapi(b), store.urlFoto), id_siswa: b.id_siswa });
 
   r.use((req, res, next) => (secret ? next() : gagal(res, 503, "portofolio belum diaktifkan")));
 
@@ -44,7 +52,7 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
   r.get("/profil/:slug", aman(async (req, res) => {
     const b = await store.ambilSlug(req.params.slug);
     if (!b) return gagal(res, 404, "halaman tidak ditemukan");
-    res.json({ ok: true, profil: dataPublik(b, store.urlFoto) });
+    res.json({ ok: true, profil: { ...dataPublik(await lengkapi(b), store.urlFoto), ...(CONTOH.test(b.id_siswa) ? { contoh: true } : {}) } });
   }));
 
   // Sertifikat: sebelum tanggal buka jenjangnya hanya staf (token admin/guru) yang bisa melihat.
@@ -54,10 +62,14 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
     const akun = bacaToken((req.header("Authorization") || "").replace(/^Bearer /, ""), secret);
     const buka = SERTIFIKAT_BUKA[b.jenjang];
     const staf = !!akun && bolehKelola(akun, b);
+    if (CONTOH.test(b.id_siswa)) {
+      return res.json({ ok: true, sertifikat: { ...dataPublik(await lengkapi(b), store.urlFoto), tanggal: buka, contoh: true,
+        nilai: { rincian: NILAI_CONTOH[b.jenjang] } } });
+    }
     if (!staf && !sertifikatTerbuka(b.jenjang, sekarang())) {
       return res.status(403).json({ ok: false, error: "sertifikat belum dibuka", buka, jenjang: b.jenjang });
     }
-    const sertifikat = { ...dataPublik(b, store.urlFoto), tanggal: buka };
+    const sertifikat = { ...dataPublik(await lengkapi(b), store.urlFoto), tanggal: buka };
     // Tanda tangan, stempel, dan transkrip nilai (dari Gradebook) hanya untuk staf dan siswa pemilik sertifikat yang
     // sedang login. Pengunjung lain yang punya link tetap melihat sertifikatnya, tanpa ketiganya.
     // Transkrip nilai baru dikirim ke siswa setelah tanggal terbitnya; staf bisa melihatnya kapan saja.
@@ -108,13 +120,13 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
   }));
 
   // ---------------------------------------------------------------- siswa: halaman sendiri
-  r.get("/saya", butuh("siswa"), (req, res) => res.json({ ok: true, siswa: untukStaf(req.siswaSaya) }));
+  r.get("/saya", butuh("siswa"), aman(async (req, res) => res.json({ ok: true, siswa: await untukStaf(req.siswaSaya) })));
 
   r.post("/saya", butuh("siswa"), aman(async (req, res) => {
     const s = saringPerubahan("siswa", req.body);
     if (s.error) return gagal(res, 400, s.error);
     const b = await store.ubah(req.siswaSaya.id_siswa, { ...s.patch, updated_by: "siswa:" + req.siswaSaya.id_siswa });
-    res.json({ ok: true, siswa: untukStaf(b) });
+    res.json({ ok: true, siswa: await untukStaf(b) });
   }));
 
   // ---------------------------------------------------------------- staf (admin; guru di Tahap 2)
@@ -128,14 +140,14 @@ function pasangPortofolio(app, { store, env, pembatas = buatPembatas(), sekarang
 
   r.get("/staf/siswa", butuh("admin", "guru"), aman(async (req, res) => {
     const jenjang = req.akun.peran === "guru" ? req.akun.jenjang : (["smp", "sma"].includes(req.query.jenjang) ? req.query.jenjang : null);
-    res.json({ ok: true, siswa: (await store.daftar(jenjang)).map(untukStaf) });
+    res.json({ ok: true, siswa: await Promise.all((await store.daftar(jenjang)).map(untukStaf)) });
   }));
 
   r.post("/staf/siswa/:id", butuh("admin", "guru"), siswaKelolaan, aman(async (req, res) => {
     const s = saringPerubahan(req.akun.peran, req.body);
     if (s.error) return gagal(res, 400, s.error);
     const b = await store.ubah(req.siswa.id_siswa, { ...s.patch, updated_by: req.akun.email });
-    res.json({ ok: true, siswa: untukStaf(b) });
+    res.json({ ok: true, siswa: await untukStaf(b) });
   }));
 
   r.post("/staf/siswa/:id/reset-kode", butuh("admin", "guru"), siswaKelolaan, aman(async (req, res) => {

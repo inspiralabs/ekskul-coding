@@ -51,6 +51,10 @@ function isiProfil(d) {
   document.title = d.nama_lengkap + " · Ekskul Coding";
   document.documentElement.dataset.tema = TEMA.indexOf(d.tema) >= 0 ? d.tema : TEMA[0];
 
+  if (d.contoh) {
+    $("konten").prepend(el("p", "pita-contoh", "Halaman contoh dengan data karangan, supaya kamu bisa melihat bentuk portofolio yang sudah terisi."));
+  }
+
   // HERO
   $("asal").textContent = ["Ekskul Coding " + (JENJANG[d.jenjang] || ""), d.kelas ? "Kelas " + d.kelas : ""].filter(Boolean).join(" · ");
   $("nama").textContent = d.nama_lengkap;

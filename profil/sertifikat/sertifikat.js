@@ -137,17 +137,19 @@ function isiSertifikat(d) {
     pasangGambar("s-tanda", d.tanda.ttd, "Tanda tangan Unggul Sulaiman");
   }
   // Server hanya mengirim "nilai_terbit" untuk pemilik sertifikat dan admin.
-  var pemilikAtauStaf = "nilai_terbit" in d;
+  var pemilikAtauStaf = "nilai_terbit" in d || !!d.contoh;
+  if (d.contoh) document.body.classList.add("contoh");
   $("catatanNilai").hidden = pemilikAtauStaf;
   var belumTerbit = d.nilai_terbit && Date.now() < Date.parse(d.nilai_terbit + "T00:00:00+07:00");
   var terbit = "";
   if (belumTerbit && adaNilai) terbit = "Siswa " + label + " baru bisa melihat transkrip nilai mulai " + tanggal(d.nilai_terbit, true) + ".";
   else if (belumTerbit) terbit = "Transkrip nilai terbit paling lambat " + tanggal(d.nilai_terbit, true) + ". Sampai saat itu halaman ini hanya berisi sertifikat.";
+  if (d.contoh) terbit = "Ini sertifikat contoh dengan nama dan nilai karangan, untuk melihat bentuk sertifikat dan transkrip. Sertifikat asli memuat tanda tangan dan stempel.";
   else if (pemilikAtauStaf && !adaNilai) terbit = "Transkrip nilai belum bisa dibaca dari spreadsheet. Coba muat ulang beberapa menit lagi.";
   $("catatanTerbit").textContent = terbit;
   $("catatanTerbit").hidden = !terbit;
   // Hanya staf yang bisa sampai sini sebelum tanggal buka: beri tahu bahwa siswa belum bisa melihatnya.
-  if (Date.now() < Date.parse(d.tanggal + "T00:00:00+07:00")) {
+  if (!d.contoh && Date.now() < Date.parse(d.tanggal + "T00:00:00+07:00")) {
     $("catatanStaf").textContent = "Kamu melihat ini sebagai admin. Siswa " + label + " baru bisa membuka sertifikat ini mulai " + tanggal(d.tanggal, true) + ".";
     $("catatanStaf").hidden = false;
   }
