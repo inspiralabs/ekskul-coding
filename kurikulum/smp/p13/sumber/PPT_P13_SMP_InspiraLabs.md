@@ -149,19 +149,17 @@ Pos poin: Easy +5, tunjukkan angka 200 ke Kak Tyo.
 
 ---
 
-### Langkah 5: Menguji Sensor dengan Hembusan Napas
+### Langkah 5: Mencocokkan Angka di Dashboard
 
-[RUANG GAMBAR: foto siswa menghembuskan napas ke arah sensor DHT22]
+1. Taruh Serial Monitor dan dashboard berdampingan di layar.
+2. Bandingkan angka **suhu** dan **kelembapan** di keduanya.
+3. Tunggu beberapa detik. Angka di dashboard ikut berubah.
 
-1. Dekatkan sensor DHT22 ke mulut.
-2. Hembuskan napas pelan-pelan selama 5 detik.
-3. Perhatikan angka **kelembapan** di dashboard.
+Angkanya sama dan terus diperbarui. Itu tandanya dashboard menampilkan data terbaru dari alatmu.
 
-Angkanya naik dalam beberapa detik. Itu tandanya dashboard menampilkan data terbaru dari alatmu.
+Pos poin: Medium +10, tunjukkan angka yang sama di Serial Monitor dan dashboard ke Kak Tyo.
 
-Pos poin: Medium +10, tunjukkan angka kelembapan yang naik ke Kak Tyo.
-
-> 🗣️ SPEAKER NOTES: Napas kita lembap dan hangat, jadi kelembapan naik lebih cepat daripada suhu. Data dikirim tiap 4 detik, jadi angkanya berubah beberapa detik setelah dihembus, tidak seketika. Sensor cukup dihembus, jangan sampai basah atau tersentuh mulut. (6 menit)
+> 🗣️ SPEAKER NOTES: ESP32 mengirim angka baru tiap 4 detik, jadi angka di dashboard berubah beberapa detik setelah Serial Monitor, tidak seketika. Kalau angkanya tidak pernah berubah: muat ulang halaman dashboard, lalu pastikan alamatnya alamat kelompok sendiri. (6 menit)
 
 ---
 
