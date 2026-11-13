@@ -84,14 +84,16 @@ test("aturan impor", () => {
   const baru = { id_siswa: "SMA-004", jenjang: "sma", device_id: "sma-04", slug: "budi", nama_lengkap: "Budi S",
                  poin: 40, lencana: [{ p: 12 }], peringkat: 2, judul_proyek: "Kipas", catatan_pelatih: "Teliti",
                  sertifikat_nomor: "EKC-2026-S1-SMA-004" };
-  assert.deepEqual(gabungImpor(null, baru), baru); // siswa baru: semua kolom
+  // siswa baru: semua kolom kecuali judul proyek & catatan pelatih (keduanya dibaca langsung dari sheet Catatan Tutor)
+  const { judul_proyek: _j, catatan_pelatih: _c, ...tanpaCatatan } = baru;
+  assert.deepEqual(gabungImpor(null, baru), tanpaCatatan);
   const lama = { ...baru, nama_lengkap: "Budi Santoso", judul_proyek: "", catatan_pelatih: "Dikoreksi guru",
                  poin: 10, slug: "budi-lama", tentang: "isian siswa" };
   const g = gabungImpor(lama, { ...baru, slug: "budi" });
   assert.equal(g.poin, 40);                // selalu ikut spreadsheet
   assert.equal(g.nama_lengkap, undefined); // tidak ditimpa (lama terisi)
   assert.equal(g.catatan_pelatih, undefined);
-  assert.equal(g.judul_proyek, "Kipas");   // lama kosong -> diisi
+  assert.equal(g.judul_proyek, undefined); // tidak diimpor lagi
   assert.equal(g.slug, undefined);         // URL lama tetap
   assert.equal(g.tentang, undefined);      // bagian siswa tidak disentuh
 });
@@ -270,4 +272,45 @@ test("sertifikat: tertutup sebelum hari pertemuan terakhir, admin bisa kapan saj
   assert.equal((await s.get("/sertifikat/budi")).sertifikat.nama_lengkap, "Budi");
   assert.equal((await s.getRaw("/sertifikat/tanpa-nomor")).status, 404);
   assert.equal((await s.getRaw("/sertifikat/tidak-ada")).status, 404);
+});
+
+test("judul proyek & catatan pelatih: koreksi dashboard menang, lalu sheet, lalu judul bawaan", async (t) => {
+  const { catatanDariCsv } = require("./portofolio-nilai");
+  const csv = [
+    '"ID Siswa","Nama Lengkap","Proyek / Karya","Kekuatan (timpa draft)","Perlu Ditingkatkan (timpa draft)","Saran","Draft Kekuatan (otomatis)"',
+    '"SMA-004","Budi","Kipas Kelas","","Rahasia internal","","Menonjol pada aspek Pemahaman Konsep (skor 4 dari 4)."',
+    '"SMP-022","Rafif","","Rajin mencoba.","","","Menonjol pada aspek X (skor 3 dari 4)."',
+    '"SMA-005","Husna","","","","","#N/A"',
+  ].join("\n");
+  const peta = catatanDariCsv(csv);
+  assert.deepEqual(peta.get("SMA-004"), { proyek: "Kipas Kelas", catatan: "Menonjol pada aspek Pemahaman Konsep." });
+  assert.deepEqual(peta.get("SMP-022"), { proyek: "", catatan: "Rajin mencoba." }); // ketikan tutor menang atas draf
+  assert.deepEqual(peta.get("SMA-005"), { proyek: "", catatan: "" });               // error sheet tidak tampil
+  assert.ok(!JSON.stringify([...peta.values()]).includes("Rahasia"));             // "Perlu Ditingkatkan" tidak dibaca
+
+  const baris = siswaAwal();
+  baris.push({ id_siswa: "SMA-005", jenjang: "sma", slug: "husna", nama_lengkap: "Husna", kode_versi: 1 });
+  const s = await jalankan(t, baris, ENV, (x) => x, { catatanSiswa: async (j, id) => peta.get(id) || null });
+  const budi = (await s.get("/profil/budi")).profil;
+  assert.deepEqual([budi.judul_proyek, budi.catatan_pelatih], ["Kipas Kelas", "Menonjol pada aspek Pemahaman Konsep."]);
+  assert.deepEqual([(await s.get("/profil/husna")).profil.judul_proyek, (await s.get("/profil/rafif")).profil.judul_proyek],
+    ["Smart Room Monitoring", "Pemantau Suhu Kelas"]); // judul bawaan per jenjang
+  const admin = (await s.post("/masuk/staf", { email: ENV.ADMIN_EMAIL, password: ENV.ADMIN_PASSWORD })).token;
+  await s.post("/staf/siswa/SMA-004", { catatan_pelatih: "Dikoreksi admin" }, admin);
+  assert.equal((await s.get("/profil/budi")).profil.catatan_pelatih, "Dikoreksi admin"); // koreksi dashboard menang
+  await s.post("/staf/siswa/SMA-004", { catatan_pelatih: "" }, admin);
+  assert.equal((await s.get("/profil/budi")).profil.catatan_pelatih, "Menonjol pada aspek Pemahaman Konsep."); // kembali ikut sheet
+  const daftar = (await s.get("/staf/siswa", admin)).siswa;
+  assert.equal(daftar.find((x) => x.id_siswa === "SMA-004").judul_proyek, "Kipas Kelas"); // dashboard admin ikut melihat
+});
+
+test("portofolio contoh SMA-990: sertifikat & transkrip terbuka untuk siapa saja, tanpa tanda tangan", async (t) => {
+  const baris = [{ id_siswa: "SMA-990", jenjang: "sma", slug: "contoh-sma", nama_lengkap: "Siswa Contoh SMA",
+    sertifikat_nomor: "EKC-2026-S1-SMA-990", kode_versi: 1 }];
+  const s = await jalankan(t, baris, ENV, (x) => x, { sekarang: () => Date.parse("2026-11-01T08:00:00+07:00"),
+    tandaSertifikat: async () => ({ ttd: "x", stempel: "y" }) });
+  assert.equal((await s.get("/profil/contoh-sma")).profil.contoh, true);
+  const c = (await s.get("/sertifikat/contoh-sma")).sertifikat; // sebelum tanggal buka, tanpa login
+  assert.equal(c.contoh, true);
+  assert.ok(c.nilai.rincian.length > 10 && !("tanda" in c));
 });

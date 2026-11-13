@@ -230,3 +230,6 @@ h1, h2, h3 { font-family: var(--judul); line-height: 1.15; }
 .kaki { text-align: center; color: var(--tinta-lemah); font-size: .9rem; padding: 2rem 1rem 2.25rem; }
 .kaki p + p { margin-top: .2rem; }
 .kaki a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Pita di atas halaman contoh (SMA-990 / SMP-990). */
+.pita-contoh { margin: 0; padding: .7rem 1rem; text-align: center; background: var(--lembut); color: var(--gelap-1); font-weight: 700; font-size: .95rem; }

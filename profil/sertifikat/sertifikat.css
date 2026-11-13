@@ -104,6 +104,12 @@ a { color: var(--maroon); font-weight: 700; }
 .n-skala td { color: var(--tinta) !important; font-weight: 600 !important; }
 .n-skala th { background: var(--emas-muda); font-weight: 800; }
 
+/* Sertifikat contoh: tulisan CONTOH melintang, supaya tidak bisa dipakai sebagai sertifikat sungguhan. */
+.contoh .sertifikat::after {
+  content: "CONTOH"; position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  font: 800 16cqw/1 'Baloo 2', sans-serif; color: rgba(122, 31, 43, .1); transform: rotate(-18deg); letter-spacing: .1em;
+}
+
 @media print {
   @page { size: A4 landscape; margin: 0; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
